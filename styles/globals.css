@@ -1,3 +1,47 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.bg1 {
+    background-color: #FFD6C2;
+}
+
+.bg2 {
+    background-color: #FFBCA1;
+}
+
+.bg3 {
+    background-color: #FF9D7B;
+}
+
+.border-color3 {
+    border-color: #FF9D7B;
+}
+
+.bg4 {
+    background-color: #FF734D;
+}
+
+.bg5 {
+    background-color: #FF6035;
+}
+
+.bg-blue1 {
+    background-color: #DBEFFD;
+}
+
+.bg-blue2 {
+    background-color: #B4DAFB;
+}
+
+.bg-blue3 {
+    background-color: #7EBCF9;
+}
+
+.bg-blue4 {
+    background-color: #3C81E1;
+}
+
+.bg-gray1 {
+    background-color: #E5E5E5;
+}
