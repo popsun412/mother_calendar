@@ -7,7 +7,7 @@ export default function PlanListWeek() {
         { day: "화", type: 1 },
         { day: "수", type: 2 },
         { day: "목", type: 3 },
-        { day: "금", type: 0 },
+        { day: "금", type: 1 },
         { day: "토", type: 0 },
         { day: "일", type: 0 },
     ];
