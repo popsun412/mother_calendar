@@ -1,19 +1,74 @@
+import PlanTitle from "./plan_title";
+import WeekPlanDayInfo from "./week_plan_day_info";
 
 export default function PlanListWeek() {
+    const dayInfos = [
+        { day: "월", type: 0 },
+        { day: "화", type: 1 },
+        { day: "수", type: 2 },
+        { day: "목", type: 3 },
+        { day: "금", type: 0 },
+        { day: "토", type: 0 },
+        { day: "일", type: 0 },
+    ];
+
     return (
-        <div className="w-full h-full overflow-y-auto flex-col items-stretch bg-white p-2" style={{ backgroundColor: "#E0E0E0" }}>
-            <div className="bg-white flex flex-col pt-2 pl-3 pb-4">
-                <div className="flex">
-                    <div
-                        className={`flex justify-center items-center px-1 py-0.5 mr-2 rounded text-white text-xs`}
-                        style={{ backgroundColor: `${(true) ? "#FF734D" : "#bdbdbd"}` }}
-                    >
-                        <span>국어</span>
-                    </div>
-                    <span className="text-sm">대교 벽보 한글 읽기</span>
+        <div className="w-full flex-auto flex-col items-stretch p-2" style={{ backgroundColor: "#E0E0E0", borderTopRightRadius: "15px" }}>
+            <div className="bg-white flex flex-col pt-2 pb-4 px-2 mb-2" style={{ borderRadius: "10px" }}>
+                <PlanTitle title="대교 벽보 한글 읽기" />
+                <div className="flex justify-between">
+                    {
+                        dayInfos.map((_item, index) => <WeekPlanDayInfo key={index} day={_item.day} type={_item.type} />)
+                    }
                 </div>
-                <div className="flex px-4 justify-between">
-                    요일
+            </div>
+
+            <div className="bg-white flex flex-col pt-2 pb-4 px-2 mb-2" style={{ borderRadius: "10px" }}>
+                <PlanTitle title="대교 벽보 한글 읽기" />
+                <div className="flex justify-between">
+                    {
+                        dayInfos.map((_item, index) => <WeekPlanDayInfo key={index} day={_item.day} type={_item.type} />)
+                    }
+                </div>
+            </div>
+            <div className="bg-white flex flex-col pt-2 pb-4 px-2 mb-2" style={{ borderRadius: "10px" }}>
+                <PlanTitle title="대교 벽보 한글 읽기" />
+                <div className="flex justify-between">
+                    {
+                        dayInfos.map((_item, index) => <WeekPlanDayInfo key={index} day={_item.day} type={_item.type} />)
+                    }
+                </div>
+            </div>
+            <div className="bg-white flex flex-col pt-2 pb-4 px-2 mb-2" style={{ borderRadius: "10px" }}>
+                <PlanTitle title="대교 벽보 한글 읽기" />
+                <div className="flex justify-between">
+                    {
+                        dayInfos.map((_item, index) => <WeekPlanDayInfo key={index} day={_item.day} type={_item.type} />)
+                    }
+                </div>
+            </div>
+            <div className="bg-white flex flex-col pt-2 pb-4 px-2 mb-2" style={{ borderRadius: "10px" }}>
+                <PlanTitle title="대교 벽보 한글 읽기" />
+                <div className="flex justify-between">
+                    {
+                        dayInfos.map((_item, index) => <WeekPlanDayInfo key={index} day={_item.day} type={_item.type} />)
+                    }
+                </div>
+            </div>
+            <div className="bg-white flex flex-col pt-2 pb-4 px-2 mb-2" style={{ borderRadius: "10px" }}>
+                <PlanTitle title="대교 벽보 한글 읽기" />
+                <div className="flex justify-between">
+                    {
+                        dayInfos.map((_item, index) => <WeekPlanDayInfo key={index} day={_item.day} type={_item.type} />)
+                    }
+                </div>
+            </div>
+            <div className="bg-white flex flex-col pt-2 pb-4 px-2 mb-2" style={{ borderRadius: "10px" }}>
+                <PlanTitle title="대교 벽보 한글 읽기" />
+                <div className="flex justify-between">
+                    {
+                        dayInfos.map((_item, index) => <WeekPlanDayInfo key={index} day={_item.day} type={_item.type} />)
+                    }
                 </div>
             </div>
         </div>

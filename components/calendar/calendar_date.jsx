@@ -19,7 +19,7 @@ export default function CalendarDate() {
     }
 
     return (
-        <div className="flex px-4 justify-between">
+        <div className="flex px-4 justify-between pb-4">
             {
                 dates.map((_date, index) => <CalendarDateItem key={index} date={_date} onClick={() => dateClick(index)} />)
             }

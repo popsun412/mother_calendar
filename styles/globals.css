@@ -64,17 +64,30 @@
     border-color: #FF9D7B;
 }
 
+.border-color4 {
+    border-color: #e0e0e0;
+}
+
 /* text color */
 
 .textGray1 {
     color: #333333;
 }
+
 .textGray2 {
     color:#4F4F4F;
 }
 
 .textGray3{
     color: #828282;
+}
+
+.textOrange3 {
+    color: #FF9D7B;
+}
+
+.textOrange5 {
+    color: #FF6035;
 }
 
 /* checkBox */

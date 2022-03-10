@@ -1,4 +1,3 @@
-import styles from '../../styles/calendar/Calendar.module.css';
 import Image from 'next/image';
 
 export default function CalendarTop() {
@@ -8,7 +7,7 @@ export default function CalendarTop() {
                 <Image src="/images/ellipse1.png" width={36} height={36} />
             </span>
             <span className="rounded-full w-9 h-9 bg-green-500"></span>
-            <button className={styles.add}>+</button>
+            <button >+</button>
         </div >
     )
 
