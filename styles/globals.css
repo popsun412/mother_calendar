@@ -47,6 +47,10 @@
     background-color: #f2f2f2;
 }
 
+.bg-gray3{
+    background-color: #e0e0e0;
+}
+
 .bg-white{
     background-color: #fff;
 }
@@ -66,6 +70,10 @@
 
 .border-color4 {
     border-color: #e0e0e0;
+}
+
+.border-orange4{
+    border-color: #FF734D;
 }
 
 /* text color */
