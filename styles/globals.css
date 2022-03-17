@@ -56,12 +56,24 @@
 }
 
 /* border color */
+.border-gary1{
+    border-color: #333333;
+}
+
 .border-gary2 {
     border-color: #F2F2F2;
 }
 
 .border-gary3{
     border-color: #bdbdbd;
+}
+
+.border-gary4{
+    border-color: #C1C1C1;
+}
+
+.border-color5{
+    border-color: #828282;
 }
 
 .border-color3 {
@@ -90,12 +102,24 @@
     color: #828282;
 }
 
+.textGray4{
+    color: #BDBDBD;
+}
+
+.textOrange1{
+    color: #FFD6C2;
+}
+
 .textOrange3 {
     color: #FF9D7B;
 }
 
 .textOrange5 {
     color: #FF6035;
+}
+
+.textWhite{
+    color: #ffffff;
 }
 
 /* checkBox */

@@ -1,45 +1,41 @@
-import Image from 'next/image';
+import { ChevronLeftRounded } from '@material-ui/icons';
+import CategroyItem from './category_item';
+import CategroyPlace from './category_place';
 
 export default function MainCategory() {
     return (
-        <div className="px-7 pb-4 flex flex-col border-b-8 border-gary2">
-            <div className="flex">
-                <div className="flex flex-col items-center flex-1 relative p-3.5">
-                    <Image src="/images/category1.png" layout='intrinsic' width="100%" height="100%" />
-                    <span className='pt-2.5'>국어</span>
+        <>
+            <div className='px-5 pt-10 pb-4'>
+                <div className="flex font-normal text-base textGray1">
+                    {/* 아이콘 대신 이미지를 넣으면 깨져서 나오네; 근데 아이콘으로 하기엔 디자인이 좀 달라 ㅜ */}
+                    {/* <ChevronLeftRounded className="flex w-2 h-4" /> */}
+                    <img src='/images/back_ic.png' className="flex w-2 h-4" />
+                    <span className="flex flex-auto justify-center">분야</span>
                 </div>
-                <div className="flex flex-col items-center flex-1 relative p-3.5">
-                    <Image src="/images/category2.png" layout='intrinsic' width="100%" height="100%" />
-                    <span className='pt-2.5'>영어</span>
+            </div>
+            <div className='flex w-full overflow-x-scroll scrollbar-hide px-5'>
+                <div className='flex space-x-0'>
+                    <div className='p-3 flex flex-col textGray2 font-normal text-xs bg-gray2' style={{ borderRadius: "1.25rem", width: "3.25rem" }}>
+                        <img src='/images/all.png' className="m-auto w-7 h-7" />
+                        <span className='text-center mt-2 textGray2 font-normal text-xs'>전체</span>
+                    </div>
+                    <div className='p-3 flex flex-col textGray2 font-normal text-xs' style={{ width: "3.25rem" }}>
+                        <img src='/images/category1.png' className="m-auto w-7 h-7" />
+                        <span className='text-center mt-2 textGray2 font-normal text-xs'>국어</span>
+                    </div>
                 </div>
-                <div className="flex flex-col items-center flex-1 relative p-3.5">
-                    <Image src="/images/category3.png" layout='intrinsic' width="100%" height="100%" />
-                    <span className='pt-2.5'>수학</span>
-                </div>
-                <div className="flex flex-col items-center flex-1 relative p-3.5">
-                    <Image src="/images/category4.png" layout='intrinsic' width="100%" height="100%" />
-                    <span className='pt-2.5'>과학</span>
-                </div>
+            </div>
+            <div className="flex flex-row text-center border-b border-gary4 textGray3 font-normal text-sm">
+                {/* 여기부분 알려줘 */}
+                <div className='basis-1/6 py-3' />
+                <div className='basis-2/6 py-3'>계획</div>
+                <div className='basis-1/6 py-3' />
+                <div className='basis-2/6 py-3 textGray1 font-semibold border-b-2 border-gary1'>아이템</div>
+                <div className='basis-1/6 py-3' />
             </div>
 
-            <div className="flex">
-                <div className="flex flex-col items-center flex-1 relative p-3.5">
-                    <Image src="/images/category1.png" layout='intrinsic' width="100%" height="100%" />
-                    <span className='pt-2.5'>국어</span>
-                </div>
-                <div className="flex flex-col items-center flex-1 relative p-3.5">
-                    <Image src="/images/category2.png" layout='intrinsic' width="100%" height="100%" />
-                    <span className='pt-2.5'>영어</span>
-                </div>
-                <div className="flex flex-col items-center flex-1 relative p-3.5">
-                    <Image src="/images/category3.png" layout='intrinsic' width="100%" height="100%" />
-                    <span className='pt-2.5'>수학</span>
-                </div>
-                <div className="flex flex-col items-center flex-1 relative p-3.5">
-                    <Image src="/images/category4.png" layout='intrinsic' width="100%" height="100%" />
-                    <span className='pt-2.5'>과학</span>
-                </div>
-            </div>
-        </div>
+            <CategroyPlace />
+            {/* <CategroyItem /> */}
+        </>
     )
 }
