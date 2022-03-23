@@ -1,0 +1,29 @@
+여기서 확인된 부분들은 지워주세요.
+
+- 질문 사항들이 있어요.
+. calendar_top.jsx
+. frind_list.jsx
+. category_item.jsx
+. main_ theme.jsx
+. main_category.jsx
+. itme_detail.jsx
+    - 아이콘이 안 넣어져요.
+    - p로 하면 엔터가 안 먹히네요 이럴땐 어떻게 해야해요?
+    - footer에 붙여놓고 싶은데 position을 잘못 썼을까요?
+. plan_detail.jsx
+    - 글자하고 이미지하고 높이가 안 맞아요. 가운데 정렬 알려주세요... 찾아도 안나와서ㅜ
+    - 실행률 만드는 방법 알려주세요
+
+
+
+
+- 책장 리스트 부분은 main_place_add.jsx 조금 수정해서 써도 될거 같아요.
+main_place_add.jsx / main_itme_add.jsx 페이지가 갑자기 없어져서 지울까 하다가 뒀는데 다른 페이지에
+비슷한 내용으로 있어서 그때 쓰면 될거 같아요
+
+- https://mui.com/getting-started/installation/
+이거 아이콘 깔았는데 안되서 지울까 하는데 그냥 둬도 될까요?
+나는 왜 아이콘 찾는게 아려울까요?ㅜㅜ
+
+- calendar_middle.jex
+유저 / 타유저 부분 주석처리로 만들어놨어요. 확인해주세요.
