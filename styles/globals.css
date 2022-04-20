@@ -137,3 +137,7 @@
     box-sizing: border-box;
     border-radius: 4px;
 }
+
+.z-100 {
+    z-index: 100;
+}
