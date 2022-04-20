@@ -93,6 +93,10 @@
     border-color: #FF734D;
 }
 
+.border-blue4 {
+    border-color: #3C81E1;
+}
+
 /* text color */
 
 .textGray1 {
@@ -125,6 +129,10 @@
 
 .textBlue1{
     color: #7EBCF9
+}
+
+.textBlue4 {
+    color: #3C81E1;
 }
 
 .textWhite{
@@ -160,4 +168,8 @@
 
 .h-90 {
     height: 360px;
+}
+
+.border-b-3 {
+    border-bottom-width: 3px;
 }
