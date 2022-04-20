@@ -173,3 +173,7 @@
 .border-b-3 {
     border-bottom-width: 3px;
 }
+
+.mr-25 {
+    margin-right: 100px;
+}
