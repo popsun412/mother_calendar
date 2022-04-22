@@ -1,35 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore, { Pagination, Autoplay } from 'swiper';
 
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 import 'swiper/components/pagination/pagination.min.css';
+import axios from 'axios';
 
 const HomeSlider = () => {
 
-    SwiperCore.use([Pagination, Autoplay]);
+    const [data, setData] = useState([]);
+    
+    useEffect(async() => {
+        const res = await axios.get('http://localhost:4000/home/main')
+        setData(res.data);
+    })
 
-    const data = [
-        {
-            people: 99,
-            title: 'A-Z까지 파닉스 워크북 풀기',
-            tag1: '영어',
-            tag2: '영어'
-        },
-        {
-            people: 100,
-            title: 'A-Z까지 파닉스 워크북 풀기',
-            tag1: '수학',
-            tag2: '수학'
-        },
-        {
-            people: 101,
-            title: 'A-Z까지 파닉스 워크북 풀기',
-            tag1: '국어',
-            tag2: '국어'
-        }
-    ]
+    SwiperCore.use([Pagination, Autoplay]);
 
     return (
         <section>

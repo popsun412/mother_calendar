@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/swiper-bundle.min.css';
@@ -27,60 +28,15 @@ const theme_data = [
     }
 ]
 
-const data = [
-    {
-        title: '가베가족 알파벳 교구',
-        id: 1,
-        tag1: '영어',
-        tag2: '교구'
-    },
-    {
-        title: '가베가족 알파벳 교구',
-        id: 1,
-        tag1: '영어',
-        tag2: '교구'
-    },
-    {
-        title: '가베가족 알파벳 교구',
-        id: 1,
-        tag1: '영어',
-        tag2: '교구'
-    },
-    {
-        title: '가베가족 알파벳 교구',
-        id: 1,
-        tag1: '영어',
-        tag2: '교구'
-    },
-    {
-        title: '가베가족 알파벳 교구',
-        id: 2,
-        tag1: '영어',
-        tag2: '교구'
-    },
-    {
-        title: '가베가족 알파벳 교구',
-        id: 2,
-        tag1: '영어',
-        tag2: '교구'
-    },
-    {
-        title: '가베가족 알파벳 교구',
-        id: 2,
-        tag1: '영어',
-        tag2: '교구'
-    },
-    {
-        title: '가베가족 알파벳 교구',
-        id: 2,
-        tag1: '영어',
-        tag2: '교구'
-    }
-]
-
 const HomeTheme = () => {
 
     const [theme, setTheme] = useState(1);
+    const [data, setData] = useState([]);
+
+    useEffect(async() => {
+        const res = await axios.get('http://localhost:4000/home/theme');
+        setData(res.data);
+    }, [])
 
     const onClick = (param) => {
         setTheme(param);

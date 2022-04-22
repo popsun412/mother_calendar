@@ -1,4 +1,5 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/swiper-bundle.min.css';
@@ -6,38 +7,12 @@ import 'swiper/swiper.min.css';
 
 const HomeItem = () => {
 
-    const data = [
-        {
-            title: '가베가족 알파벳 교구',
-            tag1: '영어',
-            tag2: '교구',
-            ranking: 1
-        },
-        {
-            title: '가베가족 알파벳 교구',
-            tag1: '영어',
-            tag2: '교구',
-            ranking: 2
-        },
-        {
-            title: '가베가족 알파벳 교구',
-            tag1: '영어',
-            tag2: '교구',
-            ranking: 3
-        },
-        {
-            title: '가베가족 알파벳 교구',
-            tag1: '영어',
-            tag2: '교구',
-            ranking: 4
-        },
-        {
-            title: '가베가족 알파벳 교구',
-            tag1: '영어',
-            tag2: '교구',
-            ranking: 5
-        }
-    ]
+    const [data, setData] = useState([]);
+
+    useEffect(async() => {
+        const res = await axios.get('http://localhost:4000/home/item');
+        setData(res.data);
+    }, [])
 
     return (
         <section style={{margin: '0 20px'}}>

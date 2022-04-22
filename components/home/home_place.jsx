@@ -1,45 +1,14 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
 const HomePlace = () => {
 
-    const data = [
-        {
-            location: '직업체험 테마파크 키자니아',
-            tag1: '서울',
-            tag2: '자연동물',
-            ranking: 1
-        },
-        {
-            location: '직업체험 테마파크 키자니아',
-            tag1: '서울',
-            tag2: '자연동물',
-            ranking: 2
-        },
-        {
-            location: '직업체험 테마파크 키자니아',
-            tag1: '서울',
-            tag2: '자연동물',
-            ranking: 3
-        },
-        {
-            location: '직업체험 테마파크 키자니아',
-            tag1: '서울',
-            tag2: '자연동물',
-            ranking: 4
-        },
-        {
-            location: '직업체험 테마파크 키자니아',
-            tag1: '서울',
-            tag2: '자연동물',
-            ranking: 5
-        },
-        {
-            location: '직업체험 테마파크 키자니아',
-            tag1: '서울',
-            tag2: '자연동물',
-            ranking: 6
-        }
-    ]
+    const [data, setData] = useState([]);
+
+    useEffect(async() => {
+        const res = await axios.get('http://localhost:4000/home/place');
+        setData(res.data);
+    }, [])
 
     return (
         <section className='my-0 mx-5'>
@@ -55,7 +24,7 @@ const HomePlace = () => {
                                     <img src='/images/ic_bookmark.png' className='absolute block bottom-0 right-0 mr-2 mb-1.5'/>
                                 </div>
                                 <div>
-                                    <h3 className='text-base font-semibold' style={{letterSpacing: '-0.3px'}}>{item.location}</h3>
+                                    <h3 className='text-base font-semibold' style={{letterSpacing: '-0.3px'}}>{item.title}</h3>
                                     <div className='flex mt-1.5'>
                                         <span className='h-5 py-0.5 px-1.5 mr-1.5 rounded text-xs' style={{ backgroundColor: '#f0f5f8'}}>{item.tag1}</span>
                                         <span className='h-5 py-0.5 px-1.5 mr-1.5 rounded text-xs' style={{ backgroundColor: '#f0f5f8'}}>{item.tag2}</span>
