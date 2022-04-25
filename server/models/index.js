@@ -40,5 +40,8 @@ db.CategoryPlan = require('./category/plan')(sequelize, Sequelize);
 
 db.User = require('./user/user')(sequelize, Sequelize);
 
+// Confirm
+db.Confirm = require('./confirm/confirm')(sequelize, Sequelize);
+
 db.secret = '(9*)5$&!3%^0%^@@2$1!#5@2!4';
 module.exports = db;

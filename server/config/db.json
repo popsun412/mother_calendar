@@ -3,7 +3,7 @@
         "host": "localhost",
         "username": "root",
         "password": "qksksk1!",
-        "database": "dbtest",
+        "database": "calendar",
         "dialect": "mysql"
     }
 }

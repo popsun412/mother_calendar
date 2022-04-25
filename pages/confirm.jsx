@@ -1,6 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import moment from 'moment';
+import axios from 'axios';
 
-const Confirm = () => {
+const Confirm = (props) => {
+
+    const router = useRouter();
+    const date = router.query.date;
+    // const [data, setData] = useState([]);
 
     const data = [
         {
@@ -69,6 +76,21 @@ const Confirm = () => {
         },
     ]
 
+    useEffect(() => {
+        const fetchData = async() => {
+            const res = await axios('http://localhost:4000/confirm/confirm', {
+                method: 'GET',
+                data: {
+                    'date': '20220402'
+                }
+            });
+
+            setData(res.data);
+        }
+
+        fetchData();
+    }, [])
+
     return (
         <div>
             <header className='sticky top-0 left-0 right-0 opacity-100 visible' style={{marginBottom: '-50px'}}>
@@ -85,7 +107,7 @@ const Confirm = () => {
             <main className='mt-14'>
                 <section>
                     <div className='flex my-4 py-4 border-b border-solid border-gary4'>
-                        <div className='text-sm ml-5' style={{letterSpacing: '-0.42px'}}>2022년 1월 31일</div>
+                        <div className='text-sm ml-5' style={{letterSpacing: '-0.42px'}}>{moment(date).format('YYYY년 M월 D일')}</div>
                         <div className='flex text-sm mr-5 ml-auto items-center' style={{letterSpacing: '-0.13px'}}>
                             👦 <span className='ml-1 mr-1 textOrange4 font-semibold'>60</span> 명 인증 완료
                             <img src='/images/ic_arrow-right-circle.png' className='ml-2' style={{width: '17px', height: '17px'}}/>
