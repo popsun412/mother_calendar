@@ -56,7 +56,7 @@ const Place = () => {
                     scrollPosition > 60 ?
                         <div className='flex mx-5 w-full'>
                             <div style={{width:'20px'}}>
-                                <img src='/images/ic_back.png'/>
+                                <img src='/images/ic_back.png' onClick={() => {window.history.back()}}/>
                             </div>
                             <div className='text-center flex-1'>🏕 애니메이션 센터</div>
                         </div> : <img src='/images/ic_banner_aos.png' />

@@ -42,7 +42,7 @@ const Plan2 = () => {
                     scrollPosition > 60 ?
                         <div className='flex mx-5 w-full'>
                             <div>
-                                <img src='/images/ic_back.png'/>
+                                <img src='/images/ic_back.png' onClick={() => {window.history.back()}}/>
                             </div>
                             <div className='text-center flex-1'>🧩 가베가족 알벳 교구</div>
                             <img src='/images/ic_back.png' className='hidden'/>

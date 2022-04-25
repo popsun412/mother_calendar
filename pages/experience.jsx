@@ -270,7 +270,7 @@ const Experience = () => {
                 <div className='my-auto mx-auto py-0 px-4 relative flex items-center w-full bg-white border-b border-solid border-gray3' style={{height: '50px'}}>
                     <div className='flex-1 flex items-center'>
                         <div style={{width: '50px'}}>
-                            <img src='/images/ic_back.png' />
+                            <img src='/images/ic_back.png' onClick={() => {window.history.back()}}/>
                         </div>
                         <div className='my-0 mx-auto text-base font-medium' style={{letterSpacing: '-0.3px'}}>체험</div>
                         <div className='flex mr-2' style={{width: '50px'}}>

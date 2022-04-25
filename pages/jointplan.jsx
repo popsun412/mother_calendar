@@ -8,10 +8,6 @@ const JointPlan = () => {
     const [activeField, setActiveField] = useState(0);
     const [activeDay, setActiveDay] = useState({ 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false });
 
-    const onClick = () => {
-        window.history.back();
-    }
-
     const handleDay = (e) => {
         setActiveDay({...activeDay, [e.target.value]: e.target.checked});
     }
@@ -29,8 +25,8 @@ const JointPlan = () => {
         <div>
             <header className='sticky top-0 left-0 right-0 opacity-100 visible z-100' style={{marginBottom: '-50px'}}>
                 <div className='flex relative mx-auto my-0 box-border py-4 w-full bg-white' style={{height: '50px'}}>
-                    <div className='ml-5' onClick={onClick}>
-                        <img src='/images/ic_back.png' />
+                    <div className='ml-5'>
+                        <img src='/images/ic_back.png' onClick={() => {window.history.back()}}/>
                     </div>
                     <div className='my-0 mx-auto'>
                         <span className='text-base font-medium'>페파피그1 영상</span>

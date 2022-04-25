@@ -179,8 +179,6 @@ const MapHeader = () => {
                             <ToggleButton value='register' aria-label='register' className='w-full'>등록순</ToggleButton>
                             <ToggleButton value='name' aria-label='name' className='w-full'>이름순</ToggleButton>
                         </ToggleButtonGroup>
-                        {/* <div className='text-sm rounded-md border border-solid py-3 px-10 border-blue4 textBlue4'>등록순</div>
-                        <div className='text-sm rounded-md border border-solid py-3 px-10 border-l-white' style={{marginLeft: '-15px'}}>이름순</div> */}
                     </div>
                 </div>
                 <div className='mb-7 mx-3.5'>
@@ -312,7 +310,7 @@ const MapHeader = () => {
                 <div className='my-auto mx-auto py-0 px-4 relative flex items-center w-full bg-white border-b border-solid border-gray3' style={{height: '50px'}}>
                     <div className='flex-1 flex items-center'>
                         <div style={{width: '50px'}}>
-                            <img src='/images/ic_back.png' />
+                            <img src='/images/ic_back.png' onClick={() => {window.history.back()}}/>
                         </div>
                         <div className='my-0 mx-auto text-base font-medium' style={{letterSpacing: '-0.3px'}}>체험</div>
                         <div className='flex mr-2' style={{width: '50px'}}>
