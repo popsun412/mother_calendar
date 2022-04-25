@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Drawer } from '@material-ui/core';
 import { Range, getTrackBackground } from 'react-range';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
+import { GlobalStyles } from '@mui/material';
 
 const data = [
     {
@@ -237,6 +238,15 @@ const CategoryItem = (props) => {
         role="presentation"
         onKeyDown={onClick(anchor, false, false)}
         >
+            <GlobalStyles 
+                styles={{
+                    '.MuiToggleButton-root.Mui-selected': {
+                        color: '#3C81E1',
+                        border: '1px solid #3C81E1',
+                        backgroundColor: '#fff!important'
+                    }
+                }}
+            />
             <div className='my-2.5'>
                 <div className='mx-3.5'>
                     <img src='/images/ic_close.png' className='ml-auto' onClick={onClick(anchor, false, false)}/>
@@ -377,9 +387,13 @@ const CategoryItem = (props) => {
         <div className='mx-5'>
             <React.Fragment key={0}>
             <div className='my-4 text-right'>
-                <div>
-                    <span className={`py-1.5 px-3 border border-solid rounded text-xs ${filterValue === '필터' ? 'border-gray3 textGray4' : 'border-blue4 textBlue4'}`} onClick={onClick('right', true)}>
-                        {filterValue}
+                <div className='flex justify-end'>
+                    <span className={`flex items-center py-1.5 px-3 border border-solid rounded text-xs ${filterValue === '필터' ? 'border-gary3 textGray4' : 'border-blue4 textBlue4'}`}
+                        onClick={onClick('right', true)}>
+                        <span style={{marginRight: '3.4px'}}>
+                            <img src='/images/filter.png' style={{width: '15px', height: '15px'}}/>
+                        </span>
+                        <span className={`text-sm ${filterValue === '필터' ? 'textGray4' : 'textBlue4'}`}>{filterValue}</span>
                     </span>
                 </div>
             </div>

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Box, Drawer } from '@material-ui/core';
 import { Range, getTrackBackground } from 'react-range';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
+import { GlobalStyles } from '@mui/material';
 
 const MapHeader = () => {
 
@@ -168,6 +169,15 @@ const MapHeader = () => {
         role="presentation"
         onKeyDown={onClick(anchor, false, false)}
         >
+            <GlobalStyles 
+                styles={{
+                    '.MuiToggleButton-root.Mui-selected': {
+                        color: '#3C81E1',
+                        border: '1px solid #3C81E1',
+                        backgroundColor: '#fff!important'
+                    }
+                }}
+            />
             <div className='my-2.5'>
                 <div className='mx-3.5'>
                     <img src='/images/ic_close.png' className='ml-auto' onClick={onClick(anchor, false, false)}/>

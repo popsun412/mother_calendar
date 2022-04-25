@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Box, Drawer, Slider } from '@material-ui/core';
+import { GlobalStyles } from '@mui/material';
 
 const Experience = () => {
 
@@ -127,6 +128,15 @@ const Experience = () => {
         role="presentation"
         onKeyDown={onClick(anchor, false)}
         >
+            <GlobalStyles 
+                styles={{
+                    '.MuiToggleButton-root.Mui-selected': {
+                        color: '#3C81E1',
+                        border: '1px solid #3C81E1',
+                        backgroundColor: '#fff!important'
+                    }
+                }}
+            />
             <div className='my-2.5 mx-3.5'>
                 <div>
                     <img src='images/ic_close.png' className='ml-auto' onClick={onClick(anchor, false)}/>
