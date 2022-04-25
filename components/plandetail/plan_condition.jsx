@@ -73,9 +73,10 @@ const PlanCondition = () => {
                     data.map((item, idx) => {
                         return (
                             item.date.substring(0, 6) === moment(date).format('YYYYMM') ?
-                            <div className='flex m-5 text-sm' key={idx}>
+                            <div className='flex m-5 text-sm items-center' key={idx}>
                                 <span className='textGray2 my-0 mx-auto flex-1 text-left' style={{letterSpacing: '-0.42px'}}>{moment(item.date).format('YYYY년 M월 YY일')}</span>
                                 <span className='textGray2 my-0 mx-auto flex-1 text-right' style={{letterSpacing: '-0.13px'}}>👦 <span className='textOrange4 font-semibold'>{item.people}명</span> 인증 완료</span>
+                                <img src='/images/ic_arrow-right-circle.png' className='ml-2' style={{width: '17px', height: '17px'}}/>
                             </div> : ''
                         )
                     })
