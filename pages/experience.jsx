@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Box, Drawer, Slider } from '@material-ui/core';
-import { GlobalStyles } from '@mui/material';
+import { GlobalStyles, ToggleButtonGroup } from '@mui/material';
+import { ToggleButton } from '@material-ui/lab';
+import { Range, getTrackBackground } from 'react-range';
 
 const Experience = () => {
 
@@ -114,19 +116,58 @@ const Experience = () => {
     const clickReturn = () => {
         setLocation({...location, 0: false, 1: false, 2: false});
         setArea({...area, 0: false, 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false, 11:false});
+        setValues([0, 30]);
     }
 
     const clickApply = () => {
         onClick(anchor, false);
-        
     }
+
+    const STEP = 10;
+    const MIN = 0;
+    const MAX = 30;
+    const [values, setValues] = useState([0, 30]);
+
+    const [aligns, setAligns] = useState(() => ['register']);
+
+    const handleAligns = (e) => {
+        setAligns([e.target.offsetParent.value]);
+        console.log(aligns[0]);
+    };
+
+    const areas = [
+        {
+            id: 1,
+            label: '놀이터'
+        },
+        {
+            id: 2,
+            label: '키즈카페'
+        },
+        {
+            id: 3,
+            label: '지식전시'
+        },
+        {
+            id: 4,
+            label: '자연동물'
+        },
+        {
+            id: 5,
+            label: '식당숙박'
+        },
+        {
+            id: 6,
+            label: '기타'
+        }
+    ]
 
     const list = (anchor) => (
 
         <Box
         sx={{ width: 250 }}
         role="presentation"
-        onKeyDown={onClick(anchor, false)}
+        onKeyDown={onClick(anchor, false, false)}
         >
             <GlobalStyles 
                 styles={{
@@ -137,18 +178,20 @@ const Experience = () => {
                     }
                 }}
             />
-            <div className='my-2.5 mx-3.5'>
-                <div>
-                    <img src='images/ic_close.png' className='ml-auto' onClick={onClick(anchor, false)}/>
+            <div className='my-2.5'>
+                <div className='mx-3.5'>
+                    <img src='/images/ic_close.png' className='ml-auto' onClick={onClick(anchor, false, false)}/>
                 </div>
-                <div className='mb-7'>
+                <div className='mb-7 mx-3.5'>
                     <h3 className='mb-4 text-base font-semibold'>정렬</h3>
                     <div className='flex'>
-                        <div className='text-sm rounded-md border border-solid py-3 px-10 border-blue4 textBlue4'>등록순</div>
-                        <div className='text-sm rounded-md border border-solid py-3 px-10 border-l-white' style={{marginLeft: '-15px'}}>↑↓ 이름순</div>
+                        <ToggleButtonGroup value={aligns} onChange={handleAligns} aria-label='aligns' className='w-full'>
+                            <ToggleButton value='register' aria-label='register' className='w-full'>등록순</ToggleButton>
+                            <ToggleButton value='name' aria-label='name' className='w-full'>이름순</ToggleButton>
+                        </ToggleButtonGroup>
                     </div>
                 </div>
-                <div className='mb-7'>
+                <div className='mb-7 mx-3.5'>
                     <h3 className='mb-4 text-base font-semibold'>지역</h3>
                     <div className='flex'>
                         <div className={`flex-1 mr-1.5 py-2 px-5 rounded border ${location[0] ? 'border-blue4' : 'border-gray3'}`}>
@@ -171,104 +214,101 @@ const Experience = () => {
                         </div>
                     </div>
                 </div>
-                <div className='mb-7'>
+                <div className='mb-7 mx-3.5'>
                     <h3 className='mb-4 text-base font-semibold'>영역</h3>
-                    <div className='flex mb-2'>
-                        <div className={`mr-1 py-1.5 px-2 rounded border text-xs ${area[0] ? 'border-blue4' : 'border-gray3'}`}>
-                            <span className='none absolute opacity-0'>
-                                <input type='checkbox' aria-hidden='false' value='0' className='box-border p-0' onChange={areaClick}/>
-                            </span>
-                            <span className={`inline-block ${area[0] ? 'textBlue4' : 'textGray4'}`}>학원</span>
-                        </div>
-                        <div className={`mr-1 py-1.5 px-2 rounded border text-xs ${area[1] ? 'border-blue4' : 'border-gray3'}`}>
-                            <span className='none absolute opacity-0'>
-                                <input type='checkbox' aria-hidden='false' value='1' className='box-border p-0' onChange={areaClick}/>
-                            </span>
-                            <span className={`inline-block ${area[1] ? 'textBlue4' : 'textGray4'}`}>대전집</span>
-                        </div>
-                        <div className={`mr-1 py-1.5 px-2 rounded border text-xs ${area[2] ? 'border-blue4' : 'border-gray3'}`}>
-                            <span className='none absolute opacity-0'>
-                                <input type='checkbox' aria-hidden='false' value='2' className='box-border p-0' onChange={areaClick}/>
-                            </span>
-                            <span className={`inline-block ${area[2] ? 'textBlue4' : 'textGray4'}`}>소전집</span>
-                        </div>
-                        <div className={`mr-1 py-1.5 px-2 rounded border text-xs ${area[3] ? 'border-blue4' : 'border-gray3'}`}>
-                            <span className='none absolute opacity-0'>
-                                <input type='checkbox' aria-hidden='false' value='3' className='box-border p-0' onChange={areaClick}/>
-                            </span>
-                            <span className={`inline-block ${area[3] ? 'textBlue4' : 'textGray4'}`}>단행본</span>
-                        </div>
-                    </div>
-                    <div className='flex mb-2'>
-                        <div className={`mr-1 py-1.5 px-2 rounded border text-xs ${area[4] ? 'border-blue4' : 'border-gray3'}`}>
-                            <span className='none absolute opacity-0'>
-                                <input type='checkbox' aria-hidden='false' value='4' className='box-border p-0' onChange={areaClick}/>
-                            </span>
-                            <span className={`inline-block ${area[4] ? 'textBlue4' : 'textGray4'}`}>교구</span>
-                        </div>
-                        <div className={`mr-1 py-1.5 px-2 rounded border text-xs ${area[5] ? 'border-blue4' : 'border-gray3'}`}>
-                            <span className='none absolute opacity-0'>
-                                <input type='checkbox' aria-hidden='false' value='5' className='box-border p-0' onChange={areaClick}/>
-                            </span>
-                            <span className={`inline-block ${area[5] ? 'textBlue4' : 'textGray4'}`}>교재</span>
-                        </div>
-                        <div className={`mr-1 py-1.5 px-2 rounded border text-xs ${area[6] ? 'border-blue4' : 'border-gray3'}`}>
-                            <span className='none absolute opacity-0'>
-                                <input type='checkbox' aria-hidden='false' value='6' className='box-border p-0' onChange={areaClick}/>
-                            </span>
-                            <span className={`inline-block ${area[6] ? 'textBlue4' : 'textGray4'}`}>영상</span>
-                        </div>
-                        <div className={`mr-1 py-1.5 px-2 rounded border text-xs ${area[7] ? 'border-blue4' : 'border-gray3'}`}>
-                            <span className='none absolute opacity-0'>
-                                <input type='checkbox' aria-hidden='false' value='7' className='box-border p-0' onChange={areaClick}/>
-                            </span>
-                            <span className={`inline-block ${area[7] ? 'textBlue4' : 'textGray4'}`}>게임</span>
-                        </div>
-                        <div className={`mr-1 py-1.5 px-2 rounded border text-xs ${area[8] ? 'border-blue4' : 'border-gray3'}`}>
-                            <span className='none absolute opacity-0'>
-                                <input type='checkbox' aria-hidden='false' value='8' className='box-border p-0' onChange={areaClick}/>
-                            </span>
-                            <span className={`inline-block ${area[8] ? 'textBlue4' : 'textGray4'}`}>블록</span>
-                        </div>
-                    </div>
-                    <div className='flex mb-2'>
-                        <div className={`mr-1 py-1.5 px-2 rounded border text-xs ${area[9] ? 'border-blue4' : 'border-gray3'}`}>
-                            <span className='none absolute opacity-0'>
-                                <input type='checkbox' aria-hidden='false' value='9' className='box-border p-0' onChange={areaClick}/>
-                            </span>
-                            <span className={`inline-block ${area[9] ? 'textBlue4' : 'textGray4'}`}>퍼즐</span>
-                        </div>
-                        <div className={`mr-1 py-1.5 px-2 rounded border text-xs ${area[10] ? 'border-blue4' : 'border-gray3'}`}>
-                            <span className='none absolute opacity-0'>
-                                <input type='checkbox' aria-hidden='false' value='10' className='box-border p-0' onChange={areaClick}/>
-                            </span>
-                            <span className={`inline-block ${area[10] ? 'textBlue4' : 'textGray4'}`}>재료</span>
-                        </div>
-                        <div className={`mr-1 py-1.5 px-2 rounded border text-xs ${area[11] ? 'border-blue4' : 'border-gray3'}`}>
-                            <span className='none absolute opacity-0'>
-                                <input type='checkbox' aria-hidden='false' value='11' className='box-border p-0' onChange={areaClick}/>
-                            </span>
-                            <span className={`inline-block ${area[11] ? 'textBlue4' : 'textGray4'}`}>기타</span>
-                        </div>
+                    <div className='flex flex-wrap'>
+                        {
+                            areas.map((item, idx) => {
+                                return (
+                                <label className='block relative mr-2 mb-2.5' key={idx}>
+                                    <input type='checkbox' value={item.id} className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
+                                    <span className={`block border border-solid bg-white py-1.5 px-2 text-xs 
+                                        ${area[item.id]? 'textBlue4 border-blue4' : 'textGray4 border-gray3'}`} style={{borderRadius: '2px'}}>{item.label}</span>
+                                </label>
+                                )
+                            })
+                        }                       
                     </div>
                 </div>
-                <div className='mb-5'>
+                <div className='mx-3.5'>
                     <h3 className='mb-4 text-base font-semibold'>연령</h3>
-                    <div className='my-0 mx-2.5'>
-                        <Slider
-                            aria-label="Custom marks"
-                            defaultValue={0}
-                            getAriaValueText={valuetext}
-                            step={20}
-                            max={60}
-                            valueLabelDisplay="false"
-                            marks={marks}
-                        />
+                    <div className='w-full justify-center'>
+                        <div className='my-0 mx-2.5'>
+                            <Range
+                                values={values}
+                                step={STEP}
+                                min={MIN}
+                                max={MAX}
+                                onChange={values => {
+                                    console.log(values);
+                                    setValues(values);
+                                }}
+                                renderTrack={({ props, children }) => (
+                                    <div
+                                        onMouseDown={props.onMouseDown}
+                                        onTouchStart={props.onTouchStart}
+                                        style={{
+                                            ...props.style,
+                                            height: "36px",
+                                            display: "flex",
+                                            width: "100%"
+                                        }}
+                                    >
+                                    <div
+                                        ref={props.ref}
+                                        style={{
+                                            height: "5px",
+                                            width: "100%",
+                                            borderRadius: "4px",
+                                            background: getTrackBackground({
+                                                values,
+                                                colors: ["#ccc", "#548BF4", "#ccc"],
+                                                min: MIN,
+                                                max: MAX
+                                            }),
+                                            alignSelf: "center"
+                                        }}
+                                    >
+                                        {children}
+                                    </div>
+                                </div>
+                            )}
+                            renderThumb={({ props, isDragged }) => (
+                                <>
+                                <div
+                                    {...props}
+                                    style={{
+                                        ...props.style,
+                                        height: "20px",
+                                        width: "20px",
+                                        borderRadius: "10px",
+                                        backgroundColor: "#FFF",
+                                        border: '1px solid #3C81E1',
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                    }}
+                                >
+                                </div>
+                                </>
+                            )}
+                            />
+                        </div>
                     </div>
                 </div>
-                <div className='block absolute bottom-0 mb-7'>
-                    <span className='py-3.5 px-7 mr-2.5 rounded-md bg-gray2 text-sm text-center' onClick={clickReturn}>다시설정</span>
-                    <span className='py-3.5 px-7 rounded-md bg-blue4 text-white text-sm text-center' onClick={clickApply}>적용하기</span>
+                <div className='flex textGray3'>
+                    <span className='flex-1 text-center text-xs'>영아<br/>(1-3세)</span>
+                    <span className='flex-1 text-center text-xs'>유아<br/>(4-6세)</span>
+                    <span className='flex-1 text-center text-xs'>취학전<br/>(7세)</span>
+                    <span className='flex-1 text-center text-xs'>초등<br/>저학년</span>
+                </div>
+                <div className='block absolute bottom-0 mb-7 mx-3.5' style={{width: '90%'}}>
+                    <div className='grid grid-cols-2 gap-x-2 text-center text-sm' style={{height: '44px'}} onClick={clickReturn}>
+                        <div className='flex justify-center rounded-md bg-gray2 items-center'>
+                            <img src='/images/ic_refresh.png' className='w-4 h-4 mr-1'/>다시설정
+                        </div>
+                        <div className='rounded-md bg-blue4 text-white' style={{lineHeight: '44px'}} onClick={onClick(anchor, false, true)}>적용하기</div>
+                    </div>
                 </div>
             </div>
         </Box>
