@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
+import { Add } from '@material-ui/icons';
 
 const children = [
     {
@@ -43,12 +44,16 @@ const ChildrenInfo = () => {
                             return (
                                 <div className='mr-3' key={idx} onClick={() => {changeTab(idx)}}>
                                     <img src={`/images/child${select === item.id ? '2.png' : '1.png'}`} style={{width: '37px', height: '37px'}}/>
-                                    <div className='mt-2.5 text-xs text-center'>아이{idx+1}</div>
+                                    <div className={`mt-2.5 text-xs text-center ${select === item.id? 'textOrange5' : 'textGray4'}`}>
+                                        {item.id === 1 ? '첫째아이' : item.id === 2 ? '둘째아이' : item.id === 3 ? '셋째아이' : item.id === 4 ? '넷째아이' : '다섯째아이'}
+                                    </div>
                                 </div>
                             )
                         })
                     }
-                    <div className='border-2 border-dotted border-color4 rounded-full' style={{width: '37px', height: '37px'}}></div>
+                    <div className='border-2 border-dotted border-color4 rounded-full text-center' style={{width: '37px', height: '37px'}}>
+                        <Add className='textGray4 mt-1'/>
+                    </div>
                 </div>
             </div>
             <div className='mb-8 mx-5'>
