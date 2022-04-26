@@ -2,13 +2,21 @@ module.exports = (sequelize, DataTypes) => {
     return sequelize.define(
         'sample1',
         {
-            name: {
-                type: DataTypes.STRING(50),
-                allowNull: true
+            category: {
+                type: DataTypes.INTEGER,
+                allowNull: false
             },
-            email: {
-                type: DataTypes.STRING(100),
-                allowNull: true
+            step: {
+                type: DataTypes.INTEGER,
+                allowNull: false
+            },
+            korean: {
+                type: DataTypes.STRING(10),
+                allowNull: false
+            },
+            science: {
+                type: DataTypes.STRING(10),
+                allowNull: false
             }
         },
         {

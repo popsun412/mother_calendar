@@ -13,11 +13,29 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-const { HomeMain, HomeItem, HomePlace, HomeTheme, CategoryPlan, Confirm, Sequelize: { Op }} = require('./models');
+const { HomeMain, HomeItem, HomePlace, HomeTheme, CategoryPlan, Confirm, Sequelize: { Op }, Sample1} = require('./models');
 sequelize.query('SET NAMES utf8;');
 
 app.get('/', (req, res) => {
     res.send('Server Response Success');
+})
+
+app.post('/add/data', (req, res) => {
+    console.log(req.body);
+
+    Sample1.create({
+        category: req.body.category,
+        step: req.body.step,
+        korean: req.body.korean,
+        science: req.body.science
+    })
+    .then(result => {
+        res.send(result)
+    })
+    .catch(err => {
+        console.log(err)
+        throw err;
+    })
 })
 
 app.get('/home/main', (req, res) => {
