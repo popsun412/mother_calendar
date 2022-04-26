@@ -185,3 +185,7 @@
 .mr-25 {
     margin-right: 100px;
 }
+
+.leading-12 {
+    line-height: 48px;
+}
