@@ -64,8 +64,13 @@ const Account = () => {
                             <Checkbox value={3}checked={checked3} onChange={handleChange} style={{color: '#FF6035'}} /><span className='textGray3 text-xs font-medium'>SMS</span>
                         </div>
                     </div>
-                    <div className='mx-5' style={{height: '50px'}}>
+                    {/* <div className='mx-5' style={{height: '50px'}}>
                         <div className='text-sm textGray4' style={{lineHeight: '50px'}}>{'회원탈퇴 >'}</div>
+                    </div> */}
+                    <div className='flex absolute bottom-0 w-full items-center justify-evenly text-sm textGray4' style={{height: '70px'}}>
+                        <div>로그아웃</div>
+                        <div>|</div>
+                        <div>회원탈퇴</div>
                     </div>
                 </section>
             </main>
