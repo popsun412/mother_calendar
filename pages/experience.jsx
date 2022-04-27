@@ -323,8 +323,9 @@ const Experience = () => {
                         data.map((item, idx) => {
                             return (
                                 <div className='flex mb-5' key={idx}>
-                                    <div className='mr-4'>
+                                    <div className='mr-4 block relative'>
                                         <img src={item.img} className='rounded-md'/>
+                                        <img src='/images/ic_bookmark.png' className='block absolute bottom-0 right-0 mr-2 mb-1.5'/>
                                     </div>
                                     <div>
                                         <h3 className='text-base font-semibold mb-1.5'>{item.title}</h3>
