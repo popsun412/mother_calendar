@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import _ from 'lodash';
 
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
@@ -30,16 +31,41 @@ const theme_data = [
 
 const HomeTheme = () => {
 
-    const [theme, setTheme] = useState(1);
+    const [theme, setTheme] = useState('');
+    const [themeData, setThemeData] = useState('');
     const [data, setData] = useState([]);
 
-    useEffect(async() => {
-        const res = await axios.get('http://localhost:4000/home/theme');
-        setData(res.data);
+    useEffect(() => {
+        const getData = async() => {
+            const res = await axios.get('http://localhost:4000/home/theme');
+            if (res) {
+                setData(res.data);
+                getThemeTitle(res.data);
+            }
+        }
+        getData();
     }, [])
 
     const onClick = (param) => {
         setTheme(param);
+    }
+
+    const getThemeTitle = (data) => {
+        const title = [];
+
+        data.map((item, idx) => {
+            title.push({'theme': item.theme});
+            idx === 0 ? setTheme(item.theme) : '';
+        })
+
+        title = title.reduce((acc, current) => {
+            if (acc.findIndex(({theme}) => theme === current.theme) === -1) {
+                acc.push(current);
+            }
+            return acc;
+        }, [])
+
+        setThemeData(title);
     }
 
     return (
@@ -48,14 +74,14 @@ const HomeTheme = () => {
             <div className='mt-4 mb-6'>
                 <div className='flex'>
                 {
-                    theme_data.map((item, idx) => {
+                    themeData ? themeData.map((item, idx) => {
                         return (
-                            <div className='mr-2' key={idx} onClick={() => {onClick(item.id)}}>
-                                <span className={`text-center py-1.5 px-2 rounded-sm text-xs 
-                                    ${theme === item.id ? 'bg-blue3 text-white' : 'border border-solid bg-white border-gray3 textGray4'}`}>{item.label}</span>
+                            <div className='mr-2' key={idx} onClick={() => {onClick(item.theme)}}>
+                                <span className={`text-center py-1.5 px-2 rounded-sm text-xs
+                                    ${theme == item.theme? 'bg-blue3 text-white' : 'border border-solid bg-white border-gray3 textGray4'}`}>{item.theme}</span>
                             </div>
                         )
-                    })
+                    }) : ''
                 }
                 </div>
             </div>
@@ -66,7 +92,7 @@ const HomeTheme = () => {
                     {
                         data.map((item, idx) => {
                             return (
-                                item.id === theme ?
+                                item.theme === theme ?
                                 <SwiperSlide key={idx}>
                                     <div className='w-24'>
                                         <div className='block relative '>

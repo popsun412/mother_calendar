@@ -9,9 +9,14 @@ const HomeItem = () => {
 
     const [data, setData] = useState([]);
 
-    useEffect(async() => {
-        const res = await axios.get('http://localhost:4000/home/item');
-        setData(res.data);
+    useEffect(() => {
+        const getData = async() => {
+            const res = await axios.get('http://localhost:4000/home/item');
+            if (res) {
+                setData(res.data);
+            }
+        }
+        getData();
     }, [])
 
     return (

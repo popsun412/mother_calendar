@@ -11,10 +11,15 @@ const HomeSlider = () => {
 
     const [data, setData] = useState([]);
     
-    useEffect(async() => {
-        const res = await axios.get('http://localhost:4000/home/main')
-        setData(res.data);
-    })
+    useEffect(() => {
+        const getData = async() => {
+            const res = await axios.get('http://localhost:4000/home/main');
+            if (res) {
+                setData(res.data);
+            }
+        }
+        getData();
+    }, [])
 
     SwiperCore.use([Pagination, Autoplay]);
 
