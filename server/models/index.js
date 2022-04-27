@@ -28,6 +28,9 @@ db.sequelize.authenticate()
 
 db.Sample1 = require('./sample1')(sequelize, Sequelize);
 
+// Common
+db.Bookmark = require('./common/bookmark')(sequelize, Sequelize);
+
 // Home
 db.HomeMain = require('./home/main')(sequelize, Sequelize);
 db.HomeItem = require('./home/item')(sequelize, Sequelize);
