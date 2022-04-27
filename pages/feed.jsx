@@ -1,32 +1,8 @@
 import React, { useState } from 'react';
 import { Box, Drawer } from '@material-ui/core';
-import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { Range, getTrackBackground } from 'react-range';
 import FeedItem from '../components/feed/feed_item';
 import Navigation from '../components/common/navigation';
-
-const data = [
-    {
-        nickname: '수민맘',
-        date: '202204151430',
-        tag: '5세 6세 8세, 서울, 엄마표',
-        type: '국어',
-        target: '한글 떼기 워크북 풀기',
-        title: '잉글리시 에그 Step 1',
-        img: 'https://picsum.photos/id/550/400/400',
-        contents: '집중력 떨어질까봐 책상은 다 비웠었는데, 교재 종류가 증가하다보니 어쩔 수 없이 매일 보는 것은 가까이 꽂아두었습니다. 가나다라마바사 가나다라마바사'
-    },
-    {
-        nickname: '유민맘',
-        date: '202204151430',
-        tag: '5세 6세, 서울, 엄마표',
-        type: '영어',
-        target: '한글 떼기 워크북 풀기',
-        title: '잉글리시 에그 Step 1',
-        img: 'https://picsum.photos/id/560/400/400',
-        contents: '집중력 떨어질까봐 책상은 다 비웠었는데, 교재 종류가 증가하다보니 어쩔 수 없이 매일 보는 것은 가까이 꽂아두었습니다. 가나다라마바사 가나다라마바사'
-    }
-]
 
 const Feed = () => {
 
@@ -325,7 +301,7 @@ const Feed = () => {
             </Drawer>
             <main style={{marginTop: '50px', marginBottom: '72px'}}>
                 <section className='pt-3.5'>
-                    <FeedItem data={data}/>
+                    <FeedItem />
                 </section>
             </main>
             <Navigation path={'feed'}/>

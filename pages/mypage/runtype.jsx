@@ -1,6 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
+const data = [
+    {
+        'eng': 35,
+        'mat': 20,
+        'art': 15,
+        'kor': 10,
+        'etc': 10
+    }
+]
 
 const RunType = () => {
+
+    const [run, setRun] = useState([])
+
+    useEffect(() => {
+        const runtype = {}
+        let sum = getSum(data);
+        console.log(sum);
+    }, [])
+
+    const getSum = (data) => {
+        let sum = 0;
+        let sumArr = [];
+
+        data.map((item, idx) => {
+            sumArr = Object.values(item);
+        })
+
+        for(let i=0; i<sumArr.length; i++) {
+            sum += sumArr[i];
+        }
+
+        return sum;
+    }
+
     return (
         <div>
             <header className='sticky top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{marginBottom: '-50px'}}>

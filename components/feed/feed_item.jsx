@@ -1,10 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const FeedItem = (props) => {
 
-    const {data} = props;
-
+    const [data, setData] = useState([]);
     const [closed, setClosed] = useState(false);
+
+    useEffect(() => {
+        const getData = async() => {
+            const res = await axios('http://localhost:4000/feed/data', {
+                method: 'GET'
+            })
+
+            if (res.data) setData(res.data);
+        }
+        getData();
+    }, [])
 
     const handleMoreBtn = () => {
         setClosed(!closed);

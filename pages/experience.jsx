@@ -1,50 +1,31 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Box, Drawer, Slider } from '@material-ui/core';
 import { GlobalStyles, ToggleButtonGroup } from '@mui/material';
 import { ToggleButton } from '@material-ui/lab';
 import { Range, getTrackBackground } from 'react-range';
+import axios from 'axios';
 
 const Experience = () => {
 
-    const data = [
-        {
-            title: '직업체험 테마파크 키자니아',
-            imgUrl: 'https://picsum.photos/id/510/100/100',
-            tag1: '서울',
-            tag2: '자연동물'
-        },
-        {
-            title: '직업체험 테마파크 키자니아',
-            imgUrl: 'https://picsum.photos/id/511/100/100',
-            tag1: '서울',
-            tag2: '자연동물'
-        },
-        {
-            title: '직업체험 테마파크 키자니아',
-            imgUrl: 'https://picsum.photos/id/512/100/100',
-            tag1: '서울',
-            tag2: '자연동물'
-        },
-        {
-            title: '직업체험 테마파크 키자니아',
-            imgUrl: 'https://picsum.photos/id/513/100/100',
-            tag1: '서울',
-            tag2: '자연동물'
-        },
-        {
-            title: '직업체험 테마파크 키자니아',
-            imgUrl: 'https://picsum.photos/id/514/100/100',
-            tag1: '서울',
-            tag2: '자연동물'
-        },
-        {
-            title: '직업체험 테마파크 키자니아',
-            imgUrl: 'https://picsum.photos/id/515/100/100',
-            tag1: '서울',
-            tag2: '자연동물'
+    const [data, setData] = useState([]);
+
+    const [state, setState] = useState({
+        top: false,
+        left: false,
+        bottom: false,
+        right: false,
+    });
+
+    useEffect(() => {
+        const getData = async() => {
+            const res = await axios('http://localhost:4000/experience/data', {
+                method: 'GET'
+            })
+            if (res.data) setData(res.data);
         }
-    ]
+        getData();
+    }, [])
 
     const marks = [
         {
@@ -65,12 +46,9 @@ const Experience = () => {
         },
     ];
 
-    const [state, setState] = useState({
-        top: false,
-        left: false,
-        bottom: false,
-        right: false,
-    });
+    const applyFilter = () => {
+        
+    }
 
     const onClick = (anchor, open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -346,7 +324,7 @@ const Experience = () => {
                             return (
                                 <div className='flex mb-5' key={idx}>
                                     <div className='mr-4'>
-                                        <img src={item.imgUrl} className='rounded-md'/>
+                                        <img src={item.img} className='rounded-md'/>
                                     </div>
                                     <div>
                                         <h3 className='text-base font-semibold mb-1.5'>{item.title}</h3>

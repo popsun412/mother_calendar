@@ -1,60 +1,30 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
 const Parents = () => {
 
-    const data = [
-        {
-            title: '직업체험 테마파크 키자니아',
-            imgUrl: 'https://picsum.photos/id/510/100/100',
-            tag1: '서울',
-            tag2: '자연동물'
-        },
-        {
-            title: '직업체험 테마파크 키자니아',
-            imgUrl: 'https://picsum.photos/id/511/100/100',
-            tag1: '서울',
-            tag2: '자연동물'
-        },
-        {
-            title: '직업체험 테마파크 키자니아',
-            imgUrl: 'https://picsum.photos/id/512/100/100',
-            tag1: '서울',
-            tag2: '자연동물'
-        },
-        {
-            title: '직업체험 테마파크 키자니아',
-            imgUrl: 'https://picsum.photos/id/513/100/100',
-            tag1: '서울',
-            tag2: '자연동물'
-        },
-        {
-            title: '직업체험 테마파크 키자니아',
-            imgUrl: 'https://picsum.photos/id/514/100/100',
-            tag1: '서울',
-            tag2: '자연동물'
-        },
-        {
-            title: '직업체험 테마파크 키자니아',
-            imgUrl: 'https://picsum.photos/id/515/100/100',
-            tag1: '서울',
-            tag2: '자연동물'
-        }
-    ]
+    const [data, setData] = useState([]);
+    const [order, setOrder] = useState(true);
 
-    const [filterValue, setFilterValue] = useState(true);
+    const getData = async(param) => {
+        let order = '';
+        param ? order = 'DESC' : order = 'ASC';
+        const res = await axios('http://localhost:4000/parents/data', {
+            method: 'GET',
+            params: {
+                order: order
+            }
+        })
+        if (res.data) setData(res.data);
+    }
 
-    const filterClick = () => {
-        setFilterValue(!filterValue);
+    useEffect(() => {
+        getData(order);
+    }, [])
 
-        if (filterValue) {
-            data.sort((a, b) => {
-                return a.title < b.title ? -1 : a.title > b.title ? 1 : 0;
-            })
-        } else {
-            data.sort((a, b) => {
-                return a.title > b.title ? -1 : a.title > b.title ? 1 : 0;
-            })
-        }
+    const clickOrder = () => {
+        setOrder(!order);
+        getData(order);
     }
 
     return (
@@ -69,9 +39,9 @@ const Parents = () => {
             </header>
             <main className='my-14'>
                 <div className='mx-4'>
-                    <div onClick={filterClick} className='block relative' style={{height: '26px'}}>
+                    <div className='block relative' style={{height: '26px'}}>
                         <div className='block absolute right-0'>
-                            <span className='bg-gray2 py-1.5 px-2 text-xs text-center textGray2 rounded'>↑↓ 이름순</span>
+                            <span className='bg-gray2 py-1.5 px-2 text-xs text-center textGray2 rounded' onClick={clickOrder}>↑↓ 이름순</span>
                         </div>
                     </div>
                     <div className='mt-5'>
@@ -80,7 +50,7 @@ const Parents = () => {
                                 return (
                                     <div className='flex mt-5' key={idx}>
                                         <div className='mr-4'>
-                                            <img src={item.imgUrl} className='rounded-md'/>
+                                            <img src={item.img} className='rounded-md'/>
                                         </div>
                                         <div>
                                             <h3 className='text-base font-semibold mb-1.5' style={{letterSpacing: '-0.3px'}}>{item.title}</h3>
