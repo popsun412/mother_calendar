@@ -13,7 +13,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-const { HomeMain, HomeItem, HomePlace, HomeTheme, CategoryPlan, Confirm, Sample1, Feed, Experience, Parents, Etc, Bookmark, Place, Sequelize: { Op }, CategoryItem} = require('./models');
+const { HomeMain, HomeItem, HomePlace, HomeTheme, CategoryPlan, Confirm, Sample1, Feed, Experience, Parents, Etc, Bookmark, Place, Sequelize: { Op }, CategoryItem, MapList} = require('./models');
 const item = require('./models/home/item');
 sequelize.query('SET NAMES utf8;');
 
@@ -152,6 +152,17 @@ app.get('/result/data', (req, res) => {
     })
         .then( result => { res.send(result) })
         .catch( err => { throw err })
+})
+
+app.get('/map/list', (req, res) => {
+    console.log(req.query);
+    MapList.findAll({
+        where: {
+
+        }
+    })
+        .then( result => { res.send(result) })
+        .catch( err => {  throw err})
 })
 
 const PORT = process.env.PORT || 4000;

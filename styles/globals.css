@@ -208,3 +208,9 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
 }
+
+.cluster_click {
+    background-color: #fff !important;
+    color: #ff734d !important;
+    border: 1.5px solid #ff734d;
+}

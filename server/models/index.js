@@ -46,6 +46,9 @@ db.CategoryPlan = require('./category/plan')(sequelize, Sequelize);
 
 db.User = require('./user/user')(sequelize, Sequelize);
 
+// Map
+db.MapList = require('./map/list')(sequelize, Sequelize);
+
 // Confirm
 db.Confirm = require('./confirm/confirm')(sequelize, Sequelize);
 
