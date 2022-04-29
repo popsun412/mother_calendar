@@ -13,7 +13,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-const { HomeMain, HomeItem, HomePlace, HomeTheme, CategoryPlan, Confirm, Sample1, Feed, Experience, Parents, Etc, Bookmark, Place, Sequelize: { Op }} = require('./models');
+const { HomeMain, HomeItem, HomePlace, HomeTheme, CategoryPlan, Confirm, Sample1, Feed, Experience, Parents, Etc, Bookmark, Place, Sequelize: { Op }, CategoryItem} = require('./models');
 const item = require('./models/home/item');
 sequelize.query('SET NAMES utf8;');
 
@@ -65,6 +65,14 @@ app.get('/home/theme', (req, res) => {
 
 app.get('/category/plan', (req, res) => {
     CategoryPlan.findAll({
+        where: { category : req.query.category }
+    })
+    .then( result => { res.send(result) })
+    .catch( err => {throw err})
+})
+
+app.get('/category/item', (req, res) => {
+    CategoryItem.findAll({
         where: { category : req.query.category }
     })
     .then( result => { res.send(result) })

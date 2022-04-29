@@ -3,69 +3,28 @@ import { Box, Drawer } from '@material-ui/core';
 import { Range, getTrackBackground } from 'react-range';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { GlobalStyles } from '@mui/material';
-
-const data = [
-    {
-        title: '가베가족 알파벳 교구',
-        category: 1,
-        tag1: '영어',
-        tag2: '교구',
-        imgUrl: '/images/itme.png',
-        bookmark: true
-    },
-    {
-        title: '가베가족 알파벳 교구',
-        category: 2,
-        tag1: '영어',
-        tag2: '교구',
-        imgUrl: '/images/itme.png',
-        bookmark: false
-    },{
-        title: '가베가족 알파벳 교구',
-        category: 3,
-        tag1: '영어',
-        tag2: '교구',
-        imgUrl: '/images/itme.png',
-        bookmark: false
-    },{
-        title: '가베가족 알파벳 교구',
-        category: 5,
-        tag1: '영어',
-        tag2: '교구',
-        imgUrl: '/images/itme.png',
-        bookmark: false
-    },{
-        title: '가베가족 알파벳 교구',
-        category: 5,
-        tag1: '영어',
-        tag2: '교구',
-        imgUrl: '/images/itme.png',
-        bookmark: false
-    },{
-        title: '가베가족 알파벳 교구',
-        category: 5,
-        tag1: '영어',
-        tag2: '교구',
-        imgUrl: '/images/itme.png',
-        bookmark: false
-    },{
-        title: '가베가족 알파벳 교구',
-        category: 4,
-        tag1: '영어',
-        tag2: '교구',
-        imgUrl: '/images/itme.png',
-        bookmark: false
-    },{
-        title: '가베가족 알파벳 교구',
-        category: 4,
-        tag1: '영어',
-        tag2: '교구',
-        imgUrl: '/images/itme.png',
-        bookmark: false
-    },
-]
+import axios from 'axios';
 
 const CategoryItem = (props) => {
+
+    const { category } = props;
+    const [data, setData] = useState([]);
+
+    const getData = async(param) => {
+        console.log('param : ', param);
+        const res = await axios('http://localhost:4000/category/item', {
+            method: 'GET',
+            params: {
+                category: category
+            }
+        })
+        res.data ? setData(res.data) : ''
+    }
+
+    useEffect(() => {
+        getData();
+
+    }, [category])
 
     const marks = [
         {
@@ -101,6 +60,17 @@ const CategoryItem = (props) => {
         }
 
         setState({ ...state, [anchor]: open });
+
+        console.log(aligns[0]);
+        console.log(location);
+        console.log(area);
+        console.log(values);
+
+        const param = {};
+
+        aligns[0] == 'register' ? param.order = aligns[0] : '';   // 정렬
+
+        console.log(param);
 
         if(filter) {
             let chk1 = false;
@@ -412,7 +382,7 @@ const CategoryItem = (props) => {
                             props.category === item.category || props.category === 0 ?
                             <div key={idx}>
                                 <div className='block relative'>
-                                    <img src={item.imgUrl} className='rounded-md' style={{width: '154px', height: '154px'}}/>
+                                    <img src={item.img} className='rounded-md' style={{width: '154px', height: '154px'}}/>
                                     {
                                         item.bookmark ? <img src='/images/ic_bookmarked.png' className='block absolute bottom-0 right-0 pr-2.5 pb-3'/>
                                                     : <img src='/images/ic_bookmark.png' className='block absolute bottom-0 right-0 pr-2.5 pb-3'/>
