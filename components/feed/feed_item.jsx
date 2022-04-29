@@ -58,7 +58,7 @@ const FeedItem = (props) => {
                             <div className='mt-4'>
                                 <div className={closed ? 'text' : 'text-close'}>
                                     {item.contents}
-                                    <div className={`absolute textGray3 bottom-0 right-0 bg-white px-2.5`} onClick={handleMoreBtn}>{closed ? '숨기기' : '더보기'}</div>
+                                    <div className={`absolute textGray3 bottom-0 right-0 bg-white px-2.5`} onClick={handleMoreBtn}>{closed ? '숨기기' : '... 더보기'}</div>
                                 </div>
                             </div>
                         </div>
