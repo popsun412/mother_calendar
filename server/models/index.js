@@ -37,6 +37,9 @@ db.HomeItem = require('./home/item')(sequelize, Sequelize);
 db.HomePlace = require('./home/place')(sequelize, Sequelize);
 db.HomeTheme = require('./home/theme')(sequelize, Sequelize);
 
+// Result
+db.Place = require('./result/place')(sequelize, Sequelize);
+
 // Category
 db.CategoryItem = require('./category/item')(sequelize, Sequelize);
 db.CategoryPlan = require('./category/plan')(sequelize, Sequelize);

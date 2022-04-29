@@ -6,14 +6,14 @@ const sequelize = require('./models').sequelize;
 sequelize.sync();
 
 const corsOptions = {
-    origin: 'http://localhost:3002',
+    origin: 'http://localhost:3000',
     credentials: true
 }
 
 app.use(cors(corsOptions));
 app.use(express.json());
 
-const { HomeMain, HomeItem, HomePlace, HomeTheme, CategoryPlan, Confirm, Sample1, Feed, Experience, Parents, Etc, Sequelize: { Op }, Bookmark} = require('./models');
+const { HomeMain, HomeItem, HomePlace, HomeTheme, CategoryPlan, Confirm, Sample1, Feed, Experience, Parents, Etc, Bookmark, Place, Sequelize: { Op }} = require('./models');
 const item = require('./models/home/item');
 sequelize.query('SET NAMES utf8;');
 
@@ -132,6 +132,18 @@ app.post('/common/bookmark', (req, res) => {
         console.log(err)
         throw err;
     })
+})
+
+app.get('/result/data', (req, res) => {
+    console.log('--- /result/data ---');
+    console.log(req.query);
+    Place.findAll({
+        where: {
+            title: { [Op.like]: `%${req.query.title}%` },
+        },
+    })
+        .then( result => { res.send(result) })
+        .catch( err => { throw err })
 })
 
 const PORT = process.env.PORT || 4000;
