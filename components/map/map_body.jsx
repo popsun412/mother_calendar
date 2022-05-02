@@ -101,8 +101,8 @@ const MapBody = (props) => {
 
 
         kakao.maps.event.addListener(clusterer, 'clusterclick', function(cluster) {
-            setOpen(true);
             setMarkers(cluster.getMarkers());
+            setOpen(true);
         })
 
     }, [kakaoMap, markerClusterPositions]);
