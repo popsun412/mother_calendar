@@ -43,9 +43,6 @@ const Guide = () => {
                     </div>
                 </section>
                 <section className='mt-4'>
-                    {/* <video controls loop muted autoPlay style={{width: '360px', height: '360px'}}>
-                        <source src="https://youtu.be/hX_XYdgjGkw" />
-                    </video> */}
                     <ReactPlayer url='https://youtu.be/hX_XYdgjGkw' playing={false} controls={true} width='360px' height='360px'/>
                 </section>
                 <section className='mt-4'>
