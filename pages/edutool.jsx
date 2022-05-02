@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Box, Drawer } from '@material-ui/core';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
-import { Range, getTrackBackground } from 'react-range';
 
-import BookshelfInstock from '../components/bookshelf/bookshelf_instock';
-import BookshelfPurchase from '../components/bookshelf/bookshelf_purchase';
-import BookshelfSell from '../components/bookshelf/bookshlef_sell';
+import EduToolInstock from '../components/edutool/edutool_instock';
+import EduToolPurchase from '../components/edutool/edutool_purchase';
+import EduToolSell from '../components/edutool/edutool_sell';
 import { Global } from '@emotion/react';
 
 const EduTool = () => {
@@ -158,9 +157,9 @@ const EduTool = () => {
     ]
 
     const obj = {
-        0: <BookshelfInstock />,
-        1: <BookshelfPurchase />,
-        2: <BookshelfSell />
+        0: <EduToolInstock />,
+        1: <EduToolPurchase />,
+        2: <EduToolSell />
     }
 
     const list = (anchor) => (
