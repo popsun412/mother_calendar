@@ -58,7 +58,7 @@ const EduToolSell = () => {
         {
             data.map((item, index) => {
                 return (
-                    <div className='flex' key={index} style={{marginBottom: '22px'}}>
+                    <div className='flex opacity-30' key={index} style={{marginBottom: '22px'}}>
                         <div className='mr-4'>
                             <img src={item.imgUrl} className='rounded-md border border-solid border-color4' style={{width: '94px', height: '94px'}}/>
                         </div>
