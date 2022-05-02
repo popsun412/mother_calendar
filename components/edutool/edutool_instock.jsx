@@ -4,50 +4,50 @@ const EduToolInstock = () => {
 
     const data = [
         {
-            title: '잉글리시 에그 Step 1',
-            imgUrl : 'https://picsum.photos/id/511/200/200',
+            title: '가베가족 알파벳 교구',
+            imgUrl : '/images/itme.png',
             tag1: '전집',
             tag2: '자연동물'
         },
         {
-            title: '잉글리시 에그 Step 1',
-            imgUrl : 'https://picsum.photos/id/512/200/200',
+            title: '가베가족 알파벳 교구',
+            imgUrl : '/images/itme.png',
             tag1: '전집',
             tag2: '자연동물'
         },
         {
-            title: '잉글리시 에그 Step 1',
-            imgUrl : 'https://picsum.photos/id/513/200/200',
+            title: '가베가족 알파벳 교구',
+            imgUrl : '/images/itme.png',
             tag1: '전집',
             tag2: '자연동물'
         },
         {
-            title: '잉글리시 에그 Step 1',
-            imgUrl : 'https://picsum.photos/id/514/200/200',
+            title: '가베가족 알파벳 교구',
+            imgUrl : '/images/itme.png',
             tag1: '전집',
             tag2: '자연동물'
         },
         {
-            title: '잉글리시 에그 Step 1',
-            imgUrl : 'https://picsum.photos/id/515/200/200',
+            title: '가베가족 알파벳 교구',
+            imgUrl : '/images/itme.png',
             tag1: '전집',
             tag2: '자연동물'
         },
         {
-            title: '잉글리시 에그 Step 1',
-            imgUrl : 'https://picsum.photos/id/516/200/200',
+            title: '가베가족 알파벳 교구',
+            imgUrl : '/images/itme.png',
             tag1: '전집',
             tag2: '자연동물'
         },
         {
-            title: '잉글리시 에그 Step 1',
-            imgUrl : 'https://picsum.photos/id/517/200/200',
+            title: '가베가족 알파벳 교구',
+            imgUrl : '/images/itme.png',
             tag1: '전집',
             tag2: '자연동물'
         },
         {
-            title: '잉글리시 에그 Step 1',
-            imgUrl : 'https://picsum.photos/id/518/200/200',
+            title: '가베가족 알파벳 교구',
+            imgUrl : '/images/itme.png',
             tag1: '전집',
             tag2: '자연동물'
         }

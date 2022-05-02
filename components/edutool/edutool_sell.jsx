@@ -4,32 +4,52 @@ import moment from 'moment';
 const EduToolSell = () => {
     const data = [
         {
-            title: '직업체험 테마파크 키자니아',
-            data: '20220107',
-            imgUrl : 'https://picsum.photos/id/511/200/200',
-            tag1: '영어',
-            tag2: '대전집'
+            title: '가베가족 알파벳 교구',
+            imgUrl : '/images/itme.png',
+            tag1: '전집',
+            tag2: '자연동물'
         },
         {
-            title: '직업체험 테마파크 키자니아',
-            data: '20220107',
-            imgUrl : 'https://picsum.photos/id/512/200/200',
-            tag1: '영어',
-            tag2: '대전집'
+            title: '가베가족 알파벳 교구',
+            imgUrl : '/images/itme.png',
+            tag1: '전집',
+            tag2: '자연동물'
         },
         {
-            title: '직업체험 테마파크 키자니아',
-            data: '20220107',
-            imgUrl : 'https://picsum.photos/id/513/200/200',
-            tag1: '영어',
-            tag2: '대전집'
+            title: '가베가족 알파벳 교구',
+            imgUrl : '/images/itme.png',
+            tag1: '전집',
+            tag2: '자연동물'
         },
         {
-            title: '직업체험 테마파크 키자니아',
-            data: '20220107',
-            imgUrl : 'https://picsum.photos/id/514/200/200',
-            tag1: '영어',
-            tag2: '대전집'
+            title: '가베가족 알파벳 교구',
+            imgUrl : '/images/itme.png',
+            tag1: '전집',
+            tag2: '자연동물'
+        },
+        {
+            title: '가베가족 알파벳 교구',
+            imgUrl : '/images/itme.png',
+            tag1: '전집',
+            tag2: '자연동물'
+        },
+        {
+            title: '가베가족 알파벳 교구',
+            imgUrl : '/images/itme.png',
+            tag1: '전집',
+            tag2: '자연동물'
+        },
+        {
+            title: '가베가족 알파벳 교구',
+            imgUrl : '/images/itme.png',
+            tag1: '전집',
+            tag2: '자연동물'
+        },
+        {
+            title: '가베가족 알파벳 교구',
+            imgUrl : '/images/itme.png',
+            tag1: '전집',
+            tag2: '자연동물'
         }
     ]
 
