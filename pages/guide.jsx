@@ -19,7 +19,7 @@ const Guide = () => {
             </header>
             <main style={{marginTop: '50px'}}>
                 <section className='mx-5' style={{paddingTop: '18px'}}>
-                    <div className='flex mb-6'>
+                    <div className='flex mb-6 justify-between'>
                         <div>
                             <img src='https://picsum.photos/200/200' className='w-10 h-10' style={{borderRadius: '20px'}}/>
                         </div>
