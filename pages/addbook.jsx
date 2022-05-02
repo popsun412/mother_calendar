@@ -7,6 +7,7 @@ const AddBook = () => {
     const [booktitle, setBooktitle] = useState('');
 
     const [status, setStatus] = useState(() => ['inbox']);
+    const [field, setField] = useState();
 
     const [star, setStar] = useState({
         1: false,
@@ -32,6 +33,10 @@ const AddBook = () => {
 
     const starChange = (index) => {
         setStar([e.target.offsetParent.value]);
+    }
+
+    const fieldClick = (e) => {
+        e.target.checked ? setField(e.target.value) : setField('');
     }
 
     return (
@@ -91,50 +96,83 @@ const AddBook = () => {
                     <div className='text-sm textGray2 font-medium'>분야</div>
                     <div className='mt-6'>
                         <div className='grid grid-cols-4 gap-3'>
-                            <div className='flex text-sm py-2 px-2 border border-solid rounded textGray4 border-gray3 justify-center'>
-                                <img src='/images/category1.png' className='mr-1 grayscale' style={{width: '17px', height: '17px'}}/>    
-                                국어
-                            </div>
-                            <div className='flex text-sm py-2 px-2 border border-solid rounded textGray4 border-gray3 justify-center'>
-                                <img src='/images/category2.png' className='mr-1 grayscale' style={{width: '17px', height: '17px'}}/>    
-                                영어
-                            </div>
-                            <div className='flex text-sm py-2 px-2 border border-solid rounded textGray4 border-gray3 justify-center'>
-                                <img src='/images/category3.png' className='mr-1 grayscale' style={{width: '17px', height: '17px'}}/>    
-                                수학
-                            </div>
-                            <div className='flex text-sm py-2 px-2 border border-solid rounded textGray4 border-gray3 justify-center'>
-                                <img src='/images/category4.png' className='mr-1 grayscale' style={{width: '17px', height: '17px'}}/>    
-                                과학
-                            </div>
-                            <div className='flex text-sm py-2 px-2 border border-solid rounded textGray4 border-gray3 justify-center'>
-                                <img src='/images/category5.png' className='mr-1 grayscale' style={{width: '17px', height: '17px'}}/>    
-                                사회
-                            </div>
-                            <div className='flex text-sm py-2 px-2 border border-solid rounded textGray4 border-gray3 justify-center'>
-                                <img src='/images/category6.png' className='mr-1 grayscale' style={{width: '17px', height: '17px'}}/>    
-                                미술
-                            </div>
-                            <div className='flex text-sm py-2 px-2 border border-solid rounded textGray4 border-gray3 justify-center'>
-                                <img src='/images/category7.png' className='mr-1 grayscale' style={{width: '17px', height: '17px'}}/>    
-                                음악
-                            </div>
-                            <div className='flex text-sm py-2 px-2 border border-solid rounded textGray4 border-gray3 justify-center'>
-                                <img src='/images/category8.png' className='mr-1 grayscale' style={{width: '17px', height: '17px'}}/>    
-                                체육
-                            </div>
-                            <div className='flex text-sm py-2 px-2 border border-solid rounded textGray4 border-gray3 justify-center'>
-                                <img src='/images/category9.png' className='mr-1 grayscale' style={{width: '17px', height: '17px'}}/>    
-                                놀이
-                            </div>
-                            <div className='flex text-sm py-2 px-2 border border-solid rounded textGray4 border-gray3 justify-center'>
-                                <img src='/images/category11.png' className='mr-1 grayscale' style={{width: '17px', height: '17px'}}/>    
-                                기타
-                            </div>
-                            <div className='flex text-sm py-2 px-2 border border-solid rounded textGray4 border-gray3 justify-center'>
-                                <img src='/images/category12.png' className='mr-1 grayscale' style={{width: '17px', height: '17px'}}/>    
-                                부모
-                            </div>
+                            <label>
+                                <input type='checkbox' value='kor' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'kor' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category1.png' className={`mr-1 ${field == 'kor' ? '' : 'grayscale'}`}
+                                        style={{width: '17px', height: '17px'}}/>국어
+                                </span>
+                            </label>
+                            <label>
+                                <input type='checkbox' value='eng' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'eng' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category2.png' className={`mr-1 ${field == 'eng' ? '' : 'grayscale'}`}
+                                        style={{width: '17px', height: '17px'}}/>영어
+                                </span>
+                            </label>
+                            <label>
+                                <input type='checkbox' value='mat' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'mat' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category3.png' className={`mr-1 ${field == 'mat' ? '' : 'grayscale'}`}
+                                        style={{width: '17px', height: '17px'}}/>수학
+                                </span>
+                            </label>
+                            <label>
+                                <input type='checkbox' value='sci' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'sci' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category4.png' className={`mr-1 ${field == 'sci' ? '' : 'grayscale'}`}
+                                        style={{width: '17px', height: '17px'}}/>과학
+                                </span>
+                            </label>
+                            <label>
+                                <input type='checkbox' value='soc' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'soc' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category5.png' className={`mr-1 ${field == 'soc' ? '' : 'grayscale'}`}
+                                        style={{width: '17px', height: '17px'}}/>사회
+                                </span>
+                            </label>
+                            <label>
+                                <input type='checkbox' value='art' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'art' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category6.png' className={`mr-1 ${field == 'art' ? '' : 'grayscale'}`}
+                                        style={{width: '17px', height: '17px'}}/>미술
+                                </span>
+                            </label>
+                            <label>
+                                <input type='checkbox' value='mus' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'mus' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category7.png' className={`mr-1 ${field == 'mus' ? '' : 'grayscale'}`}
+                                        style={{width: '17px', height: '17px'}}/>음악
+                                </span>
+                            </label>
+                            <label>
+                                <input type='checkbox' value='ath' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'ath' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category8.png' className={`mr-1 ${field == 'ath' ? '' : 'grayscale'}`}
+                                        style={{width: '17px', height: '17px'}}/>체육
+                                </span>
+                            </label>
+                            <label>
+                                <input type='checkbox' value='play' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'play' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category9.png' className={`mr-1 ${field == 'play' ? '' : 'grayscale'}`}
+                                        style={{width: '17px', height: '17px'}}/>놀이
+                                </span>
+                            </label>
+                            <label>
+                                <input type='checkbox' value='etc' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'etc' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category11.png' className={`mr-1 ${field == 'etc' ? '' : 'grayscale'}`}
+                                        style={{width: '17px', height: '17px'}}/>기타
+                                </span>
+                            </label>
+                            <label>
+                                <input type='checkbox' value='par' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'par' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category12.png' className={`mr-1 ${field == 'par' ? '' : 'grayscale'}`}
+                                        style={{width: '17px', height: '17px'}}/>부모
+                                </span>
+                            </label>
                         </div>
                     </div>
                 </section>
