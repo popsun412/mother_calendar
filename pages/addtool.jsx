@@ -2,6 +2,8 @@ import { Global } from '@emotion/react';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import React, { useEffect, useState } from 'react';
 import StarRatings from 'react-star-ratings';
+import DatePicker from 'react-mobile-datepicker';
+import moment from 'moment';
 
 const AddTool = () => {
 
@@ -16,6 +18,20 @@ const AddTool = () => {
     const [field, setField] = useState();
     const [area, setArea] = useState();
     const [rating, setRating] = useState(0);
+    const [time, setTime] = useState(new Date());
+    const [isOpen, setIsOpen] = useState(false);
+    const dateConfig = {
+        'year': {
+            format: 'YYYY년',
+            caption: 'Year',
+            step: 1
+        },
+        'month': {
+            format: 'MM월',
+            caption: 'Mon',
+            step: 1,
+        },
+    }
 
     let inputRef;
 
@@ -68,6 +84,33 @@ const AddTool = () => {
         }
     }, [status, rating, image, field, area]);
 
+    const onSubmit = async(e) => {
+        e.preventDefault();
+
+        const res = await axios('http://localhost:4000/add/tool', {
+            method: 'POST',
+            params: {
+                
+            }
+        }).then( e => {
+            console.log(e);
+        }).catch(err => console.log(err));
+    }
+
+    const handleClick = () => {
+        setIsOpen(true);
+    }
+
+    const handleCancel = () => {
+        setIsOpen(false);
+    }
+
+    const handleSelect = (time) => {
+        setTime(time);
+        console.log(moment(time).format('YYYYMMDD'))
+        setIsOpen(false);
+    }
+
     return (
         <div>
             <header className='sticky top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{marginBottom: '-50px'}}>
@@ -77,7 +120,7 @@ const AddTool = () => {
                             <img src='/images/ic_back.png' />
                         </div>
                         <div className='my-0 mx-auto text-base font-medium' style={{letterSpacing: '-0.3px'}}>교구 등록</div>
-                        <button className={`flex ${disabled ? 'textGray4' : 'textOrange5'}`} style={{fontSize: '15px'}} disabled={disabled}>완료</button>
+                        <button className={`flex ${disabled ? 'textGray4' : 'textOrange5'}`} style={{fontSize: '15px'}} disabled={disabled} onClick={onSubmit}>완료</button>
                     </div>
                 </div>
             </header>
@@ -239,9 +282,9 @@ const AddTool = () => {
                     status === 'purchase' ?
                         <section className='mx-5 my-6'>
                             <div className='text-sm textGray2 font-medium'>구매시기 <span className='textGray4'>(선택)</span></div>
-                            <div className='mt-5'>
-                                <select className='mr-6 p-1.5 text-sm border border-solid border-gray3 rounded-md bg-white'>
-                                    <option>2022년 10월</option>
+                            <div className='mt-5' onClick={handleClick}>
+                                <select>
+                                    <option>{moment(time).format('YYYY년 MM월')}</option>
                                 </select>
                             </div>
                         </section> : ''
@@ -264,6 +307,42 @@ const AddTool = () => {
                             </div>
                         </section> : ''
                 }
+                <Global
+                    styles={{
+                        '.datepicker.default': {
+                            borderTopLeftRadius: '10px',
+                            borderTopRightRadius: '10px'
+                        },
+                        '.datepicker.default .datepicker-wheel': {
+                            backgroundColor: '#f2f2f2',
+                            border: 'none',
+                        },
+                        '.datepicker.default .datepicker-scroll li': {
+                            color: '#bdbdbd'
+                        },
+                        '.datepicker.default .datepicker-navbar-btn': {
+                            color: '#ff6035'
+                        }
+                    }}
+                />
+                <DatePicker
+                    value={time}
+                    isOpen={isOpen}
+                    showHeader={false}
+                    onSelect={handleSelect}
+                    onCancel={handleCancel}
+                    dateConfig={dateConfig}
+                    cancelText=''
+                    confirmText='확인'
+                />
+                <form onSubmit={onSubmit}>
+                    <input type='hidden' value={booktitle}/>
+                    <input type='hidden' value={image} />
+                    <input type='hidden' value={status} />
+                    <input type='hidden' value={field} />
+                    <input type='hidden' value={area} />
+                    <input type='hidden' value={rating} />
+                </form>
             </main>
         </div>
     )

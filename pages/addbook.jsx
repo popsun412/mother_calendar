@@ -1,5 +1,6 @@
 import { Global } from '@emotion/react';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import StarRatings from 'react-star-ratings';
 
@@ -68,10 +69,18 @@ const AddBook = () => {
         }
     }, [status, rating, image, field, area]);
 
-    const addBook = () => {
+    const onSubmit = async(e) => {
+        e.preventDefault();
 
+        const res = await axios('http://localhost:4000/add/book', {
+            method: 'POST',
+            params: {
+                
+            }
+        }).then( e => {
+            console.log(e);
+        }).catch(err => console.log(err));
     }
-
 
     return (
         <div>
@@ -82,7 +91,7 @@ const AddBook = () => {
                             <img src='/images/ic_back.png' />
                         </div>
                         <div className='my-0 mx-auto text-base font-medium' style={{letterSpacing: '-0.3px'}}>책등록</div>
-                        <button className={`flex ${disabled ? 'textGray4' : 'textOrange5'}`} style={{fontSize: '15px'}} disabled={disabled} onClick={addBook}>완료</button>
+                        <button className={`flex ${disabled ? 'textGray4' : 'textOrange5'}`} style={{fontSize: '15px'}} disabled={disabled} onClick={onSubmit}>완료</button>
                     </div>
                 </div>
             </header>
@@ -271,6 +280,14 @@ const AddBook = () => {
                             </div>
                         </section> : ''
                 }
+                <form onSubmit={onSubmit}>
+                    <input type='hidden' value={booktitle}/>
+                    <input type='hidden' value={image} />
+                    <input type='hidden' value={status} />
+                    <input type='hidden' value={field} />
+                    <input type='hidden' value={area} />
+                    <input type='hidden' value={rating} />
+                </form>
             </main>
         </div>
     )
