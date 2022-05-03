@@ -8,6 +8,7 @@ const AddBook = () => {
 
     const [status, setStatus] = useState(() => ['inbox']);
     const [field, setField] = useState();
+    const [area, setArea] = useState();
 
     const [star, setStar] = useState({
         1: false,
@@ -24,20 +25,20 @@ const AddBook = () => {
     const handleStatus = (e) => {
         const val = e.target.offsetParent.value;
         setStatus(val);
-        console.log(status);
     }
 
-    const areaChange = (index) => {
+    const fieldClick = (e) => {
+        e.target.checked ? setField(e.target.value) : setField('');
+    }
 
+    const areaClick = (e) => {
+        e.target.checked ? setArea(e.target.value) : setArea('');
     }
 
     const starChange = (index) => {
         setStar([e.target.offsetParent.value]);
     }
 
-    const fieldClick = (e) => {
-        e.target.checked ? setField(e.target.value) : setField('');
-    }
 
     return (
         <div>
@@ -180,20 +181,24 @@ const AddBook = () => {
                     <div className='text-sm textGray2 font-medium'>영역</div>
                     <div className='mt-5 flex flex-wrap'>
                         <label className='block relative mr-3'>
-                            <input type='checkbox' className='opacity-0 absolute top-0 left-0' onChange={areaChange}/>
-                            <span className='block text-sm textGray4 px-3 py-1.5 border border-solid border-gray3 rounded-sm'>대전집</span>
+                            <input type='checkbox' value='large' className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
+                            <span className={`block text-sm px-3 py-1.5 border border-solid rounded-sm 
+                                ${area == 'large' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`}>대전집</span>
                         </label>
                         <label className='block relative mr-3'>
-                            <input type='checkbox' className='opacity-0 absolute top-0 left-0'/>
-                            <span className='block text-sm textGray4 px-3 py-1.5 border border-solid border-gray3 rounded-sm'>소전집</span>
+                            <input type='checkbox' value='small' className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
+                            <span className={`block text-sm px-3 py-1.5 border border-solid rounded-sm 
+                                ${area == 'small' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`}>소전집</span>
                         </label>
                         <label className='block relative mr-3'>
-                            <input type='checkbox' className='opacity-0 absolute top-0 left-0'/>
-                            <span className='block text-sm textGray4 px-3 py-1.5 border border-solid border-gray3 rounded-sm'>단행본</span>
+                            <input type='checkbox' value='paperback' className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
+                            <span className={`block text-sm px-3 py-1.5 border border-solid rounded-sm 
+                                ${area == 'paperback' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`}>단행본</span>
                         </label>
                         <label className='block relative mr-3'>
-                            <input type='checkbox' className='opacity-0 absolute top-0 left-0'/>
-                            <span className='block text-sm textGray4 px-3 py-1.5 border border-solid border-gray3 rounded-sm'>기타</span>
+                            <input type='checkbox' value='etc' className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
+                            <span className={`block text-sm px-3 py-1.5 border border-solid rounded-sm 
+                                ${area == 'etc' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`}>기타</span>
                         </label>
                     </div>
                 </section>
