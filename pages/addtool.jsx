@@ -1,22 +1,43 @@
 import { Global } from '@emotion/react';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import StarRatings from 'react-star-ratings';
 
 const AddTool = () => {
 
+    const [disabled, setDisabled] = useState(true);
     const [booktitle, setBooktitle] = useState('');
-
+    const [image, setImage] = useState({
+        image_file: '',
+        preview_URL: ''
+    });
+    const [loaded, setLoaded] = useState('loading');
     const [status, setStatus] = useState(() => ['inbox']);
     const [field, setField] = useState();
     const [area, setArea] = useState();
+    const [rating, setRating] = useState(0);
 
-    const [star, setStar] = useState({
-        1: false,
-        2: false,
-        3: false,
-        4: false,
-        5: false
-    })
+    let inputRef;
+
+    const saveImage = (e) => {
+        e.preventDefault();
+        const fileReader = new FileReader();
+
+        if(e.target.files[0]) {
+            setLoaded('loading');
+            fileReader.readAsDataURL(e.target.files[0]);
+        }
+
+        fileReader.onload = () => {
+            setImage(
+                {
+                    imge_file: e.target.files[0],
+                    preview_URL: fileReader.result
+                }
+            )
+            setLoaded(true)
+        }
+    }
 
     const titleChange = (e) => {
         setBooktitle(e.target.value);
@@ -35,9 +56,17 @@ const AddTool = () => {
         e.target.checked ? setArea(e.target.value) : setArea('');
     }
 
-    const starChange = (index) => {
-        setStar([e.target.offsetParent.value]);
+    const handleRating = (newVal) => {
+        setRating(newVal);
     }
+
+    useEffect(() => {
+        if (status === 'purchase') {
+            rating > 0 && booktitle != '' && image.image_file != '' && field != '' && area != '' ? setDisabled(false) : setDisabled(true)
+        } else {
+            booktitle != '' && image.image_file != '' && field != '' && area != '' ? setDisabled(false) : setDisabled(true)
+        }
+    }, [status, rating, image, field, area]);
 
     return (
         <div>
@@ -48,7 +77,7 @@ const AddTool = () => {
                             <img src='/images/ic_back.png' />
                         </div>
                         <div className='my-0 mx-auto text-base font-medium' style={{letterSpacing: '-0.3px'}}>교구 등록</div>
-                        <div className='flex textGray4' style={{fontSize: '15px'}}>완료</div>
+                        <button className={`flex ${disabled ? 'textGray4' : 'textOrange5'}`} style={{fontSize: '15px'}} disabled={disabled}>완료</button>
                     </div>
                 </div>
             </header>
@@ -56,7 +85,14 @@ const AddTool = () => {
                 <section className='pt-5 mx-5 my-6'>
                     <div className='mb-6'>
                         <div className='rounded-md my-0 mx-auto relative' style={{width: '120px', height: '120px', backgroundColor: '#f2f2f2'}}>
-                            <img src='/images/ic_camera.png' className='absolute top-10 left-10'/>
+                            <button type='primary' onClick={() => inputRef.click()}>
+                                <input type='file' accept='image/*' onChange={saveImage} ref={refParam => inputRef = refParam} style={{display: 'none'}} />
+                                {
+                                    loaded == false || loaded == true ? (
+                                        <img src={image.preview_URL} className='rounded-md' style={{width:'120px', height: '120px'}}/>
+                                    ) : <img src='/images/ic_camera.png' className='absolute top-10 left-10'/>
+                                }
+                            </button>
                         </div>
                     </div>
                     <div>
@@ -215,26 +251,16 @@ const AddTool = () => {
                         <section className='mx-5 my-6'>
                             <div className='text-sm textGray2 font-medium'>만족도 <span className='textGray4'>(선택)</span></div>
                             <div className='flex mt-3'>
-                                <label className='block relative'>
-                                    <input type='checkbox' className='opacity-0 absolute top-0 left-0' onChange={() => {starChange(1)}}/>
-                                    <img src={`/images/ic_star_${star[1] ? 'color@2x' : 'grey@2x'}.png`} />
-                                </label>
-                                <label className='block relative'>
-                                    <input type='checkbox' className='opacity-0 absolute top-0 left-0' onChange={() => {starChange(2)}}/>
-                                    <img src='/images/ic_star_grey@2x.png' />
-                                </label>
-                                <label className='block relative'>
-                                    <input type='checkbox' className='opacity-0 absolute top-0 left-0' onChange={() => {starChange(3)}}/>
-                                    <img src='/images/ic_star_grey@2x.png' />
-                                </label>
-                                <label className='block relative'>
-                                    <input type='checkbox' className='opacity-0 absolute top-0 left-0' onChange={() => {starChange(4)}}/>
-                                    <img src='/images/ic_star_grey@2x.png' />
-                                </label>
-                                <label className='block relative'>
-                                    <input type='checkbox' className='opacity-0 absolute top-0 left-0' onChange={() => {starChange(5)}}/>
-                                    <img src='/images/ic_star_grey@2x.png' />
-                                </label>
+                                <StarRatings 
+                                    rating={rating}
+                                    changeRating={handleRating}
+                                    numberOfStars={5}
+                                    name='rating'
+                                    starDimension='36px'
+                                    starSpacing='3px'
+                                    starRatedColor='rgb(255, 96, 53)'
+                                    starHoverColor='rgb(255, 96, 53)'
+                                />
                             </div>
                         </section> : ''
                 }
