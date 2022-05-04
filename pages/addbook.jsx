@@ -111,7 +111,7 @@ const AddBook = () => {
                     </div>
                     <div>
                         <div>
-                            <input type='text' placeholder='교구 이름을 입력해주세요.' value={booktitle} onChange={titleChange}
+                            <input type='text' placeholder='책 이름을 입력해주세요.' value={booktitle} onChange={titleChange}
                                 className='block w-full h-10 px-5 box-border border border-solid border-color4 rounded-md text-sm textGray4'/>
                         </div>
                     </div>
