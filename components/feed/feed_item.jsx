@@ -48,7 +48,7 @@ const FeedItem = (props) => {
                             <div className='ml-2 text-base' style={{fontFamily: 'NanumSquareRoundOTF', letterSpacing: '-0.48px'}}>{item.target}</div>
                         </div>
                         <div className='mx-5 mb-4 flex border border-solid border-color4 rounded-md justify-center' style={{height: '38px'}}>
-                            <div className='mr-1.5'><img src='/images/ic_book.png'  className='mt-2'/></div>
+                            <div className='mr-1.5'><img src='/images/ic_book.png'  className='mt-2' style={{width: '23px', height: '23px'}}/></div>
                             <div className='textOrange5' style={{fontSize: '15px', letterSpacing: '-0.3px', lineHeight: '38px'}}>{item.title}</div>
                         </div>
                         <div>
@@ -58,7 +58,7 @@ const FeedItem = (props) => {
                             <div className='mt-4'>
                                 <div className={closed ? 'text' : 'text-close'}>
                                     {item.contents}
-                                    <div className={`absolute textGray3 bottom-0 right-0 bg-white px-2.5`} onClick={handleMoreBtn}>{closed ? '숨기기' : '... 더보기'}</div>
+                                    <div className={`absolute textGray3 bottom-0 right-0 bg-white pl-2.5 pr-1.5`} onClick={handleMoreBtn}>{closed ? '숨기기' : '... 더보기'}</div>
                                 </div>
                             </div>
                         </div>
