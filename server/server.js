@@ -13,7 +13,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-const { HomeMain, HomeItem, HomePlace, HomeTheme, CategoryPlan, Confirm, Sample1, Feed, Experience, Parents, Etc, Bookmark, Place, Sequelize: { Op }, CategoryItem, MapList} = require('./models');
+const { HomeMain, HomeItem, HomePlace, HomeTheme, CategoryPlan, Confirm, Sample1, Feed, Experience, Parents, Etc, Bookmark, Place, Sequelize: { Op }, CategoryItem, MapList, Children} = require('./models');
 const item = require('./models/home/item');
 sequelize.query('SET NAMES utf8;');
 
@@ -150,8 +150,8 @@ app.get('/result/data', (req, res) => {
             title: { [Op.like]: `%${req.query.title}%` },
         },
     })
-        .then( result => { res.send(result) })
-        .catch( err => { throw err })
+    .then( result => { res.send(result) })
+    .catch( err => { throw err })
 })
 
 app.get('/map/list', (req, res) => {
@@ -161,8 +161,35 @@ app.get('/map/list', (req, res) => {
 
         }
     })
-        .then( result => { res.send(result) })
-        .catch( err => {  throw err})
+    .then( result => { res.send(result) })
+    .catch( err => {  throw err})
+})
+
+app.get('/children/data', (req, res) => {
+    console.log(req.query);
+    Children.findAll({
+        where: {
+            mom: req.query.mom
+        }
+    })
+    .then( result => {res.send(result)} )
+    .catch( err => {throw err} )
+})
+
+app.post('/children/data', (req, res) => {
+    Children.create({
+        mom: req.query.mom,
+        birth: '',
+        gender: '',
+        img: '/images/child1.png',
+    })
+    .then(result => {
+        res.send(result)
+    })
+    .catch(err => {
+        console.log(err)
+        throw err;
+    })
 })
 
 const PORT = process.env.PORT || 4000;

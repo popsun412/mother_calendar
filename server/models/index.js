@@ -64,5 +64,8 @@ db.Etc = require('./etc/data')(sequelize, Sequelize);
 // Feed
 db.Feed = require('./feed/data')(sequelize, Sequelize);
 
+// Children
+db.Children = require('./children/data')(sequelize, Sequelize);
+
 db.secret = '(9*)5$&!3%^0%^@@2$1!#5@2!4';
 module.exports = db;
