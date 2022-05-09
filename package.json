@@ -32,7 +32,7 @@
     "react-daum-postcode": "^3.0.1",
     "react-dom": "17.0.2",
     "react-draggable": "^4.4.4",
-    "react-mobile-datepicker": "^4.0.2",
+    "react-month-picker": "^2.2.1",
     "react-player": "^2.10.0",
     "react-range": "^1.8.12",
     "react-star-ratings": "^2.3.0",

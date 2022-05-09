@@ -1,9 +1,10 @@
 import { Global } from '@emotion/react';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import StarRatings from 'react-star-ratings';
-import DatePicker from 'react-mobile-datepicker';
 import moment from 'moment';
+import MonthPicker from "react-month-picker";
+import "react-month-picker/css/month-picker.css";
 
 const AddTool = () => {
 
@@ -32,6 +33,27 @@ const AddTool = () => {
             step: 1,
         },
     }
+
+    const [value, setValue] = useState({ year: 2022, month: 5 });
+    const monthPickerRef = useRef(null);
+    const lang = {
+        months: [
+            "1월",
+            "2월",
+            "3월",
+            "4월",
+            "5월",
+            "6월",
+            "7월",
+            "8월",
+            "9월",
+            "10월",
+            "11월",
+            "12월"
+        ],
+        from: "From",
+        to: "To"
+    };
 
     let inputRef;
 
@@ -110,6 +132,23 @@ const AddTool = () => {
         console.log(moment(time).format('YYYYMMDD'))
         setIsOpen(false);
     }
+
+    const showPicker = () => {
+        if (monthPickerRef && monthPickerRef.current) {
+            monthPickerRef.current.show();
+        }
+    };
+
+    const hidePicker = () => {
+        if (monthPickerRef && monthPickerRef.current) {
+            monthPickerRef.current.dismiss();
+        }
+    };
+
+    const handlePickerChange = (...args) => {
+        setValue({ year: args[0], month: args[1] });
+        hidePicker();
+    };
 
     return (
         <div>
@@ -282,10 +321,16 @@ const AddTool = () => {
                     status === 'purchase' ?
                         <section className='mx-5 my-6'>
                             <div className='text-sm textGray2 font-medium'>구매시기 <span className='textGray4'>(선택)</span></div>
-                            <div className='mt-5' onClick={handleClick}>
-                                <select>
-                                    <option>{moment(time).format('YYYY년 MM월')}</option>
-                                </select>
+                            <div className='mt-5'>
+                                <MonthPicker
+                                    lang={lang.months}
+                                    ref={monthPickerRef}
+                                    value={value}
+                                    onChange={handlePickerChange}
+                                    >
+                                    <span onClick={showPicker} className='mr-6 py-2.5 px-4 text-sm border border-solid border-gray3 rounded-md bg-white'>
+                                        {value.year}년 {value.month}월</span>
+                                </MonthPicker>
                             </div>
                         </section> : ''
                 }
@@ -324,16 +369,6 @@ const AddTool = () => {
                             color: '#ff6035'
                         }
                     }}
-                />
-                <DatePicker
-                    value={time}
-                    isOpen={isOpen}
-                    showHeader={false}
-                    onSelect={handleSelect}
-                    onCancel={handleCancel}
-                    dateConfig={dateConfig}
-                    cancelText=''
-                    confirmText='확인'
                 />
                 <form onSubmit={onSubmit}>
                     <input type='hidden' value={booktitle}/>
