@@ -27,7 +27,7 @@ const InstiMap = () => {
             </header>
             <main style={{marginTop: '50px'}}>
                 <section className='mx-5' style={{paddingTop: '18.7px'}}>
-                    <div className='flex'>
+                    <div className='flex' style={{marginBottom: '22px'}}>
                         <div style={{marginRight: '15px'}}>
                             <img src='/images/place1.png' style={{width: '94px', height: '94px'}}/>
                         </div>
@@ -39,7 +39,7 @@ const InstiMap = () => {
                             </div>
                         </div>
                     </div>
-                    <div className='flex'>
+                    <div className='flex' style={{marginBottom: '22px'}}>
                         <div style={{marginRight: '15px'}}>
                             <img src='/images/place1.png' style={{width: '94px', height: '94px'}}/>
                         </div>
@@ -51,12 +51,52 @@ const InstiMap = () => {
                             </div>
                         </div>
                     </div>
-                    <div className='flex'>
+                    <div className='flex' style={{marginBottom: '22px'}}>
                         <div style={{marginRight: '15px'}}>
                             <img src='/images/place1.png' style={{width: '94px', height: '94px'}}/>
                         </div>
                         <div>
                             <div className='font-semibold' style={{fontSize: '15px', letterSpacing: '-0.3px', color: '#333333'}}>직업체험 테마파크 키자니아</div>
+                            <div style={{marginTop: '5px'}}>
+                                <span className='text-xs textGray3 px-1.5' style={{marginRight: '5px', backgroundColor: '#f0f5f8', paddingTop: '3px', paddingBottom: '3px'}}>서울</span>
+                                <span className='text-xs textGray3 px-1.5' style={{backgroundColor: '#f0f5f8', paddingTop: '3px', paddingBottom: '3px'}}>자연 동물</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='flex opacity-40' style={{marginBottom: '22px'}}>
+                        <div style={{marginRight: '15px'}}>
+                            <img src='/images/place1.png' style={{width: '94px', height: '94px'}}/>
+                        </div>
+                        <div>
+                            <div className='font-semibold mb-1' style={{fontSize: '15px', letterSpacing: '-0.3px', color: '#333333'}}>직업체험 테마파크 키자니아</div>
+                            <div className='textGray3 mb-1' style={{fontSize: '13px'}}>2022.01.07 방문</div>
+                            <div className='flex mb-1'>
+                                <img src='/images/ic_star_color.png' />
+                                <img src='/images/ic_star_color.png' />
+                                <img src='/images/ic_star_grey.png' />
+                                <img src='/images/ic_star_grey.png' />
+                                <img src='/images/ic_star_grey.png' />
+                            </div>
+                            <div style={{marginTop: '5px'}}>
+                                <span className='text-xs textGray3 px-1.5' style={{marginRight: '5px', backgroundColor: '#f0f5f8', paddingTop: '3px', paddingBottom: '3px'}}>서울</span>
+                                <span className='text-xs textGray3 px-1.5' style={{backgroundColor: '#f0f5f8', paddingTop: '3px', paddingBottom: '3px'}}>자연 동물</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='flex opacity-40' style={{marginBottom: '22px'}}>
+                        <div style={{marginRight: '15px'}}>
+                            <img src='/images/place1.png' style={{width: '94px', height: '94px'}}/>
+                        </div>
+                        <div>
+                            <div className='font-semibold mb-1' style={{fontSize: '15px', letterSpacing: '-0.3px', color: '#333333'}}>직업체험 테마파크 키자니아</div>
+                            <div className='textGray3 mb-1' style={{fontSize: '13px'}}>2022.01.07 방문</div>
+                            <div className='flex mb-1'>
+                                <img src='/images/ic_star_color.png' />
+                                <img src='/images/ic_star_color.png' />
+                                <img src='/images/ic_star_grey.png' />
+                                <img src='/images/ic_star_grey.png' />
+                                <img src='/images/ic_star_grey.png' />
+                            </div>
                             <div style={{marginTop: '5px'}}>
                                 <span className='text-xs textGray3 px-1.5' style={{marginRight: '5px', backgroundColor: '#f0f5f8', paddingTop: '3px', paddingBottom: '3px'}}>서울</span>
                                 <span className='text-xs textGray3 px-1.5' style={{backgroundColor: '#f0f5f8', paddingTop: '3px', paddingBottom: '3px'}}>자연 동물</span>
