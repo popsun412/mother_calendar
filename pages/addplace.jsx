@@ -43,6 +43,15 @@ const AddPlace = () => {
         }
     }
 
+    const deleteImage = (e) => {
+        e.preventDefault();
+        setImage({
+            image_file: '',
+            preview_URL: ''
+        });
+        setLoaded('loading');
+    }
+
     const titleChange = (e) => {
         setBooktitle(e.target.value);
     }
@@ -98,7 +107,7 @@ const AddPlace = () => {
                         <div onClick={() => {window.history.back();}}>
                             <img src='/images/ic_back.png' />
                         </div>
-                        <div className='my-0 mx-auto text-base font-medium' style={{letterSpacing: '-0.3px'}}>책등록</div>
+                        <div className='my-0 mx-auto text-base font-medium' style={{letterSpacing: '-0.3px'}}>체험장소 등록</div>
                         <button className={`flex ${disabled ? 'textGray4' : 'textOrange5'}`} style={{fontSize: '15px'}} disabled={disabled} onClick={onSubmit}>완료</button>
                     </div>
                 </div>
@@ -115,7 +124,17 @@ const AddPlace = () => {
                                     ) : <img src='/images/ic_camera.png' className='absolute top-10 left-10'/>
                                 }
                             </button>
+                            {
+                                loaded == false || loaded == true ?
+                                    <button className='block absolute' style={{top: '-10px', right: '-10px'}} onClick={deleteImage}>
+                                        <img src='/images/ic_delete.png' />
+                                    </button> : ''
+                            }
                         </div>
+                        {
+                            loaded == false || loaded == true ?
+                            <button className='flex pt-2 mx-auto text-xs textGray3 underline' onClick={() => inputRef.click()}>수정</button> : ''
+                        }
                     </div>
                     <div>
                         <div>
