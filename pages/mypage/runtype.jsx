@@ -1,24 +1,29 @@
 import React, { useEffect, useState } from 'react';
-
-const data = [
-    {
-        'eng': 35,
-        'mat': 20,
-        'art': 15,
-        'kor': 10,
-        'etc': 10
-    }
-]
+import RuntypeData from '../../components/runtype/runtype_data';
+import NoData from '../../components/runtype/nodata';
 
 const RunType = () => {
 
-    const [run, setRun] = useState([])
+    const [run, setRun] = useState({});
+    const [key, setKey] = useState([]);
+    const [sum, setSum] = useState(0);
+    const [cal, setCal] = useState([]);
+
+    const data = [
+        {
+            'eng': 35,
+            'mat': 20,
+            'art': 15,
+            'kor': 10,
+            'etc': 10
+        }
+    ]
 
     useEffect(() => {
-        const runtype = {}
-        let sum = getSum(data);
-        console.log(sum);
-    }, [])
+        setSum(getSum(data));
+        setKey(Object.keys(data[0]));
+        setCal(getCalData(data, sum));
+    }, []);
 
     const getSum = (data) => {
         let sum = 0;
@@ -32,7 +37,27 @@ const RunType = () => {
             sum += sumArr[i];
         }
 
+        console.log(sum);
+
         return sum;
+    }
+
+    const getCalData = (data, sum) => {
+
+        const run = [];
+        let cal = {};
+
+        data.map((item, idx) => {
+            key.forEach(item2 => {
+                cal[item2] = Math.round(item[item2]/sum*100)/100*100;
+            })
+        })
+
+        run.push(cal);
+
+        console.log(cal)
+
+        return run;
     }
 
     return (
@@ -48,69 +73,9 @@ const RunType = () => {
                 </div>
             </header>
             <main style={{marginTop: '50px'}}>
-                <section>
-                    <div className='mx-5 h-30'>
-                        <div className='relative flex w-full' style={{top: '47px', bottom: '47px'}}>
-                            <div className='rounded-tl-md rounded-bl-md' style={{backgroundColor: '#ff9d00', height: '26px', marginRight: '2.4px', width: '35%'}}/>
-                            <div style={{backgroundColor: '#37cc53', height: '26px', marginRight: '2.4px', width: '25%'}}/>
-                            <div style={{backgroundColor: '#f4d100', height: '26px', marginRight: '2.4px', width: '20%'}}/>
-                            <div style={{backgroundColor: '#ff84bf', height: '26px', marginRight: '2.4px', width: '15%'}}/>
-                            <div className='rounded-tr-md rounded-br-md' style={{backgroundColor: '#828282', height: '26px', width: '10%'}}/>
-                        </div>
-                    </div>
-                </section>
-                <section>
-                    <div className='flex justify-between' style={{marginLeft: '30px', marginRight: '30px', height: '59px'}}>
-                        <div className='flex items-center'>
-                            <div className='w-3.5 h-3.5 rounded-full' style={{backgroundColor: '#ff9d00'}}/>
-                            <div className='ml-3' style={{fontSize: '15px', letterSpacing: '-0.3px'}}>영어</div>
-                        </div>
-                        <div className='flex items-center'>
-                            <div className='text-xs textGray4'>실행 5일</div>
-                            <div className='ml-3.5 text-base textGray2'>43%</div>
-                        </div>
-                    </div>
-                    <div className='flex justify-between' style={{marginLeft: '30px', marginRight: '30px', height: '59px'}}>
-                        <div className='flex items-center'>
-                            <div className='w-3.5 h-3.5 rounded-full' style={{backgroundColor: '#37cc53'}}/>
-                            <div className='ml-3' style={{fontSize: '15px', letterSpacing: '-0.3px'}}>수학</div>
-                        </div>
-                        <div className='flex items-center'>
-                            <div className='text-xs textGray4'>실행 5일</div>
-                            <div className='ml-3.5 text-base textGray2'>43%</div>
-                        </div>
-                    </div>
-                    <div className='flex justify-between' style={{marginLeft: '30px', marginRight: '30px', height: '59px'}}>
-                        <div className='flex items-center'>
-                            <div className='w-3.5 h-3.5 rounded-full' style={{backgroundColor: '#f4d100'}}/>
-                            <div className='ml-3' style={{fontSize: '15px', letterSpacing: '-0.3px'}}>미술</div>
-                        </div>
-                        <div className='flex items-center'>
-                            <div className='text-xs textGray4'>실행 5일</div>
-                            <div className='ml-3.5 text-base textGray2'>43%</div>
-                        </div>
-                    </div>
-                    <div className='flex justify-between' style={{marginLeft: '30px', marginRight: '30px', height: '59px'}}>
-                        <div className='flex items-center'>
-                            <div className='w-3.5 h-3.5 rounded-full' style={{backgroundColor: '#ff84bf'}}/>
-                            <div className='ml-3' style={{fontSize: '15px', letterSpacing: '-0.3px'}}>영어</div>
-                        </div>
-                        <div className='flex items-center'>
-                            <div className='text-xs textGray4'>실행 5일</div>
-                            <div className='ml-3.5 text-base textGray2'>43%</div>
-                        </div>
-                    </div>
-                    <div className='flex justify-between' style={{marginLeft: '30px', marginRight: '30px', height: '59px'}}>
-                        <div className='flex items-center'>
-                            <div className='w-3.5 h-3.5 rounded-full' style={{backgroundColor: '#828282'}}/>
-                            <div className='ml-3' style={{fontSize: '15px', letterSpacing: '-0.3px'}}>그 외</div>
-                        </div>
-                        <div className='flex items-center'>
-                            <div className='text-xs textGray4'>실행 5일</div>
-                            <div className='ml-3.5 text-base textGray2'>43%</div>
-                        </div>
-                    </div>
-                </section>
+                {
+                    cal[0] ? <RuntypeData cal={cal}/> : <noData />
+                }
             </main>
         </div>
     )
