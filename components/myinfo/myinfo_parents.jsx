@@ -17,16 +17,35 @@ const ParentsInfo = () => {
     const [address, setAddress] = useState('서울시 용산구 청파동 101-10');
     const [phone, setPhone] = useState(data.phone.split('-'));
     const interest = data.interest.split(',');
-    const [fileImage, setFileImage] = useState('');
+    const [image, setImage] = useState({
+        image_file: '',
+        preview_URL: ''
+    });
     const [gender, setGender] = useState(data.gender);
+    const [loaded, setLoaded] = useState('loading');
 
-    const saveFileImage = (e) => {
-        setFileImage(URL.createObjectURL(e.target.files[0]));
+    const saveImage = (e) => {
+        e.preventDefault();
+        const fileReader = new FileReader();
+
+        if(e.target.files[0]) {
+            setLoaded('loading');
+            fileReader.readAsDataURL(e.target.files[0]);
+        }
+
+        fileReader.onload = () => {
+            setImage(
+                {
+                    imge_file: e.target.files[0],
+                    preview_URL: fileReader.result
+                }
+            )
+            setLoaded(true)
+        }
     }
 
     const deleteFileImage = () => {
-        URL.revokeObjectURL(fileImage);
-        setFileImage('');
+        setImage({ image_file: '', preview_URL: '' });
     }
 
     const onCompletePost = (data) => {
@@ -39,17 +58,17 @@ const ParentsInfo = () => {
             <div className='mt-9 mb-4'>
                 <div className='mb-8'>
                     <div className='relative'>
-                        <img src={`${fileImage !== '' ? fileImage : '/images/img_profile_'}${fileImage === '' && gender === 'female'? 'mom@2x.png' : fileImage === '' && gender === 'male' ? 'dad@2x.png' : ''}`} 
+                        <img src={`${image.preview_URL !== '' ? image.preview_URL : '/images/img_profile_'}${image.preview_URL === '' && gender === 'female'? 'mom@2x.png' : image.preview_URL === '' && gender === 'male' ? 'dad@2x.png' : ''}`} 
                             className='w-30 h-30 border border-solid rounded-full mx-auto'/>
                         <button className='block absolute border border-solid rounded-full bg-white bottom-0 right-0 mr-25' style={{width: '30px', height: '30px', borderColor: '#FFBCA1'}}>
                             <label htmlFor='imgUpload' style={{display: 'inline-block', fontSize: 'inherit', lineHeight: 'normal', verticalAlign: 'middle', cursor: 'pointer'}}>
                             {
-                                fileImage === '' ? 
+                                image.preview_URL === '' ? 
                                     <CameraAlt style={{fontSize: '20px', color: '#ff6045', marginBottom: '2px'}}/> : 
                                     <Clear style={{fontSize: '20px', color: '#ff6045', marginBottom: '2px'}} onClick={deleteFileImage}/>
                             }
                             </label>
-                            <input type='file' id='imgUpload' accept='image/*' onChange={saveFileImage} 
+                            <input type='file' id='imgUpload' accept='image/*' onChange={saveImage} 
                                 style={{position: 'absolute', width: 0, height: 0, padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', border: 0}}/>
                         </button>
                     </div>
