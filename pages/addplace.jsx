@@ -118,6 +118,7 @@ const AddPlace = () => {
     }
 
     const onCompletePost = (data) => {
+        debugger;
         setAddress(data.address);
         setOpen(false);
     }
@@ -298,12 +299,19 @@ const AddPlace = () => {
                     {
                         address.length > 0 ? 
                         <>
-                        <input type='text' value={address} className='h-9 rounded-md border border-solid border-color4 w-full text-sm px-5' readOnly style={{height: '39px'}}/>
-                        <i className='block absolute top-1/2 right-0 mr-3 text-sm textBlue4 not-italic' style={{transform: 'translateY(-50%)'}} onClick={() => {setOpen(!open)}}>수정</i>
-                        {
-                            open ?
-                            <DaumPostcode autoClose onComplete={onCompletePost}/> : ''
-                        }
+                            <div className='bg-gray2 rounded-md'>
+                                <div className='flex mx-5 justify-between' style={{paddingTop: '11px'}}>
+                                    <div className='textGray1 text-sm'>{address}</div>
+                                    <div className='textGray2 text-sm underline' onClick={() => {setOpen(!open)}}>수정</div>
+                                </div>
+                                <div className='textGray3 text-sm mx-5' style={{paddingTop: '5px', paddingBottom: '11px'}}>
+                                    {address}
+                                </div>
+                            </div>
+                            {
+                                open ?
+                                <DaumPostcode autoClose onComplete={onCompletePost}/> : ''
+                            }
                         </>
                         : <>
                         <i className='block absolute top-1/2 right-2.5' onClick={() => {setOpen(!open)}}>
