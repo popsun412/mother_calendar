@@ -6,6 +6,7 @@ import DaumPostcode from 'react-daum-postcode';
 import StarRatings from 'react-star-ratings';
 import MonthPicker from "react-month-picker";
 import "react-month-picker/css/month-picker.css";
+import Link from 'next/link';
 
 const AddPlace = () => {
 
@@ -145,9 +146,11 @@ const AddPlace = () => {
             <header className='sticky top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{marginBottom: '-50px'}}>
                 <div className='my-auto mx-auto py-0 px-4 relative flex items-center w-full bg-white' style={{height: '50px'}}>
                     <div className='flex-1 flex items-center'>
-                        <div onClick={() => {window.history.back();}}>
-                            <img src='/images/ic_back.png' />
-                        </div>
+                        <Link href='/exmap'>
+                            <div>
+                                <img src='/images/ic_back.png' />
+                            </div>
+                        </Link>
                         <div className='my-0 mx-auto text-base font-medium' style={{letterSpacing: '-0.3px'}}>체험장소 등록</div>
                         <button className={`flex ${disabled ? 'textGray4' : 'textOrange5'}`} style={{fontSize: '15px'}} disabled={disabled} onClick={onSubmit}>완료</button>
                     </div>
