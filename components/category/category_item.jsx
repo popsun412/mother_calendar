@@ -22,7 +22,7 @@ const CategoryItem = (props) => {
     }
 
     useEffect(() => {
-        getData();
+        getData(category);
 
     }, [category])
 
