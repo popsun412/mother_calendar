@@ -14,7 +14,7 @@ const Navigation = (props) => {
                         <Link href='/home'>
                             <div className='flex-1 mt-2.5 my-0 mx-auto'>
                                 <div className='text-center'>
-                                    <HomeOutlined className={`${pathname === 'home' ? 'textOrange5' : 'textGray4'}`}/>
+                                    <img src={`${pathname === 'home' ? '/images/home_select.png' : '/images/home.png'}`} className='mx-auto w-6 h-6'/>
                                 </div>
                                 <div className='text-center'>
                                     <span className={`text-xs ${pathname === 'home' ? 'textOrange5' : 'textGray4'}`} style={{letterSpacing: '-0.36px'}}>홈</span>
@@ -24,7 +24,7 @@ const Navigation = (props) => {
                         <Link href='/feed'>
                             <div className='flex-1 mt-2.5 my-0 mx-auto'>
                                 <div className='text-center'>
-                                    <ChatBubbleOutline className={`${pathname === 'feed' ? 'textOrange5' : 'textGray4'}`}/>
+                                    <img src={`${pathname === 'feed' ? '/images/message-circle_select.png' : '/images/message-circle.png'}`}  className='mx-auto w-6 h-6'/>
                                 </div>
                                 <div className='text-center'>
                                     <span className={`text-xs ${pathname === 'feed' ? 'textOrange5' : 'textGray4'}`} style={{letterSpacing: '-0.36px'}}>피드</span>
@@ -34,7 +34,7 @@ const Navigation = (props) => {
                         <Link href='/calendar'>
                             <div className='flex-1 mt-2.5 my-0 mx-auto'>
                                 <div className='text-center'>
-                                    <CalendarTodayOutlined className={`${pathname === 'calendar' ? 'textOrange5' : 'textGray4'}`}/>
+                                    <img src={`${pathname === 'calendar' ? '/images/calendar_navi_select.png' : '/images/calendar_navi.png'}`}  className='mx-auto w-6 h-6'/>
                                 </div>
                                 <div className='text-center'>
                                     <span className={`text-xs ${pathname === 'calendar' ? 'textOrange5' : 'textGray4'}`} style={{letterSpacing: '-0.36px'}}>캘린더</span>
@@ -44,7 +44,7 @@ const Navigation = (props) => {
                         <Link href='/mypage'>
                             <div className='flex-1 mt-2.5 my-0 mx-auto'>
                                 <div className='text-center'>
-                                    <PersonOutline className={`${pathname === 'mypage' ? 'textOrange5' : 'textGray4'}`}/>
+                                    <img src={`${pathname === 'mypage' ? '/images/user_select.png' : '/images/user.png'}`}  className='mx-auto w-6 h-6'/>
                                 </div>
                                 <div className='text-center'>
                                     <span className={`text-xs ${pathname === 'mypage' ? 'textOrange5' : 'textGray4'}`} style={{letterSpacing: '-0.36px'}}>내정보</span>
