@@ -3,7 +3,7 @@ export default function FriendList() {
     return (
         <div className="w-full h-full verflow-y-scroll scrollbar-hide bg-gray2">
             <div className="flex  py-4 items-center justify-center">
-                <svg class="w-7 h-8 ml-1 textGray2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg className="w-7 h-8 ml-1 textGray2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
                 <span className="flex flex-auto justify-center">추천 계정</span>

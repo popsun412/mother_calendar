@@ -2,7 +2,7 @@ export default function SignIn1() {
     return (
         <>
             <div className="flex py-4 items-center justify-center">
-                <svg class="w-7 h-8 ml-1 textGray2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg className="w-7 h-8 ml-1 textGray2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
                 <span className="flex-auto text-center text-base font-medium textGray1">회원가입</span>
@@ -40,7 +40,7 @@ export default function SignIn1() {
                 <div className="space-y-4">
                     <span className="text-sm font-medium textGray1">주소</span>
                     <div className="text-sm font-medium p-2.5 flex items-center justify-start textGray4 bg-gray2 rounded-md">
-                        <svg class="w-6 h-6 mr-2.5 textGray1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <svg className="w-6 h-6 mr-2.5 textGray1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
                         지번, 도로명, 건물명으로 검색

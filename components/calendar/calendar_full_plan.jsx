@@ -4,7 +4,7 @@ export default function CalendarFullPlan() {
     return (
         <div className="flex flex-col h-full">
             <div className="flex  py-4 items-center justify-center bg-white border-b border-gary3">
-                <svg class="w-7 h-8 ml-1 textGray2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg className="w-7 h-8 ml-1 textGray2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
                 <span className="flex-auto text-center text-sm font-medium textGray1">전체 계획 관리</span>

@@ -4,7 +4,7 @@ export default function PlanCompletion() {
     return (
         <>
             <div className="flex py-4 items-center justify-center border-b-[0.3px] border-gary3">
-                <svg class="w-7 h-8 ml-1 textGray2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg className="w-7 h-8 ml-1 textGray2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
                 <span className="flex-auto text-center text-base font-medium textGray1">인증 완료</span>
@@ -21,7 +21,7 @@ export default function PlanCompletion() {
                             <div className="flex items-center justify-center">
                                 <span className="border border-color3 rounded-full px-2 py-1 text-xs textOrange3">5세 6세 8세, 서울, 엄마표</span>
                                 <div className="ml-2">
-                                    <svg class="w-4 h-4 textGray3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <svg className="w-4 h-4 textGray3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
                                     </svg>
                                 </div>
@@ -51,7 +51,7 @@ export default function PlanCompletion() {
                         <span className="text-sm font-medium textOrange5">직업체험 테마파크 키자니아</span>
                     </div> */}
                     <div className="flex items-center justify-center">
-                        <svg class="w-4 h-5 textGray4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <svg className="w-4 h-5 textGray4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
                         </svg>
                         <span className="text-sm textGray4">아이템이 없습니다.</span>
