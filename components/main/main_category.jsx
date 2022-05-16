@@ -7,8 +7,6 @@ export default function MainCategory() {
         <>
             <div className='px-5 pt-10 pb-4'>
                 <div className="flex font-normal text-base textGray1">
-                    {/* 아이콘 대신 이미지를 넣으면 깨져서 나오네; 근데 아이콘으로 하기엔 디자인이 좀 달라 ㅜ */}
-                    {/* <ChevronLeftRounded className="flex w-2 h-4" /> */}
                     <img src='/images/back_ic.png' className="flex w-2 h-4" />
                     <span className="flex flex-auto justify-center">분야</span>
                 </div>
@@ -26,7 +24,6 @@ export default function MainCategory() {
                 </div>
             </div>
             <div className="flex flex-row text-center border-b border-gary4 textGray3 font-normal text-sm">
-                {/* 여기부분 알려줘 */}
                 <div className='basis-1/6 py-3' />
                 <div className='basis-2/6 py-3'>계획</div>
                 <div className='basis-1/6 py-3' />

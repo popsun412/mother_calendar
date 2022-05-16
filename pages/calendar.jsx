@@ -5,18 +5,21 @@ import CalendarTop from "../components/calendar/calendar_top";
 import CalendarBottom from "../components/calendar/calendar_bottom";
 import FriendList from "../components/calendar/frind_list";
 import ItemDetail from "../components/main/itme_detail";
+import CalendarFullPlan from "../components/calendar/calendar_full_plan";
+
 
 export default function Calendar() {
     return (
         <div className="w-screen h-screen flex flex-col">
             <CalendarTop />
             <CalendarMiddle />
-            {/* <CalendarDate /> */}
-            {/* <CalendarHome /> */}
-            {/* <CalendarBottom /> */}
+            <CalendarDate />
+            <CalendarHome />
+            <CalendarBottom />
 
             {/* <FriendList /> */}
             {/* <ItemDetail /> */}
+            {/* <CalendarFullPlan /> */}
         </div>
     )
 }

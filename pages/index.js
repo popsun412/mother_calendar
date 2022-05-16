@@ -1,4 +1,6 @@
+
 import Calendar from './calendar'
+import Logo from './logog'
 import Main from './main'
 import Plan from './plan'
 
@@ -7,7 +9,8 @@ export default function Home() {
     <>
       {/* <Calendar /> */}
       {/* <Main /> */}
-      <Plan />
+      {/* <Plan /> */}
+      <Logo />
     </>
   )
 }

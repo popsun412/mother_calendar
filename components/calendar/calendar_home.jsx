@@ -3,6 +3,7 @@ import { useState } from "react";
 import PlanListDay from "./calendar_list_day";
 import PlanListWeek from "./calendar_list_week";
 import EmptyPlan from "./calendar_empty_plan"
+import CalendarScreen from "./calendar_screen";
 
 
 export default function CalendarHome() {
@@ -10,6 +11,9 @@ export default function CalendarHome() {
 
     return (
         <div className="bg-gray2 flex-auto overflow-y-auto flex flex-col p-5 pb-0">
+            {/* <CalendarScreen /> */}
+
+
             {(type == 0) ? <EmptyPlan /> : <></>}
             <div className="flex text-sm textGray2">
                 <div className="flex bg-white py-1.5 px-7 rounded-t-xl mr-1" onClick={() => setType(1)}>
@@ -21,6 +25,8 @@ export default function CalendarHome() {
             </div>
             {(type == 1) ? <PlanListDay /> : <></>}
             {(type == 2) ? <PlanListWeek /> : <></>}
+
+
         </div>
     )
 }

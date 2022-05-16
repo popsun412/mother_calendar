@@ -4,7 +4,6 @@ export default function MainThem() {
             <div className="flex flex-col">
                 <span className="flex text-xl font-semibold textGray1">인기 테마연계</span>
             </div>
-            {/* title이랑 아래로 쌓으니까 flex-col 쓰면 div 안의 div끼리 가로로 안되는데 flex-col 안 써도 되겠지? */}
             <div className="flex space-x-2 py-4">
                 <div className="px-3 py-2 font-normal text-sm bg4 rounded  text-white bg4">공룡</div>
                 <div className="px-3 py-2 font-normal text-sm rounded border border-gary3 textGray4">자동차</div>
