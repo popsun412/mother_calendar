@@ -8,7 +8,7 @@ export default function PlanCertify() {
     return (
         <>
             <div className="flex  py-4 items-center justify-center">
-                <svg class="w-7 h-8 ml-1 textGray2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg className="w-7 h-8 ml-1 textGray2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
                 <span className="flex-auto text-center text-base font-medium textGray1">실행 인증</span>
@@ -20,7 +20,7 @@ export default function PlanCertify() {
                     <p className="textGray1 text-lg font-semibold">페파피그1 영상</p>
                 </div>
                 <div className="flex items-center justify-center border border-color4 rounded-md mt-6 py-3">
-                    <svg class="w-4 h-5 textGray4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg className="w-4 h-5 textGray4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
                     </svg>
                     <span className="text-sm font-medium textGray4">아이템 추가하기</span>
@@ -35,7 +35,7 @@ export default function PlanCertify() {
                     <div className='relative flex items-center justify-center flex-col'>
                         <div className='rounded-md w-[11.25rem] h-[11.25rem]'>
                             <img src='/images/banner.png' className='w-full h-full rounded-md' />
-                            <svg class="w-7 h-7 absolute -top-3 -right-3 bg-gray4 rounded-full ring ring-white p-1 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <svg className="w-7 h-7 absolute -top-3 -right-3 bg-gray4 rounded-full ring ring-white p-1 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
                             </svg>
                         </div>

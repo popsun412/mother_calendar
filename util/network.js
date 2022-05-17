@@ -10,7 +10,7 @@ const instance = axios.create({
 instance.interceptors.request.use(async (config) => {
     const auth = getAuth();
 
-    if (auth.currentUser != null) config.headers!.token = await auth.currentUser.getIdToken()
+    if (auth.currentUser != null) config.headers.token = await auth.currentUser.getIdToken()
     return config;
 }, (error) => {
     console.log(error);

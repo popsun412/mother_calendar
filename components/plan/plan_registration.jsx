@@ -8,7 +8,7 @@ export default function PlanRegistartion() {
     return (
         <>
             <div className="flex  py-4 items-center justify-center">
-                <svg class="w-7 h-8 ml-1 textGray2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg className="w-7 h-8 ml-1 textGray2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
                 <span className="flex-auto text-center text-base font-medium textGray1">계획 등록</span>
@@ -59,13 +59,13 @@ export default function PlanRegistartion() {
                     <div className='grid grid-cols-2 gap-6 mt-3'>
                         <div className='border border-gary3 rounded-md text-sm textGray2 text-center py-2 flex items-center justify-center'>
                             <span className='mr-1'>2022년 10월 21일</span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </div>
                         <div className='border border-gary3 rounded-md text-sm textGray2 text-center py-2 flex items-center justify-center'>
                             <span className='mr-1'>2022년 12월 31일</span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </div>
@@ -79,18 +79,18 @@ export default function PlanRegistartion() {
                     <div className='flex space-x-1.5 mt-3'>
                         <div className='border border-gary3 rounded-md text-sm textGray2 text-center p-2 flex items-center justify-center'>
                             <span className='mr-1'>오후 2시 30분</span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </div>
                         <div className='flex items-center justify-center'>
-                            <svg class="w-3 h-2 textGray4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <svg className="w-3 h-2 textGray4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path fillRule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"></path>
                             </svg>
                         </div>
                         <div className='border border-gary3 rounded-md text-sm textGray2 text-center p-2 flex items-center justify-center'>
                             <span className='mr-1'>오후 2시 45분</span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </div>
