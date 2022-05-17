@@ -7,7 +7,7 @@ import SwiperCore, { Pagination, Autoplay } from 'swiper';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 import 'swiper/components/pagination/pagination.min.css';
-import axios from 'axios';
+import network from '../../util/network';
 
 const HomeSlider = () => {
 
@@ -15,10 +15,8 @@ const HomeSlider = () => {
 
     useEffect(() => {
         const getData = async () => {
-            const res = await axios.get('http://localhost:4000/home/main');
-            if (res) {
-                setData(res.data);
-            }
+            const res = await network.post('/common/banners')
+            res.data ? setData(res.data) : null;
         }
         getData();
     }, [])
@@ -40,7 +38,7 @@ const HomeSlider = () => {
                     data.map((item, idx) => {
                         return (
                             <SwiperSlide key={idx}>
-                                <img src='/images/banner.png' />
+                                <img src={item.image_url} />
                                 <span className='block absolute bottom-28 left-2.5 text-xs text-center text-white w-21 h-6 py-1 px-2 rounded-xl' style={{ backgroundColor: '#ff6035' }}>
                                     {item.people}명 참여중👦
                                 </span>

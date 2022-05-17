@@ -1,7 +1,7 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import _ from 'lodash';
+import network from '../../util/network';
 
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
@@ -36,12 +36,9 @@ const HomeTheme = () => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        const getData = async() => {
-            const res = await axios.get('http://localhost:4000/home/theme');
-            if (res) {
-                setData(res.data);
-                getThemeTitle(res.data);
-            }
+        const getData = async () => {
+            const res = await network.post('/best/theme')
+            res.data ? setData(res.data) : null;
         }
         getData();
     }, [])
@@ -50,31 +47,13 @@ const HomeTheme = () => {
         setTheme(param);
     }
 
-    const getThemeTitle = (data) => {
-        const title = [];
-
-        data.map((item, idx) => {
-            title.push({'theme': item.theme});
-            idx === 0 ? setTheme(item.theme) : '';
-        })
-
-        title = title.reduce((acc, current) => {
-            if (acc.findIndex(({theme}) => theme === current.theme) === -1) {
-                acc.push(current);
-            }
-            return acc;
-        }, [])
-
-        setThemeData(title);
-    }
-
     return (
         <section className='mt-5 mb-20 mx-5'>
             <h3 className='text-xl font-semibold' style={{letterSpacing: '-0.4px'}}>인기 테마연계</h3>
             <div className='mt-4 mb-6'>
                 <div className='flex'>
                 {
-                    themeData ? themeData.map((item, idx) => {
+                    data ? data.map((item, idx) => {
                         return (
                             <div className='mr-2' key={idx} onClick={() => {onClick(item.theme)}}>
                                 <span className={`text-center py-1.5 px-2 rounded-sm text-xs
@@ -96,13 +75,13 @@ const HomeTheme = () => {
                                 <SwiperSlide key={idx}>
                                     <div className='w-24'>
                                         <div className='block relative '>
-                                            <img src='/images/itme.png' className='rounded-md'/>
+                                            <img src={item.image} className='rounded-md'/>
                                             <img src='/images/ic_bookmark.png' className='block absolute bottom-0 right-0 mr-2 mb-1.5' />
                                         </div>
-                                        <div className='text-sm leading-snug mt-1.5' style={{letterSpacing: '-0.26px'}}>{item.title}</div>
+                                        <div className='text-sm leading-snug mt-1.5' style={{letterSpacing: '-0.26px'}}>{item.name}</div>
                                         <div className='flex mt-1'>
-                                            <span className='py-1 px-1.5 rounded text-center text-xs textGray3 mr-1 bg5' style={{backgroundColor: '#f0f5f8'}}>{item.tag1}</span>
-                                            <span className='py-1 px-1.5 rounded text-center text-xs textGray3 mr-1 bg5' style={{backgroundColor: '#f0f5f8'}}>{item.tag2}</span>
+                                            <span className='py-1 px-1.5 rounded text-center text-xs textGray3 mr-1 bg5' style={{backgroundColor: '#f0f5f8'}}>{item.field}</span>
+                                            <span className='py-1 px-1.5 rounded text-center text-xs textGray3 mr-1 bg5' style={{backgroundColor: '#f0f5f8'}}>{item.subject}</span>
                                         </div>
                                     </div>
                                 </SwiperSlide> : ''
