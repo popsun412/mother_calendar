@@ -4,7 +4,7 @@ import { Box, Drawer, Slider } from '@material-ui/core';
 import { GlobalStyles, ToggleButtonGroup } from '@mui/material';
 import { ToggleButton } from '@material-ui/lab';
 import { Range, getTrackBackground } from 'react-range';
-import axios from 'axios';
+import network from '../util/network';
 
 const Experience = () => {
 
@@ -19,10 +19,8 @@ const Experience = () => {
 
     useEffect(() => {
         const getData = async() => {
-            const res = await axios('http://localhost:4000/experience/data', {
-                method: 'GET'
-            })
-            if (res.data) setData(res.data);
+            const res = await network.post('/home/recommPlace');
+            res.data ? setData(res.data) : null;
         }
         getData();
     }, [])
@@ -47,7 +45,15 @@ const Experience = () => {
     ];
 
     const applyFilter = () => {
-        
+        const params = {
+            order: aligns,
+            region: location,
+            field: area,
+            age: values
+        }
+
+        console.log(params);
+        onClick('right', false, true);
     }
 
     const onClick = (anchor, open) => (event) => {
@@ -285,7 +291,7 @@ const Experience = () => {
                         <div className='flex justify-center rounded-md bg-gray2 items-center'>
                             <img src='/images/ic_refresh.png' className='w-4 h-4 mr-1'/>다시설정
                         </div>
-                        <div className='rounded-md bg-blue4 text-white' style={{lineHeight: '44px'}} onClick={onClick(anchor, false, true)}>적용하기</div>
+                        <div className='rounded-md bg-blue4 text-white' style={{lineHeight: '44px'}} onClick={() => {applyFilter()}}>적용하기</div>
                     </div>
                 </div>
             </div>
@@ -324,14 +330,14 @@ const Experience = () => {
                             return (
                                 <div className='flex mb-5' key={idx}>
                                     <div className='mr-4 block relative'>
-                                        <img src={item.img} className='rounded-md'/>
+                                        <img src={item.image} className='rounded-md'/>
                                         <img src='/images/ic_bookmark.png' className='block absolute bottom-0 right-0 mr-2 mb-1.5'/>
                                     </div>
                                     <div>
-                                        <h3 className='text-base font-semibold mb-1.5'>{item.title}</h3>
+                                        <h3 className='text-base font-semibold mb-1.5'>{item.name}</h3>
                                         <div className='flex'>
-                                            <span className='py-1 px-1.5 mr-1.5 rounded text-xs textGray3' style={{backgroundColor: '#f0f5f8'}}>{item.tag1}</span>
-                                            <span className='py-1 px-1.5 mr-1.5 rounded text-xs textGray3' style={{backgroundColor: '#f0f5f8'}}>{item.tag2}</span>
+                                            <span className='py-1 px-1.5 mr-1.5 rounded text-xs textGray3' style={{backgroundColor: '#f0f5f8'}}>{item.field}</span>
+                                            <span className='py-1 px-1.5 mr-1.5 rounded text-xs textGray3' style={{backgroundColor: '#f0f5f8'}}>{item.subject}</span>
                                         </div>
                                     </div>
                                 </div>
