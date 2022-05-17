@@ -5,12 +5,12 @@ import { RecoilRoot } from 'recoil'
 
 function MyApp({ Component, pageProps }) {
   const firebaseConfig = {
-    apiKey: "AIzaSyC6HvJE6TtAoYrxo3wRdnX4VUmD1nUIs74",
-    authDomain: "mother-s-calendar.firebaseapp.com",
-    projectId: "mother-s-calendar",
-    storageBucket: "mother-s-calendar.appspot.com",
-    messagingSenderId: "463886716448",
-    appId: "1:463886716448:web:57b6c3b3c960fc2c083645"
+    apiKey: "AIzaSyBJkSWeipxN-pfSYc7zc-xHi87XZvN6LKo",
+    authDomain: "mamadadacal-a1df8.firebaseapp.com",
+    projectId: "mamadadacal-a1df8",
+    storageBucket: "mamadadacal-a1df8.appspot.com",
+    messagingSenderId: "229114284434",
+    appId: "1:229114284434:web:72f1e5ea4485e6e94a194b"
   };
 
   // Initialize Firebase
