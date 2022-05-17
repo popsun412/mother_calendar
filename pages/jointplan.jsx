@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import ToggleSwitch from '../components/common/toggle';
+import GlobalStyles from '@mui/material/GlobalStyles';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css"
 
 const JointPlan = () => {
 
@@ -7,6 +10,9 @@ const JointPlan = () => {
     const [active, setActive] = useState(false);
     const [activeField, setActiveField] = useState(0);
     const [activeDay, setActiveDay] = useState({ 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false });
+
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
 
     const handleDay = (e) => {
         setActiveDay({...activeDay, [e.target.value]: e.target.checked});
@@ -154,13 +160,22 @@ const JointPlan = () => {
                 </section>
                 <section className='mt-8 mx-6'>
                     <div className='text-sm textGray2'>기간 <span className='textGray4'>(선택)</span></div>
-                    <div className='mt-3'>
-                        <select className='mr-6 p-1.5 text-sm border border-solid border-gray3 rounded-md'>
-                            <option>2022년 10월 21일</option>
-                        </select>
-                        <select className='text-sm p-1.5 border border-solid border-gray3 rounded-md'>
-                            <option>2022년 12월 31일</option>
-                        </select>
+                    <div className='mt-3 flex'>
+                        <GlobalStyles 
+                            styles={{
+                                'input': {
+                                    padding: '7px 8px',
+                                    textAlign: 'center',
+                                    fontSize: '14px',
+                                    border: 'solid 1px #bdbdbd',
+                                    borderRadius: '6px',
+                                    width: '145px',
+                                    height: '32px'
+                                }
+                            }}
+                        />
+                        <DatePicker selected={startDate} dateFormat='yyyy년 MM월 dd일' onChange={(date) => setStartDate(date)} className='mr-6'/>
+                        <DatePicker selected={endDate} dateFormat='yyyy년 MM월 dd일' onChange={(date) => setEndDate(date)}/>
                     </div>
                 </section>
                 <section className='mt-8 mx-6'>
