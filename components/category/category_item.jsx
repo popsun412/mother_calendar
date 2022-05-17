@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Drawer } from '@material-ui/core';
 import { Range, getTrackBackground } from 'react-range';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
-import { GlobalStyles } from '@mui/material';
+import GlobalStyles from '@mui/material/GlobalStyles';
 import axios from 'axios';
 
 const CategoryItem = (props) => {
