@@ -14,6 +14,9 @@ const JointPlan = () => {
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
 
+    const [startTime, setStartTime] = useState();
+    const [endTime, setEndTime] = useState();
+
     const handleDay = (e) => {
         setActiveDay({...activeDay, [e.target.value]: e.target.checked});
     }
