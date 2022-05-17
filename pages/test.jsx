@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @next/next/no-img-element */
 import axios from 'axios';
 import React, { useRef, useState } from 'react'
 import StarRatings from 'react-star-ratings';
@@ -25,7 +27,7 @@ const Test = () => {
         e.preventDefault();
         const fileReader = new FileReader();
 
-        if(e.target.files[0]) {
+        if (e.target.files[0]) {
             setLoaded('loading');
             fileReader.readAsDataURL(e.target.files[0]);
         }
@@ -44,13 +46,13 @@ const Test = () => {
     return (
         <div>
             <div className='mb-6'>
-                <div className='rounded-md my-0 mx-auto relative' style={{width: '120px', height: '120px', backgroundColor: '#f2f2f2'}}>
+                <div className='rounded-md my-0 mx-auto relative' style={{ width: '120px', height: '120px', backgroundColor: '#f2f2f2' }}>
                     <button type='primary' onClick={() => inputRef.click()}>
-                        <input type='file' accept='image/*' onChange={saveImage} ref={refParam => inputRef = refParam} style={{display: 'none'}} />
+                        <input type='file' accept='image/*' onChange={saveImage} ref={refParam => inputRef = refParam} style={{ display: 'none' }} />
                         {
                             loaded == false || loaded == true ? (
-                                <img src={image.preview_URL} className='rounded-md' style={{width:'120px', height: '120px'}}/>
-                            ) : <img src='/images/ic_camera.png' className='absolute top-10 left-10'/>
+                                <img src={image.preview_URL} className='rounded-md' style={{ width: '120px', height: '120px' }} />
+                            ) : <img src='/images/ic_camera.png' className='absolute top-10 left-10' />
                         }
                     </button>
                 </div>
@@ -58,7 +60,7 @@ const Test = () => {
             <div>
                 <div>
                     <input type='text' placeholder='교구 이름을 입력해주세요.' value={booktitle} onChange={titleChange}
-                        className='block w-full h-10 px-5 box-border border border-solid border-color4 rounded-md text-sm textGray4'/>
+                        className='block w-full h-10 px-5 box-border border border-solid border-color4 rounded-md text-sm textGray4' />
                 </div>
             </div>
         </div>
@@ -78,7 +80,7 @@ const Test2 = () => {
 
     return (
         <div className='App'>
-            <StarRatings 
+            <StarRatings
                 rating={rating}
                 changeRating={handleRating}
                 numberOfStars={5}
@@ -143,7 +145,7 @@ const Test3 = () => {
                     }
                 }}
             />
-            <DatePicker 
+            <DatePicker
                 value={time}
                 isOpen={isOpen}
                 showHeader={false}
@@ -183,18 +185,18 @@ const Test4 = () => {
 
     const lang = {
         months: [
-        "1월",
-        "2월",
-        "3월",
-        "4월",
-        "5월",
-        "6월",
-        "7월",
-        "8월",
-        "9월",
-        "10월",
-        "11월",
-        "12월"
+            "1월",
+            "2월",
+            "3월",
+            "4월",
+            "5월",
+            "6월",
+            "7월",
+            "8월",
+            "9월",
+            "10월",
+            "11월",
+            "12월"
         ],
         from: "From",
         to: "To"
@@ -207,7 +209,7 @@ const Test4 = () => {
                 ref={monthPickerRef}
                 value={value}
                 onChange={handlePickerChange}
-                >
+            >
                 <span onClick={showPicker}>{moment(value).format('YYYY년 MM월')}</span>
             </MonthPicker>
         </div>

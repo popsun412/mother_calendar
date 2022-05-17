@@ -1,16 +1,21 @@
 import { ChevronLeftRounded } from "@material-ui/icons";
+import PlanTitle from "../calendar/plan_title";
 
 export default function PlaneDetail() {
     return (
         <>
             <div className="px-5">
-                <div className="flex flex-row justify-between py-6">
-                    <ChevronLeftRounded style={{ fontSize: "1.5rem", color: "#333333" }} />
-                    <img src="/images/more-horizontal.png" alt="메뉴" />
+                <div className="flex items-center justify-between py-6">
+                    <svg className="w-7 h-8 textGray2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    <svg className="w-6 h-6 textGray3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path>
+                    </svg>
                 </div>
 
                 <div className="flex flex-row pb-6">
-                    <span className="text-xs font-normal flex items-center mr-2">국어</span>
+                    <PlanTitle />
                     <p className="textGray1 text-lg font-normal">페파피그1 영상</p>
                 </div>
                 <div className="border rounded-md border-color2 flex justify-between p-3 mb-4">
@@ -56,34 +61,39 @@ export default function PlaneDetail() {
                         </span>
                     </div>
                 </div>
-                <div className="grid grid-cols-2 text-center border-b border-gary4 mb-1" style={{ borderBottomWidth: "0.38px" }}>
-                    <span className="textGray1 font-semibold text-sm pb-2 border-b-2 border-gary1">실행인증</span>
-                    <span className="textGray3 font-normal text-sm pb-2">실행현황</span>
+                <div>
+                    <div className="grid grid-cols-2 text-center border-b-[0.38px] border-gary4 mb-1">
+                        <span className="textGray3 font-normal text-sm pb-2 hover:border-b-2 hover:text-[#3c81e1] hover:border-[#3c81e1] hover:font-semibold">실행인증</span>
+                        <span className="textGray3 font-normal text-sm pb-2 hover:border-b-2 hover:text-[#3c81e1] hover:border-[#3c81e1] hover:font-semibold">실행현황</span>
+                    </div>
+                    {/* 실행 인증 */}
+                    <div className="grid grid-cols-3 gap-1">
+                        <div className="bg-[url('/images/banner.png')] bg-center bg-no-repeat bg-cover relative h-[7.5rem]">
+                            <div className="w-full h-full absolute top-0 left-0 bg-[rgba(0,0,0,0.4)]" />
+                            <div className="flex flex-col absolute left-2.5 bottom-2.5">
+                                <span className="text-[#dbeffd] text-xs font-light">2022년</span>
+                                <span className="text-white font-normal text-sm shadow-[0px 0px 4px rgba(0,0,0,0.25)]">3월 22일</span>
+                            </div>
+                        </div>
+                        <div className="bg-[url('/images/rectangle.png')] bg-center bg-no-repeat relative h-[7.5rem]">
+                            <div className="w-full h-full absolute top-0 left-0 bg-[rgba(0,0,0,0.4)]" />
+                            <div className="flex flex-col absolute left-2.5 bottom-2.5">
+                                <span className="text-[#dbeffd] text-xs font-light">2022년</span>
+                                <span className="text-white font-normal text-sm shadow-[0px 0px 4px rgba(0,0,0,0.25)]">3월 22일</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 실행 현황 */}
+                    {/* <div>캘린더 들어가야함</div> */}
                 </div>
-                <div className="grid grid-cols-3 gap-1">
-                    <div className="bg-[url('/images/banner.png')] bg-center bg-no-repeat bg-cover relative" style={{ height: "7.5rem" }}>
-                        <div
-                            className="w-full h-full absolute top-0 left-0"
-                            style={{ background: "rgba(0, 0, 0, 0.4)" }}
-                        />
-                        <span
-                            className="text-white font-normal text-lg absolute top-1/2 left-1/2"
-                            style={{ transform: "translate(-50%, -50%)" }}
-                        >2/14</span>
-                    </div>
-                    <div className="bg-center bg-no-repeat bg-cover relative" style={{ height: "7.5rem" }}>
-                        <div
-                            className="w-full h-full absolute top-0 left-0"
-                            style={{ background: "rgba(0, 0, 0, 0.4)" }}
-                        />
-                        <span
-                            className="text-white font-normal text-lg absolute top-1/2 left-1/2"
-                            style={{ transform: "translate(-50%, -50%)" }}
-                        >2/14</span>
-                    </div>
+
+                <div className="flex items-center justify-center relative">
+                    <span className="px-5 py-3 bg5 text-base text-white font-medium rounded-full fixed bottom-6">오늘 하루 인증하기</span>
+                    {/* <span className="px-5 py-3 bg-gray4 text-base text-white font-medium rounded-full fixed bottom-6">오늘 인증을 완료했어요!</span>
+                    <span className="px-5 py-3 bg5 text-base text-white font-medium rounded-full fixed bottom-6">종료 계획 재시작하기</span> */}
                 </div>
             </div>
-
 
         </>
     )

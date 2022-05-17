@@ -2,10 +2,7 @@
 
 - 질문 사항들이 있어요.
 . calendar_top.jsx
-. frind_list.jsx
 . category_item.jsx
-. main_ theme.jsx
-. main_category.jsx
 . itme_detail.jsx
     - 아이콘이 안 넣어져요.
     - p로 하면 엔터가 안 먹히네요 이럴땐 어떻게 해야해요?
