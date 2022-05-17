@@ -1,6 +1,6 @@
 import { useState } from "react";
 import SignupHeader from "./sign_up_header";
-import { createUserWithEmailAndPassword, getAuth, sendEmailVerification } from "firebase/auth"
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
 import network from "../../util/network";
 
 export default function SignIn3(props) {
@@ -9,18 +9,14 @@ export default function SignIn3(props) {
     const [showPasswordCheck, setShowPasswordCheck] = useState(false);
 
     const signUp = () => {
-        console.log(props.signupInfo.email);
-
-        createUserWithEmailAndPassword(auth, props.signupInfo.email, props.signupInfo.password).then((userCredential) => {
-            network.post('/user/signup', props.signupInfo).then((_value) => {
-                sendEmailVerification(userCredential.user);
-            });
+        network.post('/user/signup', props.signupInfo).then((_value) => {
+            signInWithEmailAndPassword(auth, props.signupInfo.email, props.signupInfo.password);
         }).catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
 
             alert(errorMessage);
-        });
+        })
     }
 
     return (
