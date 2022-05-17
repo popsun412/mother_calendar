@@ -97,11 +97,20 @@ const HomeCategory = () => {
                 <div className='grid grid-cols-4'>
                 {
                     data.map((item, idx) => {
+                        let category = '';
+                        item.id == 10 ? category = 'exp' : item.id == 12 ? category = 'par' : item.id == 11 ? category == 'etc' : category = 'edu'
+
+                        if (item.id == 11) {
+                            category = 'etc';
+                        }
                         return (
                             <Link key={idx}
                                 href={{
                                     pathname: '/category',
-                                    query: { id: item.id }
+                                    query: { 
+                                        type: category,
+                                        id: 0
+                                    }
                                 }}
                             >
                                 <div className={`flex justify-center flex-col my-0 mx-auto ${item.recommend ? 'border border-solid rounded-lg border-color2' : ''}`} style={{height: '87px', width: '62px'}}>

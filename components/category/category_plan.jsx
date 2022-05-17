@@ -1,15 +1,16 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Toast from '../common/toast';
 
-const CategoryPlan = () => {
+const CategoryPlan = (props) => {
 
     const [visible, setVisible] = React.useState(false);
+    const [ToastStatus, setToastStatus] = useState(false);
+    const [data, setData] = useState([]);
 
     const onClick = () => {
         setVisible(true);
     }
-
-    const [ToastStatus, setToastStatus] = useState(false);
 
     const handleToast = (type) => {
         if (!ToastStatus) {
@@ -23,7 +24,22 @@ const CategoryPlan = () => {
                 setToastStatus(false);
             }, 1000);
         }
-    }, [ToastStatus])
+    }, [ToastStatus]);
+
+    useEffect(() => {
+        const getData = async(param) => {
+            const res = await axios('http://localhost:4000/', {
+                method: 'GET',
+                params: {
+                    category: param
+                }
+            })
+
+            res.data ? setData() : null;
+        }
+
+        getData(props.category);
+    }, [props.category])
 
     return (
         <div className='mx-5'>

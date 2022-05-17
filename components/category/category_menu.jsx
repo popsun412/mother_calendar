@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 
-const data = [
+const edu = [
     {
         id: 0,
         title: '전체',
@@ -54,26 +54,23 @@ const data = [
         title: '놀이',
         imgUrl: '/images/category9.png'
     },
-    {
-        id: 11,
-        title: '기타',
-        imgUrl: '/images/category11.png'
-    },
-    {
-        id: 12,
-        title: '부모',
-        imgUrl: '/images/category12.png'
-    }
 ]
 
 const CategoryMenu = (props) => {
 
-    console.log(props);
+    const [data, setData] = useState(
+        [{ id: 0, title: '전체', imgUrl: '/images/all.png' }]
+    );
+    const type = props.type;
 
     const categoryClick = (param) => {
         alert(param);
         props.setCategory(param);
     }
+
+    useEffect(() => {
+        type == 'edu' ? setData(edu) : null;
+    }, [])
 
     return (
         <div className='ml-4'>
