@@ -16,9 +16,19 @@ import { useRouter } from "next/router";
 // firebase
 import { getAuth } from "firebase/auth";
 
-const Calendar = (props) => {
+// 글로벌 상태관리
+import { useRecoilState } from "recoil";
+import { userInfoState } from "../states/user_info";
+
+// api호출
+import network from "../util/network";
+
+const Calendar = () => {
     const auth = getAuth();
     const router = useRouter();
+
+    // 글로벌 상태관리
+    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
 
     const [load, setLoad] = useState(false);
 
@@ -27,14 +37,30 @@ const Calendar = (props) => {
         setLoad(true);
     }
 
+    // 유저 정보 갖고오기
+    const getUser = async () => {
+        const _result = await network.post('/userInfo');
+
+        // data 통신
+        if (_result.status == 200) {
+            setUserInfo(_result.data);
+        } else {
+            router.push('/');
+        }
+    }
+
     useEffect(() => {
-        auth.onAuthStateChanged(async (_user) => {
-            if (_user) {
-                getItem();
-            } else {
-                router.push('/');
-            }
-        });
+        if (userInfo == null) {
+            auth.onAuthStateChanged(async (_user) => {
+                if (_user) {
+                    getUser();
+                } else {
+                    router.push('/');
+                }
+            });
+        }
+
+        if (userInfo != null && !load) getItem();
     })
 
     return (<>

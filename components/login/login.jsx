@@ -1,10 +1,11 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { getCookie, setCookies } from 'cookies-next';
 
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { useRecoilState } from "recoil";
+import { userInfoState } from "../../states/user_info";
 
 export default function Login() {
     const auth = getAuth();
@@ -13,14 +14,16 @@ export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+
     const login = () => {
         // 파이어베이스 로그인 시도
         signInWithEmailAndPassword(auth, email, password).then(async (userCredential) => {
             if (userCredential.user.emailVerified) {
+                setUserInfo(userCredential.user.email);
+
                 router.push('/calendar');
             } else {
-                // 이메일 인증 필요
-                console.log("ddd");
             }
         }).catch(async (error) => {
             console.log(error);

@@ -1,6 +1,7 @@
 import '../styles/globals.css'
 import '../styles/toggle_switch.css'
 import { initializeApp } from "firebase/app";
+import { RecoilRoot } from 'recoil'
 
 function MyApp({ Component, pageProps }) {
   const firebaseConfig = {
@@ -17,7 +18,9 @@ function MyApp({ Component, pageProps }) {
 
   initializeApp(firebaseConfig);
 
-  return <Component {...pageProps} />
+  return <RecoilRoot>
+    <Component {...pageProps} />
+  </RecoilRoot>
 }
 
 export default MyApp
