@@ -34,6 +34,7 @@ const Calendar = () => {
 
     // 아이템 불러오기
     const getItem = async () => {
+        console.log(userInfo);
         setLoad(true);
     }
 
@@ -55,6 +56,7 @@ const Calendar = () => {
                 if (_user) {
                     getUser();
                 } else {
+                    setUserInfo(null);
                     router.push('/');
                 }
             });

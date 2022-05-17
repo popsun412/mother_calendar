@@ -1,16 +1,5 @@
-
-import Calendar from './calendar'
-import Logo from './logo'
-import Main from './main'
-import Plan from './plan'
+import Login from '../components/login/login';
 
 export default function Home() {
-  return (
-    <>
-      {/* <Calendar /> */}
-      {/* <Main /> */}
-      {/* <Plan /> */}
-      <Logo />
-    </>
-  )
+  return <Login />
 }
