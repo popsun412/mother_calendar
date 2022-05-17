@@ -43,7 +43,7 @@ const Guide = () => {
                     </div>
                 </section>
                 <section className='mt-4'>
-                    <ReactPlayer url='https://youtu.be/hX_XYdgjGkw' playing={false} controls={true} width='360px' height='360px'/>
+                    <ReactPlayer url='https://youtu.be/a5oTbhuROVw' playing={false} controls={true} width='360px' height='360px'/>
                 </section>
                 <section className='mt-4'>
                     <div className='mx-5' style={{fontSize: '13px', letterSpacing: '-0.52px'}}>
