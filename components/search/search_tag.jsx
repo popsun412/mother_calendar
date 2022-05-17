@@ -1,10 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import network from '../../util/network';
 
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 
 const SearchTag = () => {
+
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        const getData = async() => {
+            const res = await network.post('/search/recommTags');
+            res.data ? setData(res.data) : null;
+        }
+        getData();
+    }, [])
+
+    const rendering = () => {
+        const result = [];
+        for (let i = 0; i < data.length; i++) {
+            result.push(
+                <SwiperSlide>
+                    <div className='text-xs text-center border border-solid textBlue1 p-2.5' style={{borderRadius: '30px', borderColor: '#7EBCF9'}}>{"#" + data[i]}</div>
+                </SwiperSlide>
+            );
+        }
+        return result;
+    };
+
     return (
         <>
             <div className='my-0 mx-6'>
@@ -17,18 +41,7 @@ const SearchTag = () => {
                     onSlideChange={() => console.log('change slide')}
                     onSwiper={swiper => console.log(swiper)}
                     >
-                    <SwiperSlide>
-                        <div className='text-xs text-center border border-solid textBlue1 p-2.5' style={{borderRadius: '30px', borderColor: '#7EBCF9'}}>#어쩌구챌린지</div>
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <div className='text-xs text-center border border-solid textBlue1 p-2.5' style={{borderRadius: '30px', borderColor: '#7EBCF9'}}>#어쩌구챌린지</div>
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <div className='text-xs text-center border border-solid textBlue1 p-2.5' style={{borderRadius: '30px', borderColor: '#7EBCF9'}}>#어쩌구챌린지</div>
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <div className='text-xs text-center border border-solid textBlue1 p-2.5' style={{borderRadius: '30px', borderColor: '#7EBCF9'}}>#어쩌구챌린지</div>
-                    </SwiperSlide>
+                    {rendering()}
                 </Swiper>
             </div>
         </>
