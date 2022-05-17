@@ -6,10 +6,10 @@ import SignIn3 from "../components/login/sign_in_3";
 export default function Logo() {
     return (
         <>
-            {/* <Login /> */}
+            <Login />
             {/* <SignIn1 /> */}
             {/* <SignIn2 /> */}
-            <SignIn3 />
+            {/* <SignIn3 /> */}
         </>
     )
 }

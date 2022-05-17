@@ -1,6 +1,6 @@
 
 import Calendar from './calendar'
-import Logo from './logog'
+import Logo from './logo'
 import Main from './main'
 import Plan from './plan'
 
