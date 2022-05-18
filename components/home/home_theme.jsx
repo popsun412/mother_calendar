@@ -29,7 +29,7 @@ const theme_data = [
     }
 ]
 
-const HomeTheme = () => {
+const HomeTheme = (props) => {
 
     const [theme, setTheme] = useState('');
     const [themeData, setThemeData] = useState('');
@@ -76,7 +76,7 @@ const HomeTheme = () => {
                                     <div className='w-24'>
                                         <div className='block relative '>
                                             <img src={item.image} className='rounded-md'/>
-                                            <img src='/images/ic_bookmark.png' className='block absolute bottom-0 right-0 mr-2 mb-1.5' />
+                                            <img src={`/images/ic_${item.bookmark? 'bookmarked.png' : 'bookmark.png'}`}  className='block absolute bottom-0 right-0 mr-2 mb-1.5' />
                                         </div>
                                         <div className='text-sm leading-snug mt-1.5' style={{letterSpacing: '-0.26px'}}>{item.name}</div>
                                         <div className='flex mt-1'>

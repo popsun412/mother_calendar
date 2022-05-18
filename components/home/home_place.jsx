@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import network from '../../util/network';
 
-const HomePlace = () => {
+const HomePlace = (props) => {
 
     const [data, setData] = useState([]);
 
@@ -24,7 +24,7 @@ const HomePlace = () => {
                                 <div className='mr-3 block relative'>
                                     <span className='absolute block top-0 py-1 px-2 text-xs text-white bg-blue3 rounded-tl-md rounded-br-md'>{item.ranking}위</span>
                                     <img src={item.image} width={'96px'} height={'96px'} className='rounded-md'/>
-                                    <img src='/images/ic_bookmark.png' className='absolute block bottom-0 right-0 mr-2 mb-1.5'/>
+                                    <img src={`/images/ic_${item.bookmark? 'bookmarked.png' : 'bookmark.png'}`}  className='absolute block bottom-0 right-0 mr-2 mb-1.5'/>
                                 </div>
                                 <div>
                                     <h3 className='text-base font-semibold' style={{letterSpacing: '-0.3px'}}>{item.name}</h3>
