@@ -12,6 +12,7 @@ import { useRecoilState } from "recoil";
 import { userInfoState } from "../states/user_info";
 
 import network from '../util/network';
+import { useRouter } from 'next/router';
 
 const Home = () => {
 
