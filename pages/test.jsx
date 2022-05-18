@@ -181,7 +181,7 @@ const Test6 = () => {
         <>
             <DatePicker 
                 selected={startDate}
-                onChange={(date) => setDate(date)}
+                onChange={(date) => setStartDate(date)}
                 dateFormat='yyyy/MM'
                 showMonthYearPicker
                 showFullMonthYearPicker
