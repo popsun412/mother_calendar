@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore, { Pagination } from 'swiper';
+import { useRouter } from "next/router";
+import network from '../util/network';
 
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
@@ -29,11 +31,15 @@ const data = [
     }
 ]
 
-const Place = () => {
+const Item = () => {
 
-    SwiperCore.use([Pagination]);
-
+    const [data, setData] = useState([]);
     const [scrollPosition, setScrollPosition] = useState(0);
+
+    const router = useRouter();
+    const itemUid = router.query.itemUid;
+    
+    SwiperCore.use([Pagination]);
     
     const updateScroll = () => {
         setScrollPosition(window.scrollY || document.documentElement.scrollTop);
@@ -43,9 +49,18 @@ const Place = () => {
         window.addEventListener('scroll', updateScroll);
     }, []);
 
-    const onClick = () => {
-        window.history.back();
-    }
+    useEffect(() => {
+        const getData = async() => {
+            const res = await network.post('/home/recommItems', {
+                params: {
+                    itemUid: itemUid
+                }
+            })
+            res.data ? setData(res.data.filter(val => val.commonItemUid == itemUid)) : null
+        }
+        getData();
+        console.log(data)
+    }, []);
 
     return (
         <div>
@@ -161,4 +176,4 @@ const Place = () => {
     )
 }
 
-export default Place;
+export default Item;

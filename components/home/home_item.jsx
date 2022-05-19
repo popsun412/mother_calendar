@@ -31,7 +31,7 @@ const HomeItem = (props) => {
                             <SwiperSlide key={idx}>
                                 <Link href={{
                                     pathname: '/item',
-                                    query: { commonItemUid: item.commonItemUid }
+                                    query: { itemUid: item.commonItemUid }
                                 }}>
                                     <div className='w-24'>
                                         <div className='block relative'>
