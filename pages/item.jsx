@@ -55,11 +55,11 @@ const Place = () => {
                 {
                     scrollPosition > 60 ?
                         <div className='flex mx-5 w-full'>
-                            <div style={{width:'20px'}}>
-                                <img src='/images/ic_back.png' onClick={() => {window.history.back()}}/>
+                            <div style={{width:'20px'}} onClick={() => {window.history.back();}}>
+                                <img src='/images/ic_back.png'/>
                             </div>
                             <div className='text-center flex-1'>🏕 애니메이션 센터</div>
-                        </div> : <img src='/images/ic_banner_aos.png' />
+                        </div> : <img src='/images/ic_banner_aos.png' onClick={() => {window.history.back();}}/>
                 }
                 </div>
             </header>
