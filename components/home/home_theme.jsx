@@ -75,7 +75,7 @@ const HomeTheme = (props) => {
                                 <SwiperSlide key={idx}>
                                     <div className='w-24'>
                                         <div className='block relative '>
-                                            <img src={item.image} className='rounded-md'/>
+                                            <img src={item.image} className='rounded-md' style={{width: '94px', height: '94px'}}/>
                                             <img src={`/images/ic_${item.bookmark? 'bookmarked.png' : 'bookmark.png'}`}  className='block absolute bottom-0 right-0 mr-2 mb-1.5' />
                                         </div>
                                         <div className='text-sm leading-snug mt-1.5' style={{letterSpacing: '-0.26px'}}>{item.name}</div>

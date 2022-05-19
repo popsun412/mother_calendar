@@ -38,7 +38,7 @@ const HomeSlider = () => {
                     data.map((item, idx) => {
                         return (
                             <SwiperSlide key={idx}>
-                                <img src={item.image} />
+                                <img src={item.image} style={{width: '360px'}}/>
                                 <span className='block absolute bottom-28 left-2.5 text-xs text-center text-white w-21 h-6 py-1 px-2 rounded-xl' style={{ backgroundColor: '#ff6035' }}>
                                     {item.count}명 참여중👦
                                 </span>
