@@ -3,19 +3,17 @@ import { Box, Drawer } from '@material-ui/core';
 import { Range, getTrackBackground } from 'react-range';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import GlobalStyles from '@mui/material/GlobalStyles';
-import axios from 'axios';
+import network from '../../util/network';
 
 const CategoryItem = (props) => {
 
-    const { category } = props;
+    const { category, setCategory } = props;
     const [data, setData] = useState([]);
 
     const getData = async(param) => {
-        console.log('param : ', param);
-        const res = await axios('http://localhost:4000/category/item', {
-            method: 'GET',
+        const res = await network.post('/home/recommItems', {
             params: {
-                category: category
+                subject: category
             }
         })
         res.data ? setData(res.data) : ''
@@ -201,6 +199,45 @@ const CategoryItem = (props) => {
         }
     ]
 
+    const applyFilter = async() => {
+        const region = [];
+        const field = [];
+        const age = [];
+        
+        location[0] ? region.push('서울') : null;
+        location[1] ? region.push('경기') : null;
+        location[2] ? region.push('기타') : null;
+
+        area[1] ? field.push('학원') : null;
+        area[2] ? field.push('대전집') : null;
+        area[3] ? field.push('소전집') : null;
+        area[4] ? field.push('단행본') : null;
+        area[5] ? field.push('교구') : null;
+        area[6] ? field.push('교재') : null;
+        area[7] ? field.push('영상') : null;
+        area[8] ? field.push('게임') : null;
+        area[9] ? field.push('블록') : null;
+        area[10] ? field.push('퍼즐') : null;
+        area[11] ? field.push('재료') : null;
+        area[12] ? field.push('기타') : null;
+
+        age.push(3);
+        values[1] == 0 ? age.push(3) : null;
+        values[1] == 10 ? age.push(6) : null;
+        values[1] == 20 ? age.push(7) : null;
+        values[1] == 30 ? age.push(8) : null;
+
+        const res = network.post('/home/recommItems', {
+            params: {
+                order: 'reg',
+                region: region,
+                field: field,
+                age: age
+            }
+        })
+        res.data ? setData(res.data) : null;
+    }
+
     const list = (anchor) => (
 
         <Box
@@ -346,7 +383,7 @@ const CategoryItem = (props) => {
                         <div className='flex justify-center rounded-md bg-gray2 items-center'>
                             <img src='/images/ic_refresh.png' className='w-4 h-4 mr-1'/>다시설정
                         </div>
-                        <div className='rounded-md bg-blue4 text-white' style={{lineHeight: '44px'}} onClick={onClick(anchor, false, true)}>적용하기</div>
+                        <div className='rounded-md bg-blue4 text-white' style={{lineHeight: '44px'}} onClick={applyFilter}>적용하기</div>
                     </div>
                 </div>
             </div>
@@ -379,10 +416,10 @@ const CategoryItem = (props) => {
                 {
                     data.map((item, idx) => {
                         return (
-                            props.category === item.category || props.category === 0 ?
+                            // props.category === item.category || props.category === 0 ?
                             <div key={idx}>
                                 <div className='block relative'>
-                                    <img src={item.img} className='rounded-md' style={{width: '154px', height: '154px'}}/>
+                                    <img src={item.image} className='rounded-md' style={{width: '154px', height: '154px'}}/>
                                     {
                                         item.bookmark ? <img src='/images/ic_bookmarked.png' className='block absolute bottom-0 right-0 pr-2.5 pb-3'/>
                                                     : <img src='/images/ic_bookmark.png' className='block absolute bottom-0 right-0 pr-2.5 pb-3'/>
@@ -394,7 +431,7 @@ const CategoryItem = (props) => {
                                     <span className='mr-1.5 py-1 px-1.5 rounded text-xs text-center textGray3' style={{backgroundColor: '#f0f5f8'}}>영어</span>
                                     <span className='mr-1.5 py-1 px-1.5 rounded text-xs text-center textGray3' style={{backgroundColor: '#f0f5f8'}}>교구</span>
                                 </div>
-                            </div> : ''
+                            </div>
                         )
                     })
                 }

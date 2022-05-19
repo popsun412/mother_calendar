@@ -98,7 +98,7 @@ const HomeCategory = () => {
                 {
                     data.map((item, idx) => {
                         let category = '';
-                        item.id == 10 ? category = 'exp' : item.id == 12 ? category = 'par' : item.id == 11 ? category == 'etc' : category = 'edu'
+                        item.id == 10 ? category = '체험' : item.id == 12 ? category = '부모' : item.id == 11 ? category == '기타' : category = '교육'
 
                         if (item.id == 11) {
                             category = 'etc';
@@ -109,7 +109,7 @@ const HomeCategory = () => {
                                     pathname: '/category',
                                     query: { 
                                         type: category,
-                                        id: 0
+                                        id: item.title
                                     }
                                 }}
                             >

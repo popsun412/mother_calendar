@@ -9,13 +9,15 @@ const CategoryBody = (props) => {
     const [category, setCategory] = useState(props.category);
     const type = props.type;
 
+    console.log(props);
+
     const tabClick = (index) => {
         setActiveTab(index);
     }
 
     const obj = {
-        0: <CategoryPlan category={category} setCategory={setCategory}/>,
-        1: <CategoryItem category={category} setCategory={setCategory}/>
+        0: <CategoryPlan type={type} category={category} setCategory={setCategory}/>,
+        1: <CategoryItem type={type} category={category} setCategory={setCategory}/>
     }
 
     return (
