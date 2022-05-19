@@ -29,19 +29,38 @@ const theme_data = [
     }
 ]
 
-const HomeTheme = () => {
+const HomeTheme = (props) => {
 
     const [theme, setTheme] = useState('');
-    const [themeData, setThemeData] = useState('');
+    const [themeData, setThemeData] = useState([]);
     const [data, setData] = useState([]);
 
     useEffect(() => {
         const getData = async () => {
             const res = await network.post('/best/theme')
             res.data ? setData(res.data) : null;
+            res.data ? getTheme(res.data) : null;
         }
         getData();
     }, [])
+
+    const getTheme = (data) => {
+        const arr = [];
+        const result = [];
+
+        data.map((item, idx) => {
+            arr.push(item.theme);
+        });
+        const set = new Set(arr);
+        const theme = [...set];
+
+        for(let i=0; i<theme.length; i++) {
+            result.push({id: i, theme: theme[i]})
+        }
+
+        result ? setThemeData(result) : null;
+        result ? setTheme(result[0].theme) : null;
+    }
 
     const onClick = (param) => {
         setTheme(param);
@@ -52,21 +71,25 @@ const HomeTheme = () => {
             <h3 className='text-xl font-semibold' style={{letterSpacing: '-0.4px'}}>인기 테마연계</h3>
             <div className='mt-4 mb-6'>
                 <div className='flex'>
-                {
-                    data ? data.map((item, idx) => {
-                        return (
-                            <div className='mr-2' key={idx} onClick={() => {onClick(item.theme)}}>
-                                <span className={`text-center py-1.5 px-2 rounded-sm text-xs
-                                    ${theme == item.theme? 'bg-blue3 text-white' : 'border border-solid bg-white border-gray3 textGray4'}`}>{item.theme}</span>
-                            </div>
-                        )
-                    }) : ''
-                }
+                    <Swiper slidesPerView={5}>
+                    {
+                        themeData ? themeData.map((item, idx) => {
+                            return (
+                                <SwiperSlide key={idx}>
+                                    <div className='mr-2' onClick={() => {onClick(item.theme)}}>
+                                        <div className={`text-center py-1.5 px-2 rounded-sm text-xs
+                                            ${theme == item.theme? 'bg-blue3 text-white' : 'border border-solid bg-white border-gray3 textGray4'}`}>{item.theme}</div>
+                                    </div>
+                                </SwiperSlide>
+                            )
+                        }) : ''
+                    }
+                    </Swiper>
                 </div>
             </div>
             <div>
                 <Swiper
-                    slidesPerView={3.2}
+                    slidesPerView={3}
                 >
                     {
                         data.map((item, idx) => {
@@ -75,8 +98,8 @@ const HomeTheme = () => {
                                 <SwiperSlide key={idx}>
                                     <div className='w-24'>
                                         <div className='block relative '>
-                                            <img src={item.image} className='rounded-md'/>
-                                            <img src='/images/ic_bookmark.png' className='block absolute bottom-0 right-0 mr-2 mb-1.5' />
+                                            <img src={item.image} className='rounded-md' style={{width: '94px', height: '94px'}}/>
+                                            <img src={`/images/ic_${item.bookmark? 'bookmarked.png' : 'bookmark.png'}`}  className='block absolute bottom-0 right-0 mr-2 mb-1.5' />
                                         </div>
                                         <div className='text-sm leading-snug mt-1.5' style={{letterSpacing: '-0.26px'}}>{item.name}</div>
                                         <div className='flex mt-1'>

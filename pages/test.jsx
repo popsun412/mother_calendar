@@ -7,10 +7,6 @@ import moment from 'moment';
 import { Global } from '@emotion/react';
 import MonthPicker from "react-month-picker";
 import "react-month-picker/css/month-picker.css";
-
-import { DateRange, DateRangePicker } from 'react-date-range';
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
 import { addDays } from "date-fns"
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css"
@@ -177,4 +173,22 @@ const Test5 = () => {
     )
 }
 
-export default Test5;
+const Test6 = () => {
+
+    const [startDate, setStartDate] = useState(new Date());
+
+    return (
+        <>
+            <DatePicker 
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                dateFormat='yyyy/MM'
+                showMonthYearPicker
+                showFullMonthYearPicker
+                showTwoColumnMonthYearPicker
+            />
+        </>
+    )
+}
+
+export default Test6;

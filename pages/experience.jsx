@@ -331,7 +331,7 @@ const Experience = () => {
                                 <div className='flex mb-5' key={idx}>
                                     <div className='mr-4 block relative'>
                                         <img src={item.image} className='rounded-md'/>
-                                        <img src='/images/ic_bookmark.png' className='block absolute bottom-0 right-0 mr-2 mb-1.5'/>
+                                        <img src={`/images/ic_${item.bookmark? 'bookmarked.png' : 'bookmark.png'}`}  className='block absolute bottom-0 right-0 mr-2 mb-1.5'/>
                                     </div>
                                     <div>
                                         <h3 className='text-base font-semibold mb-1.5'>{item.name}</h3>
