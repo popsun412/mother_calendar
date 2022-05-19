@@ -71,14 +71,14 @@ const HomeTheme = (props) => {
             <h3 className='text-xl font-semibold' style={{letterSpacing: '-0.4px'}}>인기 테마연계</h3>
             <div className='mt-4 mb-6'>
                 <div className='flex'>
-                    <Swiper slidesPerView={5.7}>
+                    <Swiper slidesPerView={5}>
                     {
                         themeData ? themeData.map((item, idx) => {
                             return (
                                 <SwiperSlide key={idx}>
-                                    <div key={idx} onClick={() => {onClick(item.theme)}}>
-                                        <span className={`text-center py-1.5 px-2 rounded-sm text-xs
-                                            ${theme == item.theme? 'bg-blue3 text-white' : 'border border-solid bg-white border-gray3 textGray4'}`}>{item.theme}</span>
+                                    <div className='mr-2' onClick={() => {onClick(item.theme)}}>
+                                        <div className={`text-center py-1.5 px-2 rounded-sm text-xs
+                                            ${theme == item.theme? 'bg-blue3 text-white' : 'border border-solid bg-white border-gray3 textGray4'}`}>{item.theme}</div>
                                     </div>
                                 </SwiperSlide>
                             )
