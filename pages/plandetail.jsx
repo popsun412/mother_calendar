@@ -4,18 +4,20 @@
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import network from '../util/network';
+import { useRouter } from 'next/router';
 
 import PlanHeader from '../components/plandetail/plan_header';
 import PlanItem from '../components/plandetail/plan_item';
-import PlanCondition from '../components/plandetail/plan_condition';
-import PlanConfirm from '../components/plandetail/plan_confirm';
 import PlanRecommend from '../components/plandetail/plan_recommend';
 import PlanDesc from '../components/plandetail/plan_desc';
 import PlanWeek from '../components/plandetail/plan_week';
+import PlanTab from '../components/plandetail/plan_tab';
+import PlanMain from '../components/plandetail/plan_main';
 
 const Plan2 = () => {
 
-    const [activeTab, setActiveTab] = useState(0);
+    const router = useRouter();
+    const planUid = router.query.planUid;
     const [data, setData] = useState([
         {
             planUid: 1,
@@ -38,70 +40,37 @@ const Plan2 = () => {
 
     useEffect(() => {
         const getData = async() => {
-            const res = await network.post('')
+            const res = await network.post('/plan/'+planUid)
             res.data ? setData(res.data) : null;
         }
         getData();
-    }, [])
-
-    const tabClick = (index) => {
-        setActiveTab(index);
-    }
-
-    const obj = {
-        0: <PlanConfirm data={data}/>,
-        1: <PlanCondition data={data}/>
-    }
-
-    const clickCalendar = () => {
-        alert('등록!');
-    }
+    }, []);
 
     return (
         <>
             <PlanHeader />
             <main>
-                <section className='mb-6'>
-                    <div className='block relative'>
-                        <img src='/images/banner.png' />
-                        <span className='block absolute text-white font-bold bottom-0 left-0 text-lg mb-12 ml-5'
-                            style={{ letterSpacing: '-0.54px', fontFamily: 'NanumSquareRoundOTF' }}>영어 원서읽기</span>
-                        <div className='block absolute bottom-0 left-0 mb-6 ml-5 mt-1 text-xs'>
-                            <span className='mr-2 py-1 px-1.5 rounded textOrange1' style={{ letterSpacing: '-0.12px', backgroundColor: 'rgba(219, 239, 253, 0.2)' }}>영어</span>
-                            <span className='py-1 px-1.5 rounded textOrange1' style={{ letterSpacing: '-0.12px', backgroundColor: 'rgba(219, 239, 253, 0.2)' }}>영어</span>
-                        </div>
-                        <div className='block absolute bottom-0 right-0'>
-                            <div className='mr-5 mb-1'>
-                                <img src='/images/ic_add_circle.png' className='mx-auto' />
-                                <div className='mb-5 text-xs text-white text-center mx-auto'>135</div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                <PlanMain data={data}/>
                 <PlanRecommend data={data}/>
                 <PlanDesc data={data}/>
                 <PlanWeek data={data}/>
                 <PlanItem data={data}/>
-                <section className='mb-24'>
-                    <div>
-                        <ul className='flex w-full border-b' style={{ height: '40px' }}>
-                            <li className={`flex-1 my-0 mx-auto text-center ${activeTab === 0 ? 'textBlue4 border-blue4 border-b border-solid border-b-3' : ''}`} onClick={() => { tabClick(0) }}>실행 인증</li>
-                            <li className={`flex-1 my-0 mx-auto text-center ${activeTab === 1 ? 'textBlue4 border-blue4 border-b border-solid border-b-3' : ''}`} onClick={() => { tabClick(1) }}>실행 현황</li>
-                        </ul>
-                    </div>
-                    <div>
-                        {
-                            obj[activeTab]
-                        }
-                    </div>
-                </section>
+                <PlanTab data={data}/>
             </main>
             <aside className='fixed bottom-0 left-0 right-0 z-100'>
                 <div className='relative mx-auto my-0 bg-white'>
-                    <nav className='flex items-center box-border relative' style={{ height: '90px' }}>
-                        <span className='text-sm text-white text-center p-4 m-5 w-full rounded-md bg5'
-                            style={{ letterSpacing: '-0.28px' }} onClick={clickCalendar}>캘린더에 등록하기</span>
-                    </nav>
+                    <Link
+                        href={{
+                            pathname: '/jointplan',
+                            query: {
+                                planUid: planUid
+                            }
+                    }}>
+                        <nav className='flex items-center box-border relative' style={{ height: '90px' }}>
+                            <span className='text-sm text-white text-center p-4 m-5 w-full rounded-md bg5'
+                                style={{ letterSpacing: '-0.28px' }}>캘린더에 등록하기</span>
+                        </nav>
+                    </Link>
                 </div>
             </aside>
         </>

@@ -25,7 +25,7 @@ const PlanHeader = () => {
                                 </div>
                                 <div className='text-center flex-1'>🧩 가베가족 알벳 교구</div>
                                 <img src='/images/ic_back.png' className='hidden' />
-                            </div> : <img src='/images/ic_banner_aos.png' />
+                            </div> : <img src='/images/ic_banner_aos.png' onClick={() => { window.history.back() }} />
                     }
                 </div>
             </header>
