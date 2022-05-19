@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Toast from '../common/toast';
 import network from '../../util/network';
+import Link from 'next/link';
 
 const CategoryPlan = (props) => {
-
-    console.log(props);
 
     const {type, category, setCategory} = props;
     const [visible, setVisible] = useState(false);
@@ -80,13 +79,20 @@ const CategoryPlan = (props) => {
                                     data.map((item2, idx2) => {
                                         return (
                                             item.level == item2.level ?
+                                                <Link href={{
+                                                    pathname: '/plandetail',
+                                                    query: {
+                                                        planUid: item2.commonPlanUid
+                                                    }
+                                                }}>
                                                     <div className='py-5 px-4 rounded-2xl text-sm flex mb-4' style={{backgroundColor: '#f8f6f5'}}>
                                                         <img src='/images/category1.png' className='mr-4'/>
                                                         <div className='my-auto mx-0'>{item2.name}</div>
                                                         <a className='ml-auto' onClick={handleToast}>
                                                             <img src='/images/ic_check_circle.png' />
                                                         </a>
-                                                    </div>: ''
+                                                    </div>
+                                                </Link>: ''
                                         )
                                     })
                                 }

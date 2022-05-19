@@ -4,6 +4,7 @@ import { Range, getTrackBackground } from 'react-range';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import network from '../../util/network';
+import Link from 'next/link';
 
 const CategoryItem = (props) => {
 
@@ -416,22 +417,28 @@ const CategoryItem = (props) => {
                 {
                     data.map((item, idx) => {
                         return (
-                            // props.category === item.category || props.category === 0 ?
-                            <div key={idx}>
-                                <div className='block relative'>
-                                    <img src={item.image} className='rounded-md' style={{width: '154px', height: '154px'}}/>
-                                    {
-                                        item.bookmark ? <img src='/images/ic_bookmarked.png' className='block absolute bottom-0 right-0 pr-2.5 pb-3'/>
-                                                    : <img src='/images/ic_bookmark.png' className='block absolute bottom-0 right-0 pr-2.5 pb-3'/>
-                                    }
-                                    
-                                </div>
-                                <div className='my-2 text-sm'>가베가족 알파벳 교구</div>
+                            <Link href={{
+                                pathname: '/item',
+                                query: {
+                                    itemUid: item.commonItemUid
+                                }
+                            }} key={idx}>
                                 <div>
-                                    <span className='mr-1.5 py-1 px-1.5 rounded text-xs text-center textGray3' style={{backgroundColor: '#f0f5f8'}}>영어</span>
-                                    <span className='mr-1.5 py-1 px-1.5 rounded text-xs text-center textGray3' style={{backgroundColor: '#f0f5f8'}}>교구</span>
+                                    <div className='block relative'>
+                                        <img src={item.image} className='rounded-md' style={{width: '154px', height: '154px'}}/>
+                                        {
+                                            item.bookmark ? <img src='/images/ic_bookmarked.png' className='block absolute bottom-0 right-0 pr-2.5 pb-3'/>
+                                                        : <img src='/images/ic_bookmark.png' className='block absolute bottom-0 right-0 pr-2.5 pb-3'/>
+                                        }
+                                        
+                                    </div>
+                                    <div className='my-2 text-sm'>가베가족 알파벳 교구</div>
+                                    <div>
+                                        <span className='mr-1.5 py-1 px-1.5 rounded text-xs text-center textGray3' style={{backgroundColor: '#f0f5f8'}}>영어</span>
+                                        <span className='mr-1.5 py-1 px-1.5 rounded text-xs text-center textGray3' style={{backgroundColor: '#f0f5f8'}}>교구</span>
+                                    </div>
                                 </div>
-                            </div>
+                            </Link>
                         )
                     })
                 }

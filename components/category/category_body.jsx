@@ -9,8 +9,6 @@ const CategoryBody = (props) => {
     const [category, setCategory] = useState(props.category);
     const type = props.type;
 
-    console.log(props);
-
     const tabClick = (index) => {
         setActiveTab(index);
     }
