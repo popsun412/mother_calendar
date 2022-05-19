@@ -27,7 +27,7 @@ const PlaceHeader = () => {
                                 <span>🏕 애니메이션 센터</span>
                             </div>
                             <img src='/images/ic_back.png' className='hidden'/>
-                        </div> : <img src='/images/ic_banner_aos.png' />
+                        </div> : <img src='/images/ic_banner_aos.png' onClick={() => {window.history.back()}}/>
                 }
                 </div>
             </header>
