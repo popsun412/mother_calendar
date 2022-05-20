@@ -3,10 +3,12 @@ import { useRouter } from 'next/router';
 import ToggleSwitch from '../components/common/toggle';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import DatePicker from 'react-datepicker';
+import TimePicker from 'rc-time-picker';
+import moment from 'moment';
 import "react-datepicker/dist/react-datepicker.css"
+import 'rc-time-picker/assets/index.css';
 
 import network from '../util/network';
-import JointPlanHeader from '../components/jointplan/jointplan_header';
 
 const JointPlan = () => {
 
@@ -22,8 +24,8 @@ const JointPlan = () => {
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
 
-    const [startTime, setStartTime] = useState();
-    const [endTime, setEndTime] = useState();
+    const [startTime, setStartTime] = useState(moment());
+    const [endTime, setEndTime] = useState(moment());
 
     useEffect(() => {
         const getData = async() => {
@@ -48,9 +50,47 @@ const JointPlan = () => {
         setActive(target.checked);
     }
 
+    const activeDayArr = (activeDay) => {
+        const arr = [];
+
+        activeDay[1] ? arr.push(1) : null;
+        activeDay[2] ? arr.push(2) : null;
+        activeDay[3] ? arr.push(3) : null;
+        activeDay[4] ? arr.push(4) : null;
+        activeDay[5] ? arr.push(5) : null;
+        activeDay[6] ? arr.push(6) : null;
+        activeDay[7] ? arr.push(0) : null;
+
+        return arr;
+    }
+
+    const goAddPlan = async() => {
+        const res = await network.post('/plan/commonPlan', {
+            params: {
+                subject: activeField,
+                field: '',
+                repeatDay: activeDayArr(activeDay),
+                startTime: moment(startTime).format('hhmm'),
+                endTime: moment(endTime).format('hhmm')
+            }
+        })
+    }
+
     return (
         <div className='w-full h-full overflow-y-auto scrollbar-hide'>
-            <JointPlanHeader data={data}/>
+            <header className='sticky top-0 left-0 right-0 opacity-100 visible z-100' style={{marginBottom: '-50px'}}>
+                <div className='flex relative mx-auto my-0 box-border py-4 w-full bg-white' style={{height: '50px'}}>
+                    <div className='ml-5'>
+                        <img src='/images/ic_back.png' onClick={() => {window.history.back()}}/>
+                    </div>
+                    <div className='my-0 mx-auto'>
+                        <span className='text-base font-medium'>{data.name}</span>
+                    </div>
+                    <div className='mr-4' onClick={goAddPlan}>
+                        <span className='text-base textOrange5'>완료</span>
+                    </div>
+                </div>
+            </header>
             <main className='mt-16'>
                 <section className='mx-8 pt-4'>
                     <div className='bg-gray2 text-center text-sm py-4' style={{borderRadius: '10px'}}>{data.name}</div>
@@ -189,13 +229,34 @@ const JointPlan = () => {
                 </section>
                 <section className='mt-8 mx-6'>
                     <div className='text-sm textGray2'>시간 <span className='textGray4'>(선택)</span></div>
-                    <div className='mt-3'>
-                        <select className='mr-6 p-1.5 text-sm border border-solid border-gray3 rounded-md'>
-                            <option>오후 2시</option>
-                        </select>
-                        <select className='text-sm p-1.5 border border-solid border-gray3 rounded-md'>
-                            <option>오후 2시</option>
-                        </select>
+                    <div className='mt-3 flex'>
+                        <GlobalStyles 
+                            styles={{
+                                '.rc-time-picker-input': {
+                                    padding: '7px 8px',
+                                    textAlign: 'center',
+                                    color: 'black',
+                                    fontSize: '14px',
+                                    border: 'solid 1px #bdbdbd',
+                                    borderRadius: '6px',
+                                    width: '145px',
+                                    height: '32px'
+                                }
+                            }}
+                        />
+                        <TimePicker
+                            value={startTime}
+                            onChange={(val) => setStartTime(val)}
+                            showSecond={false}
+                            allowEmpty
+                            className='mr-6'
+                        />
+                        <TimePicker
+                            value={endTime}
+                            onChange={(val) => setEndTime(val)}
+                            showSecond={false}
+                            allowEmpty
+                        />
                     </div>
                 </section>
                 <section className='my-8 mx-6'>
