@@ -5,58 +5,20 @@ import network from '../../util/network';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 
-const PlanItem = () => {
+const PlanItem = (props) => {
 
-    const [data, setData] = useState([
-        // {
-        //     name: '알파벳 교구',
-        //     field: '영어',
-        //     subject: '교구',
-        //     image: '/images/itme.png',
-        //     bookmark: true,
-        //     pick: true
-        // },
-        // {
-        //     name: '알파벳 교구',
-        //     field: '영어',
-        //     subject: '교구',
-        //     image: '/images/itme.png',
-        //     bookmark: false,
-        //     pick: false
-        // },
-        // {
-        //     name: '알파벳 교구',
-        //     field: '영어',
-        //     subject: '교구',
-        //     image: '/images/itme.png',
-        //     bookmark: false,
-        //     pick: false
-        // },
-        // {
-        //     name: '알파벳 교구',
-        //     field: '영어',
-        //     subject: '교구',
-        //     image: '/images/itme.png',
-        //     bookmark: false,
-        //     pick: false
-        // },
-        // {
-        //     name: '알파벳 교구',
-        //     field: '영어',
-        //     subject: '교구',
-        //     image: '/images/itme.png',
-        //     bookmark: false,
-        //     pick: false
-        // }
-    ]);
+    const { subject, field } = props;
+    const [data, setData] = useState([]);
 
     useEffect(() => {
         const getData = async() => {
-            const res = await network.post('/home/recommItems')
-                .then((res) => {
-                    res.data ? setData(res.data) : null;
-                })
-                .catch((err) => {console.log(err)});
+            const res = await network.post('/item/recommItem', {
+                params: {
+                    subject: subject,
+                    field: field
+                }
+            })
+            res.data ? setData(res.data) : null;
         }
         getData();
     }, [])

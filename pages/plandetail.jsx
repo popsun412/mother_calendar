@@ -18,6 +18,8 @@ const Plan2 = () => {
 
     const router = useRouter();
     const planUid = router.query.planUid;
+    const field = router.query.field;
+    const subject = router.query.subject;
     const [data, setData] = useState([
         {
             planUid: 1,
@@ -54,7 +56,7 @@ const Plan2 = () => {
                 <PlanRecommend data={data}/>
                 <PlanDesc data={data}/>
                 <PlanWeek data={data}/>
-                <PlanItem data={data}/>
+                <PlanItem subject={subject} field={field}/>
                 <PlanTab data={data}/>
             </main>
             <aside className='fixed bottom-0 left-0 right-0 z-100'>
