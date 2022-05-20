@@ -16,7 +16,7 @@ const JointPlan = () => {
     const [data, setData] = useState([]);
     const [activeIndex, setActiveIndex] = useState(0);
     const [active, setActive] = useState(false);
-    const [activeField, setActiveField] = useState(0);
+    const [activeField, setActiveField] = useState('');
     const [activeDay, setActiveDay] = useState({ 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false });
 
     const [startDate, setStartDate] = useState(new Date());
@@ -29,8 +29,10 @@ const JointPlan = () => {
         const getData = async() => {
             const res = await network.get('/plan/commonPlan/' + planUid);
             res.data ? setData(res.data) : null;
+            res.data ? setActiveField(res.data.subject) : null;
+            console.log(activeField);
         }
-        // getData();
+        getData();
     }, [])
 
     const handleDay = (e) => {
@@ -38,7 +40,7 @@ const JointPlan = () => {
     }
 
     const handleField = (param) => {
-        setActiveField(param);
+        data.subject ? setActiveField(data.subject) : setActiveField(param);
     }
 
     const onChange = (target) => {
@@ -47,66 +49,66 @@ const JointPlan = () => {
     }
 
     return (
-        <div>
+        <div className='w-full h-full overflow-y-auto scrollbar-hide'>
             <JointPlanHeader data={data}/>
             <main className='mt-16'>
                 <section className='mx-8 pt-4'>
-                    <div className='bg-gray2 text-center text-sm py-4' style={{borderRadius: '10px'}}>영어 원서 읽기</div>
+                    <div className='bg-gray2 text-center text-sm py-4' style={{borderRadius: '10px'}}>{data.name}</div>
                 </section>
                 <section className='mt-6 mx-6'>
                     <div className='text-sm textGray2'>분야</div>
                     <div className='my-6'>
                         <div className='flex mb-3 justify-between'>
-                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField === 1 ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField(1)}>
-                                <img src='/images/category1.png' className={`${activeField === 1 ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
+                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField == '국어' ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField('국어')}>
+                                <img src='/images/category1.png' className={`${activeField == '국어' ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
                                 <span className='my-auto ml-1'>국어</span>
                             </div>
-                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField === 2 ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField(2)}>
-                                <img src='/images/category2.png' className={`${activeField === 2 ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
+                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField == '영어' ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField('영어')}>
+                                <img src='/images/category2.png' className={`${activeField == '영어' ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
                                 <span className='my-auto ml-1'>영어</span>
                             </div>
-                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField === 3 ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField(3)}>
-                                <img src='/images/category3.png' className={`${activeField === 3 ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
+                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField == '수학' ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField('수학')}>
+                                <img src='/images/category3.png' className={`${activeField == '수학' ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
                                 <span className='my-auto ml-1'>수학</span>
                             </div>
-                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField === 4 ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField(4)}>
-                                <img src='/images/category4.png' className={`${activeField === 4 ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
+                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField == '과학' ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField('과학')}>
+                                <img src='/images/category4.png' className={`${activeField == '과학' ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
                                 <span className='my-auto ml-1'>과학</span>
                             </div>
                         </div>
                         <div className='flex mb-3 justify-between'>
-                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField === 5 ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField(5)}>
-                                <img src='/images/category5.png' className={`${activeField === 5 ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
+                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField == '사회' ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField('사회')}>
+                                <img src='/images/category5.png' className={`${activeField == '사회' ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
                                 <span className='my-auto ml-1'>사회</span>
                             </div>
-                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField === 6 ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField(6)}>
-                                <img src='/images/category6.png' className={`${activeField === 6 ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
+                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField == '미술' ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField('미술')}>
+                                <img src='/images/category6.png' className={`${activeField == '미술' ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
                                 <span className='my-auto ml-1'>미술</span>
                             </div>
-                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField === 7 ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField(7)}>
-                                <img src='/images/category7.png' className={`${activeField === 7 ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
+                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField == '음악' ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField('음악')}>
+                                <img src='/images/category7.png' className={`${activeField == '음악' ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
                                 <span className='my-auto ml-1'>음악</span>
                             </div>
-                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField === 8 ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField(8)}>
-                                <img src='/images/category8.png' className={`${activeField === 8 ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
+                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField == '체육' ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField('체육')}>
+                                <img src='/images/category8.png' className={`${activeField == '체육' ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
                                 <span className='my-auto ml-1'>체육</span>
                             </div>
                         </div>
                         <div className='flex mb-3 justify-between'>
-                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField === 9 ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField(9)}>
-                                <img src='/images/category9.png' className={`${activeField === 9 ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
+                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField == '놀이' ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField('놀이')}>
+                                <img src='/images/category9.png' className={`${activeField == '놀이' ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
                                 <span className='my-auto ml-1'>놀이</span>
                             </div>
-                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField === 10 ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField(10)}>
-                                <img src='/images/category10.png' className={`${activeField === 10 ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
+                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField == '체험' ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField('체험')}>
+                                <img src='/images/category10.png' className={`${activeField == '체험' ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
                                 <span className='my-auto ml-1'>체험</span>
                             </div>
-                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField === 11 ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField(11)}>
-                                <img src='/images/category11.png' className={`${activeField === 11 ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
+                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField == '기타' ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField('기타')}>
+                                <img src='/images/category11.png' className={`${activeField == '기타' ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
                                 <span className='my-auto ml-1'>기타</span>
                             </div>
-                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField === 12 ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField(12)}>
-                                <img src='/images/category12.png' className={`${activeField === 12 ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
+                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField == '부모' ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField('부모')}>
+                                <img src='/images/category12.png' className={`${activeField == '부모' ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
                                 <span className='my-auto ml-1'>부모</span>
                             </div>
                         </div>
