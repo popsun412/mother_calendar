@@ -3,6 +3,10 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import { getAuth } from "firebase/auth";
+import { useRecoilState } from "recoil";
+import { userInfoState } from "../states/user_info";
+
 import network from '../util/network';
 import { useRouter } from 'next/router';
 
@@ -16,33 +20,76 @@ import PlanMain from '../components/plandetail/plan_main';
 
 const Plan2 = () => {
 
+    const auth = getAuth();
     const router = useRouter();
+
+    // 글로벌 상태관리
+    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+    const [load, setLoad] = useState(false);
+
+    // 아이템 불러오기
+    const getItem = async () => {
+        console.log(userInfo);
+        setLoad(true);
+    }
+
+    // 유저 정보 갖고오기
+    const getUser = async () => {
+        const _result = await network.post('/userInfo');
+
+        // data 통신
+        if (_result.status == 200) {
+            setUserInfo(_result.data);
+        } else {
+            router.push('/');
+        }
+    }
+
+    useEffect(() => {
+        if (userInfo == null) {
+            auth.onAuthStateChanged(async (_user) => {
+                if (_user) {
+                    getUser();
+                } else {
+                    setUserInfo(null);
+                    router.push('/');
+                }
+            });
+        }
+
+        if (userInfo != null && !load) getItem();
+    })
+    
     const planUid = router.query.planUid;
     const field = router.query.field;
     const subject = router.query.subject;
-    const [data, setData] = useState([
+    const [data, setData] = useState(
         {
-            planUid: 1,
-            createUserUid: 1,
-            name: '영어 원서읽기',
-            description: '아이가 궁금해할만한 과학적/자연현상에 대해 귀여운 그림체로 흥미롭게 설명해놓은 과학전집이에요! 📒'+
-                '공룡은 어떻게 멸망했는지, 우리의 음식은 어떤 과정을 통해 소화가 되는지 등 초등학교 교과서와 연계되는 배경 지식을 기를 수 있고 맨 뒤페이지에 나오는 간단한 과학실험도 따라해볼만 해요. 🥽🥼'+
-                '저는 공룡덕후인 아들에게 어떻게 공룡이 멸망했는지에 설명해주기 힘들어서 구매했는데 다른 권들도 아이가 궁금해할만한 주제로 이루어져 있어서 좋았어요.'+
-                '다만 추피처럼 서양 기준 캐릭터와 문화가 녹아있어 낯설 수 있고, 음원이나 리딩펜이 없어 엄마 목이 좀 아플 수 있지요. 😂',
-            subject: '영어',
-            field: '영어',
-            level: 1,
-            repeatDay: [1, 3],
-            startDate: '2022-10-21',
-            endDate: '2022-11-21',
-            startTime: '1900',
-            endTime: '2130',
+            "commonPlanUid": 3,
+            "name": "그림책 읽기",
+            "description": "√ 아이에게 매일매일 다양한 종류의 책을 읽어주는것은 엄마표 학습의 가장 기본이에요. 아이가 책에 관심이 없더라도 재미있는 토이북 혹은 좋아할만한 스토리를 가진 책을 시간을 정해 꾸준히 읽어주세요.  혹은 아이의 눈에 보이는 곳에 화려한 색채를 가진 그림책이나 아이가 좋아할만한 캐릭터(예: 뽀로로,공주님,공룡 등)가 나오는 그림책을 놓아만 두셔도 됩니다. 책을 좋아하는 아이라면 엄마에게 끊임없는 책을 가져와서 읽어달라고 할거에요. 집안일도 해야하고 밥도 해야하고 할 일이 산더미지만 하루에 30분만 오롯이 아이에게 시간을 내주세요.  √국어 그림책은 보통 2~3세 시점에 놀이북/토이북/플랩북 위주의 보드북으로 아이의 흥미를 이끈 다음 3~4세부터 국내창작/세계창작을 읽고 6세 이후 전래/명작을 읽히곤 합니다.  생활동화류는 나이에 상관없이 아이가 스스로 무언가를 해내야하는 시점부터(홀로 밥먹기, 배변가리기, 장난감 정리하기 등) 자연스럽게 노출해주면 좋아요.   1주차: 생활동화류 또는 국내 문화를 담고있는 창작 전집류 읽기(예: 우리아람이)   2주차: 유명 세계 창작 전집류 읽기(예: 토들피카소, 피리부는카멜레온) 3주차: 전래/명작 전집류 읽기(예: 마마파파, 요술항아리, 호야토야옛이야기) 4주차: 유명 단행본류 다양하게 읽기(예: 최숙희, 백희나, 안녕달 등)",
+            "subject": "국어",
+            "field": "대전집",
+            "level": 1,
+            "repeatDay": [
+                1,
+                2,
+                3,
+                4,
+                5
+            ],
+            "startTime": "20:30:00",
+            "endTime": "21:00:00",
+            "category": "edu",
+            "recommTerm": 12,
+            "image": null,
+            "isBanner": false
         }
-    ])
+    )
 
     useEffect(() => {
         const getData = async() => {
-            const res = await network.post('/plan/'+planUid)
+            const res = await network.post('/plan/commonPlan/'+planUid)
             res.data ? setData(res.data) : null;
         }
         getData();

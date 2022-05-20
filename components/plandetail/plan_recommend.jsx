@@ -41,28 +41,22 @@ const PlanRecommend = (props) => {
     return (
         <>
             <section className='mb-8 mx-5'>
-            {
-                data.map((item, idx) => {
-                    return (
-                        <div key={idx}>
-                            <h3 className='text-base font-semibold mb-3' style={{ letterSpacing: '-0.32px' }}>추천 루틴</h3>
-                            <div className="bg-gray2 rounded-md px-5 py-3.5 mb-5">
-                                <p className="textGray2 font-semibold text-base mb-3">주 {item.repeatDay.length}회  |  매주 {getRepeatDay(item.repeatDay)}</p>
-                                <div className="textGray3 font-normal text-sm flex flex-col space-y-2.5">
-                                    <div className="flex flex-row">
-                                        <img src="/images/calendar.png" alt="캘린더이미지" className="w-3.5 h-3.5 my-auto mx-0" />
-                                        <span className='ml-1.5'>{moment(item.startDate).format('YYYY년 M월 D일')} - {moment(item.endDate).format('YYYY년 M월 D일')}</span>
-                                    </div>
-                                    <div className="flex flex-row">
-                                        <img src="/images/clock.png" alt="시계이미지" className="w-3.5 h-3.5 my-auto mx-0" />
-                                        <span className='ml-1.5'>{getTime(item.startTime)} - {getTime(item.endTime)}</span>
-                                    </div>
-                                </div>
+                <div>
+                    <h3 className='text-base font-semibold mb-3' style={{ letterSpacing: '-0.32px' }}>추천 루틴</h3>
+                    <div className="bg-gray2 rounded-md px-5 py-3.5 mb-5">
+                        <p className="textGray2 font-semibold text-base mb-3">주 {data.repeatDay.length}회  |  매주 {getRepeatDay(data.repeatDay)}</p>
+                        <div className="textGray3 font-normal text-sm flex flex-col space-y-2.5">
+                            <div className="flex flex-row">
+                                <img src="/images/calendar.png" alt="캘린더이미지" className="w-3.5 h-3.5 my-auto mx-0" />
+                                <span className='ml-1.5'>{moment(data.startDate).format('YYYY년 M월 D일')} - {moment(data.endDate).format('YYYY년 M월 D일')}</span>
+                            </div>
+                            <div className="flex flex-row">
+                                <img src="/images/clock.png" alt="시계이미지" className="w-3.5 h-3.5 my-auto mx-0" />
+                                <span className='ml-1.5'>{getTime(data.startTime)} - {getTime(data.endTime)}</span>
                             </div>
                         </div>
-                    )
-                })
-            }
+                    </div>
+                </div>
             </section>
         </>
     )
