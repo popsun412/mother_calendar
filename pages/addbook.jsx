@@ -1,13 +1,20 @@
+import React, { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
 import { Global } from '@emotion/react';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
-import axios from 'axios';
-import React, { useEffect, useRef, useState } from 'react';
 import StarRatings from 'react-star-ratings';
-import MonthPicker from "react-month-picker";
-import "react-month-picker/css/month-picker.css";
+import network from '../util/network';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css"
+
+// import MonthPicker from "react-month-picker";
+// import "react-month-picker/css/month-picker.css";
 
 const AddBook = () => {
 
+    const router = useRouter();
+    const itemUid = router.query.itemUid;
+    const [data, setData] = useState([]);
     const [disabled, setDisabled] = useState(true);
     const [booktitle, setBooktitle] = useState('');
     const [image, setImage] = useState({
@@ -15,10 +22,11 @@ const AddBook = () => {
         preview_URL: ''
     });
     const [loaded, setLoaded] = useState('loading');
-    const [status, setStatus] = useState(() => ['inbox']);
+    const [status, setStatus] = useState(() => ['보유중']);
     const [field, setField] = useState();
     const [area, setArea] = useState();
     const [rating, setRating] = useState(0);
+    const [startDate, setStartDate] = useState(new Date());
 
     const [value, setValue] = useState({ year: 2022, month: 5 });
     const monthPickerRef = useRef(null);
@@ -42,6 +50,22 @@ const AddBook = () => {
     };
 
     let inputRef;
+
+    useEffect(() => {
+        const getData = async() => {
+            const res = await network.get('/item/commonItem/'+itemUid)
+            res.data ? setData(res.data) : null;
+        }
+        if (itemUid) getData();
+    }, [])
+
+    useEffect(() => {
+        if(status == '구매예정') {
+            field != '' && area != '' && rating > 0 ? setDisabled(false) : '';
+        } else {
+            field != '' && area != '' ? setDisabled(false) : '';
+        }
+    }, [status, field, area, rating])
 
     const saveImage = (e) => {
         e.preventDefault();
@@ -85,7 +109,7 @@ const AddBook = () => {
     }
 
     useEffect(() => {
-        if (status === 'purchase') {
+        if (status === '구매예정') {
             rating > 0 && booktitle != '' && image.image_file != '' && field != '' && area != '' ? setDisabled(false) : setDisabled(true)
         } else {
             booktitle != '' && image.image_file != '' && field != '' && area != '' ? setDisabled(false) : setDisabled(true)
@@ -95,10 +119,12 @@ const AddBook = () => {
     const onSubmit = async(e) => {
         e.preventDefault();
 
-        const res = await axios('http://localhost:4000/add/book', {
-            method: 'POST',
+        const res = await network.post('/item/commonItem', {
             params: {
-                
+                subject: field,
+                field: area,
+                name: data.name,
+                image: data.image
             }
         }).then( e => {
             console.log(e);
@@ -131,7 +157,7 @@ const AddBook = () => {
                             <img src='/images/ic_back.png' />
                         </div>
                         <div className='my-0 mx-auto text-base font-medium' style={{letterSpacing: '-0.3px'}}>책등록</div>
-                        <button className={`flex ${disabled ? 'textGray4' : 'textOrange5'}`} style={{fontSize: '15px'}} disabled={disabled} onClick={onSubmit}>완료</button>
+                        <button className={`flex ${disabled ? 'textGray4' : 'textOrange5'}`} style={{fontSize: '15px'}} onClick={onSubmit}>완료</button>
                     </div>
                 </div>
             </header>
@@ -139,20 +165,28 @@ const AddBook = () => {
                 <section className='pt-5 mx-5 my-6'>
                     <div className='mb-6'>
                         <div className='rounded-md my-0 mx-auto relative' style={{width: '120px', height: '120px', backgroundColor: '#f2f2f2'}}>
-                            <button type='primary' onClick={() => inputRef.click()}>
-                                <input type='file' accept='image/*' onChange={saveImage} ref={refParam => inputRef = refParam} style={{display: 'none'}} />
-                                {
-                                    loaded == false || loaded == true ? (
-                                        <img src={image.preview_URL} className='rounded-md' style={{width:'120px', height: '120px'}}/>
-                                    ) : <img src='/images/ic_camera.png' className='absolute top-10 left-10'/>
-                                }
-                            </button>
+                        {
+                            data.image ? <img src={data.image} className='rounded-md'/> 
+                                : <button type='primary' onClick={() => inputRef.click()}>
+                                    <input type='file' accept='image/*' onChange={saveImage} ref={refParam => inputRef = refParam} style={{display: 'none'}} />
+                                    {
+                                        loaded == false || loaded == true ? (
+                                            <img src={image.preview_URL} className='rounded-md' style={{width:'120px', height: '120px'}}/>
+                                        ) : <img src='/images/ic_camera.png' className='absolute top-10 left-10'/>
+                                    }
+                                </button>
+                        }
                         </div>
                     </div>
                     <div>
                         <div>
-                            <input type='text' placeholder='책 이름을 입력해주세요.' value={booktitle} onChange={titleChange}
-                                className='block w-full h-10 px-5 box-border border border-solid border-color4 rounded-md text-sm textGray4'/>
+                            {
+                                data.name ?
+                                <input type='text' value={data.name} readOnly className='block w-full h-10 px-5 box-border border border-solid border-color4 rounded-md text-sm textGray4'/>
+                                : <input type='text' placeholder='책 이름을 입력해주세요.' value={booktitle} onChange={titleChange}
+                                    className='block w-full h-10 px-5 box-border border border-solid border-color4 rounded-md text-sm textGray4'/>
+                            }
+
                         </div>
                     </div>
                 </section>
@@ -176,9 +210,9 @@ const AddBook = () => {
                             value={status}
                             onChange={handleStatus}
                             aria-label="status" className='w-full'>
-                            <ToggleButton value="purchase" aria-label="purchase" className='w-full'>구매예정</ToggleButton>
-                            <ToggleButton value='inbox' arai-label='inbox' className='w-full'>보유중</ToggleButton>
-                            <ToggleButton value='sell' arai-label='sell' className='w-full'>판매완료</ToggleButton>
+                            <ToggleButton value="구매예정" aria-label="purchase" className='w-full'>구매예정</ToggleButton>
+                            <ToggleButton value='보유중' arai-label='inbox' className='w-full'>보유중</ToggleButton>
+                            <ToggleButton value='판매완료' arai-label='sell' className='w-full'>판매완료</ToggleButton>
                         </ToggleButtonGroup>
                     </div>
                 </section>
@@ -292,11 +326,11 @@ const AddBook = () => {
                     </div>
                 </section>
                 {
-                    status === 'purchase' ?
+                    status === '구매예정' ?
                         <section className='mx-5 my-6'>
                             <div className='text-sm textGray2 font-medium'>구매시기 <span className='textGray4'>(선택)</span></div>
                             <div className='mt-5'>
-                                <MonthPicker
+                                {/* <MonthPicker
                                     lang={lang.months}
                                     ref={monthPickerRef}
                                     value={value}
@@ -304,12 +338,21 @@ const AddBook = () => {
                                     >
                                     <span onClick={showPicker} className='mr-6 py-2.5 px-4 text-sm border border-solid border-gray3 rounded-md bg-white'>
                                         {value.year}년 {value.month}월</span>
-                                </MonthPicker>
+                                </MonthPicker> */}
+                                <DatePicker
+                                    selected={startDate}
+                                    onChange={(date) => setStartDate(date)}
+                                    dateFormat='yyyy년 MM월'
+                                    showMonthYearPicker
+                                    showFullMonthYearPicker
+                                    showTwoColumnMonthYearPicker
+                                    className='mr-6 py-1 px-4 text-sm border border-solid border-gray3 rounded-md bg-white'
+                                />
                             </div>
                         </section> : ''
                 }
                 {
-                    status === 'purchase' ?
+                    status === '구매예정' ?
                         <section className='mx-5 my-6'>
                             <div className='text-sm textGray2 font-medium'>만족도 <span className='textGray4'>(선택)</span></div>
                             <div className='flex mt-3'>
@@ -326,14 +369,6 @@ const AddBook = () => {
                             </div>
                         </section> : ''
                 }
-                <form onSubmit={onSubmit}>
-                    <input type='hidden' value={booktitle}/>
-                    <input type='hidden' value={image} />
-                    <input type='hidden' value={status} />
-                    <input type='hidden' value={field} />
-                    <input type='hidden' value={area} />
-                    <input type='hidden' value={rating} />
-                </form>
             </main>
         </div>
     )

@@ -7,29 +7,7 @@ import network from '../util/network';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 import 'swiper/components/pagination/pagination.min.css';
-
-const data = [
-    {
-        id: 0,
-        imgUrl: 'https://picsum.photos/id/237/326/326',
-    },
-    {
-        id: 1,
-        imgUrl: 'https://picsum.photos/id/240/326/326',
-    },
-    {
-        id: 2,
-        imgUrl: 'https://picsum.photos/id/243/326/326',
-    },
-    {
-        id: 3,
-        imgUrl: 'https://picsum.photos/id/250/326/326',
-    },
-    {
-        id: 4,
-        imgUrl: 'https://picsum.photos/id/249/326/326',
-    }
-]
+import Link from 'next/link';
 
 const Item = () => {
 
@@ -153,10 +131,18 @@ const Item = () => {
             </main>
             <aside className='fixed bottom-0 left-0 right-0 z-100'>
                 <div className='relative mx-auto my-0 bg-white'>
-                    <nav className='flex items-center box-border relative' style={{height: '90px'}}>
-                        <span className='text-sm text-white text-center p-4 m-5 w-full rounded-md bg5' 
-                            style={{letterSpacing: '-0.28px'}}>내 보관함에 등록하기</span>
-                    </nav>
+                    <Link
+                        href={{
+                            pathname: '/addbook',
+                            query: {
+                                itemUid: itemUid
+                            }
+                    }}>
+                        <nav className='flex items-center box-border relative' style={{height: '90px'}}>
+                            <span className='text-sm text-white text-center p-4 m-5 w-full rounded-md bg5' 
+                                style={{letterSpacing: '-0.28px'}}>내 보관함에 등록하기</span>
+                        </nav>
+                    </Link>
                 </div>
             </aside>
         </div>
