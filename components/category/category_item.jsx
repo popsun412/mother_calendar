@@ -420,7 +420,9 @@ const CategoryItem = (props) => {
                             <Link href={{
                                 pathname: '/item',
                                 query: {
-                                    itemUid: item.commonItemUid
+                                    itemUid: item.commonItemUid, 
+                                    subject: item.subject,
+                                    field: item.field
                                 }
                             }} key={idx}>
                                 <div>

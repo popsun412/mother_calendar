@@ -12,10 +12,13 @@ import Link from 'next/link';
 const Item = () => {
 
     const [data, setData] = useState([]);
+    const [recommData, setRecommData] = useState([]);
     const [scrollPosition, setScrollPosition] = useState(0);
 
     const router = useRouter();
     const itemUid = router.query.itemUid;
+    const subject = router.query.subject;
+    const field = router.query.field;
     
     SwiperCore.use([Pagination]);
     
@@ -29,12 +32,13 @@ const Item = () => {
 
     useEffect(() => {
         const getData = async() => {
-            const res = await network.post('/home/recommItems', {
+            const res = await network.post('/item/recommItem', {
                 params: {
-                    itemUid: itemUid
+                    subject: subject,
+                    field: field
                 }
             })
-            res.data ? setData(res.data.filter(val => val.commonItemUid == itemUid)) : null
+            res.data ? setRecommData(res.data) : null
         }
         getData();
         console.log(data)
@@ -104,7 +108,23 @@ const Item = () => {
                             <section className='mx-5'>
                                 <div className='text-base font-semibold mb-4' style={{letterSpacing: '-0.32px'}}>추천 아이템</div>
                                 <div>
-                                    <div className='flex py-4 pr-4 text-sm mb-4 justify-between' style={{borderRadius: '15px', backgroundColor: '#f8f6f5', paddingLeft: '17px'}}>
+                                {
+                                    recommData.map((item, idx) => {
+                                        return (
+                                            <div className='flex py-4 pr-4 text-sm mb-4 justify-between' key={idx}
+                                                style={{borderRadius: '15px', backgroundColor: '#f8f6f5', paddingLeft: '17px'}}>
+                                                <div className='flex'>
+                                                    <img src='/images/category7.png' className='mr-3' style={{width: '25px', height: '25px'}}/>
+                                                    <div className='mx-0 my-auto'>{item.name}</div>
+                                                </div>
+                                                <div>
+                                                    <img src='/images/ic_check_circle.png'/>
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                }
+                                    {/* <div className='flex py-4 pr-4 text-sm mb-4 justify-between' style={{borderRadius: '15px', backgroundColor: '#f8f6f5', paddingLeft: '17px'}}>
                                         <div className='flex'>
                                             <img src='/images/category7.png' className='mr-3' style={{width: '25px', height: '25px'}}/>
                                             <div className='mx-0 my-auto'>엄마와 함께 피아노 연주하기</div>
@@ -121,7 +141,7 @@ const Item = () => {
                                         <div>
                                             <img src='/images/ic_add_circle.png'/>
                                         </div>
-                                    </div>                        
+                                    </div>                         */}
                                 </div>
                             </section>
                             </>
@@ -135,7 +155,7 @@ const Item = () => {
                         href={{
                             pathname: '/addbook',
                             query: {
-                                itemUid: itemUid
+                                itemUid: itemUid,
                             }
                     }}>
                         <nav className='flex items-center box-border relative' style={{height: '90px'}}>
