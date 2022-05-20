@@ -1,12 +1,17 @@
 import CalendarMine from "./calendar_mine";
-import CalendarOther from "./calendar_other";
+import CalendarName from "./calendar_name";
 
 
-export default function CalendarMiddle() {
+export default function CalendarMiddle(props) {
     return (
         <div className="px-5 pt-4 pb-3">
             {/* <CalendarMine /> */}
-            <CalendarOther />
+            <CalendarName
+                selectedUserUid={props.selectedUserUid}
+                setSelectedUserUid={props.setSelectedUserUid}
+                selectedDate={props.selectedDate}
+                setSelectedDate={props.setSelectedDate}
+            />
         </div>
     );
 }

@@ -7,8 +7,15 @@ export default function SignIn3(props) {
     const auth = getAuth();
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordCheck, setShowPasswordCheck] = useState(false);
+    const [checkPassword, setCheckPassword] = useState("");
 
     const signUp = () => {
+        if (!buttonActive()) return;
+
+        if (checkPassword != props.signupInfo.password) {
+            return alert("비밀번호를 확인해주세요");
+        }
+
         network.post('/user/signup', props.signupInfo).then((_value) => {
             signInWithEmailAndPassword(auth, props.signupInfo.email, props.signupInfo.password);
         }).catch((error) => {
@@ -17,6 +24,12 @@ export default function SignIn3(props) {
 
             alert(errorMessage);
         })
+    }
+
+    const buttonActive = () => {
+
+
+        return false;
     }
 
     return (
@@ -73,6 +86,8 @@ export default function SignIn3(props) {
                                 type={(showPasswordCheck) ? "text" : "password"}
                                 className="flex-auto h-14 text-sm font-normal placeholder-[#bbbbbb] outline-none"
                                 placeholder="비밀번호를 한번 더 입력해주세요"
+                                value={checkPassword}
+                                onChange={(e) => setCheckPassword(e.currentTarget.value)}
                             />
                             <svg
                                 className="w-6 h-6"
@@ -144,8 +159,8 @@ export default function SignIn3(props) {
                                 </p>
                             </div>
                         </div>
-                        <div className="bg-gray3 rounded-md hover:bg-[#ff6035]">
-                            <button className="w-full py-4 text-sm font-semibold text-white" onClick={signUp}>다음</button>
+                        <div className="bg-gray3 rounded-md">
+                            <button className={`w-full py-4 text-sm font-semibold text-white ${buttonActive() ? "bg-[#FF6035]" : ""}`} onClick={signUp}>다음</button>
                         </div>
                     </div>
                 </div>

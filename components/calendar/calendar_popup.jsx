@@ -1,23 +1,34 @@
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
+import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from 'date-fns/locale';
 
 import "../../styles/test.module.css";
 
 
-export default function CalendarPopUp() {
-    const [startDate, setStartDate] = useState(new Date());
-    const [value, onChange] = useState(new Date());
+export default function CalendarPopUp(props) {
+    const getDateFormat = () => {
+        const _year = props.selectedDate.getFullYear();
+        const _month = props.selectedDate.getMonth();
+        const _week = weekOfMonth(moment(props.selectedDate));
+
+        return `${_year}년 ${_month + 1}월 ${_week}주차`;
+    }
+
+    // 목요일 기준 주차 구하기
+    const weekOfMonth = (m) => m.week() - moment(m).startOf('month').week() + 1;
 
     return (
         <>
             <DatePicker
-                selected={startDate}
-                onChange={(date) => setStartDate(date)}
-                dateFormat="yyyy년 MM월 w주"
+                selected={props.selectedDate}
+                onChange={(date) => props.setSelectedDate(date)}
+                dateFormat={getDateFormat()}
                 locale={ko}
                 displayStaticWrapperAs="desktop"
+                className="bg-transparent outline-none caret-transparent"
+                onChangeRaw={(e) => e.preventDefault()}
             />
         </>
     );

@@ -14,7 +14,7 @@ export default function SignIn1(props) {
             <div className="pt-4 px-5 text-2xl font-normal textGray1">
                 회원님 정보를 입력해주세요.
             </div>
-            <div className="pt-9 px-5 space-y-9 h-screen">
+            <div className="pt-9 px-5 space-y-9">
                 <div className="space-y-4">
                     <span className="text-sm font-medium textGray1">닉네임</span>
                     <div className="border border-color4 rounded-md py-2.5 px-5">

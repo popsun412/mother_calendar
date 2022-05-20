@@ -32,16 +32,20 @@ const Calendar = () => {
 
     const [load, setLoad] = useState(false);
 
+    // 화면 상태관리
+    const [selectedUserUid, setSelectedUserUid] = useState(null);
+
+    // 날짜 선택
+    const [selectedDate, setSelectedDate] = useState(new Date());
+
     // 아이템 불러오기
     const getItem = async () => {
-        console.log(userInfo);
         setLoad(true);
     }
 
     // 유저 정보 갖고오기
     const getUser = async () => {
         const _result = await network.post('/userInfo');
-
         // data 통신
         if (_result.status == 200) {
             setUserInfo(_result.data);
@@ -55,6 +59,7 @@ const Calendar = () => {
             auth.onAuthStateChanged(async (_user) => {
                 if (_user) {
                     getUser();
+                    setSelectedUserUid(_user.uid);
                 } else {
                     setUserInfo(null);
                     router.push('/');
@@ -69,15 +74,23 @@ const Calendar = () => {
         {(load) ?
             // 화면
             <div className="w-screen h-screen flex flex-col">
-                <CalendarTop />
-                <CalendarMiddle />
+                <CalendarTop
+                    selectedUserUid={selectedUserUid}
+                    setSelectedUserUid={setSelectedUserUid}
+                />
+                <CalendarMiddle
+                    selectedUserUid={selectedUserUid}
+                    setSelectedUserUid={setSelectedUserUid}
+                    selectedDate={selectedDate}
+                    setSelectedDate={setSelectedDate}
+                />
                 <CalendarDate />
-                <CalendarHome />
+                {/* <CalendarHome />
                 <CalendarBottom />
 
                 <FriendList />
                 <ItemDetail />
-                <CalendarFullPlan />
+                <CalendarFullPlan /> */}
             </div>
             // 로딩 바
             : <CircleLoading />
