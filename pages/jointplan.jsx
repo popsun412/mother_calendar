@@ -1,11 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import ToggleSwitch from '../components/common/toggle';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css"
 
+import network from '../util/network';
+import JointPlanHeader from '../components/jointplan/jointplan_header';
+
 const JointPlan = () => {
 
+    const router = useRouter();
+    const planUid = router.query.planUid;
+
+    const [data, setData] = useState([]);
     const [activeIndex, setActiveIndex] = useState(0);
     const [active, setActive] = useState(false);
     const [activeField, setActiveField] = useState(0);
@@ -16,6 +24,14 @@ const JointPlan = () => {
 
     const [startTime, setStartTime] = useState();
     const [endTime, setEndTime] = useState();
+
+    useEffect(() => {
+        const getData = async() => {
+            const res = await network.get('/plan/commonPlan/' + planUid);
+            res.data ? setData(res.data) : null;
+        }
+        // getData();
+    }, [])
 
     const handleDay = (e) => {
         setActiveDay({...activeDay, [e.target.value]: e.target.checked});
@@ -32,19 +48,7 @@ const JointPlan = () => {
 
     return (
         <div>
-            <header className='sticky top-0 left-0 right-0 opacity-100 visible z-100' style={{marginBottom: '-50px'}}>
-                <div className='flex relative mx-auto my-0 box-border py-4 w-full bg-white' style={{height: '50px'}}>
-                    <div className='ml-5'>
-                        <img src='/images/ic_back.png' onClick={() => {window.history.back()}}/>
-                    </div>
-                    <div className='my-0 mx-auto'>
-                        <span className='text-base font-medium'>페파피그1 영상</span>
-                    </div>
-                    <div className='mr-4'>
-                        <span className='text-base textOrange5'>완료</span>
-                    </div>
-                </div>
-            </header>
+            <JointPlanHeader data={data}/>
             <main className='mt-16'>
                 <section className='mx-8 pt-4'>
                     <div className='bg-gray2 text-center text-sm py-4' style={{borderRadius: '10px'}}>영어 원서 읽기</div>
