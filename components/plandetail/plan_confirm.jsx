@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
+import network from '../../util/network';
 
-const PlanConfirm = () => {
+const PlanConfirm = (props) => {
 
-    const data = [
+    const { planUid } = props;
+
+    const [data, setData] = useState([
         {
             userImgUrl: 'https://picsum.photos/id/1/20',
             imgUrl: '/images/banner.png',
@@ -59,7 +62,15 @@ const PlanConfirm = () => {
             imgUrl: '/images/banner.png',
             date: '20220122'
         }
-    ]
+    ])
+
+    useEffect(() => {
+        const getData = async() => {
+            const res = await network.post('/plan/commonPlan/auth/'+planUid)
+            res.data ? setData(res.data) : null;
+        }
+        getData();
+    }, [])
 
     const divClass = (imgUrl) => {
         return "bg-[url('"+imgUrl+"')] bg-center bg-no-repeat bg-cover relative";

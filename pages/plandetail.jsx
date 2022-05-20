@@ -104,7 +104,7 @@ const Plan2 = () => {
                 <PlanDesc data={data}/>
                 <PlanWeek data={data}/>
                 <PlanItem subject={subject} field={field}/>
-                <PlanTab data={data}/>
+                <PlanTab planUid={data.commonPlanUid}/>
             </main>
             <aside className='fixed bottom-0 left-0 right-0 z-100'>
                 <div className='relative mx-auto my-0 bg-white'>

@@ -4,7 +4,7 @@ import PlanConfirm from './plan_confirm';
 
 const PlanTab = (props) => {
 
-    const { data } = props;
+    const { planUid } = props;
     const [activeTab, setActiveTab] = useState(0);
 
     const tabClick = (index) => {
@@ -12,8 +12,8 @@ const PlanTab = (props) => {
     }
 
     const obj = {
-        0: <PlanConfirm data={data}/>,
-        1: <PlanCondition data={data}/>
+        0: <PlanConfirm planUid={planUid}/>,
+        1: <PlanCondition planUid={planUid}/>
     }
 
     return (
