@@ -97,7 +97,7 @@ const Plan2 = () => {
 
     return (
         <>
-            <PlanHeader />
+            <PlanHeader name={data.name}/>
             <main>
                 <PlanMain data={data}/>
                 <PlanRecommend data={data}/>
