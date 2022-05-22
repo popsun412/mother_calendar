@@ -6,6 +6,7 @@ import CalendarPopUp from "./calendar_popup";
 // 글로벌 상태관리
 import { useRecoilState } from "recoil";
 import { userInfoState } from "../../states/user_info";
+import moment from "moment";
 
 export default function CalendarName(props) {
     // 글로벌 상태관리
@@ -15,6 +16,23 @@ export default function CalendarName(props) {
     const showModel = {
         get isMe() {
             return props.selectedUserUid != userInfo.uid;
+        },
+        get babysAge() {
+            const _now = new Date();
+            const _ages = [];
+            userInfo.babys.map((_baby) => {
+                const _birth = moment(_baby.birth, 'YYYY-MM-DD').toDate();
+                const _age = _now.getFullYear() - _birth.getFullYear();
+                _ages.push(`${_age}세`);
+            });
+
+            return _ages.join(' ');
+        },
+        get region() {
+            return "";
+        },
+        get nick() {
+            return "";
         }
     }
 
@@ -23,7 +41,7 @@ export default function CalendarName(props) {
             <div className="flex mb-4 justify-between">
                 <div className='flex flex-row'>
                     <span className="text-2xl font-semibold textGray1 mr-2">{userInfo.nickName}</span>
-                    <div className="flex px-2 text-xs font-normal border-color3 textOrange3 rounded-full border items-center text-center">6세, 경기, 엄마표</div>
+                    <div className="flex px-2 text-xs font-normal border-color3 textOrange3 rounded-full border items-center text-center">{`${showModel.babysAge}, ${showModel.region}, ${showModel.nick}`}</div>
                 </div>
 
                 {(showModel.isMe) ?

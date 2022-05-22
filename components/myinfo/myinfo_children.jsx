@@ -28,7 +28,6 @@ const ChildrenInfo = () => {
 
     const changeTab = (param) => {
         setSelect(param + 1);
-        console.log(children[0]);
         const birth = parseInt(children[param].birth.substring(0, 4));
         const year = parseInt(moment(new Date()).format('YYYY'));
 

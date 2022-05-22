@@ -30,6 +30,7 @@ const Calendar = () => {
     // 글로벌 상태관리
     const [userInfo, setUserInfo] = useRecoilState(userInfoState);
 
+    // 로그인 확인
     const [load, setLoad] = useState(false);
 
     // 화면 상태관리
@@ -37,11 +38,6 @@ const Calendar = () => {
 
     // 날짜 선택
     const [selectedDate, setSelectedDate] = useState(new Date());
-
-    // 아이템 불러오기
-    const getItem = async () => {
-        setLoad(true);
-    }
 
     // 유저 정보 갖고오기
     const getUser = async () => {
@@ -58,16 +54,15 @@ const Calendar = () => {
         if (userInfo == null) {
             auth.onAuthStateChanged(async (_user) => {
                 if (_user) {
-                    getUser();
+                    await getUser();
                     setSelectedUserUid(_user.uid);
+                    setLoad(true);
                 } else {
                     setUserInfo(null);
                     router.push('/');
                 }
             });
         }
-
-        if (userInfo != null && !load) getItem();
     })
 
     return (<>
@@ -84,9 +79,15 @@ const Calendar = () => {
                     selectedDate={selectedDate}
                     setSelectedDate={setSelectedDate}
                 />
-                <CalendarDate />
-                {/* <CalendarHome />
-                <CalendarBottom />
+                <CalendarDate
+                    selectedDate={selectedDate}
+                    setSelectedDate={setSelectedDate}
+                />
+                <CalendarHome
+                    selectedUserUid={selectedUserUid}
+                    selectedDate={selectedDate}
+                />
+                {/* <CalendarBottom />
 
                 <FriendList />
                 <ItemDetail />
