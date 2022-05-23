@@ -25,7 +25,6 @@ const Home = () => {
 
     // 아이템 불러오기
     const getItem = async () => {
-        console.log(userInfo);
         setLoad(true);
     }
 
