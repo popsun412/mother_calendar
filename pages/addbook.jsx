@@ -143,7 +143,7 @@ const AddBook = () => {
 
         let statusVal = 0;
 
-        status[0] == '구매예정' ? statusVal = 0 : status[0] == '보유중' ? statusVal = 1 : statusVal = 2;
+        status == '구매예정' ? statusVal = 0 : status == '보유중' ? statusVal = 1 : statusVal = 2;
 
         const formData = new FormData();
         formData.append('name', booktitle);
@@ -152,6 +152,10 @@ const AddBook = () => {
         formData.append('field', area);
         formData.append('lockerType', "책장");
         formData.append('image', image.imge_file);
+        status == '보유중' ? formData.append('buyDt', startDate) : null;
+        status == '보유중' ? formData.append('score', rating) : null;
+
+        console.log(formData);
 
         const res = await network.post('/locker', formData)
             .then((res) => {
@@ -341,7 +345,7 @@ const AddBook = () => {
                     </div>
                 </section>
                 {
-                    status === '구매예정' ?
+                    status === '보유중' ?
                         <section className='mx-5 my-6'>
                             <div className='text-sm textGray2 font-medium'>구매시기 <span className='textGray4'>(선택)</span></div>
                             <div className='mt-5'>
@@ -369,7 +373,7 @@ const AddBook = () => {
                         </section> : ''
                 }
                 {
-                    status === '구매예정' ?
+                    status === '보유중' ?
                         <section className='mx-5 my-6'>
                             <div className='text-sm textGray2 font-medium'>만족도 <span className='textGray4'>(선택)</span></div>
                             <div className='flex mt-3'>
