@@ -23,6 +23,12 @@ const Plan2 = () => {
     const auth = getAuth();
     const router = useRouter();
 
+    const commonPlanUid = router.query.commonPlanUid;
+
+    const [data, setData] = useState({});
+    const [field, setField] = useState('');
+    const [subject, setSubject] = useState('');
+
     // 글로벌 상태관리
     const [userInfo, setUserInfo] = useRecoilState(userInfoState);
     const [load, setLoad] = useState(false);
@@ -58,16 +64,15 @@ const Plan2 = () => {
 
         if (userInfo != null && !load) getItem();
     })
-    
-    const commonPlanUid = router.query.commonPlanUid;
-    const field = router.query.field;
-    const subject = router.query.subject;
-    const [data, setData] = useState({});
 
     useEffect(() => {
         const getData = async() => {
             const res = await network.get('/plan/commonPlan/'+commonPlanUid)
-            res.data ? setData(res.data) : null;
+            if (res.data) {
+                setData(res.data);
+                setField(res.data.field);
+                setSubject(res.data.subject);
+            }
             console.log(res.data);
         }
         getData();
@@ -78,11 +83,11 @@ const Plan2 = () => {
             <PlanHeader name={data.name}/>
             <main>
                 <PlanMain data={data}/>
-                <PlanRecommend data={data}/>
+                {/* <PlanRecommend planId={commonPlanUid}/> */}
                 <PlanDesc data={data}/>
-                <PlanWeek data={data}/>
+                {/* <PlanWeek data={data}/> */}
                 <PlanItem subject={subject} field={field}/>
-                <PlanTab commonPlanUid={data.commonPlanUid}/>
+                <PlanTab commonPlanUid={commonPlanUid}/>
             </main>
             <aside className='fixed bottom-0 left-0 right-0 z-100'>
                 <div className='relative mx-auto my-0 bg-white'>

@@ -85,8 +85,6 @@ const CategoryPlan = (props) => {
                                                                 pathname: '/plandetail',
                                                                 query: {
                                                                     commonPlanUid: item2.commonPlanUid,
-                                                                    field: item2.field,
-                                                                    subject: item2.subject
                                                                 }
                                                         }}>
                                                             <div className='flex'>

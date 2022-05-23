@@ -1,11 +1,21 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import network from '../../util/network';
 
 const PlanRecommend = (props) => {
 
-    const { data } = props;
+    console.log(props);
     const [repeatDay, setRepeatDay] = useState([]);
-    console.log(data);
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        const getData = async() => {
+            const res = await network.get('/plan/commonPlan/'+commonPlanUid)
+            res.data ? setData(res.data) : null;
+            console.log(res.data);
+        }
+        getData();
+    }, [])
 
     useEffect(() => {
         data ? setRepeatDay(data.repeatDay) : null;
@@ -35,12 +45,15 @@ const PlanRecommend = (props) => {
     }
 
     const getTime = (param) => {
-        const time = param.substring(0, 2) + ':' + param.substring(2, 4);
-        const arr = time.split(':');
         let result = '';
 
-        parseInt(arr[0]) > 11 ? result += ('오후 ' + parseInt(arr[0]-12) + '시') : result += ('오전 ' + arr[0] + '시');
-        parseInt(arr[1]) > 0 ? result += (arr[1] + '분') : '';
+        if (param) {
+            const time = param.substring(0, 2) + ':' + param.substring(2, 4);
+            const arr = time.split(':');
+    
+            parseInt(arr[0]) > 11 ? result += ('오후 ' + parseInt(arr[0]-12) + '시') : result += ('오전 ' + arr[0] + '시');
+            parseInt(arr[1]) > 0 ? result += (arr[1] + '분') : '';
+        }
 
         return result;
     }
