@@ -52,11 +52,11 @@ const Item = () => {
 
     useEffect(() => {
         const getData = async() => {
-            const res = await network.post('/item/commonItem/'+itemUid);
+            const res = await network.get('/item/commonItem/'+itemUid);
             res.data ? setData(res.data) : null;
         }
         getData();
-    })
+    }, []);
 
     useEffect(() => {
         const getData = async() => {
@@ -91,22 +91,22 @@ const Item = () => {
             <main className='mb-28'>
                 <section className='mb-7'>
                     <div className='block relative'>
-                        <img src='/images/banner.png' />
+                        <img src={data.image} style={{ minWidth: '360px' }}/>
                         <span className='block absolute bottom-0 left-0 text-lg text-white font-bold ml-5 mb-11' style={{fontFamily: 'NanumSquareRoundOTF'}}>{data.name}</span>
                         <div className='block absolute bottom-0 left-0 ml-5 mb-5'>
-                            <span className='textOrange1 text-xs rounded p-1 mr-1' style={{fontFamily: 'NanumSquareRoundOTF', backgroundColor: 'rgba(219, 239, 253, 0.2)'}}>{data.region}</span>
-                            <span className='textOrange1 text-xs rounded p-1' style={{fontFamily: 'NanumSquareRoundOTF', backgroundColor: 'rgba(219, 239, 253, 0.2)'}}>{data.subject}</span>
+                            <span className='textOrange1 text-xs rounded p-1 mr-1' style={{fontFamily: 'NanumSquareRoundOTF', backgroundColor: 'rgba(219, 239, 253, 0.2)'}}>{data.subject}</span>
+                            <span className='textOrange1 text-xs rounded p-1' style={{fontFamily: 'NanumSquareRoundOTF', backgroundColor: 'rgba(219, 239, 253, 0.2)'}}>{data.field}</span>
                         </div>
                         <div className='block absolute bottom-0 right-0 mr-5 mb-5'>
-                            <img src='/images/ic_bookmark.png' className='mx-auto'/>
+                            <img src={`/images/ic_${data.bookmark? 'bookmarked.png' : 'bookmark.png'}`} className='mx-auto'/>
                             <span className='text-xs text-white'>135</span>
                         </div>
                     </div>
                 </section>
                 <section className='mx-5 mb-4'>
                     <div className='text-base font-semibold mb-5' style={{letterSpacing: '-0.32px'}}>어떤 아이템인가요?</div>
-                    <div className='mb-11'>
-                        {/* <Swiper
+                    {/* <div className='mb-11'>
+                        <Swiper
                             modules={[Pagination]}
                             slidesPerView={1}
                             centeredSlides
@@ -123,9 +123,8 @@ const Item = () => {
                                     )
                                 })
                             }
-                        </Swiper> */}
-                        <img src={data.image} style={{width: '320px'}} />
-                    </div>
+                        </Swiper>
+                    </div> */}
                     <div className='text-sm' style={{letterSpacing: '-0.28px', lineHeight: '21px'}}>
                         {data.description}
                     </div>
