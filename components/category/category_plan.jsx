@@ -79,23 +79,27 @@ const CategoryPlan = (props) => {
                                     data.map((item2, idx2) => {
                                         return (
                                             item.level == item2.level ?
-                                                <Link key={idx2} 
-                                                    href={{
-                                                        pathname: '/plandetail',
-                                                        query: {
-                                                            planUid: item2.commonPlanUid,
-                                                            field: item2.field,
-                                                            subject: item2.subject
-                                                        }
-                                                }}>
+                                                
                                                     <div className='py-5 px-4 rounded-2xl text-sm flex mb-4' style={{backgroundColor: '#f8f6f5'}}>
-                                                        <img src='/images/category1.png' className='mr-4'/>
-                                                        <div className='my-auto mx-0'>{item2.name}</div>
+                                                        <Link key={idx2} 
+                                                            href={{
+                                                                pathname: '/plandetail',
+                                                                query: {
+                                                                    planUid: item2.commonPlanUid,
+                                                                    field: item2.field,
+                                                                    subject: item2.subject
+                                                                }
+                                                        }}>
+                                                            <div className='flex'>
+                                                                <img src='/images/category1.png' className='mr-4'/>
+                                                                <div className='my-auto mx-0'>{item2.name}</div>
+                                                            </div>
+                                                        </Link>
                                                         <a className='ml-auto' onClick={handleToast}>
                                                             <img src='/images/ic_check_circle.png' />
                                                         </a>
                                                     </div>
-                                                </Link>: ''
+                                                : ''
                                         )
                                     })
                                 }
