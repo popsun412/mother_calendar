@@ -7,7 +7,7 @@ import network from '../util/network';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import { ko } from "date-fns/esm/locale";
+// import { ko } from "date-fns/esm/locale";
 
 import { getAuth } from "firebase/auth";
 import { useRecoilState } from "recoil";
@@ -26,7 +26,7 @@ const AddBook = () => {
     const [disabled, setDisabled] = useState(true);
     const [booktitle, setBooktitle] = useState('');
     const [image, setImage] = useState({
-        image_file: '',
+        imge_file: '',
         preview_URL: ''
     });
     const [loaded, setLoaded] = useState('loading');
@@ -35,27 +35,6 @@ const AddBook = () => {
     const [area, setArea] = useState();
     const [rating, setRating] = useState(0);
     const [startDate, setStartDate] = useState(new Date());
-
-    const [value, setValue] = useState({ year: 2022, month: 5 });
-    const monthPickerRef = useRef(null);
-    const lang = {
-        months: [
-            "1월",
-            "2월",
-            "3월",
-            "4월",
-            "5월",
-            "6월",
-            "7월",
-            "8월",
-            "9월",
-            "10월",
-            "11월",
-            "12월"
-        ],
-        from: "From",
-        to: "To"
-    };
 
     let inputRef;
 
@@ -125,6 +104,8 @@ const AddBook = () => {
             )
             setLoaded(true)
         }
+
+        console.log(image)
     }
 
     const titleChange = (e) => {
@@ -150,9 +131,9 @@ const AddBook = () => {
 
     useEffect(() => {
         if (status === '구매예정') {
-            rating > 0 && booktitle != '' && image.image_file != '' && field != '' && area != '' ? setDisabled(false) : setDisabled(true)
+            rating > 0 && booktitle != '' && image.imge_file != '' && field != '' && area != '' ? setDisabled(false) : setDisabled(true)
         } else {
-            booktitle != '' && image.image_file != '' && field != '' && area != '' ? setDisabled(false) : setDisabled(true)
+            booktitle != '' && image.imge_file != '' && field != '' && area != '' ? setDisabled(false) : setDisabled(true)
         }
     }, [status, rating, image, field, area]);
 
@@ -160,13 +141,18 @@ const AddBook = () => {
         e.preventDefault();
 
         const params = {}
+        let statusVal = 0;
+
+        status[0] == '구매예정' ? statusVal = 0 : status[0] == '보유중' ? statusVal = 1 : statusVal = 2;
 
         params.name = booktitle;
-        params.status = status[0];
+        params.status = statusVal;
         params.subject = field;
         params.field = area;
         params.lockerType = '책장';
-        params.image = image.preview_URL;
+        params.image = image.imge_file;
+
+        console.log(params)
 
         if (status[0] == '구매예정') {
             params.buyDt = startDate;
@@ -178,23 +164,6 @@ const AddBook = () => {
         }).then((res) => console.log(res))
         .catch((err) => console.log(err));
     }
-
-    const showPicker = () => {
-        if (monthPickerRef && monthPickerRef.current) {
-            monthPickerRef.current.show();
-        }
-    };
-
-    const hidePicker = () => {
-        if (monthPickerRef && monthPickerRef.current) {
-            monthPickerRef.current.dismiss();
-        }
-    };
-
-    const handlePickerChange = (...args) => {
-        setValue({ year: args[0], month: args[1] });
-        hidePicker();
-    };
 
     return (
         <div>
