@@ -4,10 +4,11 @@ import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import DaumPostcode from 'react-daum-postcode';
 import StarRatings from 'react-star-ratings';
-import MonthPicker from "react-month-picker";
-import "react-month-picker/css/month-picker.css";
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css"
 import { useRouter } from 'next/router';
 import network from '../util/network';
+import GlobalStyles from '@mui/material/GlobalStyles';
 
 const AddPlace = () => {
 
@@ -28,8 +29,8 @@ const AddPlace = () => {
     const [rating, setRating] = useState(0);
     const [address, setAddress] = useState('');
     const [open, setOpen] = useState(false);
-
-    const [value, setValue] = useState({ year: 2022, month: 5 });
+    // const [value, setValue] = useState({ year: 2022, month: 5 });
+    const [startDate, setStartDate] = useState(new Date());
     const monthPickerRef = useRef(null);
     const lang = {
         months: [
@@ -349,15 +350,25 @@ const AddPlace = () => {
                         <section className='mx-5 my-6'>
                             <div className='text-sm textGray2 font-medium'>방문시기 <span className='textGray4'>(선택)</span></div>
                             <div className='mt-5'>
-                                <MonthPicker
-                                    lang={lang.months}
-                                    ref={monthPickerRef}
-                                    value={value}
-                                    onChange={handlePickerChange}
-                                    >
-                                    <span onClick={showPicker} className='mr-6 py-2.5 px-4 text-sm border border-solid border-gray3 rounded-md bg-white'>
-                                        {value.year}년 {value.month}월</span>
-                                </MonthPicker>
+                                <GlobalStyles 
+                                    styles={{
+                                        'input': {
+                                            width: '114px',
+                                            fontSize: '14px',
+                                            borderRadius: '6px',
+                                            border: 'solid 1px #bdbdbd'
+                                        }
+                                    }}
+                                />
+                                <DatePicker
+                                    selected={startDate}
+                                    onChange={(date) => setStartDate(date)}
+                                    dateFormat='yyyy년 MM월'
+                                    showMonthYearPicker
+                                    showFullMonthYearPicker
+                                    showTwoColumnMonthYearPicker
+                                    className='mr-6 py-1 px-4 text-sm border border-solid border-gray3 rounded-md bg-white'
+                                />
                             </div>
                         </section> : ''
                 }
