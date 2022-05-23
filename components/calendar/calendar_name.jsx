@@ -20,11 +20,11 @@ export default function CalendarName(props) {
         get babysAge() {
             const _now = new Date();
             const _ages = [];
-            userInfo.babys.map((_baby) => {
-                const _birth = moment(_baby.birth, 'YYYY-MM-DD').toDate();
-                const _age = _now.getFullYear() - _birth.getFullYear();
-                _ages.push(`${_age}세`);
-            });
+            // userInfo.babys.map((_baby) => {
+            //     const _birth = moment(_baby.birth, 'YYYY-MM-DD').toDate();
+            //     const _age = _now.getFullYear() - _birth.getFullYear();
+            //     _ages.push(`${_age}세`);
+            // });
 
             return _ages.join(' ');
         },
