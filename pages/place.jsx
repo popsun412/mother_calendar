@@ -64,7 +64,7 @@ const Place = () => {
             <main className='mb-28'>
                 <section className='mb-7'>
                     <div className='block relative'>
-                        <img src='/images/banner.png' />
+                        <img src={data.image} style={{minWidth: '360px', maxHeight: '207px'}}/>
                         <span className='block absolute bottom-0 left-0 text-lg text-white font-bold ml-5 mb-11' style={{fontFamily: 'NanumSquareRoundOTF'}}>{data.name}</span>
                         <div className='block absolute bottom-0 left-0 ml-5 mb-5'>
                             <span className='textOrange1 text-xs rounded p-1 mr-1' style={{fontFamily: 'NanumSquareRoundOTF', backgroundColor: 'rgba(219, 239, 253, 0.2)'}}>{data.subject}</span>
@@ -78,7 +78,7 @@ const Place = () => {
                 </section>
                 <section className='mx-5'>
                     <div className='text-base font-semibold mb-2' style={{letterSpacing: '-0.32px'}}>어떤 체험장소인가요?</div>
-                    <div className='text-sm' style={{letterSpacing: '-0.28px', lineHeight: '21px'}}>
+                    <div className='text-sm break-all' style={{letterSpacing: '-0.28px', lineHeight: '21px'}}>
                         {data.description}
                     </div>
                 </section>
