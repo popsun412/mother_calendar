@@ -66,7 +66,7 @@ const Parents = () => {
                                     <div className='flex mt-5' key={idx}>
                                         <div className='mr-4 block relative'>
                                             <img src={item.img} className='rounded-md'/>
-                                            <img src='/images/ic_bookmark.png' className='block absolute bottom-0 right-0 mr-2 mb-1.5' onClick={addBookmark(item)}/>
+                                            <img src={`/images/ic_${item.bookmark? 'bookmarked.png' : 'bookmark.png'}`}  className='block absolute bottom-0 right-0 mr-2 mb-1.5' onClick={addBookmark(item)}/>
                                         </div>
                                         <div>
                                             <h3 className='text-base font-semibold mb-1.5' style={{letterSpacing: '-0.3px'}}>{item.title}</h3>

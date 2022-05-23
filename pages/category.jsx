@@ -6,12 +6,13 @@ import { useRouter } from 'next/router';
 const Category = () => {
 
     const router = useRouter();
+    const type = router.query.type;
     const category = router.query.id;
 
     return (
         <div className='w-screen h-screen overflow-y-auto scrollbar-hide'>
-            <CategoryHeader />
-            <CategoryBody category={category}/>
+            <CategoryHeader type={type}/>
+            <CategoryBody type={type} category={category}/>
         </div>
     )
 }

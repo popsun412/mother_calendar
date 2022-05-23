@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 
-const data = [
+const edu = [
     {
         id: 0,
         title: '전체',
@@ -54,26 +54,24 @@ const data = [
         title: '놀이',
         imgUrl: '/images/category9.png'
     },
-    {
-        id: 11,
-        title: '기타',
-        imgUrl: '/images/category11.png'
-    },
-    {
-        id: 12,
-        title: '부모',
-        imgUrl: '/images/category12.png'
-    }
 ]
 
 const CategoryMenu = (props) => {
-
-    console.log(props);
+    
+    const { type, category } = props;
+    const [data, setData] = useState(
+        [{ id: 0, title: '전체', imgUrl: '/images/all.png' }]
+    );
 
     const categoryClick = (param) => {
         alert(param);
         props.setCategory(param);
     }
+
+    useEffect(() => {
+        type == '교육' ? setData(edu) : null;
+        type != '교육' ? props.setCategory('전체') : props.setCategory(category);
+    }, [])
 
     return (
         <div className='ml-4'>
@@ -86,8 +84,8 @@ const CategoryMenu = (props) => {
                     data.map((item, idx) => {
                         return (
                             <SwiperSlide key={idx}>
-                                <div className={`p-3 flex flex-col textGray2 font-normal text-xs ${item.id === parseInt(props.category) ? 'bg-gray2' : ''}`} 
-                                    style={{ borderRadius: "1.25rem", width: "3.25rem" }} onClick={() => props.setCategory(item.id)}>
+                                <div className={`p-3 flex flex-col textGray2 font-normal text-xs ${item.title === props.category ? 'bg-gray2' : ''}`} 
+                                    style={{ borderRadius: "1.25rem", width: "3.25rem" }} onClick={() => props.setCategory(item.title)}>
                                     <img src={item.imgUrl} className="m-auto w-7 h-7" />
                                     <span className='text-center mt-2 textGray2 font-normal text-xs'>{item.title}</span>
                                 </div>

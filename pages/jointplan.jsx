@@ -1,19 +1,48 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import ToggleSwitch from '../components/common/toggle';
+import GlobalStyles from '@mui/material/GlobalStyles';
+import DatePicker from 'react-datepicker';
+import TimePicker from 'rc-time-picker';
+import moment from 'moment';
+import "react-datepicker/dist/react-datepicker.css"
+import 'rc-time-picker/assets/index.css';
+
+import network from '../util/network';
 
 const JointPlan = () => {
 
+    const router = useRouter();
+    const planUid = router.query.planUid;
+
+    const [data, setData] = useState([]);
     const [activeIndex, setActiveIndex] = useState(0);
     const [active, setActive] = useState(false);
-    const [activeField, setActiveField] = useState(0);
+    const [activeField, setActiveField] = useState('');
     const [activeDay, setActiveDay] = useState({ 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false });
+
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
+
+    const [startTime, setStartTime] = useState(moment());
+    const [endTime, setEndTime] = useState(moment());
+
+    useEffect(() => {
+        const getData = async() => {
+            const res = await network.get('/plan/commonPlan/' + planUid);
+            res.data ? setData(res.data) : null;
+            res.data ? setActiveField(res.data.subject) : null;
+            console.log(activeField);
+        }
+        getData();
+    }, [])
 
     const handleDay = (e) => {
         setActiveDay({...activeDay, [e.target.value]: e.target.checked});
     }
 
     const handleField = (param) => {
-        setActiveField(param);
+        data.subject ? setActiveField(data.subject) : setActiveField(param);
     }
 
     const onChange = (target) => {
@@ -21,79 +50,105 @@ const JointPlan = () => {
         setActive(target.checked);
     }
 
+    const activeDayArr = (activeDay) => {
+        const arr = [];
+
+        activeDay[1] ? arr.push(1) : null;
+        activeDay[2] ? arr.push(2) : null;
+        activeDay[3] ? arr.push(3) : null;
+        activeDay[4] ? arr.push(4) : null;
+        activeDay[5] ? arr.push(5) : null;
+        activeDay[6] ? arr.push(6) : null;
+        activeDay[7] ? arr.push(0) : null;
+
+        return arr;
+    }
+
+    const goAddPlan = async() => {
+        const res = await network.post('/plan/commonPlan', {
+            params: {
+                subject: activeField,
+                field: '',
+                repeatDay: activeDayArr(activeDay),
+                startTime: moment(startTime).format('hhmm'),
+                endTime: moment(endTime).format('hhmm')
+            }
+        })
+    }
+
     return (
-        <div>
+        <div className='w-full h-full overflow-y-auto scrollbar-hide'>
             <header className='sticky top-0 left-0 right-0 opacity-100 visible z-100' style={{marginBottom: '-50px'}}>
                 <div className='flex relative mx-auto my-0 box-border py-4 w-full bg-white' style={{height: '50px'}}>
                     <div className='ml-5'>
                         <img src='/images/ic_back.png' onClick={() => {window.history.back()}}/>
                     </div>
                     <div className='my-0 mx-auto'>
-                        <span className='text-base font-medium'>페파피그1 영상</span>
+                        <span className='text-base font-medium'>{data.name}</span>
                     </div>
-                    <div className='mr-4'>
+                    <div className='mr-4' onClick={goAddPlan}>
                         <span className='text-base textOrange5'>완료</span>
                     </div>
                 </div>
             </header>
             <main className='mt-16'>
                 <section className='mx-8 pt-4'>
-                    <div className='bg-gray2 text-center text-sm py-4' style={{borderRadius: '10px'}}>영어 원서 읽기</div>
+                    <div className='bg-gray2 text-center text-sm py-4' style={{borderRadius: '10px'}}>{data.name}</div>
                 </section>
                 <section className='mt-6 mx-6'>
                     <div className='text-sm textGray2'>분야</div>
                     <div className='my-6'>
                         <div className='flex mb-3 justify-between'>
-                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField === 1 ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField(1)}>
-                                <img src='/images/category1.png' className={`${activeField === 1 ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
+                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField == '국어' ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField('국어')}>
+                                <img src='/images/category1.png' className={`${activeField == '국어' ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
                                 <span className='my-auto ml-1'>국어</span>
                             </div>
-                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField === 2 ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField(2)}>
-                                <img src='/images/category2.png' className={`${activeField === 2 ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
+                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField == '영어' ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField('영어')}>
+                                <img src='/images/category2.png' className={`${activeField == '영어' ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
                                 <span className='my-auto ml-1'>영어</span>
                             </div>
-                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField === 3 ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField(3)}>
-                                <img src='/images/category3.png' className={`${activeField === 3 ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
+                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField == '수학' ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField('수학')}>
+                                <img src='/images/category3.png' className={`${activeField == '수학' ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
                                 <span className='my-auto ml-1'>수학</span>
                             </div>
-                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField === 4 ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField(4)}>
-                                <img src='/images/category4.png' className={`${activeField === 4 ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
+                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField == '과학' ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField('과학')}>
+                                <img src='/images/category4.png' className={`${activeField == '과학' ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
                                 <span className='my-auto ml-1'>과학</span>
                             </div>
                         </div>
                         <div className='flex mb-3 justify-between'>
-                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField === 5 ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField(5)}>
-                                <img src='/images/category5.png' className={`${activeField === 5 ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
+                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField == '사회' ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField('사회')}>
+                                <img src='/images/category5.png' className={`${activeField == '사회' ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
                                 <span className='my-auto ml-1'>사회</span>
                             </div>
-                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField === 6 ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField(6)}>
-                                <img src='/images/category6.png' className={`${activeField === 6 ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
+                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField == '미술' ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField('미술')}>
+                                <img src='/images/category6.png' className={`${activeField == '미술' ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
                                 <span className='my-auto ml-1'>미술</span>
                             </div>
-                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField === 7 ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField(7)}>
-                                <img src='/images/category7.png' className={`${activeField === 7 ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
+                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField == '음악' ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField('음악')}>
+                                <img src='/images/category7.png' className={`${activeField == '음악' ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
                                 <span className='my-auto ml-1'>음악</span>
                             </div>
-                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField === 8 ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField(8)}>
-                                <img src='/images/category8.png' className={`${activeField === 8 ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
+                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField == '체육' ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField('체육')}>
+                                <img src='/images/category8.png' className={`${activeField == '체육' ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
                                 <span className='my-auto ml-1'>체육</span>
                             </div>
                         </div>
                         <div className='flex mb-3 justify-between'>
-                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField === 9 ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField(9)}>
-                                <img src='/images/category9.png' className={`${activeField === 9 ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
+                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField == '놀이' ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField('놀이')}>
+                                <img src='/images/category9.png' className={`${activeField == '놀이' ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
                                 <span className='my-auto ml-1'>놀이</span>
                             </div>
-                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField === 10 ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField(10)}>
-                                <img src='/images/category10.png' className={`${activeField === 10 ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
+                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField == '체험' ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField('체험')}>
+                                <img src='/images/category10.png' className={`${activeField == '체험' ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
                                 <span className='my-auto ml-1'>체험</span>
                             </div>
-                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField === 11 ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField(11)}>
-                                <img src='/images/category11.png' className={`${activeField === 11 ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
+                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField == '기타' ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField('기타')}>
+                                <img src='/images/category11.png' className={`${activeField == '기타' ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
                                 <span className='my-auto ml-1'>기타</span>
                             </div>
-                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField === 12 ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField(12)}>
-                                <img src='/images/category12.png' className={`${activeField === 12 ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
+                            <div className={`flex border border-solid rounded text-sm px-2.5 py-2 ${activeField == '부모' ? 'textOrange5 border-orange5' : 'textGray3 border-gray3'}`} onClick={() => handleField('부모')}>
+                                <img src='/images/category12.png' className={`${activeField == '부모' ? 'grayscale-0' : 'grayscale'}`} style={{height: '20px'}}/>
                                 <span className='my-auto ml-1'>부모</span>
                             </div>
                         </div>
@@ -154,24 +209,54 @@ const JointPlan = () => {
                 </section>
                 <section className='mt-8 mx-6'>
                     <div className='text-sm textGray2'>기간 <span className='textGray4'>(선택)</span></div>
-                    <div className='mt-3'>
-                        <select className='mr-6 p-1.5 text-sm border border-solid border-gray3 rounded-md'>
-                            <option>2022년 10월 21일</option>
-                        </select>
-                        <select className='text-sm p-1.5 border border-solid border-gray3 rounded-md'>
-                            <option>2022년 12월 31일</option>
-                        </select>
+                    <div className='mt-3 flex'>
+                        <GlobalStyles 
+                            styles={{
+                                'input': {
+                                    padding: '7px 8px',
+                                    textAlign: 'center',
+                                    fontSize: '14px',
+                                    border: 'solid 1px #bdbdbd',
+                                    borderRadius: '6px',
+                                    width: '145px',
+                                    height: '32px'
+                                }
+                            }}
+                        />
+                        <DatePicker selected={startDate} dateFormat='yyyy년 MM월 dd일' onChange={(date) => setStartDate(date)} className='mr-6'/>
+                        <DatePicker selected={endDate} dateFormat='yyyy년 MM월 dd일' onChange={(date) => setEndDate(date)}/>
                     </div>
                 </section>
                 <section className='mt-8 mx-6'>
                     <div className='text-sm textGray2'>시간 <span className='textGray4'>(선택)</span></div>
-                    <div className='mt-3'>
-                        <select className='mr-6 p-1.5 text-sm border border-solid border-gray3 rounded-md'>
-                            <option>오후 2시</option>
-                        </select>
-                        <select className='text-sm p-1.5 border border-solid border-gray3 rounded-md'>
-                            <option>오후 2시</option>
-                        </select>
+                    <div className='mt-3 flex'>
+                        <GlobalStyles 
+                            styles={{
+                                '.rc-time-picker-input': {
+                                    padding: '7px 8px',
+                                    textAlign: 'center',
+                                    color: 'black',
+                                    fontSize: '14px',
+                                    border: 'solid 1px #bdbdbd',
+                                    borderRadius: '6px',
+                                    width: '145px',
+                                    height: '32px'
+                                }
+                            }}
+                        />
+                        <TimePicker
+                            value={startTime}
+                            onChange={(val) => setStartTime(val)}
+                            showSecond={false}
+                            allowEmpty
+                            className='mr-6'
+                        />
+                        <TimePicker
+                            value={endTime}
+                            onChange={(val) => setEndTime(val)}
+                            showSecond={false}
+                            allowEmpty
+                        />
                     </div>
                 </section>
                 <section className='my-8 mx-6'>

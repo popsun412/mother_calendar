@@ -4,12 +4,18 @@ import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import DaumPostcode from 'react-daum-postcode';
 import StarRatings from 'react-star-ratings';
-import MonthPicker from "react-month-picker";
-import "react-month-picker/css/month-picker.css";
-import Link from 'next/link';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css"
+import { useRouter } from 'next/router';
+import network from '../util/network';
+import GlobalStyles from '@mui/material/GlobalStyles';
 
 const AddPlace = () => {
 
+    const router = useRouter();
+    const commonItemUid = router.query.commonItemUid;
+
+    const [data, setData] = useState([]);
     const [disabled, setDisabled] = useState(true);
     const [booktitle, setBooktitle] = useState('');
     const [image, setImage] = useState({
@@ -23,8 +29,8 @@ const AddPlace = () => {
     const [rating, setRating] = useState(0);
     const [address, setAddress] = useState('');
     const [open, setOpen] = useState(false);
-
-    const [value, setValue] = useState({ year: 2022, month: 5 });
+    // const [value, setValue] = useState({ year: 2022, month: 5 });
+    const [startDate, setStartDate] = useState(new Date());
     const monthPickerRef = useRef(null);
     const lang = {
         months: [
@@ -46,6 +52,19 @@ const AddPlace = () => {
     };
 
     let inputRef;
+
+    useEffect(() => {
+        const getData = async() => {
+            const res = await network.get('/item/commonItem/'+commonItemUid);
+            if (res.data) {
+                setData(res.data);
+                setLoaded(true);
+                setImage({image_file: res.data.image, preview_URL: res.data.image});
+                setBooktitle(res.data.name);
+            }
+        }
+        commonItemUid != undefined ? getData() : null;
+    }, [])
 
     const saveImage = (e) => {
         e.preventDefault();
@@ -77,7 +96,7 @@ const AddPlace = () => {
     }
 
     const titleChange = (e) => {
-        setBooktitle(e.target.value);
+        data.name ? setBooktitle(data.name) : setBooktitle(e.target.value);
     }
 
     const handleStatus = (e) => {
@@ -108,7 +127,7 @@ const AddPlace = () => {
     const onSubmit = async(e) => {
         e.preventDefault();
 
-        const res = await axios('http://localhost:4000/add/place', {
+        const res = await axios('/item/commonItem', {
             method: 'POST',
             params: {
                 
@@ -119,7 +138,6 @@ const AddPlace = () => {
     }
 
     const onCompletePost = (data) => {
-        debugger;
         setAddress(data.address);
         setOpen(false);
     }
@@ -146,11 +164,9 @@ const AddPlace = () => {
             <header className='sticky top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{marginBottom: '-50px'}}>
                 <div className='my-auto mx-auto py-0 px-4 relative flex items-center w-full bg-white' style={{height: '50px'}}>
                     <div className='flex-1 flex items-center'>
-                        <Link href='/exmap'>
-                            <div>
-                                <img src='/images/ic_back.png' />
-                            </div>
-                        </Link>
+                        <div onClick={() => {window.history.back()}}>
+                            <img src='/images/ic_back.png' />
+                        </div>
                         <div className='my-0 mx-auto text-base font-medium' style={{letterSpacing: '-0.3px'}}>체험장소 등록</div>
                         <button className={`flex ${disabled ? 'textGray4' : 'textOrange5'}`} style={{fontSize: '15px'}} disabled={disabled} onClick={onSubmit}>완료</button>
                     </div>
@@ -169,14 +185,14 @@ const AddPlace = () => {
                                 }
                             </button>
                             {
-                                loaded == false || loaded == true ?
+                                (loaded == false || loaded == true) && !data.image ?
                                     <button className='block absolute' style={{top: '-10px', right: '-10px'}} onClick={deleteImage}>
                                         <img src='/images/ic_delete.png' />
                                     </button> : ''
                             }
                         </div>
                         {
-                            loaded == false || loaded == true ?
+                            (loaded == false || loaded == true) && !data.image ?
                             <button className='flex pt-2 mx-auto text-xs textGray3 underline' onClick={() => inputRef.click()}>수정</button> : ''
                         }
                     </div>
@@ -334,15 +350,25 @@ const AddPlace = () => {
                         <section className='mx-5 my-6'>
                             <div className='text-sm textGray2 font-medium'>방문시기 <span className='textGray4'>(선택)</span></div>
                             <div className='mt-5'>
-                                <MonthPicker
-                                    lang={lang.months}
-                                    ref={monthPickerRef}
-                                    value={value}
-                                    onChange={handlePickerChange}
-                                    >
-                                    <span onClick={showPicker} className='mr-6 py-2.5 px-4 text-sm border border-solid border-gray3 rounded-md bg-white'>
-                                        {value.year}년 {value.month}월</span>
-                                </MonthPicker>
+                                <GlobalStyles 
+                                    styles={{
+                                        'input': {
+                                            width: '114px',
+                                            fontSize: '14px',
+                                            borderRadius: '6px',
+                                            border: 'solid 1px #bdbdbd'
+                                        }
+                                    }}
+                                />
+                                <DatePicker
+                                    selected={startDate}
+                                    onChange={(date) => setStartDate(date)}
+                                    dateFormat='yyyy년 MM월'
+                                    showMonthYearPicker
+                                    showFullMonthYearPicker
+                                    showTwoColumnMonthYearPicker
+                                    className='mr-6 py-1 px-4 text-sm border border-solid border-gray3 rounded-md bg-white'
+                                />
                             </div>
                         </section> : ''
                 }

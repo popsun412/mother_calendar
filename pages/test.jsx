@@ -3,11 +3,16 @@
 import axios from 'axios';
 import React, { useRef, useState } from 'react'
 import StarRatings from 'react-star-ratings';
-import DatePicker from 'react-mobile-datepicker';
 import moment from 'moment';
 import { Global } from '@emotion/react';
 import MonthPicker from "react-month-picker";
 import "react-month-picker/css/month-picker.css";
+import { addDays } from "date-fns"
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css"
+
+import TimePicker from 'rc-time-picker';
+import 'rc-time-picker/assets/index.css';
 
 const Test = () => {
 
@@ -93,72 +98,6 @@ const Test2 = () => {
     )
 }
 
-const Test3 = () => {
-
-    const [time, setTime] = useState(new Date());
-    const [isOpen, setIsOpen] = useState(false);
-    const dateConfig = {
-        'year': {
-            format: 'YYYY년',
-            caption: 'Year',
-            step: 1
-        },
-        'month': {
-            format: 'MM월',
-            caption: 'Mon',
-            step: 1,
-        },
-    }
-
-    const handleClick = () => {
-        setIsOpen(true);
-    }
-
-    const handleCancel = () => {
-        setIsOpen(false);
-    }
-
-    const handleSelect = (time) => {
-        setTime(time);
-        console.log(moment(time).format('YYYYMMDD'))
-        setIsOpen(false);
-    }
-
-    return (
-        <div>
-            <a onClick={handleClick}>{moment(time).format('YYYY-MM')}</a>
-            <Global
-                styles={{
-                    '.datepicker.default': {
-                        borderTopLeftRadius: '10px',
-                        borderTopRightRadius: '10px'
-                    },
-                    '.datepicker.default .datepicker-wheel': {
-                        backgroundColor: '#f2f2f2',
-                        border: 'none',
-                    },
-                    '.datepicker.default .datepicker-scroll li': {
-                        color: '#bdbdbd'
-                    },
-                    '.datepicker.default .datepicker-navbar-btn': {
-                        color: '#ff6035'
-                    }
-                }}
-            />
-            <DatePicker
-                value={time}
-                isOpen={isOpen}
-                showHeader={false}
-                onSelect={handleSelect}
-                onCancel={handleCancel}
-                dateConfig={dateConfig}
-                cancelText=''
-                confirmText='확인'
-            />
-        </div>
-    )
-}
-
 const Test4 = () => {
 
     const [value, setValue] = useState({ year: 2020, month: 9 });
@@ -216,4 +155,63 @@ const Test4 = () => {
     )
 }
 
-export default Test4;
+const Test5 = () => {
+
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
+
+    return (
+        <>
+            <div className='flex'>
+                <div>
+                    <DatePicker selected={startDate} dateFormat='yyyy년 MM월 dd일' onChange={(date) => setStartDate(date)} 
+                        className='text-center text-sm border border-solid rounded-md border-gary3'/>
+                </div>
+                <div>
+                    <DatePicker selected={startDate} dateFormat='yyyy년 MM월 dd일' onChange={(date) => setStartDate(date)} 
+                        className='text-center text-sm'/>
+                </div>
+            </div>
+        </>
+    )
+}
+
+const Test6 = () => {
+
+    const [startDate, setStartDate] = useState(new Date());
+
+    return (
+        <>
+            <DatePicker 
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                dateFormat='yyyy/MM'
+                showMonthYearPicker
+                showFullMonthYearPicker
+                showTwoColumnMonthYearPicker
+            />
+        </>
+    )
+}
+
+const Test7 = () => {
+
+    const [dispatchTime, setDispatchTime] = useState(moment());
+
+    const handleValueChange = (val) => {
+        setDispatchTime(val);
+    };
+
+    return (
+        <div>
+            <TimePicker
+                value={dispatchTime}
+                onChange={handleValueChange}
+                showSecond={false}
+                allowEmpty
+            />
+        </div>
+    )
+}
+
+export default Test7;

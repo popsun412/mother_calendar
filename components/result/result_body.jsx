@@ -1,5 +1,5 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import network from '../../util/network';
 
 const ResultBody = (props) => {
 
@@ -9,10 +9,9 @@ const ResultBody = (props) => {
     useEffect(() => {
         
         const getData = async() => {
-            const res = await axios('http://localhost:4000/result/data', {
-                method: 'GET',
-                params : {
-                    title : props.keyword
+            const res = await network.post('/search', {
+                params: {
+                    keyword : props.keyword
                 }
             })
             console.log(res.data);
@@ -32,13 +31,13 @@ const ResultBody = (props) => {
                             return (
                                 <div className='flex py-3 px-0' key={idx}>
                                     <div style={{marginRight: '15px'}}>
-                                        <img src={item.img} width={'94px'} height={'94px'} className='rounded-md'/>
+                                        <img src={item.image} width={'94px'} height={'94px'} className='rounded-md'/>
                                     </div>
                                     <div>
-                                        <h3 className='font-semibold text-base' style={{letterSpacing: '-0.3px'}}>{item.title}</h3>
+                                        <h3 className='font-semibold text-base' style={{letterSpacing: '-0.3px'}}>{item.name}</h3>
                                         <div>
-                                            <span className='text-center font-medium text-xs rounded textGray3 px-1.5 py-1 mr-1.5' style={{backgroundColor: '#f0f5f8'}}>{item.tag1}</span>
-                                            <span className='text-center font-medium text-xs rounded textGray3 px-1.5 py-1 mr-1.5' style={{backgroundColor: '#f0f5f8'}}>{item.tag2}</span>
+                                            <span className='text-center font-medium text-xs rounded textGray3 px-1.5 py-1 mr-1.5' style={{backgroundColor: '#f0f5f8'}}>{item.field}</span>
+                                            <span className='text-center font-medium text-xs rounded textGray3 px-1.5 py-1 mr-1.5' style={{backgroundColor: '#f0f5f8'}}>{item.subject}</span>
                                         </div>
                                     </div>
                                 </div>

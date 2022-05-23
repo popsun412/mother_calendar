@@ -5,7 +5,7 @@ const path = require('path');
 const nextConfig = {
   reactStrictMode: true,
   publicRuntimeConfig: {
-    backendUrl: process.env.API_URL || 'http://localhost:8080',
+    backendUrl: 'https://mothers-calendar-server-p2z7ecnysq-du.a.run.app' || 'http://localhost:8080',
   },
   optimizeFonts: false,
   sassOptions: {
