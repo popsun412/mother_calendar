@@ -153,7 +153,13 @@ const AddBook = () => {
         formData.append('lockerType', "책장");
         formData.append('image', image.imge_file);
 
-        const res = await network.post('/locker', formData).then((res) => console.log(res))
+        const res = await network.post('/locker', formData)
+            .then((res) => {
+                if(res.status == 200) {
+                    alert('보관함 등록을 완료했습니다.');
+                    window.history.back();
+                }
+            })
             .catch((err) => console.log(err));
     }
 
