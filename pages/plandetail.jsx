@@ -65,8 +65,8 @@ const Plan2 = () => {
     })
 
     useEffect(() => {
-        const getData = async() => {
-            const res = await network.get('/plan/commonPlan/'+commonPlanUid)
+        const getData = async () => {
+            const res = await network.get('/plan/commonPlan/' + commonPlanUid)
             if (res.data) {
                 setData(res.data);
                 setField(res.data.field);
@@ -82,8 +82,8 @@ const Plan2 = () => {
         let repDay = '';
 
         if (param) {
-            for(let i=0; i<param.length; i++) {
-                param[i] == 0 ? result.push('일요일') : param[i] == 1 ? result.push('월요일') : param[i] == 2 ? result.push('화요일') : 
+            for (let i = 0; i < param.length; i++) {
+                param[i] == 0 ? result.push('일요일') : param[i] == 1 ? result.push('월요일') : param[i] == 2 ? result.push('화요일') :
                     param[i] == 3 ? result.push('수요일') : param[i] == 4 ? result.push('목요일') : param[i] == 5 ? result.push('금요일') : result.push('토요일')
             }
         }
@@ -106,8 +106,8 @@ const Plan2 = () => {
         if (param) {
             const time = param.substring(0, 2) + ':' + param.substring(2, 4);
             const arr = time.split(':');
-    
-            parseInt(arr[0]) > 11 ? result += ('오후 ' + parseInt(arr[0]-12) + '시') : result += ('오전 ' + arr[0] + '시');
+
+            parseInt(arr[0]) > 11 ? result += ('오후 ' + parseInt(arr[0] - 12) + '시') : result += ('오전 ' + arr[0] + '시');
             parseInt(arr[1]) > 0 ? result += (arr[1] + '분') : '';
         }
 
@@ -116,7 +116,7 @@ const Plan2 = () => {
 
     return (
         <>
-            <PlanHeader name={data.name}/>
+            <PlanHeader name={data.name} />
             <main>
                 <section className='mb-6'>
                     <div className='block relative'>
@@ -164,15 +164,15 @@ const Plan2 = () => {
                     </div>
                 </section>
                 {/* <PlanWeek data={data}/> */}
-                <PlanItem subject={subject} field={field}/>
-                <PlanTab commonPlanUid={commonPlanUid}/>
+                <PlanItem subject={subject} field={field} />
+                <PlanTab commonPlanUid={commonPlanUid} />
             </main>
             <aside className='fixed bottom-0 left-0 right-0 z-100'>
                 <div className='relative mx-auto my-0 bg-white'>
                     <Link
                         href={{
-                            pathname: '/plan/'+commonPlanUid,
-                    }}>
+                            pathname: '/plan/regist', query: { commonPlanUid }
+                        }}>
                         <nav className='flex items-center box-border relative' style={{ height: '90px' }}>
                             <span className='text-sm text-white text-center p-4 m-5 w-full rounded-md bg5'
                                 style={{ letterSpacing: '-0.28px' }}>캘린더에 등록하기</span>
