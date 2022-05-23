@@ -8,33 +8,46 @@ import { useRecoilState } from "recoil";
 import { userInfoState } from "../../states/user_info";
 import Link from "next/link";
 
+import CircleLoadingOpacity from "../common/circle_loading_opacity";
+
 const Login = () => {
     const auth = getAuth();
     const router = useRouter();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loginError, setLoginError] = useState(false);
+    const [loging, setLoging] = useState(false);
 
     const [userInfo, setUserInfo] = useRecoilState(userInfoState);
 
     const login = () => {
+        if (loging) return;
+        setLoging(true);
+
         // 파이어베이스 로그인 시도
         signInWithEmailAndPassword(auth, email, password).then(async (userCredential) => {
-            if (userCredential.user.emailVerified) {
-                setUserInfo(userCredential.user.email);
+            // if (userCredential.user.emailVerified) {
+            //     setUserInfo(userCredential.user.email);
 
-                router.push('/calendar');
-            } else {
-            }
+            //     router.push('/calendar');
+            // } else {
+            //     alert("이메일은 인증해주세요");
+            // }
+            setUserInfo(userCredential.user.email);
+            router.push('/calendar');
         }).catch(async (error) => {
+            setLoginError(true);
             console.log(error);
+        }).finally((value) => {
+            setLoging(false);
         })
     }
 
     return (
         <>
             <div className="px-4 h-screen">
-                <div className="w-full mt-16 mb-4">
+                <div className="w-full pt-16 pb-4">
                     <img src="/images/img-login-bg.png" className=" h-60" />
                 </div>
 
@@ -47,7 +60,7 @@ const Login = () => {
                             onChange={(e) => setEmail(e.currentTarget.value)}
                         />
                     </div>
-                    <div className="text-xs font-normal text-[#eb5757] py-3">입력한 회원 정보를 다시 확인해주세요.</div>
+                    <div className="text-xs font-normal text-[#eb5757] py-3">{(loginError) ? "입력한 회원 정보를 다시 확인해주세요." : ""}</div>
                     <div className="flex items-center justify-center rounded-md bg-gray2 px-4 py-4">
                         <input
                             type="password"
@@ -69,6 +82,7 @@ const Login = () => {
                     </div>
                 </div>
             </div>
+            {(loging) ? <CircleLoadingOpacity /> : <></>}
         </>
     )
 }

@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 export default function CalendarDateItem(props) {
     const _selectStyle = (props.date.select) ? "bg-white border-dotted border border-color3" : "bg-gray1";
     const _dateStyle = { fontSize: "13px" };
@@ -11,7 +13,7 @@ export default function CalendarDateItem(props) {
                 <span style={{ fontSize: "12px", lineHeight: "14px" }}>{props.date.week}</span>
 
                 <div className={`flex justify-center items-center rounded-full w-6 h-6 ${_selectStyle}`} style={_dateStyle}>
-                    <span>{props.date.date}</span>
+                    <span>{props.date.date.date()}</span>
                 </div>
             </div>
         </div>

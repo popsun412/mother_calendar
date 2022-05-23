@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import CalendarHome from "../components/calendar/calendar_home";
 import CalendarMiddle from "../components/calendar/calendar_ middle";
 import CalendarDate from "../components/calendar/calendar_date";
@@ -7,6 +8,8 @@ import FriendList from "../components/calendar/frind_list";
 import ItemDetail from "../components/main/itme_detail";
 import CalendarFullPlan from "../components/calendar/calendar_full_plan";
 import CircleLoading from "../components/common/circle_loading";
+import { Fab } from "@material-ui/core";
+import { Add } from "@material-ui/icons";
 
 // react, next
 import { useState } from "react";
@@ -30,54 +33,74 @@ const Calendar = () => {
     // 글로벌 상태관리
     const [userInfo, setUserInfo] = useRecoilState(userInfoState);
 
+    // 로그인 확인
     const [load, setLoad] = useState(false);
 
-    // 아이템 불러오기
-    const getItem = async () => {
-        console.log(userInfo);
-        setLoad(true);
-    }
+    // 화면 상태관리
+    const [selectedUserUid, setSelectedUserUid] = useState(null);
+
+    // 날짜 선택
+    const [selectedDate, setSelectedDate] = useState(new Date());
 
     // 유저 정보 갖고오기
     const getUser = async () => {
         const _result = await network.post('/userInfo');
-
         // data 통신
         if (_result.status == 200) {
-            setUserInfo(_result.data);
+            console.log(_result.data);
+            if (userInfo == null) setUserInfo(_result.data);
         } else {
             router.push('/');
         }
     }
 
     useEffect(() => {
-        if (userInfo == null) {
-            auth.onAuthStateChanged(async (_user) => {
-                if (_user) {
-                    getUser();
-                } else {
-                    setUserInfo(null);
-                    router.push('/');
-                }
-            });
-        }
-
-        if (userInfo != null && !load) getItem();
-    })
+        auth.onAuthStateChanged(async (_user) => {
+            if (_user) {
+                await getUser();
+                setSelectedUserUid(_user.uid);
+                setLoad(true);
+            } else {
+                setUserInfo(null);
+                router.push('/');
+            }
+        });
+    });
 
     return (<>
         {(load) ?
             // 화면
             <div className="w-screen h-screen flex flex-col">
-                <CalendarTop />
-                <CalendarMiddle />
-                <CalendarDate />
-                <CalendarHome />
-                <CalendarBottom />
+                <CalendarTop
+                    selectedUserUid={selectedUserUid}
+                    setSelectedUserUid={setSelectedUserUid}
+                />
+                <CalendarMiddle
+                    selectedUserUid={selectedUserUid}
+                    setSelectedUserUid={setSelectedUserUid}
+                    selectedDate={selectedDate}
+                    setSelectedDate={setSelectedDate}
+                />
+                <CalendarDate
+                    selectedDate={selectedDate}
+                    setSelectedDate={setSelectedDate}
+                />
+                <CalendarHome
+                    selectedUserUid={selectedUserUid}
+                    selectedDate={selectedDate}
+                />
+                {/* <CalendarBottom />
 
                 <FriendList />
                 <ItemDetail />
-                <CalendarFullPlan />
+                <CalendarFullPlan /> */}
+                <div className="flex absolute right-5 bottom-16">
+                    <Fab color="primary" aria-label="add" style={{ backgroundColor: '#ff6035' }} onClick={() => {
+                        router.push('/plan/regist');
+                    }}>
+                        <Add />
+                    </Fab>
+                </div>
             </div>
             // 로딩 바
             : <CircleLoading />

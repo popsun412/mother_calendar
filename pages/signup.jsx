@@ -12,7 +12,9 @@ export default function Logo() {
         tel3: "",
         address: "",
         interest: [],
-        babys: [],
+        babys: [
+            { year: 2022, month: "01", day: "01", sex: "female" }
+        ],
         email: "",
         password: ""
     });
