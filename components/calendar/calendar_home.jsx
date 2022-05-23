@@ -36,7 +36,7 @@ export default function CalendarHome(props) {
 
     return (
         <div className="bg-gray2 flex-auto overflow-y-auto flex flex-col p-5 pb-0">
-            {(type == 1) ? <CalendarScreen /> : <></>}
+            {/* {(type == 1) ? <CalendarScreen /> : <></>} */}
             {(type == 0 && items.length == 0) ? <EmptyPlan /> : <></>}
             {/* {(type == 0) ? <EmptyPlan /> : <></>}
             <div className="flex text-sm textGray2">
