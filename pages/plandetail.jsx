@@ -89,7 +89,7 @@ const Plan2 = () => {
 
     useEffect(() => {
         const getData = async() => {
-            const res = await network.post('/plan/commonPlan/'+planUid)
+            const res = await network.get('/plan/commonPlan/'+planUid)
             res.data ? setData(res.data) : null;
         }
         getData();
