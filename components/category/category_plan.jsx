@@ -79,13 +79,12 @@ const CategoryPlan = (props) => {
                                     data.map((item2, idx2) => {
                                         return (
                                             item.level == item2.level ?
-                                                
-                                                    <div className='py-5 px-4 rounded-2xl text-sm flex mb-4' style={{backgroundColor: '#f8f6f5'}}>
-                                                        <Link key={idx2} 
+                                                    <div className='py-5 px-4 rounded-2xl text-sm flex mb-4' style={{backgroundColor: '#f8f6f5'}} key={idx2}>
+                                                        <Link 
                                                             href={{
                                                                 pathname: '/plandetail',
                                                                 query: {
-                                                                    planUid: item2.commonPlanUid,
+                                                                    commonPlanUid: item2.commonPlanUid,
                                                                     field: item2.field,
                                                                     subject: item2.subject
                                                                 }
