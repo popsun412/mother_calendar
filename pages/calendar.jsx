@@ -47,8 +47,7 @@ const Calendar = () => {
         const _result = await network.post('/userInfo');
         // data 통신
         if (_result.status == 200) {
-            console.log(_result.data);
-            if (userInfo == null) setUserInfo(_result.data);
+            setUserInfo(_result.data);
         } else {
             router.push('/');
         }
@@ -65,7 +64,7 @@ const Calendar = () => {
                 router.push('/');
             }
         });
-    });
+    }, []);
 
     return (<>
         {(load) ?

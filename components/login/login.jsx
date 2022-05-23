@@ -4,8 +4,6 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { useRecoilState } from "recoil";
-import { userInfoState } from "../../states/user_info";
 import Link from "next/link";
 
 import CircleLoadingOpacity from "../common/circle_loading_opacity";
@@ -18,8 +16,6 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [loginError, setLoginError] = useState(false);
     const [loging, setLoging] = useState(false);
-
-    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
 
     const login = () => {
         if (loging) return;
@@ -34,7 +30,6 @@ const Login = () => {
             // } else {
             //     alert("이메일은 인증해주세요");
             // }
-            setUserInfo(userCredential.user.email);
             router.push('/calendar');
         }).catch(async (error) => {
             setLoginError(true);
