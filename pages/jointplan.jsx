@@ -7,6 +7,7 @@ import TimePicker from 'rc-time-picker';
 import moment from 'moment';
 import "react-datepicker/dist/react-datepicker.css"
 import 'rc-time-picker/assets/index.css';
+import { ko } from "date-fns/esm/locale";
 
 import network from '../util/network';
 
@@ -223,8 +224,8 @@ const JointPlan = () => {
                                 }
                             }}
                         />
-                        <DatePicker selected={startDate} dateFormat='yyyy년 MM월 dd일' onChange={(date) => setStartDate(date)} className='mr-6'/>
-                        <DatePicker selected={endDate} dateFormat='yyyy년 MM월 dd일' onChange={(date) => setEndDate(date)}/>
+                        <DatePicker locale={ko} selected={startDate} dateFormat='yyyy년 MM월 dd일' onChange={(date) => setStartDate(date)} className='mr-6'/>
+                        <DatePicker locale={ko} selected={endDate} dateFormat='yyyy년 MM월 dd일' onChange={(date) => setEndDate(date)}/>
                     </div>
                 </section>
                 <section className='mt-8 mx-6'>

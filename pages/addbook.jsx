@@ -4,16 +4,24 @@ import { Global } from '@emotion/react';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import StarRatings from 'react-star-ratings';
 import network from '../util/network';
+import GlobalStyles from '@mui/material/GlobalStyles';
 import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css"
+import "react-datepicker/dist/react-datepicker.css";
+import { ko } from "date-fns/esm/locale";
 
-// import MonthPicker from "react-month-picker";
-// import "react-month-picker/css/month-picker.css";
+import { getAuth } from "firebase/auth";
+import { useRecoilState } from "recoil";
+import { userInfoState } from "../states/user_info";
 
 const AddBook = () => {
 
+    const auth = getAuth();
+    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+    const [load, setLoad] = useState(false);
+
     const router = useRouter();
     const itemUid = router.query.itemUid;
+
     const [data, setData] = useState([]);
     const [disabled, setDisabled] = useState(true);
     const [booktitle, setBooktitle] = useState('');
@@ -50,6 +58,38 @@ const AddBook = () => {
     };
 
     let inputRef;
+
+    // 아이템 불러오기
+    const getItem = async () => {
+        setLoad(true);
+    }
+
+    // 유저 정보 갖고오기
+    const getUser = async () => {
+        const _result = await network.post('/userInfo');
+
+        // data 통신
+        if (_result.status == 200) {
+            setUserInfo(_result.data);
+        } else {
+            router.push('/');
+        }
+    }
+
+    useEffect(() => {
+        if (userInfo == null) {
+            auth.onAuthStateChanged(async (_user) => {
+                if (_user) {
+                    getUser();
+                } else {
+                    setUserInfo(null);
+                    router.push('/');
+                }
+            });
+        }
+
+        if (userInfo != null && !load) getItem();
+    })
 
     useEffect(() => {
         const getData = async() => {
@@ -119,16 +159,24 @@ const AddBook = () => {
     const onSubmit = async(e) => {
         e.preventDefault();
 
-        const res = await network.post('/item/commonItem', {
-            params: {
-                subject: field,
-                field: area,
-                name: data.name,
-                image: data.image
-            }
-        }).then( e => {
-            console.log(e);
-        }).catch(err => console.log(err));
+        const params = {}
+
+        params.name = booktitle;
+        params.status = status[0];
+        params.subject = field;
+        params.field = area;
+        params.lockerType = '책장';
+        params.image = image.preview_URL;
+
+        if (status[0] == '구매예정') {
+            params.buyDt = startDate;
+            params.score = rating;
+        }
+
+        const res = await network.post('/locker', {
+            params: params
+        }).then((res) => console.log(res))
+        .catch((err) => console.log(err));
     }
 
     const showPicker = () => {
@@ -221,79 +269,79 @@ const AddBook = () => {
                     <div className='mt-6'>
                         <div className='grid grid-cols-4 gap-3'>
                             <label>
-                                <input type='checkbox' value='kor' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'kor' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category1.png' className={`mr-1 ${field == 'kor' ? '' : 'grayscale'}`}
+                                <input type='checkbox' value='국어' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '국어' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category1.png' className={`mr-1 ${field == '국어' ? '' : 'grayscale'}`}
                                         style={{width: '17px', height: '17px'}}/>국어
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='eng' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'eng' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category2.png' className={`mr-1 ${field == 'eng' ? '' : 'grayscale'}`}
+                                <input type='checkbox' value='영어' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '영어' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category2.png' className={`mr-1 ${field == '영어' ? '' : 'grayscale'}`}
                                         style={{width: '17px', height: '17px'}}/>영어
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='mat' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'mat' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category3.png' className={`mr-1 ${field == 'mat' ? '' : 'grayscale'}`}
+                                <input type='checkbox' value='수학' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '수학' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category3.png' className={`mr-1 ${field == '수학' ? '' : 'grayscale'}`}
                                         style={{width: '17px', height: '17px'}}/>수학
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='sci' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'sci' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category4.png' className={`mr-1 ${field == 'sci' ? '' : 'grayscale'}`}
+                                <input type='checkbox' value='과학' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '과학' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category4.png' className={`mr-1 ${field == '과학' ? '' : 'grayscale'}`}
                                         style={{width: '17px', height: '17px'}}/>과학
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='soc' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'soc' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category5.png' className={`mr-1 ${field == 'soc' ? '' : 'grayscale'}`}
+                                <input type='checkbox' value='사회' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '사회' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category5.png' className={`mr-1 ${field == '사회' ? '' : 'grayscale'}`}
                                         style={{width: '17px', height: '17px'}}/>사회
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='art' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'art' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category6.png' className={`mr-1 ${field == 'art' ? '' : 'grayscale'}`}
+                                <input type='checkbox' value='미술' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '미술' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category6.png' className={`mr-1 ${field == '미술' ? '' : 'grayscale'}`}
                                         style={{width: '17px', height: '17px'}}/>미술
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='mus' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'mus' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category7.png' className={`mr-1 ${field == 'mus' ? '' : 'grayscale'}`}
+                                <input type='checkbox' value='음악' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '음악' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category7.png' className={`mr-1 ${field == '음악' ? '' : 'grayscale'}`}
                                         style={{width: '17px', height: '17px'}}/>음악
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='ath' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'ath' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category8.png' className={`mr-1 ${field == 'ath' ? '' : 'grayscale'}`}
+                                <input type='checkbox' value='체육' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '체육' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category8.png' className={`mr-1 ${field == '체육' ? '' : 'grayscale'}`}
                                         style={{width: '17px', height: '17px'}}/>체육
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='play' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'play' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category9.png' className={`mr-1 ${field == 'play' ? '' : 'grayscale'}`}
+                                <input type='checkbox' value='놀이' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '놀이' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category9.png' className={`mr-1 ${field == '놀이' ? '' : 'grayscale'}`}
                                         style={{width: '17px', height: '17px'}}/>놀이
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='etc' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'etc' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category11.png' className={`mr-1 ${field == 'etc' ? '' : 'grayscale'}`}
+                                <input type='checkbox' value='기타' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '기타' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category11.png' className={`mr-1 ${field == '기타' ? '' : 'grayscale'}`}
                                         style={{width: '17px', height: '17px'}}/>기타
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='par' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'par' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category12.png' className={`mr-1 ${field == 'par' ? '' : 'grayscale'}`}
+                                <input type='checkbox' value='부모' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '부모' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category12.png' className={`mr-1 ${field == '부모' ? '' : 'grayscale'}`}
                                         style={{width: '17px', height: '17px'}}/>부모
                                 </span>
                             </label>
@@ -304,24 +352,24 @@ const AddBook = () => {
                     <div className='text-sm textGray2 font-medium'>영역</div>
                     <div className='mt-5 flex flex-wrap'>
                         <label className='block relative mr-3'>
-                            <input type='checkbox' value='large' className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
+                            <input type='checkbox' value='대전집' className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
                             <span className={`block text-sm px-3 py-1.5 border border-solid rounded-sm 
-                                ${area == 'large' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`}>대전집</span>
+                                ${area == '대전집' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`}>대전집</span>
                         </label>
                         <label className='block relative mr-3'>
-                            <input type='checkbox' value='small' className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
+                            <input type='checkbox' value='소전집' className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
                             <span className={`block text-sm px-3 py-1.5 border border-solid rounded-sm 
-                                ${area == 'small' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`}>소전집</span>
+                                ${area == '소전집' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`}>소전집</span>
                         </label>
                         <label className='block relative mr-3'>
-                            <input type='checkbox' value='paperback' className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
+                            <input type='checkbox' value='단행본' className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
                             <span className={`block text-sm px-3 py-1.5 border border-solid rounded-sm 
-                                ${area == 'paperback' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`}>단행본</span>
+                                ${area == '단행본' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`}>단행본</span>
                         </label>
                         <label className='block relative mr-3'>
-                            <input type='checkbox' value='etc' className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
+                            <input type='checkbox' value='기타' className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
                             <span className={`block text-sm px-3 py-1.5 border border-solid rounded-sm 
-                                ${area == 'etc' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`}>기타</span>
+                                ${area == '기타' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`}>기타</span>
                         </label>
                     </div>
                 </section>
@@ -330,16 +378,18 @@ const AddBook = () => {
                         <section className='mx-5 my-6'>
                             <div className='text-sm textGray2 font-medium'>구매시기 <span className='textGray4'>(선택)</span></div>
                             <div className='mt-5'>
-                                {/* <MonthPicker
-                                    lang={lang.months}
-                                    ref={monthPickerRef}
-                                    value={value}
-                                    onChange={handlePickerChange}
-                                    >
-                                    <span onClick={showPicker} className='mr-6 py-2.5 px-4 text-sm border border-solid border-gray3 rounded-md bg-white'>
-                                        {value.year}년 {value.month}월</span>
-                                </MonthPicker> */}
+                                <GlobalStyles 
+                                    styles={{
+                                        'input': {
+                                            width: '114px',
+                                            fontSize: '14px',
+                                            borderRadius: '6px',
+                                            border: 'solid 1px #bdbdbd'
+                                        }
+                                    }}
+                                />
                                 <DatePicker
+                                    locale={ko}
                                     selected={startDate}
                                     onChange={(date) => setStartDate(date)}
                                     dateFormat='yyyy년 MM월'
