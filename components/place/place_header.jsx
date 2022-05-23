@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
-const PlaceHeader = () => {
+const PlaceHeader = (props) => {
 
+    const { name } = props;
     const [scrollPosition, setScrollPosition] = useState(0);
     
     const updateScroll = () => {
@@ -24,7 +25,7 @@ const PlaceHeader = () => {
                                 <img src='/images/ic_back.png' onClick={() => {window.history.back()}}/>
                             </div>
                             <div className='text-center flex-1'>
-                                <span>🏕 애니메이션 센터</span>
+                                <span>🏕 {name}</span>
                             </div>
                             <img src='/images/ic_back.png' className='hidden'/>
                         </div> : <img src='/images/ic_banner_aos.png' onClick={() => {window.history.back()}}/>
