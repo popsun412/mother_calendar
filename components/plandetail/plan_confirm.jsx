@@ -4,69 +4,13 @@ import network from '../../util/network';
 
 const PlanConfirm = (props) => {
 
-    const { planUid } = props;
+    const { commonPlanUid } = props;
 
-    const [data, setData] = useState([
-        {
-            profileImage: 'https://picsum.photos/id/1/20',
-            authImage: '/images/banner.png',
-            regDt: '20220322'
-        },
-        {
-            profileImage: 'https://picsum.photos/id/2/20',
-            authImage: '/images/banner.png',
-            regDt: '20220422'
-        },
-        {
-            profileImage: 'https://picsum.photos/id/3/20',
-            authImage: '/images/banner.png',
-            regDt: '20220522'
-        },
-        {
-            profileImage: 'https://picsum.photos/id/4/20',
-            authImage: '/images/banner.png',
-            regDt: '20220622'
-        },
-        {
-            profileImage: 'https://picsum.photos/id/415/20',
-            authImage: '/images/banner.png',
-            regDt: '20220722'
-        },
-        {
-            profileImage: 'https://picsum.photos/id/5/20',
-            authImage: '/images/banner.png',
-            regDt: '20220822'
-        },
-        {
-            profileImage: 'https://picsum.photos/id/6/20',
-            authImage: '/images/banner.png',
-            regDt: '20220922'
-        },
-        {
-            profileImage: 'https://picsum.photos/id/7/20',
-            authImage: '/images/banner.png',
-            regDt: '20221022'
-        },
-        {
-            profileImage: 'https://picsum.photos/id/8/20',
-            authImage: '/images/banner.png',
-            regDt: '20221122'
-        },
-        {
-            profileImage: 'https://picsum.photos/id/9/20',
-            authImage: '/images/banner.png',
-            regDt: '20221222'
-        },
-        {
-            profileImage: 'https://picsum.photos/id/10/20',
-            authImage: '/images/banner.png',
-            regDt: '20220122'
-        }
-    ])
+    const [data, setData] = useState([]);
 
     useEffect(() => {
         const getData = async() => {
-            const res = await network.post('/plan/commonPlan/auth/'+planUid)
+            const res = await network.get('/plan/commonPlan/auth/'+commonPlanUid)
             res.data ? setData(res.data) : null;
         }
         getData();

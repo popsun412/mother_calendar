@@ -1,14 +1,14 @@
 import { Global } from '@emotion/react';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
-import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
 import DaumPostcode from 'react-daum-postcode';
 import StarRatings from 'react-star-ratings';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css"
-import { useRouter } from 'next/router';
 import network from '../util/network';
 import GlobalStyles from '@mui/material/GlobalStyles';
+import { ko } from "date-fns/esm/locale";
 
 const AddPlace = () => {
 
@@ -127,14 +127,6 @@ const AddPlace = () => {
     const onSubmit = async(e) => {
         e.preventDefault();
 
-        const res = await axios('/item/commonItem', {
-            method: 'POST',
-            params: {
-                
-            }
-        }).then( e => {
-            console.log(e);
-        }).catch(err => console.log(err));
     }
 
     const onCompletePost = (data) => {
@@ -361,6 +353,7 @@ const AddPlace = () => {
                                     }}
                                 />
                                 <DatePicker
+                                    locale={ko}
                                     selected={startDate}
                                     onChange={(date) => setStartDate(date)}
                                     dateFormat='yyyy년 MM월'

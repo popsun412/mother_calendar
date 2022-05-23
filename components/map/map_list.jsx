@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { styled, CssBaseline, Box, SwipeableDrawer } from '@material-ui/core';
 import { Global } from '@emotion/react';
 import moment from 'moment';
-import axios from 'axios';
+import network from '../../util/network';
 
 const Root = styled('div')(({ theme }) => ({
     height: '100%',
@@ -19,26 +19,55 @@ const MapList = (props) => {
 
     const { window, markers, setMarkers } = props;
     const [open, setOpen] = useState(false);
-    const [data, setData] = useState([]);
+    const [data, setData] = useState([
+        {
+            title: '직업체험 테마파크 키자니아',
+            data: '20220101',
+            subject: '영어',
+            field: '영어'
+        },
+        {
+            title: '직업체험 테마파크 키자니아',
+            data: '20220101',
+            subject: '영어',
+            field: '영어'
+        },
+        {
+            title: '직업체험 테마파크 키자니아',
+            data: '20220101',
+            subject: '영어',
+            field: '영어'
+        },
+        {
+            title: '직업체험 테마파크 키자니아',
+            data: '20220101',
+            subject: '영어',
+            field: '영어'
+        },
+        {
+            title: '직업체험 테마파크 키자니아',
+            data: '20220101',
+            subject: '영어',
+            field: '영어'
+        }
+    ]);
 
     const getData = async() => {
-        const res = await axios('http://localhost:4000/map/list', {
-            method: 'GET'
-        })
-        setData(res.data);
+        const res = await network.post('');
+        res.data ? setData(res.data) : null;
     }
 
     useEffect(() => {
-        getData();
-        const dataNew = [];
-        for(let i=0; i<markers.length; i++) {
-            console.log(markers[i].getPosition())
-            data.map((item, idx) => {
-                item.lat == markers[i].getPosition().La && item.lng == markers[i].getPosition().Ma ?
-                    dataNew.push(item) : ''
-            })
-        }
-        setData(dataNew);
+        // getData();
+        // const dataNew = [];
+        // for(let i=0; i<markers.length; i++) {
+        //     console.log(markers[i].getPosition())
+        //     data.map((item, idx) => {
+        //         item.lat == markers[i].getPosition().La && item.lng == markers[i].getPosition().Ma ?
+        //             dataNew.push(item) : ''
+        //     })
+        // }
+        // setData(dataNew);
     }, [])
 
     const container = window !== undefined ? () => window().document.body : undefined;
@@ -110,8 +139,8 @@ const MapList = (props) => {
                                         { getRate(item.rate) }
                                     </div>
                                     <div className='flex'>
-                                        <span className='mr-1 text-xs rounded py-1 px-1.5' style={{backgroundColor: '#f0f5f8'}}>{item.tag1}</span>
-                                        <span className='text-xs rounded py-1 px-1.5' style={{backgroundColor: '#f0f5f8'}}>{item.tag2}</span>
+                                        <span className='mr-1 text-xs rounded py-1 px-1.5' style={{backgroundColor: '#f0f5f8'}}>{item.subject}</span>
+                                        <span className='text-xs rounded py-1 px-1.5' style={{backgroundColor: '#f0f5f8'}}>{item.field}</span>
                                     </div>
                                 </div>
                             </div>
