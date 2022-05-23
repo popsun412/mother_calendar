@@ -5,29 +5,7 @@ import network from '../../util/network';
 
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
-
-const theme_data = [
-    {
-        id: 1,
-        label: '공룡'
-    },
-    {
-        id: 2,
-        label: '자동차'
-    },
-    {
-        id: 3,
-        label: '놀이터'
-    },
-    {
-        id: 4,
-        label: '놀이터'
-    },
-    {
-        id: 5,
-        label: '놀이터'
-    }
-]
+import Link from 'next/link';
 
 const HomeTheme = (props) => {
 
@@ -93,6 +71,8 @@ const HomeTheme = (props) => {
                 >
                     {
                         data.map((item, idx) => {
+                            let url = '';
+                            item.category == 'place' ? url = '/place' : url = '/item';
                             return (
                                 item.theme === theme ?
                                 <SwiperSlide key={idx}>
@@ -101,7 +81,14 @@ const HomeTheme = (props) => {
                                             <img src={item.image} className='rounded-md' style={{width: '94px', height: '94px'}}/>
                                             <img src={`/images/ic_${item.bookmark? 'bookmarked.png' : 'bookmark.png'}`}  className='block absolute bottom-0 right-0 mr-2 mb-1.5' />
                                         </div>
-                                        <div className='text-sm leading-snug mt-1.5' style={{letterSpacing: '-0.26px'}}>{item.name}</div>
+                                        <Link href={{
+                                            pathname: url,
+                                            query: { 
+                                                commonItemUid: item.commonItemUid
+                                            }
+                                        }}>
+                                            <div className='text-sm leading-snug mt-1.5' style={{letterSpacing: '-0.26px'}}>{item.name}</div>
+                                        </Link>
                                         <div className='flex mt-1'>
                                             <span className='py-1 px-1.5 rounded text-center text-xs textGray3 mr-1 bg5' style={{backgroundColor: '#f0f5f8'}}>{item.field}</span>
                                             <span className='py-1 px-1.5 rounded text-center text-xs textGray3 mr-1 bg5' style={{backgroundColor: '#f0f5f8'}}>{item.subject}</span>
