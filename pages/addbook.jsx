@@ -7,11 +7,12 @@ import network from '../util/network';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-// import { ko } from "date-fns/esm/locale";
 
 import { getAuth } from "firebase/auth";
 import { useRecoilState } from "recoil";
 import { userInfoState } from "../states/user_info";
+
+import { ko } from 'date-fns/locale';
 
 const AddBook = () => {
 
@@ -71,15 +72,15 @@ const AddBook = () => {
     })
 
     useEffect(() => {
-        const getData = async() => {
-            const res = await network.get('/item/commonItem/'+itemUid)
+        const getData = async () => {
+            const res = await network.get('/item/commonItem/' + itemUid)
             res.data ? setData(res.data) : null;
         }
         if (itemUid) getData();
     }, [])
 
     useEffect(() => {
-        if(status == '구매예정') {
+        if (status == '구매예정') {
             field != '' && area != '' && rating > 0 ? setDisabled(false) : '';
         } else {
             field != '' && area != '' ? setDisabled(false) : '';
@@ -90,7 +91,7 @@ const AddBook = () => {
         e.preventDefault();
         const fileReader = new FileReader();
 
-        if(e.target.files[0]) {
+        if (e.target.files[0]) {
             setLoaded('loading');
             fileReader.readAsDataURL(e.target.files[0]);
         }
@@ -137,71 +138,62 @@ const AddBook = () => {
         }
     }, [status, rating, image, field, area]);
 
-    const onSubmit = async(e) => {
+    const onSubmit = async (e) => {
         e.preventDefault();
 
-        const params = {}
         let statusVal = 0;
 
         status[0] == '구매예정' ? statusVal = 0 : status[0] == '보유중' ? statusVal = 1 : statusVal = 2;
 
-        params.name = booktitle;
-        params.status = statusVal;
-        params.subject = field;
-        params.field = area;
-        params.lockerType = '책장';
-        params.image = image.imge_file;
+        const formData = new FormData();
+        formData.append('name', booktitle);
+        formData.append('status', statusVal);
+        formData.append('subject', field);
+        formData.append('field', area);
+        formData.append('lockerType', "책장");
+        formData.append('image', image.imge_file);
 
-        console.log(params)
-
-        if (status[0] == '구매예정') {
-            params.buyDt = startDate;
-            params.score = rating;
-        }
-
-        const res = await network.post('/locker', {
-            params: params
-        }).then((res) => console.log(res))
-        .catch((err) => console.log(err));
+        const res = await network.post('/locker', formData).then((res) => console.log(res))
+            .catch((err) => console.log(err));
     }
 
     return (
         <div>
-            <header className='sticky top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{marginBottom: '-50px'}}>
-                <div className='my-auto mx-auto py-0 px-4 relative flex items-center w-full bg-white' style={{height: '50px'}}>
+            <header className='sticky top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{ marginBottom: '-50px' }}>
+                <div className='my-auto mx-auto py-0 px-4 relative flex items-center w-full bg-white' style={{ height: '50px' }}>
                     <div className='flex-1 flex items-center'>
-                        <div onClick={() => {window.history.back();}}>
+                        <div onClick={() => { window.history.back(); }}>
                             <img src='/images/ic_back.png' />
                         </div>
-                        <div className='my-0 mx-auto text-base font-medium' style={{letterSpacing: '-0.3px'}}>책등록</div>
-                        <button className={`flex ${disabled ? 'textGray4' : 'textOrange5'}`} style={{fontSize: '15px'}} onClick={onSubmit}>완료</button>
+                        <div className='my-0 mx-auto text-base font-medium' style={{ letterSpacing: '-0.3px' }}>책등록</div>
+                        <button className={`flex ${disabled ? 'textGray4' : 'textOrange5'}`} style={{ fontSize: '15px' }} onClick={onSubmit}>완료</button>
                     </div>
                 </div>
             </header>
-            <main style={{marginTop: '50px'}}>
+            <main style={{ marginTop: '50px' }}>
                 <section className='pt-5 mx-5 my-6'>
                     <div className='mb-6'>
-                        <div className='rounded-md my-0 mx-auto relative' style={{width: '120px', height: '120px', backgroundColor: '#f2f2f2'}}>
-                        {
-                            data.image ? <img src={data.image} className='rounded-md'/> 
-                                : <button type='primary' onClick={() => inputRef.click()}>
-                                    <input type='file' accept='image/*' onChange={saveImage} ref={refParam => inputRef = refParam} style={{display: 'none'}} />
-                                    {
-                                        loaded == false || loaded == true ? (
-                                            <img src={image.preview_URL} className='rounded-md' style={{width:'120px', height: '120px'}}/>
-                                        ) : <img src='/images/ic_camera.png' className='absolute top-10 left-10'/>
-                                    }
-                                </button>
-                        }
+                        <div className='rounded-md my-0 mx-auto relative' style={{ width: '120px', height: '120px', backgroundColor: '#f2f2f2' }}>
+                            {
+                                data.image ? <img src={data.image} className='rounded-md' />
+                                    : <button type='primary' onClick={() => inputRef.click()}>
+                                        <input type='file' accept='image/*' onChange={saveImage} ref={refParam => inputRef = refParam} style={{ display: 'none' }} />
+                                        {
+                                            loaded == false || loaded == true ? (
+                                                <img src={image.preview_URL} className='rounded-md' style={{ width: '120px', height: '120px' }} />
+                                            ) : <img src='/images/ic_camera.png' className='absolute top-10 left-10' />
+                                        }
+                                    </button>
+                            }
                         </div>
                     </div>
                     <div>
                         <div>
                             {
                                 data.name ?
-                                <input type='text' value={data.name} readOnly className='block w-full h-10 px-5 box-border border border-solid border-color4 rounded-md text-sm textGray4'/>
-                                : <input type='text' placeholder='책 이름을 입력해주세요.' value={booktitle} onChange={titleChange}
-                                    className='block w-full h-10 px-5 box-border border border-solid border-color4 rounded-md text-sm textGray4'/>
+                                    <input type='text' value={data.name} readOnly className='block w-full h-10 px-5 box-border border border-solid border-color4 rounded-md text-sm textGray4' />
+                                    : <input type='text' placeholder='책 이름을 입력해주세요.' value={booktitle} onChange={titleChange}
+                                        className='block w-full h-10 px-5 box-border border border-solid border-color4 rounded-md text-sm textGray4' />
                             }
 
                         </div>
@@ -209,7 +201,7 @@ const AddBook = () => {
                 </section>
                 <section className='mx-5 mt-9 mb-6'>
                     <div className='text-sm textGray2 font-medium'>상태</div>
-                    <div style={{marginTop: '18px'}}>
+                    <div style={{ marginTop: '18px' }}>
                         <Global
                             styles={{
                                 'MuiToggleButtonGroup-root': {
@@ -223,7 +215,7 @@ const AddBook = () => {
                                 },
                             }}
                         />
-                        <ToggleButtonGroup 
+                        <ToggleButtonGroup
                             value={status}
                             onChange={handleStatus}
                             aria-label="status" className='w-full'>
@@ -238,80 +230,80 @@ const AddBook = () => {
                     <div className='mt-6'>
                         <div className='grid grid-cols-4 gap-3'>
                             <label>
-                                <input type='checkbox' value='국어' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <input type='checkbox' value='국어' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick} />
                                 <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '국어' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
                                     <img src='/images/category1.png' className={`mr-1 ${field == '국어' ? '' : 'grayscale'}`}
-                                        style={{width: '17px', height: '17px'}}/>국어
+                                        style={{ width: '17px', height: '17px' }} />국어
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='영어' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <input type='checkbox' value='영어' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick} />
                                 <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '영어' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
                                     <img src='/images/category2.png' className={`mr-1 ${field == '영어' ? '' : 'grayscale'}`}
-                                        style={{width: '17px', height: '17px'}}/>영어
+                                        style={{ width: '17px', height: '17px' }} />영어
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='수학' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <input type='checkbox' value='수학' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick} />
                                 <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '수학' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
                                     <img src='/images/category3.png' className={`mr-1 ${field == '수학' ? '' : 'grayscale'}`}
-                                        style={{width: '17px', height: '17px'}}/>수학
+                                        style={{ width: '17px', height: '17px' }} />수학
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='과학' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <input type='checkbox' value='과학' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick} />
                                 <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '과학' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
                                     <img src='/images/category4.png' className={`mr-1 ${field == '과학' ? '' : 'grayscale'}`}
-                                        style={{width: '17px', height: '17px'}}/>과학
+                                        style={{ width: '17px', height: '17px' }} />과학
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='사회' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <input type='checkbox' value='사회' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick} />
                                 <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '사회' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
                                     <img src='/images/category5.png' className={`mr-1 ${field == '사회' ? '' : 'grayscale'}`}
-                                        style={{width: '17px', height: '17px'}}/>사회
+                                        style={{ width: '17px', height: '17px' }} />사회
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='미술' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <input type='checkbox' value='미술' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick} />
                                 <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '미술' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
                                     <img src='/images/category6.png' className={`mr-1 ${field == '미술' ? '' : 'grayscale'}`}
-                                        style={{width: '17px', height: '17px'}}/>미술
+                                        style={{ width: '17px', height: '17px' }} />미술
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='음악' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <input type='checkbox' value='음악' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick} />
                                 <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '음악' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
                                     <img src='/images/category7.png' className={`mr-1 ${field == '음악' ? '' : 'grayscale'}`}
-                                        style={{width: '17px', height: '17px'}}/>음악
+                                        style={{ width: '17px', height: '17px' }} />음악
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='체육' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <input type='checkbox' value='체육' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick} />
                                 <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '체육' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
                                     <img src='/images/category8.png' className={`mr-1 ${field == '체육' ? '' : 'grayscale'}`}
-                                        style={{width: '17px', height: '17px'}}/>체육
+                                        style={{ width: '17px', height: '17px' }} />체육
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='놀이' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <input type='checkbox' value='놀이' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick} />
                                 <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '놀이' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
                                     <img src='/images/category9.png' className={`mr-1 ${field == '놀이' ? '' : 'grayscale'}`}
-                                        style={{width: '17px', height: '17px'}}/>놀이
+                                        style={{ width: '17px', height: '17px' }} />놀이
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='기타' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <input type='checkbox' value='기타' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick} />
                                 <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '기타' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
                                     <img src='/images/category11.png' className={`mr-1 ${field == '기타' ? '' : 'grayscale'}`}
-                                        style={{width: '17px', height: '17px'}}/>기타
+                                        style={{ width: '17px', height: '17px' }} />기타
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='부모' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <input type='checkbox' value='부모' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick} />
                                 <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '부모' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
                                     <img src='/images/category12.png' className={`mr-1 ${field == '부모' ? '' : 'grayscale'}`}
-                                        style={{width: '17px', height: '17px'}}/>부모
+                                        style={{ width: '17px', height: '17px' }} />부모
                                 </span>
                             </label>
                         </div>
@@ -321,22 +313,22 @@ const AddBook = () => {
                     <div className='text-sm textGray2 font-medium'>영역</div>
                     <div className='mt-5 flex flex-wrap'>
                         <label className='block relative mr-3'>
-                            <input type='checkbox' value='대전집' className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
+                            <input type='checkbox' value='대전집' className='opacity-0 absolute top-0 left-0' onChange={areaClick} />
                             <span className={`block text-sm px-3 py-1.5 border border-solid rounded-sm 
                                 ${area == '대전집' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`}>대전집</span>
                         </label>
                         <label className='block relative mr-3'>
-                            <input type='checkbox' value='소전집' className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
+                            <input type='checkbox' value='소전집' className='opacity-0 absolute top-0 left-0' onChange={areaClick} />
                             <span className={`block text-sm px-3 py-1.5 border border-solid rounded-sm 
                                 ${area == '소전집' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`}>소전집</span>
                         </label>
                         <label className='block relative mr-3'>
-                            <input type='checkbox' value='단행본' className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
+                            <input type='checkbox' value='단행본' className='opacity-0 absolute top-0 left-0' onChange={areaClick} />
                             <span className={`block text-sm px-3 py-1.5 border border-solid rounded-sm 
                                 ${area == '단행본' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`}>단행본</span>
                         </label>
                         <label className='block relative mr-3'>
-                            <input type='checkbox' value='기타' className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
+                            <input type='checkbox' value='기타' className='opacity-0 absolute top-0 left-0' onChange={areaClick} />
                             <span className={`block text-sm px-3 py-1.5 border border-solid rounded-sm 
                                 ${area == '기타' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`}>기타</span>
                         </label>
@@ -347,7 +339,7 @@ const AddBook = () => {
                         <section className='mx-5 my-6'>
                             <div className='text-sm textGray2 font-medium'>구매시기 <span className='textGray4'>(선택)</span></div>
                             <div className='mt-5'>
-                                <GlobalStyles 
+                                <GlobalStyles
                                     styles={{
                                         'input': {
                                             width: '114px',
@@ -375,7 +367,7 @@ const AddBook = () => {
                         <section className='mx-5 my-6'>
                             <div className='text-sm textGray2 font-medium'>만족도 <span className='textGray4'>(선택)</span></div>
                             <div className='flex mt-3'>
-                                <StarRatings 
+                                <StarRatings
                                     rating={rating}
                                     changeRating={handleRating}
                                     numberOfStars={5}
