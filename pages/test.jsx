@@ -11,6 +11,9 @@ import { addDays } from "date-fns"
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css"
 
+import TimePicker from 'rc-time-picker';
+import 'rc-time-picker/assets/index.css';
+
 const Test = () => {
 
     const [booktitle, setBooktitle] = useState();
@@ -191,4 +194,24 @@ const Test6 = () => {
     )
 }
 
-export default Test6;
+const Test7 = () => {
+
+    const [dispatchTime, setDispatchTime] = useState(moment());
+
+    const handleValueChange = (val) => {
+        setDispatchTime(val);
+    };
+
+    return (
+        <div>
+            <TimePicker
+                value={dispatchTime}
+                onChange={handleValueChange}
+                showSecond={false}
+                allowEmpty
+            />
+        </div>
+    )
+}
+
+export default Test7;
