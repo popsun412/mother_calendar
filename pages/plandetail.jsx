@@ -88,10 +88,7 @@ const Plan2 = () => {
                 <div className='relative mx-auto my-0 bg-white'>
                     <Link
                         href={{
-                            pathname: '/plan',
-                            query: {
-                                commonPlanUid: commonPlanUid
-                            }
+                            pathname: '/plan/'+commonPlanUid,
                     }}>
                         <nav className='flex items-center box-border relative' style={{ height: '90px' }}>
                             <span className='text-sm text-white text-center p-4 m-5 w-full rounded-md bg5'
