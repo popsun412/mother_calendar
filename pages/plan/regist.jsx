@@ -5,6 +5,9 @@ import { useRouter } from "next/router";
 import subjects from ".././../constants/subjects";
 import Switch from 'react-ios-switch';
 import network from "../../util/network";
+import GlobalStyles from '@mui/material/GlobalStyles';
+import DatePicker from 'react-datepicker';
+import { ko } from "date-fns/esm/locale";
 
 // firebase
 import { getAuth } from "firebase/auth";
@@ -34,8 +37,8 @@ export default function Regist() {
             subject: null,
             category: null,
             repeatDay: [],
-            startDate: null,
-            endDate: null,
+            startDate: Date(),
+            endDate: Date(),
             notification: [],
         }
     );
@@ -151,7 +154,7 @@ export default function Regist() {
 
                 {/* 한나님과 같이 작업 */}
                 {/* 기간 */}
-                <div className='mb-8'>
+                {/* <div className='mb-8'>
                     <span className="textGray2 text-sm font-medium">기간</span>
                     <div className='grid grid-cols-2 gap-6 mt-3'>
                         <div className='border border-gary3 rounded-md text-sm textGray2 text-center py-2 flex items-center justify-center'>
@@ -167,7 +170,39 @@ export default function Regist() {
                             </svg>
                         </div>
                     </div>
-                </div>
+                </div> */}
+                <section className='mt-8 mx-6'>
+                    <div className='text-sm textGray2'>기간 <span className='textGray4'>(선택)</span></div>
+                    <div className='mt-3 flex'>
+                        <GlobalStyles
+                            styles={{
+                                'input': {
+                                    padding: '7px 8px',
+                                    textAlign: 'center',
+                                    fontSize: '14px',
+                                    border: 'solid 1px #bdbdbd',
+                                    borderRadius: '6px',
+                                    width: '145px',
+                                    height: '32px'
+                                }
+                            }}
+                        />
+                        <DatePicker
+                            locale={ko}
+                            selected={registInfo.startDate}
+                            dateFormat='yyyy년 MM월 dd일'
+                            className='mr-6'
+                            onChange={(date) => setRegistInfo({ ...registInfo, startDate: date })}
+                        />
+                        <DatePicker
+                            locale={ko}
+                            selected={registInfo.endDate}
+                            dateFormat='yyyy년 MM월 dd일'
+                            className='mr-6'
+                            onChange={(date) => setRegistInfo({ ...registInfo, endDate: date })}
+                        />
+                    </div>
+                </section>
 
                 {/* 한나님과 같이 작업 */}
                 {/* 시간 */}
