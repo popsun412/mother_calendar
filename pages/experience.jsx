@@ -19,7 +19,17 @@ const Experience = () => {
 
     useEffect(() => {
         const getData = async() => {
-            const res = await network.post('/home/recommPlace');
+            const res = await network.post('/home/recommPlace', {
+                "lat": 0,
+                "lng": 0,
+                "range": 0,
+                "order": "reg",
+                "region": [],
+                "field": [],
+                "age": [],
+                "offset": 0,
+                "limit": 10
+            });
             res.data ? setData(res.data) : null;
         }
         getData();
@@ -330,7 +340,7 @@ const Experience = () => {
                             return (
                                 <div className='flex mb-5' key={idx}>
                                     <div className='mr-4 block relative'>
-                                        <img src={item.image} className='rounded-md'/>
+                                        <img src={item.image} className='rounded-md' style={{width: '94px', height: '94px'}}/>
                                         <img src={`/images/ic_${item.bookmark? 'bookmarked.png' : 'bookmark.png'}`}  className='block absolute bottom-0 right-0 mr-2 mb-1.5'/>
                                     </div>
                                     <div>
