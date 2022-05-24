@@ -11,8 +11,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { getAuth } from "firebase/auth";
 import { useRecoilState } from "recoil";
 import { userInfoState } from "../states/user_info";
-
-import { ko } from 'date-fns/locale';
+import { ko } from "date-fns/locale";
 
 const AddBook = () => {
 
@@ -163,7 +162,7 @@ const AddBook = () => {
 
         const res = await network.post('/locker', formData)
             .then((res) => {
-                if(res.status == 200) {
+                if (res.status == 200) {
                     alert('보관함 등록을 완료했습니다.');
                     window.history.back();
                 }

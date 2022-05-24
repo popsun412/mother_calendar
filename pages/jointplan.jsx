@@ -7,7 +7,7 @@ import TimePicker from 'rc-time-picker';
 import moment from 'moment';
 import "react-datepicker/dist/react-datepicker.css"
 import 'rc-time-picker/assets/index.css';
-import { ko } from "date-fns/esm/locale";
+import { ko } from "date-fns/locale";
 
 import network from '../util/network';
 

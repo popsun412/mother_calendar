@@ -23,14 +23,11 @@ const Login = () => {
 
         // 파이어베이스 로그인 시도
         signInWithEmailAndPassword(auth, email, password).then(async (userCredential) => {
-            // if (userCredential.user.emailVerified) {
-            //     setUserInfo(userCredential.user.email);
-
-            //     router.push('/calendar');
-            // } else {
-            //     alert("이메일은 인증해주세요");
-            // }
-            router.push('/calendar');
+            if (userCredential.user.emailVerified) {
+                router.push('/home');
+            } else {
+                alert("이메일을 확인해주세요");
+            }
         }).catch(async (error) => {
             setLoginError(true);
             console.log(error);
