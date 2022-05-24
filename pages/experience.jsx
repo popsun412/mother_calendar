@@ -20,15 +20,15 @@ const Experience = () => {
     useEffect(() => {
         const getData = async() => {
             const res = await network.post('/home/recommPlace', {
-                "lat": 0,
-                "lng": 0,
-                "range": 0,
-                "order": "reg",
-                "region": [],
-                "field": [],
-                "age": [],
-                "offset": 0,
-                "limit": 10
+                lat: 0,
+                lng: 0,
+                range: 0,
+                order: "reg", // 정렬
+                region: [],   // 지역
+                field: [],    // 영역
+                age: [],
+                offset: 0,
+                limit: 10
             });
             res.data ? setData(res.data) : null;
         }
@@ -54,16 +54,25 @@ const Experience = () => {
         },
     ];
 
-    const applyFilter = () => {
+    const applyFilter = async() => {
+
         const params = {
-            order: aligns,
-            region: location,
-            field: area,
-            age: values
+            lat: 0,
+            lng: 0,
+            range: 0,
+            order: "reg", // 정렬
+            region: getRegion(),   // 지역
+            field: getField(),    // 영역
+            age: getAge(),
+            offset: 0,
+            limit: 10
         }
 
-        console.log(params);
-        onClick('right', false, true);
+        setState({ ...state, ['right']: false});
+        
+        const res = await network.post('/home/recommPlace', params)
+            .then((res) => res.status == 200 ? setData(res.data) : null)
+            .catch((err) => console.log(err))
     }
 
     const onClick = (anchor, open) => (event) => {
@@ -91,12 +100,6 @@ const Experience = () => {
         3: false,
         4: false,
         5: false,
-        6: false,
-        7: false,
-        8: false,
-        9: false,
-        10: false,
-        11: false
     })
 
     const locationClick = (e) => {
@@ -155,6 +158,44 @@ const Experience = () => {
             label: '기타'
         }
     ]
+
+    const getRegion = () => {
+        const region = [];
+
+        location[0] ? region.push('서울') : null;
+        location[1] ? region.push('경기') : null;
+        location[2] ? region.push('기타') : null;
+
+        return region;
+    }
+
+    const getField = () => {
+        const field = [];
+
+        area[0] ? field.push('놀이터') : null;
+        area[1] ? field.push('키즈카페') : null;
+        area[2] ? field.push('지식전시') : null;
+        area[3] ? field.push('자연동물') : null;
+        area[4] ? field.push('식당숙박') : null;
+        area[5] ? field.push('기타') : null;
+
+        return field;
+    }
+
+    const getAge = () => {
+        const age = [];
+
+        if (values.length > 0) {
+            for(let i=0; i<values.length; i++) {
+                values[i] == 0 ? age.push(3) : null;
+                values[i] == 10 ? age.push(6) : null;
+                values[i] == 20 ? age.push(7) : null;
+                values[i] == 30 ? age.push(8) : null;
+            }
+        }
+
+        return age;
+    }
 
     const list = (anchor) => (
 
