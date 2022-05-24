@@ -31,7 +31,7 @@ const AddBook = () => {
         preview_URL: ''
     });
     const [loaded, setLoaded] = useState('loading');
-    const [status, setStatus] = useState(() => ['보유중']);
+    const [status, setStatus] = useState('보유중');
     const [field, setField] = useState();
     const [area, setArea] = useState();
     const [rating, setRating] = useState(0);
@@ -142,16 +142,20 @@ const AddBook = () => {
         e.preventDefault();
 
         let statusVal = 0;
+        let name = '';
+        let image = '';
 
         status == '구매예정' ? statusVal = 0 : status == '보유중' ? statusVal = 1 : statusVal = 2;
+        data.name ? name = data.name : name = booktitle;
+        data.image ? image = data.image : image.imge_file;
 
         const formData = new FormData();
-        formData.append('name', booktitle);
+        formData.append('name', name);
         formData.append('status', statusVal);
         formData.append('subject', field);
         formData.append('field', area);
         formData.append('lockerType', "책장");
-        formData.append('image', image.imge_file);
+        formData.append('image', image);
         status == '보유중' ? formData.append('buyDt', startDate) : null;
         status == '보유중' ? formData.append('score', rating) : null;
 
