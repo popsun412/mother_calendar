@@ -4,13 +4,57 @@ import BookshelfInstock from '../components/bookshelf/bookshelf_instock';
 import BookshelfPurchase from '../components/bookshelf/bookshelf_purchase';
 import BookshelfSell from '../components/bookshelf/bookshlef_sell';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
-import { Range, getTrackBackground } from 'react-range';
 import Link from 'next/link';
 import { Global } from '@emotion/react';
+import { getAuth } from "firebase/auth";
+import { useRecoilState } from "recoil";
+import { userInfoState } from "../states/user_info";
+import network from '../util/network';
+import { useRouter } from 'next/router';
 
 const Bookshelf = () => {
 
     const [activeTab, setActiveTab] = useState(1);
+    const [data, setData] = useState([]);
+
+    const auth = getAuth();
+    const router = useRouter();
+
+    // 글로벌 상태관리
+    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+    const [load, setLoad] = useState(false);
+
+    // 아이템 불러오기
+    const getItem = async () => {
+        setLoad(true);
+    }
+
+    // 유저 정보 갖고오기
+    const getUser = async () => {
+        const _result = await network.post('/userInfo');
+
+        // data 통신
+        if (_result.status == 200) {
+            setUserInfo(_result.data);
+        } else {
+            router.push('/');
+        }
+    }
+
+    useEffect(() => {
+        if (userInfo == null) {
+            auth.onAuthStateChanged(async (_user) => {
+                if (_user) {
+                    getUser();
+                } else {
+                    setUserInfo(null);
+                    router.push('/');
+                }
+            });
+        }
+
+        if (userInfo != null && !load) getItem();
+    })
 
     const tabClick = (index) => {
         setActiveTab(index);

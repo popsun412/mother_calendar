@@ -1,49 +1,12 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import network from '../../util/network';
-import { getAuth } from "firebase/auth";
-import { useRecoilState } from "recoil";
-import { userInfoState } from "../../states/user_info";
 
 const BookshelfPurchase = () => {
 
-    const auth = getAuth();
-    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
-    const [load, setLoad] = useState(false);
     const [data, setData] = useState([]);
 
-    // 아이템 불러오기
-    const getItem = async () => {
-        setLoad(true);
-    }
-
-    // 유저 정보 갖고오기
-    const getUser = async () => {
-        const _result = await network.post('/userInfo');
-
-        // data 통신
-        if (_result.status == 200) {
-            setUserInfo(_result.data);
-        } else {
-            router.push('/');
-        }
-    }
-
-    useEffect(() => {
-        if (userInfo == null) {
-            auth.onAuthStateChanged(async (_user) => {
-                if (_user) {
-                    getUser();
-                } else {
-                    setUserInfo(null);
-                    router.push('/');
-                }
-            });
-        }
-
-        if (userInfo != null && !load) getItem();
-    })
-
+    // 500에러
     useEffect(() => {
         const getData = async () => {
             const res = await network.post('/locker/items', {
