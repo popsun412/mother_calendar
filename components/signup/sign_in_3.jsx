@@ -2,8 +2,11 @@ import { useState } from "react";
 import SignupHeader from "./sign_up_header";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
 import network from "../../util/network";
+import { useRouter } from "next/router";
 
 export default function SignIn3(props) {
+    const router = useRouter();
+
     const auth = getAuth();
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordCheck, setShowPasswordCheck] = useState(false);
@@ -18,6 +21,8 @@ export default function SignIn3(props) {
 
         network.post('/user/signup', props.signupInfo).then((_value) => {
             signInWithEmailAndPassword(auth, props.signupInfo.email, props.signupInfo.password);
+            alert("이메일을 확인해주세요");
+            router.push('/');
         }).catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
@@ -27,9 +32,7 @@ export default function SignIn3(props) {
     }
 
     const buttonActive = () => {
-
-
-        return false;
+        return true;
     }
 
     return (

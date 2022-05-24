@@ -3411,10 +3411,10 @@ react-datepicker@^4.7.0:
     react-onclickoutside "^6.12.0"
     react-popper "^2.2.5"
 
-react-daum-postcode@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.npmjs.org/react-daum-postcode/-/react-daum-postcode-3.0.1.tgz"
-  integrity sha512-TBA6p+5yFy4YrH3jneNPyqNR+9igCb/XhQfnDBOABX38Hgf4n5EMmXf3NZptPSqg3UldHQ+8HPHCJ5L6zjskkg==
+react-daum-postcode@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/react-daum-postcode/-/react-daum-postcode-3.0.3.tgz#e2a8cc6dca5a9f8a925b6c617ab329b8051491da"
+  integrity sha512-uxr7d2GENx/m4pnowXH6mN54+pGn0TjSfJfPvnXdRTtGQH9wyu6D7xkDcYBdQfW+KfXQC2dtUQrT3BAw76kokw==
   dependencies:
     prop-types "^15.7.2"
     react "^17.0.2"
