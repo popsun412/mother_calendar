@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Box, Drawer } from '@material-ui/core';
 import BookshelfInstock from '../components/bookshelf/bookshelf_instock';
@@ -7,27 +8,16 @@ import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import Link from 'next/link';
 import { Global } from '@emotion/react';
 import { getAuth } from "firebase/auth";
-import { useRecoilState } from "recoil";
-import { userInfoState } from "../states/user_info";
 import network from '../util/network';
 import { useRouter } from 'next/router';
+import CircleLoading from "../components/common/circle_loading";
 
 const Bookshelf = () => {
-
+    const [load, setLoad] = useState(false);
     const [activeTab, setActiveTab] = useState(1);
-    const [data, setData] = useState([]);
 
     const auth = getAuth();
     const router = useRouter();
-
-    // 글로벌 상태관리
-    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
-    const [load, setLoad] = useState(false);
-
-    // 아이템 불러오기
-    const getItem = async () => {
-        setLoad(true);
-    }
 
     // 유저 정보 갖고오기
     const getUser = async () => {
@@ -35,26 +25,31 @@ const Bookshelf = () => {
 
         // data 통신
         if (_result.status == 200) {
-            setUserInfo(_result.data);
         } else {
             router.push('/');
         }
     }
 
     useEffect(() => {
-        if (userInfo == null) {
-            auth.onAuthStateChanged(async (_user) => {
-                if (_user) {
-                    getUser();
-                } else {
-                    setUserInfo(null);
-                    router.push('/');
-                }
-            });
-        }
+        auth.onAuthStateChanged(async (_user) => {
+            if (_user) {
+                await getUser();
+                setLoad(true);
+            } else {
+                router.push('/');
+            }
+        });
 
-        if (userInfo != null && !load) getItem();
-    })
+        fields.forEach((item, idx) => {
+            field[idx] = false;
+            returnField[idx] = false;
+        })
+
+        areas.forEach((item, idx) => {
+            area[idx] = false;
+            returnArea[idx] = false;
+        })
+    }, [])
 
     const tabClick = (index) => {
         setActiveTab(index);
@@ -80,24 +75,12 @@ const Bookshelf = () => {
     const returnArea = {};
     const returnField = {};
 
-    useEffect(() => {
-        fields.forEach((item, idx) => {
-            field[idx] = false;
-            returnField[idx] = false;
-        })
-
-        areas.forEach((item, idx) => {
-            area[idx] = false;
-            returnArea[idx] = false;
-        })
-    }, [])
-
     const areaClick = (e) => {
-        setArea({ ...area, [e.target.value]: e.target.checked});
+        setArea({ ...area, [e.target.value]: e.target.checked });
     }
 
     const fieldClick = (e) => {
-        setField({...field, [e.target.value]: e.target.checked});
+        setField({ ...field, [e.target.value]: e.target.checked });
     }
 
     const clickReturn = () => {
@@ -187,13 +170,13 @@ const Bookshelf = () => {
     const list = (anchor) => (
 
         <Box
-        sx={{ width: 250 }}
-        role="presentation"
-        onKeyDown={onClick(anchor, false, false)}
+            sx={{ width: 250 }}
+            role="presentation"
+            onKeyDown={onClick(anchor, false, false)}
         >
             <div className='my-2.5'>
                 <div className='mx-3.5'>
-                    <img src='/images/ic_close.png' className='ml-auto' onClick={onClick(anchor, false, false)}/>
+                    <img src='/images/ic_close.png' className='ml-auto' onClick={onClick(anchor, false, false)} />
                 </div>
                 <div className='mb-7 mx-3.5'>
                     <h3 className='mb-4 text-base font-semibold'>정렬</h3>
@@ -224,12 +207,12 @@ const Bookshelf = () => {
                         {
                             fields.map((item, idx) => {
                                 return (
-                                <label className='block relative' key={idx}>
-                                    <input type='checkbox' value={item.id} className='opacity-0 absolute top-0 left-0' onChange={fieldClick}/>
-                                    <span className={`block border border-solid bg-white text-xs 
-                                        ${field[item.id]? 'textBlue4 border-blue4' : 'textGray4 border-gray3'}`} 
-                                        style={{borderRadius: '2px', padding: '5px 8px 6px'}}>{item.label}</span>
-                                </label>
+                                    <label className='block relative' key={idx}>
+                                        <input type='checkbox' value={item.id} className='opacity-0 absolute top-0 left-0' onChange={fieldClick} />
+                                        <span className={`block border border-solid bg-white text-xs 
+                                        ${field[item.id] ? 'textBlue4 border-blue4' : 'textGray4 border-gray3'}`}
+                                            style={{ borderRadius: '2px', padding: '5px 8px 6px' }}>{item.label}</span>
+                                    </label>
                                 )
                             })
                         }
@@ -237,77 +220,79 @@ const Bookshelf = () => {
                 </div>
                 <div className='mb-7 mx-3.5'>
                     <h3 className='mb-4 text-base font-semibold'>영역</h3>
-                    <div className='flex flex-wrap gap-y-2' style={{columnGap: '7px'}}>
+                    <div className='flex flex-wrap gap-y-2' style={{ columnGap: '7px' }}>
                         {
                             areas.map((item, idx) => {
                                 return (
-                                <label className='block relative' key={idx}>
-                                    <input type='checkbox' value={item.id} className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
-                                    <span className={`block border border-solid bg-white text-xs 
-                                        ${area[item.id]? 'textBlue4 border-blue4' : 'textGray4 border-gray3'}`} 
-                                        style={{borderRadius: '2px', padding: '5px 8px 6px'}}>{item.label}</span>
-                                </label>
+                                    <label className='block relative' key={idx}>
+                                        <input type='checkbox' value={item.id} className='opacity-0 absolute top-0 left-0' onChange={areaClick} />
+                                        <span className={`block border border-solid bg-white text-xs 
+                                        ${area[item.id] ? 'textBlue4 border-blue4' : 'textGray4 border-gray3'}`}
+                                            style={{ borderRadius: '2px', padding: '5px 8px 6px' }}>{item.label}</span>
+                                    </label>
                                 )
                             })
-                        }                       
+                        }
                     </div>
                 </div>
-                <div className='block absolute bottom-0 mb-6 mx-3.5' style={{width: '90%'}}>
-                    <div className='grid grid-cols-2 gap-x-2 text-center text-sm' style={{height: '44px'}} onClick={clickReturn}>
+                <div className='block absolute bottom-0 mb-6 mx-3.5' style={{ width: '90%' }}>
+                    <div className='grid grid-cols-2 gap-x-2 text-center text-sm' style={{ height: '44px' }} onClick={clickReturn}>
                         <div className='flex justify-center rounded-md bg-gray2 items-center'>
-                            <img src='/images/ic_refresh.png' className='w-4 h-4 mr-1'/>다시설정
+                            <img src='/images/ic_refresh.png' className='w-4 h-4 mr-1' />다시설정
                         </div>
-                        <div className='rounded-md bg-blue4 text-white' style={{lineHeight: '44px'}} onClick={onClick(anchor, false, true)}>적용하기</div>
+                        <div className='rounded-md bg-blue4 text-white' style={{ lineHeight: '44px' }} onClick={onClick(anchor, false, true)}>적용하기</div>
                     </div>
                 </div>
             </div>
         </Box>
     );
 
-    return (
-        <div>
-            <header className='sticky top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{marginBottom: '-50px'}}>
-                <div className='my-auto mx-auto py-0 px-4 relative flex items-center w-full bg-white' style={{height: '50px'}}>
-                    <div className='flex-1 flex items-center'>
-                        <div onClick={() => {window.history.back()}}>
-                            <img src='/images/ic_back.png' />
-                        </div>
-                        <div className='my-0 mx-auto text-base font-medium' style={{letterSpacing: '-0.3px'}}>책장</div>
-                        <div className='flex'>
-                            <img src='/images/filter.png' onClick={onClick('right', true)}/>
+    return (<>{
+        (load)
+            ? <div>
+                <header className='sticky top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{ marginBottom: '-50px' }}>
+                    <div className='my-auto mx-auto py-0 px-4 relative flex items-center w-full bg-white' style={{ height: '50px' }}>
+                        <div className='flex-1 flex items-center'>
+                            <div onClick={() => { window.history.back() }}>
+                                <img src='/images/ic_back.png' />
+                            </div>
+                            <div className='my-0 mx-auto text-base font-medium' style={{ letterSpacing: '-0.3px' }}>책장</div>
+                            <div className='flex'>
+                                <img src='/images/filter.png' onClick={onClick('right', true)} />
+                            </div>
                         </div>
                     </div>
-                </div>
-            </header>
-            <Drawer
-                anchor='right'
-                open={state['right']}
-                onClose={onClick('right', false)}
-            >
-                {list('right')}
-            </Drawer>
-            <main className='mt-12'>
-                <div className='grid grid-cols-3 text-center text-sm textGray4 border-b border-solid border-gray3' style={{height: '40px'}}>
-                    <div className={`font-semibold ${activeTab === 0 ? 'textBlue4 border-b-3 border-solid border-blue4' : ''}`} 
-                        style={{lineHeight: '40px'}} onClick={() => {tabClick(0)}}>구매예정</div>
-                    <div className={`font-semibold ${activeTab === 1 ? 'textBlue4 border-b-3 border-solid border-blue4' : ''}`} 
-                        style={{lineHeight: '40px'}} onClick={() => {tabClick(1)}}>보유중</div>
-                    <div className={`font-semibold ${activeTab === 2 ? 'textBlue4 border-b-3 border-solid border-blue4' : ''}`} 
-                        style={{lineHeight: '40px'}} onClick={() => {tabClick(2)}}>판매완료</div>
-                </div>
-                <section>
-                {
-                    obj[activeTab]
-                }
-                </section>
-            </main>
-            <Link href='/addbook'>
-                <div className='fixed bottom-0 right-0 z-100'>
-                    <img src='/images/ic_float.png'/>
-                </div>
-            </Link>
-        </div>
-    )
+                </header>
+                <Drawer
+                    anchor='right'
+                    open={state['right']}
+                    onClose={onClick('right', false)}
+                >
+                    {list('right')}
+                </Drawer>
+                <main className='mt-12'>
+                    <div className='grid grid-cols-3 text-center text-sm textGray4 border-b border-solid border-gray3' style={{ height: '40px' }}>
+                        <div className={`font-semibold ${activeTab === 0 ? 'textBlue4 border-b-3 border-solid border-blue4' : ''}`}
+                            style={{ lineHeight: '40px' }} onClick={() => { tabClick(0) }}>구매예정</div>
+                        <div className={`font-semibold ${activeTab === 1 ? 'textBlue4 border-b-3 border-solid border-blue4' : ''}`}
+                            style={{ lineHeight: '40px' }} onClick={() => { tabClick(1) }}>보유중</div>
+                        <div className={`font-semibold ${activeTab === 2 ? 'textBlue4 border-b-3 border-solid border-blue4' : ''}`}
+                            style={{ lineHeight: '40px' }} onClick={() => { tabClick(2) }}>판매완료</div>
+                    </div>
+                    <section>
+                        {
+                            obj[activeTab]
+                        }
+                    </section>
+                </main>
+                <Link href='/addbook'>
+                    <div className='fixed bottom-0 right-0 z-100'>
+                        <img src='/images/ic_float.png' />
+                    </div>
+                </Link>
+            </div>
+            : <CircleLoading />
+    }</>)
 }
 
 export default Bookshelf;
