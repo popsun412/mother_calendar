@@ -44,7 +44,7 @@ const HomeItem = (props) => {
                                         pathname: '/item',
                                         query: { itemUid: item.commonItemUid }
                                     }}>
-                                        <div className='text-xs leading-tight mt-1.5' style={{letterSpacing: '-0.26px'}}>{item.name}</div>
+                                        <div className='text-xs leading-tight my-1.5' style={{letterSpacing: '-0.26px'}}>{item.name}</div>
                                     </Link>
                                     <div className='flex mt-1'>
                                         <span className='py-0.7 px-1.5 mr-1 rounded text-center text-xs textGray3' style={{backgroundColor: '#f0f5f8'}}>{item.field}</span>
