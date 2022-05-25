@@ -54,26 +54,6 @@ const EduTool = () => {
         })
     }, []);
 
-    useEffect(() => {
-
-        const getData = async() => {
-            const res = await network.post('/locker/items', {
-                offset: 0,
-                limit: 20,
-                status: 1,
-                subject: "",
-                field: "",
-                lockerType: "교구장",
-                region: ""
-            });
-
-            res.data ? setData(res.data) : null;
-        }
-
-        getData();
-
-    }, []);
-
     const tabClick = (index) => {
         setActiveTab(index);
     }
