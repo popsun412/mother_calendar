@@ -10,9 +10,7 @@ const ResultBody = (props) => {
         
         const getData = async() => {
             const res = await network.post('/search', {
-                params: {
-                    keyword : props.keyword
-                }
+                keyword: props.keyword
             })
             console.log(res.data);
             res.data ? setData(res.data) : '';
