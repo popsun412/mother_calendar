@@ -3,8 +3,12 @@ import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import React, { useEffect, useRef, useState } from 'react';
 import StarRatings from 'react-star-ratings';
 import moment from 'moment';
-import MonthPicker from "react-month-picker";
-import "react-month-picker/css/month-picker.css";
+
+import GlobalStyles from '@mui/material/GlobalStyles';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
+
+import { ko } from 'date-fns/locale';
 
 const AddTool = () => {
 
@@ -19,41 +23,7 @@ const AddTool = () => {
     const [field, setField] = useState();
     const [area, setArea] = useState();
     const [rating, setRating] = useState(0);
-    const [time, setTime] = useState(new Date());
-    const [isOpen, setIsOpen] = useState(false);
-    const dateConfig = {
-        'year': {
-            format: 'YYYY년',
-            caption: 'Year',
-            step: 1
-        },
-        'month': {
-            format: 'MM월',
-            caption: 'Mon',
-            step: 1,
-        },
-    }
-
-    const [value, setValue] = useState({ year: 2022, month: 5 });
-    const monthPickerRef = useRef(null);
-    const lang = {
-        months: [
-            "1월",
-            "2월",
-            "3월",
-            "4월",
-            "5월",
-            "6월",
-            "7월",
-            "8월",
-            "9월",
-            "10월",
-            "11월",
-            "12월"
-        ],
-        from: "From",
-        to: "To"
-    };
+    const [startDate, setStartDate] = useState(new Date());
 
     let inputRef;
 
@@ -109,46 +79,35 @@ const AddTool = () => {
     const onSubmit = async(e) => {
         e.preventDefault();
 
-        const res = await axios('http://localhost:4000/add/tool', {
-            method: 'POST',
-            params: {
-                
-            }
-        }).then( e => {
-            console.log(e);
-        }).catch(err => console.log(err));
+        let statusVal = 0;
+        let name = '';
+        let image = '';
+
+        status == '구매예정' ? statusVal = 0 : status == '보유중' ? statusVal = 1 : statusVal = 2;
+        data.name ? name = data.name : name = booktitle;
+        data.image ? image = data.image : image.imge_file;
+
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('status', statusVal);
+        formData.append('subject', field);
+        formData.append('field', area);
+        formData.append('lockerType', "교구장");
+        formData.append('image', image);
+        status == '보유중' ? formData.append('buyDt', startDate) : null;
+        status == '보유중' ? formData.append('score', rating) : null;
+
+        console.log(formData);
+
+        const res = await network.post('/locker', formData)
+            .then((res) => {
+                if(res.status == 200) {
+                    alert('보관함 등록을 완료했습니다.');
+                    window.history.back();
+                }
+            })
+            .catch((err) => console.log(err));
     }
-
-    const handleClick = () => {
-        setIsOpen(true);
-    }
-
-    const handleCancel = () => {
-        setIsOpen(false);
-    }
-
-    const handleSelect = (time) => {
-        setTime(time);
-        console.log(moment(time).format('YYYYMMDD'))
-        setIsOpen(false);
-    }
-
-    const showPicker = () => {
-        if (monthPickerRef && monthPickerRef.current) {
-            monthPickerRef.current.show();
-        }
-    };
-
-    const hidePicker = () => {
-        if (monthPickerRef && monthPickerRef.current) {
-            monthPickerRef.current.dismiss();
-        }
-    };
-
-    const handlePickerChange = (...args) => {
-        setValue({ year: args[0], month: args[1] });
-        hidePicker();
-    };
 
     return (
         <div>
@@ -322,15 +281,26 @@ const AddTool = () => {
                         <section className='mx-5 my-6'>
                             <div className='text-sm textGray2 font-medium'>구매시기 <span className='textGray4'>(선택)</span></div>
                             <div className='mt-5'>
-                                <MonthPicker
-                                    lang={lang.months}
-                                    ref={monthPickerRef}
-                                    value={value}
-                                    onChange={handlePickerChange}
-                                    >
-                                    <span onClick={showPicker} className='mr-6 py-2.5 px-4 text-sm border border-solid border-gray3 rounded-md bg-white'>
-                                        {value.year}년 {value.month}월</span>
-                                </MonthPicker>
+                                <GlobalStyles
+                                    styles={{
+                                        'input': {
+                                            width: '114px',
+                                            fontSize: '14px',
+                                            borderRadius: '6px',
+                                            border: 'solid 1px #bdbdbd'
+                                        }
+                                    }}
+                                />
+                                <DatePicker
+                                    locale={ko}
+                                    selected={startDate}
+                                    onChange={(date) => setStartDate(date)}
+                                    dateFormat='yyyy년 MM월'
+                                    showMonthYearPicker
+                                    showFullMonthYearPicker
+                                    showTwoColumnMonthYearPicker
+                                    className='mr-6 py-1 px-4 text-sm border border-solid border-gray3 rounded-md bg-white'
+                                />
                             </div>
                         </section> : ''
                 }
