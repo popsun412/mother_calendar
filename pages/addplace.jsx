@@ -4,11 +4,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import DaumPostcode from 'react-daum-postcode';
 import StarRatings from 'react-star-ratings';
-import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css"
 import network from '../util/network';
+
 import GlobalStyles from '@mui/material/GlobalStyles';
-import { ko } from "date-fns/esm/locale";
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
+
+import { ko } from 'date-fns/locale';
 
 const AddPlace = () => {
 
@@ -17,39 +19,19 @@ const AddPlace = () => {
 
     const [data, setData] = useState([]);
     const [disabled, setDisabled] = useState(true);
-    const [booktitle, setBooktitle] = useState('');
+    const [placetitle, setPlaceTitle] = useState('');
     const [image, setImage] = useState({
         image_file: '',
         preview_URL: ''
     });
     const [loaded, setLoaded] = useState('loading');
-    const [status, setStatus] = useState('expected');
+    const [status, setStatus] = useState('방문예정');
     const [field, setField] = useState();
     const [area, setArea] = useState();
     const [rating, setRating] = useState(0);
     const [address, setAddress] = useState('');
     const [open, setOpen] = useState(false);
-    // const [value, setValue] = useState({ year: 2022, month: 5 });
     const [startDate, setStartDate] = useState(new Date());
-    const monthPickerRef = useRef(null);
-    const lang = {
-        months: [
-            "1월",
-            "2월",
-            "3월",
-            "4월",
-            "5월",
-            "6월",
-            "7월",
-            "8월",
-            "9월",
-            "10월",
-            "11월",
-            "12월"
-        ],
-        from: "From",
-        to: "To"
-    };
 
     let inputRef;
 
@@ -60,7 +42,7 @@ const AddPlace = () => {
                 setData(res.data);
                 setLoaded(true);
                 setImage({image_file: res.data.image, preview_URL: res.data.image});
-                setBooktitle(res.data.name);
+                setPlaceTitle(res.data.name);
             }
         }
         commonItemUid != undefined ? getData() : null;
@@ -96,7 +78,7 @@ const AddPlace = () => {
     }
 
     const titleChange = (e) => {
-        data.name ? setBooktitle(data.name) : setBooktitle(e.target.value);
+        data.name ? setPlaceTitle(data.name) : setPlaceTitle(e.target.value);
     }
 
     const handleStatus = (e) => {
@@ -117,39 +99,47 @@ const AddPlace = () => {
     }
 
     useEffect(() => {
-        if (status === 'expected') {
-            rating > 0 && booktitle != '' && image.image_file != '' && field != '' && area != '' ? setDisabled(false) : setDisabled(true)
+        if (status === '방문예정') {
+            rating > 0 && placetitle != '' && image.image_file != '' && field != '' && area != '' ? setDisabled(false) : setDisabled(true)
         } else {
-            booktitle != '' && image.image_file != '' && field != '' && area != '' ? setDisabled(false) : setDisabled(true)
+            placetitle != '' && image.image_file != '' && field != '' && area != '' ? setDisabled(false) : setDisabled(true)
         }
     }, [status, rating, image, field, area]);
 
     const onSubmit = async(e) => {
         e.preventDefault();
 
+        let statusVal = 0;
+        let name = '';
+        let image = '';
+
+        status == '방문예정' ? statusVal = 0 : statusVal = 1;
+        data.name ? name = data.name : name = placetitle;
+        data.image ? image = data.image : image.imge_file;
+
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('status', statusVal);
+        formData.append('subject', field);
+        formData.append('lockerType', "학원지도");
+        formData.append('image', image);
+        status == '방문완료' ? formData.append('buyDt', startDate) : null;
+        status == '방문완료' ? formData.append('score', rating) : null;
+
+        const res = await network.post('/locker', formData)
+            .then((res) => {
+                if(res.status == 200) {
+                    alert('보관함 등록을 완료했습니다.');
+                    window.history.back();
+                }
+            })
+            .catch((err) => console.log(err));
     }
 
     const onCompletePost = (data) => {
         setAddress(data.address);
         setOpen(false);
     }
-
-    const showPicker = () => {
-        if (monthPickerRef && monthPickerRef.current) {
-            monthPickerRef.current.show();
-        }
-    };
-
-    const hidePicker = () => {
-        if (monthPickerRef && monthPickerRef.current) {
-            monthPickerRef.current.dismiss();
-        }
-    };
-
-    const handlePickerChange = (...args) => {
-        setValue({ year: args[0], month: args[1] });
-        hidePicker();
-    };
 
     return (
         <div>
@@ -190,7 +180,7 @@ const AddPlace = () => {
                     </div>
                     <div>
                         <div>
-                            <input type='text' placeholder='체험장소 이름을 입력해주세요.' value={booktitle} onChange={titleChange}
+                            <input type='text' placeholder='체험장소 이름을 입력해주세요.' value={placetitle} onChange={titleChange}
                                 className='block w-full h-10 px-5 box-border border border-solid border-color4 rounded-md text-sm textGray4'/>
                         </div>
                     </div>
@@ -215,8 +205,8 @@ const AddPlace = () => {
                             value={status}
                             onChange={handleStatus}
                             aria-label="status" className='w-full'>
-                            <ToggleButton value="expected" aria-label="purchase" className='w-full'>방문예정</ToggleButton>
-                            <ToggleButton value='completed' arai-label='inbox' className='w-full'>방문완료</ToggleButton>
+                            <ToggleButton value="방문예정" aria-label="방문예정" className='w-full'>방문예정</ToggleButton>
+                            <ToggleButton value='방문완료' arai-label='방문완료' className='w-full'>방문완료</ToggleButton>
                         </ToggleButtonGroup>
                     </div>
                 </section>
@@ -225,79 +215,79 @@ const AddPlace = () => {
                     <div className='mt-6'>
                         <div className='grid grid-cols-4 gap-3'>
                             <label>
-                                <input type='checkbox' value='kor' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'kor' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category1.png' className={`mr-1 ${field == 'kor' ? '' : 'grayscale'}`}
+                                <input type='checkbox' value='국어' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '국어' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category1.png' className={`mr-1 ${field == '국어' ? '' : 'grayscale'}`}
                                         style={{width: '17px', height: '17px'}}/>국어
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='eng' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'eng' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category2.png' className={`mr-1 ${field == 'eng' ? '' : 'grayscale'}`}
+                                <input type='checkbox' value='영어' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '영어' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category2.png' className={`mr-1 ${field == '영어' ? '' : 'grayscale'}`}
                                         style={{width: '17px', height: '17px'}}/>영어
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='mat' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'mat' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category3.png' className={`mr-1 ${field == 'mat' ? '' : 'grayscale'}`}
+                                <input type='checkbox' value='수학' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '수학' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category3.png' className={`mr-1 ${field == '수학' ? '' : 'grayscale'}`}
                                         style={{width: '17px', height: '17px'}}/>수학
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='sci' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'sci' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category4.png' className={`mr-1 ${field == 'sci' ? '' : 'grayscale'}`}
+                                <input type='checkbox' value='과학' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '과학' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category4.png' className={`mr-1 ${field == '과학' ? '' : 'grayscale'}`}
                                         style={{width: '17px', height: '17px'}}/>과학
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='soc' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'soc' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category5.png' className={`mr-1 ${field == 'soc' ? '' : 'grayscale'}`}
+                                <input type='checkbox' value='사회' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '사회' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category5.png' className={`mr-1 ${field == '사회' ? '' : 'grayscale'}`}
                                         style={{width: '17px', height: '17px'}}/>사회
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='art' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'art' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category6.png' className={`mr-1 ${field == 'art' ? '' : 'grayscale'}`}
+                                <input type='checkbox' value='미술' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '미술' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category6.png' className={`mr-1 ${field == '미술' ? '' : 'grayscale'}`}
                                         style={{width: '17px', height: '17px'}}/>미술
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='mus' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'mus' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category7.png' className={`mr-1 ${field == 'mus' ? '' : 'grayscale'}`}
+                                <input type='checkbox' value='음악' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '음악' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category7.png' className={`mr-1 ${field == '음악' ? '' : 'grayscale'}`}
                                         style={{width: '17px', height: '17px'}}/>음악
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='ath' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'ath' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category8.png' className={`mr-1 ${field == 'ath' ? '' : 'grayscale'}`}
+                                <input type='checkbox' value='체육' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '체육' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category8.png' className={`mr-1 ${field == '체육' ? '' : 'grayscale'}`}
                                         style={{width: '17px', height: '17px'}}/>체육
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='play' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'play' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category9.png' className={`mr-1 ${field == 'play' ? '' : 'grayscale'}`}
+                                <input type='checkbox' value='놀이' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '놀이' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category9.png' className={`mr-1 ${field == '놀이' ? '' : 'grayscale'}`}
                                         style={{width: '17px', height: '17px'}}/>놀이
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='etc' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'etc' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category11.png' className={`mr-1 ${field == 'etc' ? '' : 'grayscale'}`}
+                                <input type='checkbox' value='기타' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '기타' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category11.png' className={`mr-1 ${field == '기타' ? '' : 'grayscale'}`}
                                         style={{width: '17px', height: '17px'}}/>기타
                                 </span>
                             </label>
                             <label>
-                                <input type='checkbox' value='par' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === 'par' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category12.png' className={`mr-1 ${field == 'par' ? '' : 'grayscale'}`}
+                                <input type='checkbox' value='부모' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick}/>
+                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '부모' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
+                                    <img src='/images/category12.png' className={`mr-1 ${field == '부모' ? '' : 'grayscale'}`}
                                         style={{width: '17px', height: '17px'}}/>부모
                                 </span>
                             </label>
@@ -338,7 +328,7 @@ const AddPlace = () => {
                 </div>
                 </section>
                 {
-                    status === 'expected' ?
+                    status === '방문완료' ?
                         <section className='mx-5 my-6'>
                             <div className='text-sm textGray2 font-medium'>방문시기 <span className='textGray4'>(선택)</span></div>
                             <div className='mt-5'>
@@ -366,7 +356,7 @@ const AddPlace = () => {
                         </section> : ''
                 }
                 {
-                    status === 'expected' ?
+                    status === '방문완료' ?
                         <section className='mx-5 my-6'>
                             <div className='text-sm textGray2 font-medium'>만족도 <span className='textGray4'>(선택)</span></div>
                             <div className='flex mt-3'>
@@ -383,14 +373,6 @@ const AddPlace = () => {
                             </div>
                         </section> : ''
                 }
-                <form onSubmit={onSubmit}>
-                    <input type='hidden' value={booktitle}/>
-                    <input type='hidden' value={image} />
-                    <input type='hidden' value={status} />
-                    <input type='hidden' value={field} />
-                    <input type='hidden' value={area} />
-                    <input type='hidden' value={rating} />
-                </form>
             </main>
         </div>
     )
