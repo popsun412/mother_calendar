@@ -8,9 +8,71 @@ import EduToolPurchase from '../components/edutool/edutool_purchase';
 import EduToolSell from '../components/edutool/edutool_sell';
 import { Global } from '@emotion/react';
 
+import network from '../util/network';
+import { getAuth } from "firebase/auth";
+import { useRouter } from 'next/router';
+import CircleLoading from '../components/common/circle_loading';
+
 const EduTool = () => {
 
+    const [data, setData] = useState([]);
+    const [load, setLoad] = useState(false);
     const [activeTab, setActiveTab] = useState(1);
+
+    const auth = getAuth();
+    const router = useRouter();
+
+    // 유저 정보 갖고오기
+    const getUser = async () => {
+        const _result = await network.post('/userInfo');
+
+        // data 통신
+        if (_result.status == 200) {
+        } else {
+            router.push('/');
+        }
+    }
+
+    useEffect(() => {
+        auth.onAuthStateChanged(async (_user) => {
+            if (_user) {
+                await getUser();
+                setLoad(true);
+            } else {
+                router.push('/');
+            }
+        });
+
+        fields.forEach((item, idx) => {
+            field[idx] = false;
+            returnField[idx] = false;
+        })
+
+        areas.forEach((item, idx) => {
+            area[idx] = false;
+            returnArea[idx] = false;
+        })
+    }, []);
+
+    useEffect(() => {
+
+        const getData = async() => {
+            const res = await network.post('/locker/items', {
+                offset: 0,
+                limit: 20,
+                status: 1,
+                subject: "",
+                field: "",
+                lockerType: "교구장",
+                region: ""
+            });
+
+            res.data ? setData(res.data) : null;
+        }
+
+        getData();
+
+    }, []);
 
     const tabClick = (index) => {
         setActiveTab(index);
@@ -242,8 +304,9 @@ const EduTool = () => {
         </Box>
     );
 
-    return (
-        <div>
+    return (<>{
+        (load)
+            ? <div>
             <header className='sticky top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{marginBottom: '-50px'}}>
                 <div className='my-auto mx-auto py-0 px-4 relative flex items-center w-full bg-white' style={{height: '50px'}}>
                     <div className='flex-1 flex items-center'>
@@ -285,7 +348,8 @@ const EduTool = () => {
                 </div>
             </Link>
         </div>
-    )
+            : <CircleLoading />
+    }</>)
 }
 
 export default EduTool;
