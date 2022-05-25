@@ -1,29 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import network from '../../util/network';
 
-const EduToolInstock = () => {
+const EduToolInstock = (props) => {
 
+    const { params, activeTab } = props;
     const [data, setData] = useState([]);
 
+    const getData = async() => {
+        const res = await network.post('/locker/items', {
+            offset: 0,
+            limit: 20,
+            status: 0,
+            subject: "",
+            field: "",
+            lockerType: "교구장",
+            region: ""
+        });
+
+        res.data ? setData(res.data) : null;
+    }
+
     useEffect(() => {
-
-        const getData = async() => {
-            const res = await network.post('/locker/items', {
-                offset: 0,
-                limit: 20,
-                status: 0,
-                subject: "",
-                field: "",
-                lockerType: "교구장",
-                region: ""
-            });
-
-            res.data ? setData(res.data) : null;
-        }
-
-        getData();
-
-    }, []);
+        if(activeTab == 0) {
+            getData();
+        } 
+    }, [params, activeTab]);
 
     return (
         <div className='mt-5 mx-5'>

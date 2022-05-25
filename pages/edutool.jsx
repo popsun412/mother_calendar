@@ -18,6 +18,7 @@ const EduTool = () => {
     const [data, setData] = useState([]);
     const [load, setLoad] = useState(false);
     const [activeTab, setActiveTab] = useState(1);
+    const [params, setParams] = useState({});
 
     const auth = getAuth();
     const router = useRouter();
@@ -109,11 +110,10 @@ const EduTool = () => {
         onClick(anchor, false);
     }
 
-    const [aligns, setAligns] = useState(() => []);
+    const [aligns, setAligns] = useState('구매순');
 
     const handleAligns = (e) => {
-        setAligns([e.target.offsetParent.value]);
-        console.log(aligns[0]);
+        setAligns(e.currentTarget.value);
     };
 
     const fields = [
@@ -199,9 +199,61 @@ const EduTool = () => {
     ]
 
     const obj = {
-        0: <EduToolInstock />,
-        1: <EduToolPurchase />,
-        2: <EduToolSell />
+        0: <EduToolInstock params={params} activeTab={activeTab}/>,
+        1: <EduToolPurchase params={params} activeTab={activeTab}/>,
+        2: <EduToolSell params={params} activeTab={activeTab}/>
+    }
+
+    const applyFilter = () => {
+        
+        setParams({
+            offset: 0,
+            limit: 20,
+            status: activeTab,
+            subject: getSubject(),
+            field: getField(),
+            lockerType: "교구장",
+            region: ""
+        });
+
+        console.log(params);
+
+        setState({ ...state, ['right']: false });
+    }
+
+    const getSubject = () => {
+        
+        const subject = [];
+
+        field[0] ? subject.push('국어') : null;
+        field[1] ? subject.push('영어') : null;
+        field[2] ? subject.push('수학') : null;
+        field[3] ? subject.push('과학') : null;
+        field[4] ? subject.push('사회') : null;
+        field[5] ? subject.push('미술') : null;
+        field[6] ? subject.push('음악') : null;
+        field[7] ? subject.push('체육') : null;
+        field[8] ? subject.push('놀이') : null;
+        field[9] ? subject.push('기타') : null;
+        field[10] ? subject.push('부모') : null;
+
+        return subject;
+    }
+
+    const getField = () => {
+        
+        const field = [];
+
+        area[0] ? field.push('교구') : null;
+        area[1] ? field.push('교재') : null;
+        area[2] ? field.push('영상') : null;
+        area[3] ? field.push('게임') : null;
+        area[4] ? field.push('블록') : null;
+        area[5] ? field.push('퍼즐') : null;
+        area[6] ? field.push('재료') : null;
+        area[7] ? field.push('기타') : null;
+
+        return field;
     }
 
     const list = (anchor) => (
@@ -232,9 +284,9 @@ const EduTool = () => {
                             }}
                         />
                         <ToggleButtonGroup value={aligns} onChange={handleAligns} aria-label='aligns' className='w-full'>
-                            <ToggleButton value='purchase' aria-label='purchase' className='w-full'>구매순</ToggleButton>
-                            <ToggleButton value='name' aria-label='name' className='w-full'>이름순</ToggleButton>
-                            <ToggleButton value='star' aria-label='star' className='w-full'>별점순</ToggleButton>
+                            <ToggleButton value='구매순' aria-label='구매순' className='w-full'>구매순</ToggleButton>
+                            <ToggleButton value='이름순' aria-label='이름순' className='w-full'>이름순</ToggleButton>
+                            <ToggleButton value='별점순' aria-label='별점순' className='w-full'>별점순</ToggleButton>
                         </ToggleButtonGroup>
                     </div>
                 </div>
@@ -277,7 +329,7 @@ const EduTool = () => {
                         <div className='flex justify-center rounded-md bg-gray2 items-center'>
                             <img src='/images/ic_refresh.png' className='w-4 h-4 mr-1'/>다시설정
                         </div>
-                        <div className='rounded-md bg-blue4 text-white' style={{lineHeight: '44px'}} onClick={onClick(anchor, false, true)}>적용하기</div>
+                        <div className='rounded-md bg-blue4 text-white' style={{lineHeight: '44px'}} onClick={applyFilter}>적용하기</div>
                     </div>
                 </div>
             </div>
