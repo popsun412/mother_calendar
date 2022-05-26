@@ -21,7 +21,7 @@ const AddBook = () => {
     const [load, setLoad] = useState(false);
 
     const router = useRouter();
-    const itemUid = router.query.itemUid;
+    const commonItemUid = router.query.commonItemUid;
 
     const [data, setData] = useState([]);
     const [disabled, setDisabled] = useState(true);
@@ -73,10 +73,10 @@ const AddBook = () => {
 
     useEffect(() => {
         const getData = async () => {
-            const res = await network.get('/item/commonItem/' + itemUid)
+            const res = await network.get('/item/commonItem/' + commonItemUid)
             res.data ? setData(res.data) : null;
         }
-        if (itemUid) getData();
+        if (commonItemUid) getData();
     }, [])
 
     useEffect(() => {
