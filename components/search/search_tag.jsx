@@ -21,7 +21,7 @@ const SearchTag = () => {
         const result = [];
         for (let i = 0; i < data.length; i++) {
             result.push(
-                <SwiperSlide>
+                <SwiperSlide key={i}>
                     <div className='text-xs text-center border border-solid textBlue1 p-2.5' style={{borderRadius: '30px', borderColor: '#7EBCF9'}}>{"#" + data[i]}</div>
                 </SwiperSlide>
             );
