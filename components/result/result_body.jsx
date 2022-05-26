@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import network from '../../util/network';
 
@@ -12,7 +13,6 @@ const ResultBody = (props) => {
             const res = await network.post('/search', {
                 keyword: props.keyword
             })
-            console.log(res.data);
             res.data ? setData(res.data) : '';
         }
 
@@ -27,18 +27,26 @@ const ResultBody = (props) => {
                     data.length > 0 ? 
                         data.map((item, idx) => {
                             return (
-                                <div className='flex py-3 px-0' key={idx}>
-                                    <div style={{marginRight: '15px'}}>
-                                        <img src={item.image} width={'94px'} height={'94px'} className='rounded-md'/>
-                                    </div>
-                                    <div>
-                                        <h3 className='font-semibold text-base' style={{letterSpacing: '-0.3px'}}>{item.name}</h3>
+                                <Link key={idx}
+                                    href={{
+                                        pathname: item.category == 'place' ? '/place' : '/item',
+                                        query: {
+                                            commonItemUid: item.commonItemUid
+                                        }
+                                    }}>
+                                    <div className='flex py-3 px-0'>
+                                        <div style={{marginRight: '15px'}}>
+                                            <img src={item.image} width={'94px'} height={'94px'} className='rounded-md'/>
+                                        </div>
                                         <div>
-                                            <span className='text-center font-medium text-xs rounded textGray3 px-1.5 py-1 mr-1.5' style={{backgroundColor: '#f0f5f8'}}>{item.field}</span>
-                                            <span className='text-center font-medium text-xs rounded textGray3 px-1.5 py-1 mr-1.5' style={{backgroundColor: '#f0f5f8'}}>{item.subject}</span>
+                                            <h3 className='font-semibold text-base' style={{letterSpacing: '-0.3px'}}>{item.name}</h3>
+                                            <div>
+                                                <span className='text-center font-medium text-xs rounded textGray3 px-1.5 py-1 mr-1.5' style={{backgroundColor: '#f0f5f8'}}>{item.field}</span>
+                                                <span className='text-center font-medium text-xs rounded textGray3 px-1.5 py-1 mr-1.5' style={{backgroundColor: '#f0f5f8'}}>{item.subject}</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </Link>
                             )
                         }) : <div className='absolute top-1/2 left-4 right-4' style={{transform: 'translateY(-50%)'}}>
                                     <div className='items-center justify-center'>
