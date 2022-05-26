@@ -13,12 +13,12 @@ const Item = () => {
 
     const [data, setData] = useState({});
     const [recommData, setRecommData] = useState([]);
+    const [subject, setSubject] = useState('');
+    const [field, setField] = useState('');
     const [scrollPosition, setScrollPosition] = useState(0);
 
     const router = useRouter();
     const commonItemUid = router.query.commonItemUid;
-    const subject = router.query.subject;
-    const field = router.query.field;
     
     SwiperCore.use([Pagination]);
     
@@ -34,6 +34,8 @@ const Item = () => {
         const getData = async() => {
             const res = await network.get('/item/commonItem/'+commonItemUid);
             res.data ? setData(res.data) : null;
+            res.data ? setSubject(res.data.subject) : null;
+            res.data ? setField(res.data.field) : null;
         }
         getData();
     }, []);
@@ -41,10 +43,8 @@ const Item = () => {
     useEffect(() => {
         const getData = async() => {
             const res = await network.post('/item/recommItem', {
-                params: {
-                    subject: subject,
-                    field: field
-                }
+                subject: subject,
+                field: field
             })
             res.data ? setRecommData(res.data) : null
         }
