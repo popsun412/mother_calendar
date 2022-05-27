@@ -39,8 +39,8 @@ const Login = () => {
     return (
         <>
             <div className="px-4 h-screen">
-                <div className="w-full pt-16 pb-4">
-                    <img src="/images/img-login-bg.png" className=" h-60" />
+                <div className="w-full pt-16 pb-4 text-center">
+                    <img src="/images/img-login-bg.png" className="h-60 mx-auto" />
                 </div>
 
                 <div className="px-6">
@@ -49,6 +49,7 @@ const Login = () => {
                             type="text"
                             className="w-full bg-gray2 text-sm font-normal textGray1 outline-none"
                             value={email}
+                            placeholder={"이메일을 입력해주세요."}
                             onChange={(e) => setEmail(e.currentTarget.value)}
                         />
                     </div>
@@ -58,6 +59,7 @@ const Login = () => {
                             type="password"
                             className="w-full bg-gray2 text-sm font-normal textGray1 outline-none"
                             value={password}
+                            placeholder={"비밀번호를 입력해주세요."}
                             onChange={(e) => setPassword(e.currentTarget.value)}
                         />
                         <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

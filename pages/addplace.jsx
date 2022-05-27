@@ -328,7 +328,7 @@ const AddPlace = () => {
                                     <i className='block absolute top-1/2 right-2.5' onClick={() => { setOpen(!open) }}>
                                         <img src='/images/ic_search_black.png' className='w-4 h-4' style={{ transform: 'translateY(-50%)' }} />
                                     </i>
-                                    <input type='text' placeholder='주소를 입력해주세요' className='h-9 rounded-md border border-solid border-color4 w-full text-sm pr-3 pl-5' style={{ height: '39px' }} onChange={() => { }} />
+                                    <input type='text' placeholder='주소를 입력해주세요.' className='h-9 rounded-md border border-solid border-color4 w-full text-sm pr-3 pl-5' style={{ height: '39px' }} onChange={() => { }} />
                                     {
                                         open ?
                                             <DaumPostcode autoClose onComplete={onCompletePost} /> : ''

@@ -175,7 +175,7 @@ const Plan2 = () => {
                         }}>
                         <nav className='flex items-center box-border relative' style={{ height: '90px' }}>
                             <span className='text-sm text-white text-center p-4 m-5 w-full rounded-md bg5'
-                                style={{ letterSpacing: '-0.28px' }}>캘린더에 등록하기</span>
+                                style={{ letterSpacing: '-0.28px' }}>내 캘린더에 등록하기</span>
                         </nav>
                     </Link>
                 </div>

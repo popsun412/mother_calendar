@@ -158,8 +158,6 @@ const AddBook = () => {
         status == '보유중' ? formData.append('buyDt', startDate) : null;
         status == '보유중' ? formData.append('score', rating) : null;
 
-        console.log(formData);
-
         const res = await network.post('/locker', formData)
             .then((res) => {
                 if (res.status == 200) {

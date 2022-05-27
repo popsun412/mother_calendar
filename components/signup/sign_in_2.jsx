@@ -15,7 +15,7 @@ export default function SignIn2(props) {
     const babyAge = (year) => {
         const nowDate = new Date();
 
-        return `${nowDate.getFullYear() - year + 1}살`;
+        return `${nowDate.getFullYear() - year + 1}세`;
     }
 
     // 성별 변경
@@ -52,7 +52,7 @@ export default function SignIn2(props) {
                     <div className="grid grid-cols-8 gap-3 text-center text-base font-normal textGray1 items-center justify-center">
                         <select
                             value={props.signupInfo.babys[selectedIndex].year}
-                            className="border border-color4 rounded-md py-2 col-span-3 text-center outline-none appearance-none"
+                            className="border border-color4 rounded-md py-2 col-span-3 text-center outline-none appearance-none bg-white"
                             onChange={(e) => {
                                 props.signupInfo.babys[selectedIndex].year = e.currentTarget.value;
                                 props.setSignupInfo({ ...props.signupInfo, babys: props.signupInfo.babys });
@@ -62,7 +62,7 @@ export default function SignIn2(props) {
                         </select>
                         <select
                             value={props.signupInfo.babys[selectedIndex].month}
-                            className="border border-color4 rounded-md py-2 col-span-2 text-center outline-none appearance-none"
+                            className="border border-color4 rounded-md py-2 col-span-2 text-center outline-none appearance-none bg-white"
                             onChange={(e) => {
                                 props.signupInfo.babys[selectedIndex].month = e.currentTarget.value;
                                 props.setSignupInfo({ ...props.signupInfo, babys: props.signupInfo.babys });
@@ -72,7 +72,7 @@ export default function SignIn2(props) {
                         </select>
                         <select
                             value={props.signupInfo.babys[selectedIndex].day}
-                            className="border border-color4 rounded-md py-2 col-span-2 text-center outline-none appearance-none"
+                            className="border border-color4 rounded-md py-2 col-span-2 text-center outline-none appearance-none bg-white"
                             onChange={(e) => {
                                 props.signupInfo.babys[selectedIndex].day = e.currentTarget.value;
                                 props.setSignupInfo({ ...props.signupInfo, babys: props.signupInfo.babys });

@@ -126,7 +126,7 @@ export default function SignIn3(props) {
                                 </svg>
                             </div>
                             <p className="flex items-center justify-center text-xs textGray3">
-                                <a href="#" className="textBlue4">개인정보 수집, 이용</a>
+                                <a href="#" className="textBlue4">개인정보 취급방침</a>
                                 에 동의합니다.<span className="textOrange5 ml-1">(필수)</span>
                             </p>
                         </div>

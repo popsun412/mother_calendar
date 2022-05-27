@@ -44,7 +44,7 @@ export default function PlanExperience() {
                 <div className=''>
                     <span className='text-sm font-medium textGray2'>주소 <span className='textGray4'>(선택)</span></span>
                     <div className='mt-3 flex items-center justify-center border border-color4 rounded-md'>
-                        <input type="text" placeholder="주소를 입력해주세요" className='px-5 py-3 flex-auto focus:outline-none' />
+                        <input type="text" placeholder="주소를 입력해주세요." className='px-5 py-3 flex-auto focus:outline-none' />
                         <svg className="w-6 h-6 m-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>

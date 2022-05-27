@@ -18,7 +18,7 @@ export default function SignIn1(props) {
             ? <PostCode signupInfo={props.signupInfo} setSignupInfo={props.setSignupInfo} setPostOpen={setPostOpen} />
             : <>
                 <SignupHeader step={props.step} setStep={props.setStep} />
-                <div className="pt-4 px-5 text-2xl font-normal textGray1">
+                <div className="pt-4 px-5 text-2xl font-normal textGray1" style={{ fontFamily: "BazziOTF" }}>
                     회원님 정보를 입력해주세요.
                 </div>
                 <div className="pt-9 px-5 space-y-9">
@@ -28,7 +28,7 @@ export default function SignIn1(props) {
                             <input
                                 className="placeholder-[#bdbdbd] text-base font-normal w-full outline-none"
                                 type="text"
-                                placeholder="ex. OO맘"
+                                placeholder="예: OO엄마"
                                 value={props.signupInfo.nickName}
                                 onChange={(e) => props.setSignupInfo({ ...props.signupInfo, nickName: e.currentTarget.value })}
                             />
@@ -50,12 +50,12 @@ export default function SignIn1(props) {
                     </div>
 
                     <div className="space-y-4">
-                        <span className="text-sm font-medium textGray1">전화번호</span>
+                        <span className="text-sm font-medium textGray1">휴대폰번호</span>
                         <form className="">
                             <div className="items-center justify-center grid grid-cols-3 gap-3">
-                                <input type="number" className="border border-color4 rounded-md py-2 text-center placeholder-[#333333] text-base font-normal" placeholder="010" value={props.signupInfo.tel1} required disabled />
-                                <input type="number" className="border border-color4 rounded-md py-2 text-center text-base font-normal" value={props.signupInfo.tel2} onChange={(e) => props.setSignupInfo({ ...props.signupInfo, tel2: e.currentTarget.value })} />
-                                <input type="number" className="border border-color4 rounded-md py-2 text-center text-base font-normal" value={props.signupInfo.tel3} onChange={(e) => props.setSignupInfo({ ...props.signupInfo, tel3: e.currentTarget.value })} />
+                                <input type="number" className="border border-color4 rounded-md py-2 text-center text-base font-normal bg-white" placeholder="010" value={props.signupInfo.tel1} required disabled />
+                                <input type="number" className="border border-color4 rounded-md py-2 text-center text-base font-normal bg-white" value={props.signupInfo.tel2} onChange={(e) => props.setSignupInfo({ ...props.signupInfo, tel2: e.currentTarget.value })} />
+                                <input type="number" className="border border-color4 rounded-md py-2 text-center text-base font-normal bg-white" value={props.signupInfo.tel3} onChange={(e) => props.setSignupInfo({ ...props.signupInfo, tel3: e.currentTarget.value })} />
                             </div>
                         </form>
                     </div>
