@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import clusterdata from './markerCluster.json';
+// import clusterdata from './markerCluster.json';
 import MapList from './map_list';
 
 const MapBody = (props) => {
@@ -7,7 +7,8 @@ const MapBody = (props) => {
     const { markerPositions, size } = props;
     const [kakaoMap, setKakaoMap] = useState(null);
     const container = useRef();
-    const [markerClusterPositions, setMarkerClusterPositions] = useState(clusterdata);
+    // const [markerClusterPositions, setMarkerClusterPositions] = useState(clusterdata);
+    const [markerClusterPositions, setMarkerClusterPositions] = useState();
     const [open, setOpen] = useState(false);
     const [markers, setMarkers] = useState();
 
@@ -69,11 +70,14 @@ const MapBody = (props) => {
             }]
         })
 
-        const clusterMarkers = markerClusterPositions.map( (item) => {
-            return new kakao.maps.Marker({
-                position : new kakao.maps.LatLng(item.lat, item.lng)
+        let clusterMarkers = '';
+        if(markerClusterPositions) {
+            clusterMarkers = markerClusterPositions.map( (item) => {
+                return new kakao.maps.Marker({
+                    position : new kakao.maps.LatLng(item.lat, item.lng)
+                })
             })
-        })
+        }
 
         kakao.maps.event.addListener(clusterer, 'clustered', function(clusters ) {
             for(const i=0; i<clusters.length; i++){            
@@ -142,9 +146,10 @@ const MapBody = (props) => {
                         <img src='/images/ic_crosshair.png' />
                     </div>
                 </div>
-                {
+                {/* {
                     open ? <MapList markers={markers} setMarkers={setMarkers}/> : ''
-                }
+                } */}
+                <MapList />
             </div>
         </React.Fragment> 
     )

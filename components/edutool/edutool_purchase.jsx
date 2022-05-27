@@ -1,58 +1,51 @@
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import React from 'react';
+import network from '../../util/network';
 
-const EduToolPurchase = () => {
+const EduToolPurchase = (props) => {
 
-    const data = [
-        // {
-        //     title: '직업체험 테마파크 키자니아',
-        //     data: '20220107',
-        //     imgUrl : 'https://picsum.photos/id/511/200/200',
-        //     tag1: '영어',
-        //     tag2: '대전집'
-        // },
-        // {
-        //     title: '직업체험 테마파크 키자니아',
-        //     data: '20220107',
-        //     imgUrl : 'https://picsum.photos/id/512/200/200',
-        //     tag1: '영어',
-        //     tag2: '대전집'
-        // },
-        // {
-        //     title: '직업체험 테마파크 키자니아',
-        //     data: '20220107',
-        //     imgUrl : 'https://picsum.photos/id/513/200/200',
-        //     tag1: '영어',
-        //     tag2: '대전집'
-        // },
-        // {
-        //     title: '직업체험 테마파크 키자니아',
-        //     data: '20220107',
-        //     imgUrl : 'https://picsum.photos/id/514/200/200',
-        //     tag1: '영어',
-        //     tag2: '대전집'
-        // }
-    ]
+    const { params, activeTab } = props;
+    const [data, setData] = useState([]);
+
+    const getData = async() => {
+        const res = await network.post('/locker/items', {
+            offset: 0,
+            limit: 20,
+            status: 1,
+            subject: "",
+            field: "",
+            lockerType: "교구장",
+            region: ""
+        });
+
+        res.data ? setData(res.data) : null;
+    }
+
+    useEffect(() => {
+        if(activeTab == 1) {
+            getData();
+        } 
+    }, [params, activeTab]);
 
     return (
         <div className='mt-5 mx-5'>
         {
             data.length > 0 ? 
-                data.map((item, index) => {
+                data.map((item, idx) => {
                     return (
-                        <div className='flex' key={index} style={{marginBottom: '22px'}}>
+                        <div className='flex' key={idx} style={{marginBottom: '22px'}}>
                             <div className='mr-4'>
-                                <img src={item.imgUrl} className='rounded-md border border-solid border-color4' style={{width: '94px', height: '94px'}}/>
+                                <img src={item.image} className='rounded-md border border-solid border-color4' style={{width: '94px', height: '94px'}}/>
                             </div>
                             <div>
-                                <div className='font-semibold' style={{fontSize: '15px', letterSpacing: '-0.3px'}}>{item.title}</div>
-                                <div className='textGray3' style={{fontSize: '13px'}}>{moment(item.data).format('YYYY.MM.DD')} 구매</div>
+                                <div className='font-semibold' style={{fontSize: '15px', letterSpacing: '-0.3px'}}>{item.name}</div>
+                                <div className='textGray3' style={{fontSize: '13px'}}>{moment(item.BuyDt).format('YYYY.MM.DD')} 구매</div>
                                 <div></div>
                                 <div>
                                     <span className='px-1.5 text-xs textGray3 rounded mr-1.5' 
-                                        style={{paddingTop: '3px', paddingBottom: '3px', backgroundColor: '#f0f5f8'}}>{item.tag1}</span>
+                                        style={{paddingTop: '3px', paddingBottom: '3px', backgroundColor: '#f0f5f8'}}>{item.subject}</span>
                                     <span className='px-1.5 text-xs textGray3 rounded' 
-                                        style={{paddingTop: '3px', paddingBottom: '3px', backgroundColor: '#f0f5f8'}}>{item.tag2}</span>
+                                        style={{paddingTop: '3px', paddingBottom: '3px', backgroundColor: '#f0f5f8'}}>{item.field}</span>
                                 </div>
                             </div>
                         </div>

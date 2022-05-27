@@ -13,12 +13,12 @@ const Item = () => {
 
     const [data, setData] = useState({});
     const [recommData, setRecommData] = useState([]);
+    const [subject, setSubject] = useState('');
+    const [field, setField] = useState('');
     const [scrollPosition, setScrollPosition] = useState(0);
 
     const router = useRouter();
-    const itemUid = router.query.itemUid;
-    const subject = router.query.subject;
-    const field = router.query.field;
+    const commonItemUid = router.query.commonItemUid;
     
     SwiperCore.use([Pagination]);
     
@@ -32,8 +32,10 @@ const Item = () => {
 
     useEffect(() => {
         const getData = async() => {
-            const res = await network.get('/item/commonItem/'+itemUid);
+            const res = await network.get('/item/commonItem/'+commonItemUid);
             res.data ? setData(res.data) : null;
+            res.data ? setSubject(res.data.subject) : null;
+            res.data ? setField(res.data.field) : null;
         }
         getData();
     }, []);
@@ -41,10 +43,8 @@ const Item = () => {
     useEffect(() => {
         const getData = async() => {
             const res = await network.post('/item/recommItem', {
-                params: {
-                    subject: subject,
-                    field: field
-                }
+                subject: subject,
+                field: field
             })
             res.data ? setRecommData(res.data) : null
         }
@@ -127,24 +127,6 @@ const Item = () => {
                             )
                         })
                     }
-                        {/* <div className='flex py-4 pr-4 text-sm mb-4 justify-between' style={{borderRadius: '15px', backgroundColor: '#f8f6f5', paddingLeft: '17px'}}>
-                            <div className='flex'>
-                                <img src='/images/category7.png' className='mr-3' style={{width: '25px', height: '25px'}}/>
-                                <div className='mx-0 my-auto'>엄마와 함께 피아노 연주하기</div>
-                            </div>
-                            <div>
-                                <img src='/images/ic_check_circle.png'/>
-                            </div>
-                        </div>
-                        <div className='flex py-4 pr-4 text-sm mb-4 justify-between' style={{borderRadius: '15px', backgroundColor: '#f8f6f5', paddingLeft: '17px'}}>
-                            <div className='flex'>
-                                <img src='/images/category6.png' className='mr-3' style={{width: '25px', height: '25px'}}/>
-                                <div className='mx-0 my-auto'>종이접기로 간단한 동물 만들기</div>
-                            </div>
-                            <div>
-                                <img src='/images/ic_add_circle.png'/>
-                            </div>
-                        </div>                         */}
                     </div>
                 </section>
             </main>
@@ -154,7 +136,7 @@ const Item = () => {
                         href={{
                             pathname: '/addbook',
                             query: {
-                                itemUid: itemUid,
+                                commonItemUid: commonItemUid,
                             }
                     }}>
                         <nav className='flex items-center box-border relative' style={{height: '90px'}}>

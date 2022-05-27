@@ -60,11 +60,6 @@ const CategoryItem = (props) => {
 
         setState({ ...state, [anchor]: open });
 
-        console.log(aligns[0]);
-        console.log(location);
-        console.log(area);
-        console.log(values);
-
         const param = {};
 
         aligns[0] == 'register' ? param.order = aligns[0] : '';   // 정렬
@@ -201,13 +196,32 @@ const CategoryItem = (props) => {
     ]
 
     const applyFilter = async () => {
+
+        const res = network.post('/home/recommItems', {
+            order: 'reg',
+            region: getRegion(),
+            field: getField(),
+            age: getAge()
+        })
+        res.data ? setData(res.data) : null;
+
+        setState({ ...state, ['right']: false });
+    }
+
+    const getRegion = () => {
+
         const region = [];
-        const field = [];
-        const age = [];
 
         location[0] ? region.push('서울') : null;
         location[1] ? region.push('경기') : null;
         location[2] ? region.push('기타') : null;
+
+        return region;
+    }
+
+    const getField = () => {
+
+        const field = [];
 
         area[1] ? field.push('학원') : null;
         area[2] ? field.push('대전집') : null;
@@ -222,21 +236,21 @@ const CategoryItem = (props) => {
         area[11] ? field.push('재료') : null;
         area[12] ? field.push('기타') : null;
 
+        return field;
+    }
+
+    const getAge = () => {
+
+        const age = [];
+
         age.push(3);
+
         values[1] == 0 ? age.push(3) : null;
         values[1] == 10 ? age.push(6) : null;
         values[1] == 20 ? age.push(7) : null;
         values[1] == 30 ? age.push(8) : null;
 
-        const res = network.post('/home/recommItems', {
-            params: {
-                order: 'reg',
-                region: region,
-                field: field,
-                age: age
-            }
-        })
-        res.data ? setData(res.data) : null;
+        return age;
     }
 
     const list = (anchor) => (
