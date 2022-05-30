@@ -8,7 +8,8 @@ const ExMapBody = (props) => {
     const { markerPositions, size } = props;
     const [kakaoMap, setKakaoMap] = useState(null);
     const container = useRef();
-    const [markerClusterPositions, setMarkerClusterPositions] = useState(clusterdata);
+    // const [markerClusterPositions, setMarkerClusterPositions] = useState(clusterdata);
+    const [markerClusterPositions, setMarkerClusterPositions] = useState([]);
     const [open, setOpen] = useState(false);
     const [markers, setMarkers] = useState();
 
