@@ -6,7 +6,7 @@ export default function PlanTitle(props) {
                 className={`flex justify-center items-center px-1 py-0.5 mr-2 rounded text-white text-xs`}
                 style={{ backgroundColor: `${(true) ? "#FF734D" : "#bdbdbd"}` }}
             >
-                <span>국어</span>
+                <span>{props.subject}</span>
             </div>
             <span className="text-sm">{props.title}</span>
         </div>

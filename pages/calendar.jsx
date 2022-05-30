@@ -81,6 +81,7 @@ const Calendar = () => {
                     setSelectedDate={setSelectedDate}
                 />
                 <CalendarDate
+                    selectedUserUid={selectedUserUid}
                     selectedDate={selectedDate}
                     setSelectedDate={setSelectedDate}
                 />
@@ -102,7 +103,10 @@ const Calendar = () => {
                 </div>
             </div>
             // 로딩 바
-            : <CircleLoading />
+            :
+            <div className="h-screen w-screen">
+                <CircleLoading />
+            </div>
         }
     </>)
 }

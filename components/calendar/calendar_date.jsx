@@ -2,10 +2,11 @@
 import { useState, useEffect } from "react";
 import CalendarDateItem from "./calendar_date_item";
 import moment from "moment";
+import network from "../../util/network";
 
 export default function CalendarDate(props) {
-    const _weekday = moment(props.selectedDate).weekday();
     const [dates, setDates] = useState([]);
+    const _weekday = moment(props.selectedDate).weekday();
 
     const calDate = (value) => {
         if (value < 0) {
@@ -15,16 +16,46 @@ export default function CalendarDate(props) {
         }
     }
 
+    const getDateStatus = async (_newDates) => {
+        const _result = await network.post("/calendar/weekStatus", {
+            userUid: props.selectedUserUid,
+            dates: _newDates.map((_date) => _date.date.format("yyyy-MM-D"))
+        });
+
+        _result.data.map((_status) => {
+            const _findIndex = _newDates.findIndex((_date) => _date.date.format("yyyy-MM-D") == moment(_status.date, "yyyy-MM-D").format("yyyy-MM-D"));
+            _newDates[_findIndex] = {
+                ..._newDates[_findIndex],
+                authCount: _status.authCount,
+                planCount: _status.planCount
+            }
+        });
+
+        setDates([].concat(_newDates));
+    }
+
+    // 주간 변경여부 확인
     useEffect(() => {
-        setDates([
-            { select: (_weekday - 0) == 0, week: "일", date: calDate(_weekday - 0) },
-            { select: (_weekday - 1) == 0, week: "월", date: calDate(_weekday - 1) },
-            { select: (_weekday - 2) == 0, week: "화", date: calDate(_weekday - 2) },
-            { select: (_weekday - 3) == 0, week: "수", date: calDate(_weekday - 3) },
-            { select: (_weekday - 4) == 0, week: "목", date: calDate(_weekday - 4) },
-            { select: (_weekday - 5) == 0, week: "금", date: calDate(_weekday - 5) },
-            { select: (_weekday - 6) == 0, week: "토", date: calDate(_weekday - 6) },
-        ]);
+        const _newDates = [
+            { week: "일", date: calDate(_weekday - 0), authCount: 0, planCount: 0 },
+            { week: "월", date: calDate(_weekday - 1), authCount: 0, planCount: 0 },
+            { week: "화", date: calDate(_weekday - 2), authCount: 0, planCount: 0 },
+            { week: "수", date: calDate(_weekday - 3), authCount: 0, planCount: 0 },
+            { week: "목", date: calDate(_weekday - 4), authCount: 0, planCount: 0 },
+            { week: "금", date: calDate(_weekday - 5), authCount: 0, planCount: 0 },
+            { week: "토", date: calDate(_weekday - 6), authCount: 0, planCount: 0 },
+        ];
+
+        let _refresh = false;
+        if (dates.length == 0) {
+            _refresh = true;
+        } else {
+            _refresh = !(_newDates[0].date.format("yyyy-MM-D") == dates[0].date.format("yyyy-MM-D"));
+        }
+
+        if (_refresh) {
+            getDateStatus(_newDates);
+        }
     }, [props.selectedDate])
 
 
@@ -34,9 +65,12 @@ export default function CalendarDate(props) {
 
     return (
         <div className="flex px-4 justify-between pb-4">
-            {
-                dates.map((_date, index) => <CalendarDateItem key={index} date={_date} onClick={() => dateClick(index)} />)
-            }
+            {dates.map((_date, index) => <CalendarDateItem
+                key={index}
+                date={_date}
+                selected={moment(props.selectedDate).format("yyyy-MM-D") == _date.date.format("yyyy-MM-D")}
+                onClick={() => dateClick(index)}
+            />)}
         </div>
     )
 }
