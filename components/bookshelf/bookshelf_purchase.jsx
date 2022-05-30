@@ -2,25 +2,19 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import network from '../../util/network';
 
-const BookshelfPurchase = () => {
+const BookshelfPurchase = (props) => {
 
+    const { params } = props;
     const [data, setData] = useState([]);
 
     // 500에러
     useEffect(() => {
         const getData = async () => {
-            const res = await network.post('/locker/items', {
-                limit: 20,
-                status: 1,
-                subject: '',
-                field: '',
-                lockerType: '책장',
-                region: ''
-            })
+            const res = await network.post('/locker/items', params)
             res.data ? setData(res.data) : null;
         }
         getData();
-    }, [])
+    }, [params])
 
     return (
         <div className='mt-5 mx-5'>

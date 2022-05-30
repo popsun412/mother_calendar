@@ -1,25 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import network from '../../util/network';
 
-const BookshelfInstock = () => {
+const BookshelfInstock = (props) => {
 
+    const { params } = props;
     const [data, setData] = useState([]);
 
     // 500에러
     useEffect(() => {
         const getData = async () => {
-            const res = await network.post('/locker/items', {
-                limit: 20,
-                status: 0,
-                subject: '',
-                field: '',
-                lockerType: '책장',
-                region: ''
-            })
+            const res = await network.post('/locker/items', params)
             res.data ? setData(res.data) : null;
         }
         getData();
-    }, [])
+    }, [params])
 
     return (
         <div className='mt-5 mx-5'>
