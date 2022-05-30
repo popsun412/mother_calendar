@@ -4,7 +4,6 @@ import CalendarMiddle from "../components/calendar/calendar_ middle";
 import CalendarDate from "../components/calendar/calendar_date";
 import CalendarTop from "../components/calendar/calendar_top";
 import CalendarBottom from "../components/calendar/calendar_bottom";
-import FriendList from "../components/calendar/frind_list";
 import ItemDetail from "../components/main/itme_detail";
 import CalendarFullPlan from "../components/calendar/calendar_full_plan";
 import CircleLoading from "../components/common/circle_loading";
@@ -91,7 +90,6 @@ const Calendar = () => {
                 />
                 {/* <CalendarBottom />
 
-                <FriendList />
                 <ItemDetail />
                 <CalendarFullPlan /> */}
                 <div className="flex absolute right-5 bottom-16">

@@ -1,9 +1,15 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @next/next/no-img-element */
+
+import { useRouter } from "next/router"
 
 export default function FriendList() {
+    const router = useRouter();
+
     return (
         <div className="w-full h-full verflow-y-scroll scrollbar-hide bg-gray2">
             <div className="flex  py-4 items-center justify-center">
-                <svg className="w-7 h-8 ml-1 textGray2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg className="w-7 h-8 ml-1 textGray2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" onClick={() => router.back()}>
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
                 <span className="flex flex-auto justify-center">추천 계정</span>

@@ -8,6 +8,122 @@
     ],
     "rewrites": [
       {
+        "source": "addbook",
+        "destination": "/addbook.html"
+      },
+      {
+        "source": "addplace",
+        "destination": "/addplace.html"
+      },
+      {
+        "source": "addtool",
+        "destination": "/addtool.html"
+      },
+      {
+        "source": "bookshelf",
+        "destination": "/bookshelf.html"
+      },
+      {
+        "source": "calendar",
+        "destination": "/calendar.html"
+      },
+      {
+        "source": "category",
+        "destination": "/category.html"
+      },
+      {
+        "source": "confirm",
+        "destination": "/confirm.html"
+      },
+      {
+        "source": "edutool",
+        "destination": "/edutool.html"
+      },
+      {
+        "source": "etc",
+        "destination": "/etc.html"
+      },
+      {
+        "source": "exmap",
+        "destination": "/exmap.html"
+      },
+      {
+        "source": "experience",
+        "destination": "/experience.html"
+      },
+      {
+        "source": "feed",
+        "destination": "/feed.html"
+      },
+      {
+        "source": "guide",
+        "destination": "/guide.html"
+      },
+      {
+        "source": "home",
+        "destination": "/home.html"
+      },
+      {
+        "source": "instimap",
+        "destination": "/instimap.html"
+      },
+      {
+        "source": "item",
+        "destination": "/item.html"
+      },
+      {
+        "source": "jointplan",
+        "destination": "/jointplan.html"
+      },
+      {
+        "source": "locker",
+        "destination": "/locker.html"
+      },
+      {
+        "source": "main",
+        "destination": "/main.html"
+      },
+      {
+        "source": "map",
+        "destination": "/map.html"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      },
+      {
+        "source": "mypage",
+        "destination": "/mypage.html"
+      },
+      {
+        "source": "parents",
+        "destination": "/parents.html"
+      },
+      {
+        "source": "place",
+        "destination": "/place.html"
+      },
+      {
+        "source": "plan",
+        "destination": "/plan.html"
+      },
+      {
+        "source": "plandetail",
+        "destination": "/plandetail.html"
+      },
+      {
+        "source": "result",
+        "destination": "/result.html"
+      },
+      {
+        "source": "search",
+        "destination": "/search.html"
+      },
+      {
+        "source": "signup",
+        "destination": "/signup.html"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
