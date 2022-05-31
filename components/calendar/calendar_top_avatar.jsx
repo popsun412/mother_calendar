@@ -9,7 +9,7 @@ export default function CalendarTopAvatar(props) {
     if (profileImage == "") profileImage = (props.sex == 'female') ? "/images/women.png" : "/images/men.png";
 
     return (
-        <span className={`rounded-full w-9 h-9 ring-1 ${(props.active) ? selectedRing : nonSelectedRing}`}>
+        <span className={`rounded-full w-9 h-9 ring-1 ${(props.active) ? selectedRing : nonSelectedRing}`} onClick={props.onClick}>
             <img src={profileImage} className="w-full rounded-full" />
         </span>
     );

@@ -1,20 +1,21 @@
+import CalendarFullPlan from "../../components/calendar/calendar_full_plan";
+
 // react, next
 import { useState } from "react";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import CircleLoading from "../components/common/circle_loading";
+import CircleLoading from "../../components/common/circle_loading";
 
-import FriendList from "../components/calendar/frind_list";// api호출
-import network from "../util/network";
+import network from "../../util/network";
 
 // firebase
 import { getAuth } from "firebase/auth";
 
 // 글로벌 상태관리
 import { useRecoilState } from "recoil";
-import { userInfoState } from "../states/user_info";
+import { userInfoState } from "../../states/user_info";
 
-export default function Neighbor() {
+export default function MyPlanList() {
     const auth = getAuth();
 
     // 글로벌 상태관리
@@ -39,8 +40,6 @@ export default function Neighbor() {
 
     // 데이터 갖고오기
     const getItem = async () => {
-        const _result = await network.post('/calendar/neighbor');
-        setItems(_result.data);
     }
 
     useEffect(() => {
@@ -56,10 +55,12 @@ export default function Neighbor() {
         });
     }, []);
 
-    return (<>
+    return <>
         {(load) ?
-            <div className="w-screen h-screen flex flex-col"><FriendList items={items} /></div>
+            <div className="w-screen h-screen flex flex-col">
+                <CalendarFullPlan />
+            </div>
             : <div className="h-screen w-screen"><CircleLoading /></div>
         }
-    </>)
+    </>
 }

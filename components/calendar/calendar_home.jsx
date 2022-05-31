@@ -39,6 +39,7 @@ export default function CalendarHome(props) {
     const getItems = async () => {
         if (loading) return;
         setLoading(true);
+        setOpen(true);
 
         // 주간 날짜 범위
         const _weekday = moment(props.selectedDate).weekday();
@@ -55,7 +56,7 @@ export default function CalendarHome(props) {
             });
 
 
-            if (_dayResult.status == 200) {
+            if (_dayResult.status == 200 && _dayResult.data != false) {
                 _items = _dayResult.data;
             } else {
                 setOpen(false);
@@ -70,7 +71,7 @@ export default function CalendarHome(props) {
                 endDate: _dates[1],
             });
 
-            if (_weekResult.status == 200) {
+            if (_weekResult.status == 200 && _weekResult.data != false) {
                 _items = _weekResult.data;
             } else {
                 setOpen(false);

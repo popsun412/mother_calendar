@@ -6,6 +6,9 @@ import { useRecoilState } from "recoil";
 import { userInfoState } from "../../states/user_info";
 import CustomMobileDatepicker from "../../components/common/custom_mobile_datepicker";
 import moment from "moment";
+import Link from 'next/link';
+import { useEffect } from "react";
+import network from "../../util/network";
 
 export default function CalendarName(props) {
     // 글로벌 상태관리
@@ -14,12 +17,15 @@ export default function CalendarName(props) {
     // show model
     const showModel = {
         get isMe() {
-            return props.selectedUserUid != userInfo.uid;
+            return userInfo.uid != props.selectedUserUid;
+        },
+        get isFriend() {
+            return userInfo.friends.findIndex((_friend) => _friend.uid == props.selectedUserUid) >= 0;
         },
         get babysAge() {
             const _now = new Date();
             const _ages = [];
-            userInfo.babys.map((_baby) => {
+            props.selectedUserInfo.babys.map((_baby) => {
                 const _birth = moment(_baby.birth, 'YYYY-MM-DD').toDate();
                 const _age = _now.getFullYear() - _birth.getFullYear();
                 _ages.push(`${_age}세`);
@@ -28,10 +34,10 @@ export default function CalendarName(props) {
             return _ages.join(' ');
         },
         get region() {
-            return userInfo.region ?? "";
+            return props.selectedUserInfo.region ?? "";
         },
         get nick() {
-            return (userInfo.interest == "엄마표 교육") ? "엄마표" : userInfo.interest;
+            return (props.selectedUserInfo.interest == "엄마표 교육") ? "엄마표" : props.selectedUserInfo.interest;
         }
     }
 
@@ -42,20 +48,43 @@ export default function CalendarName(props) {
         const _week = weekOfMonth(moment(props.selectedDate));
         return `${_year}년 ${_month + 1}월 ${_week}주차`;
     }
+
     const weekOfMonth = (_moment) => _moment.week() - moment(_moment).startOf('month').week() + 1;
+
+    // 친구추가
+    const addFriends = () => {
+        let _friends = userInfo.friends.map((_friend) => _friend);
+
+        if (!showModel.isFriend) {
+            _friends.push(props.selectedUserInfo);
+        } else {
+            const _checkIndex = userInfo.friends.findIndex((_friend) => _friend.uid == props.selectedUserUid);
+            _friends.splice(_checkIndex, 1);
+        }
+
+        network.post('/user/updateFriends', { friends: _friends });
+
+        setUserInfo({
+            ...userInfo,
+            friends: _friends
+        });
+    }
+
+    // 리렌더링
+    useEffect(() => {
+    }, [userInfo])
 
     return (
         <>
             <div className="flex mb-4 justify-between">
                 <div className='flex flex-row'>
-                    <span className="text-2xl font-semibold textGray1 mr-2">{userInfo.nickName}</span>
+                    <span className="text-2xl font-semibold textGray1 mr-2">{props.selectedUserInfo.nickName}</span>
                     <div className="flex px-2 text-xs font-normal border-color3 textOrange3 rounded-full border items-center text-center">{`${showModel.babysAge}, ${showModel.region}, ${showModel.nick}`}</div>
                 </div>
 
                 {(showModel.isMe) ?
-                    <div className='flex flex-row'>
-                        <img src="/images/like_off.png" className='w-7 h-7' alt="좋아요off" />
-                        <img src="/images/like_on.png" className='w-7 h-7' alt="좋아요on" />
+                    <div className='flex flex-row' onClick={addFriends}>
+                        <img src={(showModel.isFriend) ? `/images/like_on.png` : `/images/like_off.png`} className='w-7 h-7' alt="좋아요" />
                     </div>
                     : <></>
                 }
@@ -73,7 +102,7 @@ export default function CalendarName(props) {
                     </div>
                 </CustomMobileDatepicker>
                 <div className="flex space-x-1 flex-row">
-                    <div className='checkbox textGray2 text-xs font-normal px-3 py-1.5'>전체계획</div>
+                    <Link href={'/plan/list'} passHref><div className='checkbox textGray2 text-xs font-normal px-3 py-1.5'>전체계획</div></Link>
                     <div className='flex checkbox textGray2 text-xs font-normal px-3 py-1.5 items-center'>
                         보관함
                         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

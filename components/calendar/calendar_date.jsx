@@ -3,8 +3,11 @@ import { useState, useEffect } from "react";
 import CalendarDateItem from "./calendar_date_item";
 import moment from "moment";
 import network from "../../util/network";
+import { useRouter } from "next/router";
 
 export default function CalendarDate(props) {
+    const router = useRouter();
+
     const [dates, setDates] = useState([]);
     const _weekday = moment(props.selectedDate).weekday();
 
@@ -46,18 +49,8 @@ export default function CalendarDate(props) {
             { week: "토", date: calDate(_weekday - 6), authCount: 0, planCount: 0 },
         ];
 
-        let _refresh = false;
-        if (dates.length == 0) {
-            _refresh = true;
-        } else {
-            _refresh = !(_newDates[0].date.format("yyyy-MM-D") == dates[0].date.format("yyyy-MM-D"));
-        }
-
-        if (_refresh) {
-            getDateStatus(_newDates);
-        }
-    }, [props.selectedDate])
-
+        getDateStatus(_newDates);
+    }, [props.selectedDate, props.selectedUserUid]);
 
     const dateClick = (_index) => {
         props.setSelectedDate(dates[_index].date.toDate());

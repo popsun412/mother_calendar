@@ -5,7 +5,6 @@ import CalendarDate from "../components/calendar/calendar_date";
 import CalendarTop from "../components/calendar/calendar_top";
 import CalendarBottom from "../components/calendar/calendar_bottom";
 import ItemDetail from "../components/main/itme_detail";
-import CalendarFullPlan from "../components/calendar/calendar_full_plan";
 import CircleLoading from "../components/common/circle_loading";
 import { Fab } from "@material-ui/core";
 import { Add } from "@material-ui/icons";
@@ -25,7 +24,7 @@ import { userInfoState } from "../states/user_info";
 // api호출
 import network from "../util/network";
 
-const Calendar = () => {
+const Calendar = (props) => {
     const auth = getAuth();
     const router = useRouter();
 
@@ -37,6 +36,7 @@ const Calendar = () => {
 
     // 화면 상태관리
     const [selectedUserUid, setSelectedUserUid] = useState(null);
+    const [selectedUserInfo, setSelectedUserInfo] = useState(null);
 
     // 날짜 선택
     const [selectedDate, setSelectedDate] = useState(new Date());
@@ -44,6 +44,7 @@ const Calendar = () => {
     // 유저 정보 갖고오기
     const getUser = async () => {
         const _result = await network.post('/userInfo');
+
         // data 통신
         if (_result.status == 200) {
             setUserInfo(_result.data);
@@ -52,18 +53,25 @@ const Calendar = () => {
         }
     }
 
+    const getSelectedUserInfo = async (_userUid) => {
+        const _result = await network.post('/user/friend', { userUid: _userUid });
+        setSelectedUserInfo(_result.data);
+    }
+
     useEffect(() => {
         auth.onAuthStateChanged(async (_user) => {
             if (_user) {
                 await getUser();
-                setSelectedUserUid(_user.uid);
+                const _userUid = props.query.friend ?? _user.uid;
+                setSelectedUserUid(_userUid);
+                await getSelectedUserInfo(_userUid);
                 setLoad(true);
             } else {
                 setUserInfo(null);
                 router.push('/');
             }
         });
-    }, []);
+    }, [router]);
 
     return (<>
         {(load) ?
@@ -76,6 +84,7 @@ const Calendar = () => {
                 <CalendarMiddle
                     selectedUserUid={selectedUserUid}
                     setSelectedUserUid={setSelectedUserUid}
+                    selectedUserInfo={selectedUserInfo}
                     selectedDate={selectedDate}
                     setSelectedDate={setSelectedDate}
                 />
@@ -83,15 +92,17 @@ const Calendar = () => {
                     selectedUserUid={selectedUserUid}
                     selectedDate={selectedDate}
                     setSelectedDate={setSelectedDate}
+                    selectedUserInfo={selectedUserInfo}
                 />
                 <CalendarHome
                     selectedUserUid={selectedUserUid}
                     selectedDate={selectedDate}
+                    selectedUserInfo={selectedUserInfo}
                 />
                 {/* <CalendarBottom />
 
                 <ItemDetail />
-                <CalendarFullPlan /> */}
+                 */}
                 <div className="flex absolute right-5 bottom-16">
                     <Fab color="primary" aria-label="add" style={{ backgroundColor: '#ff6035' }} onClick={() => {
                         router.push('/plan/regist');
@@ -110,3 +121,9 @@ const Calendar = () => {
 }
 
 export default Calendar;
+
+Calendar.getInitialProps = async (ctx) => {
+    return {
+        query: ctx.query
+    }
+}

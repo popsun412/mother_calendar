@@ -10,6 +10,7 @@ export default function CalendarMiddle(props) {
                 setSelectedUserUid={props.setSelectedUserUid}
                 selectedDate={props.selectedDate}
                 setSelectedDate={props.setSelectedDate}
+                selectedUserInfo={props.selectedUserInfo}
             />
         </div>
     );
