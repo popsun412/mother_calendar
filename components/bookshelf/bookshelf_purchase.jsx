@@ -2,25 +2,23 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import network from '../../util/network';
 
-const BookshelfPurchase = () => {
+const BookshelfPurchase = (props) => {
 
+    const { params, activeTab } = props;
     const [data, setData] = useState([]);
 
-    // 500에러
+    const getData = async() => {
+        const res = await network.post('/locker/items', params);
+
+        res.data ? setData(res.data) : null;
+    }
+
     useEffect(() => {
-        const getData = async () => {
-            const res = await network.post('/locker/items', {
-                limit: 20,
-                status: 1,
-                subject: '',
-                field: '',
-                lockerType: '책장',
-                region: ''
-            })
-            res.data ? setData(res.data) : null;
-        }
-        getData();
-    }, [])
+        if(activeTab == 1) {
+            params['status'] = 1;
+            getData();
+        } 
+    }, [params, activeTab]);
 
     return (
         <div className='mt-5 mx-5'>
@@ -54,7 +52,7 @@ const BookshelfPurchase = () => {
                             </div>
                         </div>
                     </div>
-            }
+                }
         </div>
     )
 }

@@ -15,6 +15,15 @@ import CircleLoading from "../components/common/circle_loading";
 const Bookshelf = () => {
     const [load, setLoad] = useState(false);
     const [activeTab, setActiveTab] = useState(1);
+    const [params, setParams] = useState({
+        offset: 0,
+        limit: 20,
+        status: activeTab,
+        subject: '',
+        field: '',
+        lockerType: '책장',
+        region: ''
+    })
 
     const auth = getAuth();
     const router = useRouter();
@@ -50,6 +59,10 @@ const Bookshelf = () => {
             returnArea[idx] = false;
         })
     }, [])
+
+    useEffect(() => {
+        setParams({...params, ['status']: activeTab});
+    }, [activeTab])
 
     const tabClick = (index) => {
         setActiveTab(index);
@@ -89,15 +102,53 @@ const Bookshelf = () => {
     }
 
     const clickApply = () => {
-        onClick(anchor, false);
+        setParams({
+            offset: 0,
+            limit: 20,
+            status: activeTab,
+            subject: getSubject(),
+            field: getField(),
+            lockerType: '책장',
+            region: ''
+        })
+        setState({ ...state, ['right']: false });
     }
 
-    const [aligns, setAligns] = useState(() => ['purchase']);
+    const [aligns, setAligns] = useState('구매순');
 
     const handleAligns = (e) => {
-        setAligns([e.target.offsetParent.value]);
-        console.log(aligns[0]);
+        setAligns(e.currentTarget.value);
     };
+
+    const getSubject = () => {
+        
+        const subject = [];
+
+        field[1] ? subject.push('국어') : null;
+        field[2] ? subject.push('영어') : null;
+        field[3] ? subject.push('수학') : null;
+        field[4] ? subject.push('과학') : null;
+        field[5] ? subject.push('사회') : null;
+        field[6] ? subject.push('미술') : null;
+        field[7] ? subject.push('음악') : null;
+        field[8] ? subject.push('체육') : null;
+        field[9] ? subject.push('놀이') : null;
+        field[10] ? subject.push('기타') : null;
+
+        return subject;
+    }
+
+    const getField = () => {
+        
+        const field = [];
+
+        area[1] ? field.push('대전집') : null;
+        area[2] ? field.push('소전집') : null;
+        area[3] ? field.push('단행본') : null;
+        area[4] ? field.push('기타') : null;
+
+        return field;
+    }
 
     const fields = [
         {
@@ -162,9 +213,9 @@ const Bookshelf = () => {
     ]
 
     const obj = {
-        0: <BookshelfInstock />,
-        1: <BookshelfPurchase />,
-        2: <BookshelfSell />
+        0: <BookshelfInstock params={params} activeTab={activeTab}/>,
+        1: <BookshelfPurchase params={params} activeTab={activeTab}/>,
+        2: <BookshelfSell params={params} activeTab={activeTab}/>
     }
 
     const list = (anchor) => (
@@ -195,9 +246,9 @@ const Bookshelf = () => {
                             }}
                         />
                         <ToggleButtonGroup value={aligns} onChange={handleAligns} aria-label='aligns' className='w-full'>
-                            <ToggleButton value='purchase' aria-label='purchase' className='w-full'>구매순</ToggleButton>
-                            <ToggleButton value='name' aria-label='name' className='w-full'>이름순</ToggleButton>
-                            <ToggleButton value='star' aria-label='star' className='w-full'>별점순</ToggleButton>
+                            <ToggleButton value='구매순' aria-label='구매순' className='w-full'>구매순</ToggleButton>
+                            <ToggleButton value='이름순' aria-label='이름순' className='w-full'>이름순</ToggleButton>
+                            <ToggleButton value='별점순' aria-label='별점순' className='w-full'>별점순</ToggleButton>
                         </ToggleButtonGroup>
                     </div>
                 </div>
@@ -240,7 +291,7 @@ const Bookshelf = () => {
                         <div className='flex justify-center rounded-md bg-gray2 items-center'>
                             <img src='/images/ic_refresh.png' className='w-4 h-4 mr-1' />다시설정
                         </div>
-                        <div className='rounded-md bg-blue4 text-white' style={{ lineHeight: '44px' }} onClick={onClick(anchor, false, true)}>적용하기</div>
+                        <div className='rounded-md bg-blue4 text-white' style={{ lineHeight: '44px' }} onClick={clickApply}>적용하기</div>
                     </div>
                 </div>
             </div>

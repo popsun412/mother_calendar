@@ -8,21 +8,14 @@ const EduToolPurchase = (props) => {
     const [data, setData] = useState([]);
 
     const getData = async() => {
-        const res = await network.post('/locker/items', {
-            offset: 0,
-            limit: 20,
-            status: 1,
-            subject: "",
-            field: "",
-            lockerType: "교구장",
-            region: ""
-        });
+        const res = await network.post('/locker/items', params);
 
         res.data ? setData(res.data) : null;
     }
 
     useEffect(() => {
         if(activeTab == 1) {
+            params['status'] = 1;
             getData();
         } 
     }, [params, activeTab]);

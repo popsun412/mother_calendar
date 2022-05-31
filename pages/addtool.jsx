@@ -3,7 +3,7 @@ import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import React, { useEffect, useRef, useState } from 'react';
 import StarRatings from 'react-star-ratings';
 import moment from 'moment';
-
+import network from '../util/network';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
@@ -12,6 +12,7 @@ import { ko } from 'date-fns/locale';
 
 const AddTool = () => {
 
+    const [data, setData] = useState([]);
     const [disabled, setDisabled] = useState(true);
     const [booktitle, setBooktitle] = useState('');
     const [image, setImage] = useState({
@@ -81,11 +82,13 @@ const AddTool = () => {
 
         let statusVal = 0;
         let name = '';
-        let image = '';
+        let photo = '';
+
+        console.log(image);
 
         status == '구매예정' ? statusVal = 0 : status == '보유중' ? statusVal = 1 : statusVal = 2;
         data.name ? name = data.name : name = booktitle;
-        data.image ? image = data.image : image.imge_file;
+        data.image ? photo = data.image : photo = image.imge_file;
 
         const formData = new FormData();
         formData.append('name', name);
@@ -93,7 +96,7 @@ const AddTool = () => {
         formData.append('subject', field);
         formData.append('field', area);
         formData.append('lockerType', "교구장");
-        formData.append('image', image);
+        formData.append('image', photo);
         status == '보유중' ? formData.append('buyDt', startDate) : null;
         status == '보유중' ? formData.append('score', rating) : null;
 
@@ -255,24 +258,24 @@ const AddTool = () => {
                     <div className='text-sm textGray2 font-medium'>영역</div>
                     <div className='mt-5 flex flex-wrap'>
                         <label className='block relative mr-3'>
-                            <input type='checkbox' value='large' className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
+                            <input type='checkbox' value='대전집' className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
                             <span className={`block text-sm px-3 py-1.5 border border-solid rounded-sm 
-                                ${area == 'large' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`}>대전집</span>
+                                ${area == '대전집' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`}>대전집</span>
                         </label>
                         <label className='block relative mr-3'>
-                            <input type='checkbox' value='small' className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
+                            <input type='checkbox' value='소전집' className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
                             <span className={`block text-sm px-3 py-1.5 border border-solid rounded-sm 
-                                ${area == 'small' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`}>소전집</span>
+                                ${area == '소전집' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`}>소전집</span>
                         </label>
                         <label className='block relative mr-3'>
-                            <input type='checkbox' value='paperback' className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
+                            <input type='checkbox' value='단행본' className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
                             <span className={`block text-sm px-3 py-1.5 border border-solid rounded-sm 
-                                ${area == 'paperback' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`}>단행본</span>
+                                ${area == '단행본' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`}>단행본</span>
                         </label>
                         <label className='block relative mr-3'>
-                            <input type='checkbox' value='etc' className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
+                            <input type='checkbox' value='기타' className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
                             <span className={`block text-sm px-3 py-1.5 border border-solid rounded-sm 
-                                ${area == 'etc' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`}>기타</span>
+                                ${area == '기타' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`}>기타</span>
                         </label>
                     </div>
                 </section>
