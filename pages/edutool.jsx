@@ -18,7 +18,15 @@ const EduTool = () => {
     const [data, setData] = useState([]);
     const [load, setLoad] = useState(false);
     const [activeTab, setActiveTab] = useState(1);
-    const [params, setParams] = useState({});
+    const [params, setParams] = useState({
+        offset: 0,
+        limit: 20,
+        status: activeTab,
+        subject: '',
+        field: '',
+        lockerType: "교구장",
+        region: ""
+    });
 
     const auth = getAuth();
     const router = useRouter();
