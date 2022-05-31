@@ -143,11 +143,11 @@ const AddBook = () => {
 
         let statusVal = 0;
         let name = '';
-        let image = '';
+        let photo = '';
 
         status == '구매예정' ? statusVal = 0 : status == '보유중' ? statusVal = 1 : statusVal = 2;
         data.name ? name = data.name : name = booktitle;
-        data.image ? image = data.image : image.imge_file;
+        data.image ? photo = data.image : photo = image.imge_file;
 
         const formData = new FormData();
         formData.append('name', name);
@@ -155,7 +155,7 @@ const AddBook = () => {
         formData.append('subject', field);
         formData.append('field', area);
         formData.append('lockerType', "책장");
-        formData.append('image', image);
+        formData.append('image', photo);
         status == '보유중' ? formData.append('buyDt', startDate) : null;
         status == '보유중' ? formData.append('score', rating) : null;
 
