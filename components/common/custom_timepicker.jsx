@@ -1,26 +1,24 @@
 
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import TextField from '@mui/material/TextField';
 import { ko } from "date-fns/locale";
 import { useState } from 'react';
 
-export default function CustomMobileDatepicker({ children, ...props }) {
+export default function CustomTimepicker({ children, ...props }) {
     const [open, setOpen] = useState(false);
 
     return <>
         <div className={`flex ${(props.auto ?? false) ? "flex-auto" : ""}`} onClick={() => { setOpen(true) }}>{children}</div>
         <div className="hidden">
             <LocalizationProvider locale={ko} dateAdapter={AdapterDateFns}>
-                <MobileDatePicker
+                <TimePicker
                     open={open}
-                    inputFormat="yyyy년MM월dd일"
                     value={props.value}
-                    onChange={(date) => { props.onChange(date); }}
-                    onClose={() => { setOpen(false) }}
+                    onChange={(time) => { props.onChange(time); }}
+                    onClose={() => { setOpen(false); }}
                     renderInput={(params) => <TextField
-                        id="selcedtedDatePicker"
                         size="small"
                         className="outline-none border-0 focus:outline-none"
                         {...params}

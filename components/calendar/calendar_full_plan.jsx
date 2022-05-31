@@ -1,8 +1,15 @@
 import { useRouter } from "next/router";
 import PlanTitle from "./plan_title";
+import moment from "moment";
+import { calcPercent } from "../../util/helper";
 
-export default function CalendarFullPlan() {
+export default function CalendarFullPlan(props) {
     const router = useRouter();
+
+    const checkComplete = (_plan) => {
+        const _totalDays = (_plan.repeatDay != null) ? calcPercent(_plan) : 1;
+        return _plan.authCount / _totalDays;
+    }
 
     return (
         <div className="flex flex-col h-full">
@@ -13,18 +20,18 @@ export default function CalendarFullPlan() {
                 </svg>
             </div>
             <div className="flex flex-col bg-gray2 h-full px-5 pt-4 space-y-3">
-                <div className="flex justify-between bg-white rounded-md p-3 items-center">
-                    <PlanTitle title="대교 벽보 한글 읽기" />
-                    <span className="text-sm textGray4">100%, 종료</span>
-                </div>
-                <div className="flex justify-between bg-white rounded-md p-3 items-center">
-                    <PlanTitle title="대교 벽보 한글 읽기" />
-                    <span className="text-sm textOrange5">18%, 종료</span>
-                </div>
-                <div className="flex justify-between bg-white rounded-md p-3 items-center">
-                    <PlanTitle title="대교 벽보 한글 읽기" />
-                    <span className="text-sm textOrange5">18%, 종료</span>
-                </div>
+                {
+                    props.items.map((_item) => {
+                        const _percent = checkComplete(_item);
+                        const isEnd = (moment() >= moment(_item.endDate).add(1, 'd'));
+
+                        return <div className="flex justify-between bg-white rounded-md p-3 items-center" key={_item.planUid}>
+                            <PlanTitle title={_item.name} subject={_item.subject} active={_percent < 100 && !isEnd} />
+
+                            <span className={`text-sm ${(isEnd) ? "textGray4" : "textOrange4"}`}>{`${_percent}%, ${isEnd ? "종료" : "실행"}`}</span>
+                        </div>
+                    })
+                }
             </div>
         </div>
     )

@@ -6,14 +6,11 @@ import { useRouter } from "next/router";
 import subjects from ".././../constants/subjects";
 import Switch from 'react-ios-switch';
 import network from "../../util/network";
-import GlobalStyles from '@mui/material/GlobalStyles';
-import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css"
-import { ko } from "date-fns/locale";
-import TimePicker from 'rc-time-picker';
-import 'rc-time-picker/assets/index.css';
 import moment from 'moment';
 import CircleLoading from "../../components/common/circle_loading";
+import CustomMobileDatepicker from "../../components/common/custom_mobile_datepicker";
+import CustomTimepicker from "../../components/common/custom_timepicker";
+import { ChevronRight } from "@mui/icons-material"
 
 // firebase
 import { getAuth } from "firebase/auth";
@@ -35,8 +32,8 @@ export default function Regist(props) {
             repeatDay: [],
             startDate: new Date(),
             endDate: new Date(),
-            startTime: moment(),
-            endTime: moment(),
+            startTime: new Date(),
+            endTime: new Date(),
             notification: [],
         }
     );
@@ -76,7 +73,7 @@ export default function Regist(props) {
     const daysRendering = () => {
         const result = [];
         const _days = ["일", "월", "화", "수", "목", "금", "토"];
-        for (let i = 1; i <= 7; i++) {
+        for (let i = 0; i < 7; i++) {
             const _index = (i < 7) ? i : 0;
             const _daysIndex = registInfo.repeatDay.findIndex((_item) => _item == _index);
 
@@ -102,8 +99,8 @@ export default function Regist(props) {
         const _result = await network.post('/plan', {
             ...registInfo,
             commonPlanUid: common ? props.query.commonPlanUid : null,
-            startTime: (registInfo.startTime == null) ? null : registInfo.startTime.format("HH:mm"),
-            endTime: (registInfo.endTime == null) ? null : registInfo.endTime.format("HH:mm"),
+            startTime: (registInfo.startTime == null) ? null : moment(registInfo.startTime).format("HH:mm"),
+            endTime: (registInfo.endTime == null) ? null : moment(registInfo.endTime).format("HH:mm"),
         });
 
         if (_result.status == 200) {
@@ -122,17 +119,33 @@ export default function Regist(props) {
         });
     }, [])
 
+    // 오전 오후 표시
+    const timeFormat = (_dateTime) => {
+        if (_dateTime == null) return "";
+
+        const koA = moment(_dateTime).format("a") == 'am' ? "오전" : "오후";
+        const koH = moment(_dateTime).format("h시");
+        const koM = moment(_dateTime).format("mm");
+        return `${koA} ${koH}${(koM == "00") ? "" : " " + koM + "분"}`;
+    }
+
     return (<>
         {(load)
             ? <div className="">
-                <div className="flex py-4 items-center justify-center">
-                    <svg className="w-7 h-8 ml-1 textGray2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" onClick={() => router.back()}>
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
-                    </svg>
-                    <span className="flex-auto text-center text-base font-medium textGray1">계획 등록</span>
-                    <span className={`pr-4 text-base font-medium textGray4 textOrange5`} value="false" onClick={planRegist}>완료</span>
+                {/* 상단바 */}
+                <div className="relative flex py-4">
+                    <span className="absolute top-0 right-0 left-0 bottom-0 flex items-center justify-center text-base font-medium textGray1 z-40">계획 등록</span>
+
+                    <div className="flex flex-auto justify-between items-center z-50">
+                        <svg className="w-7 h-8 ml-1 textGray2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" onClick={() => router.back()}>
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+
+                        <span className={`pr-4 text-base font-medium textGray4 textOrange5`} value="false" onClick={planRegist}>완료</span>
+                    </div>
                 </div>
-                <div className="px-5 h-screen">
+
+                <div className="px-5">
                     <div className="text-sm font-medium textGray4 bg-gray2 rounded-xl py-5 flex items-center justify-center mt-4">
                         <input
                             type="text"
@@ -150,7 +163,7 @@ export default function Regist(props) {
                             {(subjects.map((_item, index) => {
                                 return (
                                     <div
-                                        className={`flex px-3 py-2 border rounded items-center justify-center ${(registInfo.subject == _item.subject) ? "border-[#FF6035] text-[#FF6035]" : "border-gary3 textGray4"}`}
+                                        className={`flex items-center py-2 border rounded justify-center ${(registInfo.subject == _item.subject) ? "border-[#FF6035] text-[#FF6035]" : "border-gary3 textGray4"}`}
                                         key={index}
                                         onClick={() => {
                                             if (common) return;
@@ -183,25 +196,37 @@ export default function Regist(props) {
                         </div>
                     </div>
 
-                    {/* 한나님과 같이 작업 */}
                     {/* 기간 */}
                     <div className='mb-8'>
                         <span className="textGray2 text-sm font-medium">기간</span>
                         <div className='mt-3 flex'>
-                            <DatePicker
-                                locale={ko}
-                                selected={registInfo.startDate}
-                                dateFormat='yyyy년 MM월 dd일'
-                                className='mr-6 border border-gary3 rounded-md text-sm textGray2 text-center py-2 flex items-center justify-center'
+                            <CustomMobileDatepicker
                                 onChange={(date) => setRegistInfo({ ...registInfo, startDate: date })}
-                            />
-                            <DatePicker
-                                locale={ko}
-                                selected={registInfo.endDate}
-                                dateFormat='yyyy년 MM월 dd일'
-                                className='mr-6 border border-gary3 rounded-md text-sm textGray2 text-center py-2 flex items-center justify-center'
+                                value={registInfo.startDate}
+                                auto={true}
+                            >
+                                <div className='flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center'>
+                                    <span className="text-xs font-medium pl-2">{moment(registInfo.startDate).format("YYYY년 M월 D일")}</span>
+                                    <ChevronRight className="rotate-90" />
+                                </div>
+                            </CustomMobileDatepicker>
+
+                            <div className='flex items-center justify-center'>
+                                <svg className="w-3 h-2 textGray4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fillRule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"></path>
+                                </svg>
+                            </div>
+
+                            <CustomMobileDatepicker
                                 onChange={(date) => setRegistInfo({ ...registInfo, endDate: date })}
-                            />
+                                value={registInfo.endDate}
+                                auto={true}
+                            >
+                                <div className='flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center'>
+                                    <span className="text-xs font-medium pl-2">{moment(registInfo.endDate).format("YYYY년 M월 D일")}</span>
+                                    <ChevronRight className="rotate-90" />
+                                </div>
+                            </CustomMobileDatepicker>
                         </div>
                     </div>
 
@@ -212,47 +237,35 @@ export default function Regist(props) {
                             <span className='textGray4'> (선택)</span>
                         </span>
                         <div className='flex space-x-1.5 mt-3'>
-                            <GlobalStyles
-                                styles={{
-                                    '.rc-time-picker-input': {
-                                        padding: '8',
-                                        textAlign: 'center',
-                                        color: 'black',
-                                        fontSize: '14px',
-                                        border: 'solid 1px #bdbdbd',
-                                        borderRadius: '6px',
-                                        width: '130px',
-                                        height: '32px'
-                                    }
-                                }}
-                            />
-                            <TimePicker
+                            <CustomTimepicker
+                                onChange={(time) => setRegistInfo({ ...registInfo, startTime: time })}
                                 value={registInfo.startTime}
-                                format={"A hh시mm분"}
-                                onChange={(val) => {
-                                    let _startTime = val;
-                                    if (registInfo.endTime != null && _startTime > registInfo.endTime) _startTime = registInfo.endTime;
-                                    setRegistInfo({ ...registInfo, startTime: _startTime })
-                                }}
-                                showSecond={false}
-                                allowEmpty
-                            />
+                            >
+                                <div className='flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center'>
+                                    <span className={`text-xs font-medium pl-2 ${registInfo.startTime == null ? "textGray4" : ""}`}>
+                                        {registInfo.startTime == null ? "시작시간" : timeFormat(registInfo.startTime)}
+                                    </span>
+                                    <ChevronRight className="rotate-90" />
+                                </div>
+                            </CustomTimepicker>
+
                             <div className='flex items-center justify-center'>
                                 <svg className="w-3 h-2 textGray4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                     <path fillRule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"></path>
                                 </svg>
                             </div>
-                            <TimePicker
+
+                            <CustomTimepicker
+                                onChange={(time) => setRegistInfo({ ...registInfo, endTime: time })}
                                 value={registInfo.endTime}
-                                format={"A hh시mm분"}
-                                onChange={(val) => {
-                                    let _endTime = val;
-                                    if (registInfo.startTime != null && _endTime < registInfo.startTime) _endTime = registInfo.startTime;
-                                    setRegistInfo({ ...registInfo, endTime: _endTime })
-                                }}
-                                showSecond={false}
-                                allowEmpty
-                            />
+                            >
+                                <div className='flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center'>
+                                    <span className={`text-xs font-medium pl-2 ${registInfo.endTime == null ? "textGray4" : ""}`}>
+                                        {registInfo.endTime == null ? "종료시간" : timeFormat(registInfo.endTime)}
+                                    </span>
+                                    <ChevronRight className="rotate-90" />
+                                </div>
+                            </CustomTimepicker>
                         </div>
                     </div>
 

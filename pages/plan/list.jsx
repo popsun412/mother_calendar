@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import CalendarFullPlan from "../../components/calendar/calendar_full_plan";
 
 // react, next
@@ -40,6 +41,8 @@ export default function MyPlanList() {
 
     // 데이터 갖고오기
     const getItem = async () => {
+        const _result = await network.get('/plans');
+        setItems(_result.data);
     }
 
     useEffect(() => {
@@ -58,7 +61,7 @@ export default function MyPlanList() {
     return <>
         {(load) ?
             <div className="w-screen h-screen flex flex-col">
-                <CalendarFullPlan />
+                <CalendarFullPlan items={items} />
             </div>
             : <div className="h-screen w-screen"><CircleLoading /></div>
         }
