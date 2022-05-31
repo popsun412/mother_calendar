@@ -3,23 +3,28 @@ import network from '../../util/network';
 
 const BookshelfInstock = (props) => {
 
-    const { params } = props;
+    const { params, activeTab } = props;
     const [data, setData] = useState([]);
 
-    // 500에러
+    const getData = async() => {
+        const res = await network.post('/locker/items', params);
+
+        res.data ? setData(res.data) : null;
+    }
+
     useEffect(() => {
-        const getData = async () => {
-            const res = await network.post('/locker/items', params)
-            res.data ? setData(res.data) : null;
-        }
-        getData();
-    }, [params])
+        if(activeTab == 0) {
+            params['status'] = 0;
+            getData();
+        } 
+    }, [params, activeTab]);
 
     return (
         <div className='mt-5 mx-5'>
             {
-                data.map((item, index) => {
-                    return (
+                data.length > 0 ?
+                    data.map((item, index) => {
+                        return (
                         <div className='flex' key={index} style={{ marginBottom: '22px' }}>
                             <div className='mr-4'>
                                 <img src={item.image} className='rounded-md border border-solid border-color4' style={{ width: '94px', height: '94px' }} />
@@ -35,7 +40,15 @@ const BookshelfInstock = (props) => {
                             </div>
                         </div>
                     )
-                })
+                }) : <div className='absolute top-1/2 left-4 right-4' style={{ transform: 'translateY(-50%)' }}>
+                    <div className='items-center justify-center'>
+                        <img src='/images/no_result.png' width={'93px'} height={'113px'} style={{ margin: '0 auto' }} />
+                        <div className='text-sm text-center textGray4 mt-2.5' style={{ lineHeight: 1.7, letterSpacing: '-0.28px' }}>
+                            아이템이 없습니다.<br />
+                            내가 구매예정인 아이템으로 채워주세요!
+                        </div>
+                    </div>
+                </div>
             }
         </div>
     )

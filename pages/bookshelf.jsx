@@ -142,10 +142,10 @@ const Bookshelf = () => {
         
         const field = [];
 
-        area[0] ? field.push('대전집') : null;
-        area[1] ? field.push('소전집') : null;
-        area[2] ? field.push('단행본') : null;
-        area[3] ? field.push('기타') : null;
+        area[1] ? field.push('대전집') : null;
+        area[2] ? field.push('소전집') : null;
+        area[3] ? field.push('단행본') : null;
+        area[4] ? field.push('기타') : null;
 
         return field;
     }
@@ -213,9 +213,9 @@ const Bookshelf = () => {
     ]
 
     const obj = {
-        0: <BookshelfInstock params={params} setParams={setParams} status={0}/>,
-        1: <BookshelfPurchase params={params} setParams={setParams} status={1}/>,
-        2: <BookshelfSell params={params} setParams={setParams} status={2}/>
+        0: <BookshelfInstock params={params} activeTab={activeTab}/>,
+        1: <BookshelfPurchase params={params} activeTab={activeTab}/>,
+        2: <BookshelfSell params={params} activeTab={activeTab}/>
     }
 
     const list = (anchor) => (
