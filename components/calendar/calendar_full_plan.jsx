@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import PlanTitle from "./plan_title";
 import moment from "moment";
 import { calcPercent } from "../../util/helper";
+import Link from "next/link";
 
 export default function CalendarFullPlan(props) {
     const router = useRouter();
@@ -25,11 +26,13 @@ export default function CalendarFullPlan(props) {
                         const _percent = checkComplete(_item);
                         const isEnd = (moment() >= moment(_item.endDate).add(1, 'd'));
 
-                        return <div className="flex justify-between bg-white rounded-md p-3 items-center" key={_item.planUid}>
-                            <PlanTitle title={_item.name} subject={_item.subject} active={_percent < 100 && !isEnd} />
+                        return <Link href={`/plan/${_item.planUid}`} key={_item.planUid} passHref>
+                            <div className="flex justify-between bg-white rounded-md p-3 items-center">
+                                <PlanTitle title={_item.name} subject={_item.subject} active={_percent < 100 && !isEnd} />
 
-                            <span className={`text-sm ${(isEnd) ? "textGray4" : "textOrange4"}`}>{`${_percent}%, ${isEnd ? "종료" : "실행"}`}</span>
-                        </div>
+                                <span className={`text-sm ${(isEnd) ? "textGray4" : "textOrange4"}`}>{`${_percent}%, ${isEnd ? "종료" : "실행"}`}</span>
+                            </div>
+                        </Link>
                     })
                 }
             </div>

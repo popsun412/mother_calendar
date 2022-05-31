@@ -5,6 +5,7 @@ import CalendarDate from "../components/calendar/calendar_date";
 import CalendarTop from "../components/calendar/calendar_top";
 import CalendarBottom from "../components/calendar/calendar_bottom";
 import ItemDetail from "../components/main/itme_detail";
+import Navigation from '../components/common/navigation';
 import CircleLoading from "../components/common/circle_loading";
 import { Fab } from "@material-ui/core";
 import { Add } from "@material-ui/icons";
@@ -103,13 +104,14 @@ const Calendar = (props) => {
 
                 <ItemDetail />
                  */}
-                <div className="flex absolute right-5 bottom-16">
+                <div className="flex fixed right-5 bottom-20">
                     <Fab color="primary" aria-label="add" style={{ backgroundColor: '#ff6035' }} onClick={() => {
                         router.push('/plan/regist');
                     }}>
                         <Add />
                     </Fab>
                 </div>
+                <Navigation path={'calendar'} />
             </div>
             // 로딩 바
             :
