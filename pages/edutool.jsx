@@ -225,17 +225,17 @@ const EduTool = () => {
         
         const subject = [];
 
-        field[0] ? subject.push('국어') : null;
-        field[1] ? subject.push('영어') : null;
-        field[2] ? subject.push('수학') : null;
-        field[3] ? subject.push('과학') : null;
-        field[4] ? subject.push('사회') : null;
-        field[5] ? subject.push('미술') : null;
-        field[6] ? subject.push('음악') : null;
-        field[7] ? subject.push('체육') : null;
-        field[8] ? subject.push('놀이') : null;
-        field[9] ? subject.push('기타') : null;
-        field[10] ? subject.push('부모') : null;
+        field[1] ? subject.push('국어') : null;
+        field[2] ? subject.push('영어') : null;
+        field[3] ? subject.push('수학') : null;
+        field[4] ? subject.push('과학') : null;
+        field[5] ? subject.push('사회') : null;
+        field[6] ? subject.push('미술') : null;
+        field[7] ? subject.push('음악') : null;
+        field[8] ? subject.push('체육') : null;
+        field[9] ? subject.push('놀이') : null;
+        field[10] ? subject.push('기타') : null;
+        field[11] ? subject.push('부모') : null;
 
         return subject;
     }
@@ -244,14 +244,14 @@ const EduTool = () => {
         
         const field = [];
 
-        area[0] ? field.push('교구') : null;
-        area[1] ? field.push('교재') : null;
-        area[2] ? field.push('영상') : null;
-        area[3] ? field.push('게임') : null;
-        area[4] ? field.push('블록') : null;
-        area[5] ? field.push('퍼즐') : null;
-        area[6] ? field.push('재료') : null;
-        area[7] ? field.push('기타') : null;
+        area[1] ? field.push('교구') : null;
+        area[2] ? field.push('교재') : null;
+        area[3] ? field.push('영상') : null;
+        area[4] ? field.push('게임') : null;
+        area[5] ? field.push('블록') : null;
+        area[6] ? field.push('퍼즐') : null;
+        area[7] ? field.push('재료') : null;
+        area[8] ? field.push('기타') : null;
 
         return field;
     }
