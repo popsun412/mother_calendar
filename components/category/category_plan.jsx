@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState } from 'react';
 import Toast from '../common/toast';
 import network from '../../util/network';
@@ -5,11 +7,11 @@ import Link from 'next/link';
 
 const CategoryPlan = (props) => {
 
-    const {type, category, setCategory} = props;
+    const { type, category, setCategory } = props;
     const [visible, setVisible] = useState(false);
     const [ToastStatus, setToastStatus] = useState(false);
     const [data, setData] = useState([]);
-    const [level, setLevel] = useState([]);
+    const [level, setLevel] = useState([1, 2, 3]);
 
     const onClick = () => {
         setVisible(true);
@@ -29,73 +31,53 @@ const CategoryPlan = (props) => {
         }
     }, [ToastStatus]);
 
+    const getData = async (param) => {
+        const res = await network.post('/home/recommPlans', {
+            subject: category == '전체' ? "" : category
+        });
+
+        res.data ? setData(res.data) : null;
+    }
+
     useEffect(() => {
-        const getData = async(param) => {
-            const res = await network.post('/home/recommPlans', {
-                params: {
-                    subject: category == '전체' ? type : category
-                }
-            });
-
-            res.data ? setData(res.data) : null;
-            res.data ? getLevel(res.data) : null;
-        }
-
         getData(props.category);
     }, [props.category])
-
-    const getLevel = (data) => {
-        const arr = [];
-        const result = [];
-
-        data.map((item, idx) => {
-            arr.push(item.level);
-        })
-
-        const set = new Set(arr);
-        const level = [...set];
-
-        for(let i=0; i<level.length; i++) {
-            result.push({id: i, level: level[i]});
-        }
-
-        result ? setLevel(result) : null;
-    }
 
     return (
         <div className='mx-5'>
             {ToastStatus && (
                 <>
-                <Toast msg={'보관함에 추가되었습니다.'} />
+                    <Toast msg={'보관함에 추가되었습니다.'} />
                 </>
             )}
             {
-                level.map((item, idx) => {
+                level.map((_level) => {
                     return (
-                        <div className='mb-6' key={idx}>
-                            <span className='py-1.5 px-3 bg5 text-sm text-white' style={{borderRadius: '13.5px'}}>{item.level} 단계 추천 계획</span>
+                        <div className='mb-6' key={_level}>
+                            <span className='py-1.5 px-3 bg5 text-sm text-white' style={{ borderRadius: '13.5px' }}>{_level} 단계 추천 계획</span>
                             <div className='mt-3.5'>
                                 {
-                                    data.map((item2, idx2) => {
+                                    data.map((_item, _index) => {
                                         return (
-                                            item.level == item2.level ?
-                                                    <div className='py-5 px-4 rounded-2xl text-sm flex mb-4' style={{backgroundColor: '#f8f6f5'}} key={idx2}>
-                                                        <Link 
-                                                            href={{
-                                                                pathname: '/plandetail',
-                                                                query: {
-                                                                    commonPlanUid: item2.commonPlanUid,
-                                                                }
-                                                        }}>
-                                                            <div className='flex'>
-                                                                <img src='/images/category1.png' className='mr-4'/>
-                                                                <div className='my-auto mx-0'>{item2.name}</div>
-                                                            </div>
-                                                        </Link>
+                                            _item.level == _level ?
+                                                <Link
+                                                    href={{
+                                                        pathname: '/plandetail', query: { commonPlanUid: _item.commonPlanUid }
+                                                    }}
+                                                    key={_index}
+                                                    passHref
+                                                >
+                                                    <div className='py-5 px-4 rounded-2xl text-sm flex mb-4' style={{ backgroundColor: '#f8f6f5' }}>
+
+                                                        <div className='flex'>
+                                                            <img src='/images/category1.png' className='mr-4' />
+                                                            <div className='my-auto mx-0'>{_item.name}</div>
+                                                        </div>
                                                         <a className='ml-auto' onClick={handleToast}>
                                                             <img src='/images/ic_check_circle.png' />
                                                         </a>
                                                     </div>
+                                                </Link>
                                                 : ''
                                         )
                                     })

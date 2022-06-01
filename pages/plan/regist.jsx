@@ -132,9 +132,8 @@ export default function Regist(props) {
     return (<>
         {(load)
             ? <div className="">
-                {/* 상단바 */}
                 <div className="relative flex py-4">
-                    <span className="absolute top-0 right-0 left-0 bottom-0 flex items-center justify-center text-base font-medium textGray1 z-40">계획 등록</span>
+                    <span className="absolute top-0 right-0 left-0 bottom-0 flex items-center justify-center text-base font-medium textGray1 z-40">{common ? "공동" : ""} 계획 등록</span>
 
                     <div className="flex flex-auto justify-between items-center z-50">
                         <svg className="w-7 h-8 ml-1 textGray2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" onClick={() => router.back()}>
@@ -307,7 +306,9 @@ export default function Regist(props) {
                 </div> */}
                 </div>
             </div>
-            : <CircleLoading />
+            : <div className="w-screen h-screen flex items-center justify-center">
+                <CircleLoading />
+            </div>
         }
     </>)
 }

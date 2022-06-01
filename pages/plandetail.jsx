@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/link-passhref */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
@@ -15,13 +16,14 @@ import PlanHeader from '../components/plandetail/plan_header';
 import PlanItem from '../components/plandetail/plan_item';
 // import PlanWeek from '../components/plandetail/plan_week';
 import PlanTab from '../components/plandetail/plan_tab';
+import CircleLoading from "../components/common/circle_loading";
 
-const Plan2 = () => {
+const Plan2 = (props) => {
 
     const auth = getAuth();
     const router = useRouter();
 
-    const commonPlanUid = router.query.commonPlanUid;
+    const commonPlanUid = props.query.commonPlanUid;
 
     const [data, setData] = useState({});
     const [field, setField] = useState('');
@@ -31,11 +33,6 @@ const Plan2 = () => {
     // 글로벌 상태관리
     const [userInfo, setUserInfo] = useRecoilState(userInfoState);
     const [load, setLoad] = useState(false);
-
-    // 아이템 불러오기
-    const getItem = async () => {
-        setLoad(true);
-    }
 
     // 유저 정보 갖고오기
     const getUser = async () => {
@@ -49,33 +46,31 @@ const Plan2 = () => {
         }
     }
 
-    useEffect(() => {
-        if (userInfo == null) {
-            auth.onAuthStateChanged(async (_user) => {
-                if (_user) {
-                    getUser();
-                } else {
-                    setUserInfo(null);
-                    router.push('/');
-                }
-            });
+    // 아이템 불러오기
+    const getData = async () => {
+        const res = await network.get('/plan/commonPlan/' + commonPlanUid);
+
+        if (res.status == 200) {
+            setData(res.data);
+            setField(res.data.field);
+            setSubject(res.data.subject);
+            setNum(res.data.repeatDay.length);
         }
 
-        if (userInfo != null && !load) getItem();
-    })
+        setLoad(true);
+    }
 
     useEffect(() => {
-        const getData = async () => {
-            const res = await network.get('/plan/commonPlan/' + commonPlanUid)
-            if (res.data) {
-                setData(res.data);
-                setField(res.data.field);
-                setSubject(res.data.subject);
-                setNum(res.data.repeatDay.length);
+        auth.onAuthStateChanged(async (_user) => {
+            if (_user) {
+                await getUser();
+                await getData();
+            } else {
+                setUserInfo(null);
+                router.push('/');
             }
-        }
-        getData();
-    }, []);
+        });
+    }, [])
 
     const getRepeatDay = (param) => {
         const result = [];
@@ -83,8 +78,8 @@ const Plan2 = () => {
 
         if (param) {
             for (let i = 0; i < param.length; i++) {
-                param[i] == 0 ? result.push('일요일') : param[i] == 1 ? result.push('월요일') : param[i] == 2 ? result.push('화요일') :
-                    param[i] == 3 ? result.push('수요일') : param[i] == 4 ? result.push('목요일') : param[i] == 5 ? result.push('금요일') : result.push('토요일')
+                param[i] == 0 ? result.push('일') : param[i] == 1 ? result.push('월') : param[i] == 2 ? result.push('화') :
+                    param[i] == 3 ? result.push('수') : param[i] == 4 ? result.push('목') : param[i] == 5 ? result.push('금') : result.push('토')
             }
         }
 
@@ -100,88 +95,95 @@ const Plan2 = () => {
         return repDay;
     }
 
-    const getTime = (param) => {
-        let result = '';
+    const getTime = (_time) => {
+        if (_time == null) return "";
+        const _dateTime = moment(`${moment().format("yyyy-MM-DD")} ${_time}`);
 
-        if (param) {
-            const time = param.substring(0, 2) + ':' + param.substring(2, 4);
-            const arr = time.split(':');
-
-            parseInt(arr[0]) > 11 ? result += ('오후 ' + parseInt(arr[0] - 12) + '시') : result += ('오전 ' + arr[0] + '시');
-            parseInt(arr[1]) > 0 ? result += (arr[1] + '분') : '';
-        }
-
-        return result;
+        const koA = _dateTime.format("a") == 'am' ? "오전" : "오후";
+        const koH = _dateTime.format("h시");
+        const koM = _dateTime.format("mm");
+        return `${koA} ${koH}${(koM == "00") ? "" : " " + koM + "분"}`;
     }
 
     return (
-        <>
-            <PlanHeader name={data.name} />
-            <main>
-                <section className='mb-6'>
-                    <div className='block relative'>
-                        <img src='/images/banner.png' />
-                        <span className='block absolute text-white font-bold bottom-0 left-0 text-lg mb-12 ml-5'
-                            style={{ letterSpacing: '-0.54px', fontFamily: 'NanumSquareRoundOTF' }}>{data.name}</span>
-                        <div className='block absolute bottom-0 left-0 mb-6 ml-5 mt-1 text-xs'>
-                            <span className='mr-2 py-1 px-1.5 rounded textOrange1' style={{ letterSpacing: '-0.12px', backgroundColor: 'rgba(219, 239, 253, 0.2)' }}>{data.subject}</span>
-                            <span className='py-1 px-1.5 rounded textOrange1' style={{ letterSpacing: '-0.12px', backgroundColor: 'rgba(219, 239, 253, 0.2)' }}>{data.field}</span>
-                        </div>
-                        <div className='block absolute bottom-0 right-0'>
-                            <div className='mr-5 mb-1'>
-                                <img src='/images/ic_add_circle.png' className='mx-auto' />
-                                <div className='mb-5 text-xs text-white text-center mx-auto'>{data.recommTerm}</div>
+        (load) ?
+            <>
+                <PlanHeader name={data.name} />
+                <main>
+                    <section className='mb-6'>
+                        <div className='block relative'>
+                            <img src='/images/banner.png' className="w-full" />
+                            <span className='block absolute text-white font-bold bottom-0 left-0 text-lg mb-12 ml-5'
+                                style={{ letterSpacing: '-0.54px', fontFamily: 'NanumSquareRoundOTF' }}>{data.name}</span>
+                            <div className='block absolute bottom-0 left-0 mb-6 ml-5 mt-1 text-xs'>
+                                <span className='mr-2 py-1 px-1.5 rounded textOrange1' style={{ letterSpacing: '-0.12px', backgroundColor: 'rgba(219, 239, 253, 0.2)' }}>{data.subject}</span>
+                                <span className='py-1 px-1.5 rounded textOrange1' style={{ letterSpacing: '-0.12px', backgroundColor: 'rgba(219, 239, 253, 0.2)' }}>{data.field}</span>
                             </div>
+                            {
+                                (!data.isMyPlan) ? <div className='block absolute bottom-0 right-0'>
+                                    <div className='mr-5 mb-1'>
+                                        <img src='/images/ic_add_circle.png' className='mx-auto' />
+                                        <div className='mb-5 text-xs text-white text-center mx-auto' />
+                                    </div>
+                                </div> : <></>
+                            }
                         </div>
-                    </div>
-                </section>
-                <section className='mb-8 mx-5'>
-                    <div>
-                        <h3 className='text-base font-semibold mb-3' style={{ letterSpacing: '-0.32px' }}>추천 루틴</h3>
-                        <div className="bg-gray2 rounded-md px-5 py-3.5 mb-5">
-                            <p className="textGray2 font-semibold text-base mb-3">주 {num}회  |  매주 {getRepeatDay(data.repeatDay)}</p>
-                            <div className="textGray3 font-normal text-sm flex flex-col space-y-2.5">
-                                <div className="flex flex-row">
-                                    <img src="/images/calendar.png" alt="캘린더이미지" className="w-3.5 h-3.5 my-auto mx-0" />
-                                    <span className='ml-1.5'>{moment(data.startDate).format('YYYY년 M월 D일')} - {moment(data.endDate).format('YYYY년 M월 D일')}</span>
+                    </section>
+                    <section className='mb-8 mx-5'>
+                        <div>
+                            <h3 className='text-base font-semibold mb-3' style={{ letterSpacing: '-0.32px' }}>추천 루틴</h3>
+                            <div className="bg-gray2 rounded-md px-5 py-3.5 mb-5">
+                                <p className="textGray2 font-semibold text-base mb-3">주 {num}회  |  매주 {getRepeatDay(data.repeatDay)}</p>
+                                <div className="textGray3 font-normal text-sm flex flex-col space-y-2.5">
+                                    <div className="flex flex-row">
+                                        <img src="/images/calendar.png" alt="캘린더이미지" className="w-3.5 h-3.5 my-auto mx-0" />
+                                        <span className='ml-1.5'>{data.recommTerm}개월</span>
+                                    </div>
+                                    <div className="flex flex-row">
+                                        <img src="/images/clock.png" alt="시계이미지" className="w-3.5 h-3.5 my-auto mx-0" />
+                                        <span className='ml-1.5'>{getTime(data.startTime)} - {getTime(data.endTime)}</span>
+                                    </div>
                                 </div>
-                                <div className="flex flex-row">
-                                    <img src="/images/clock.png" alt="시계이미지" className="w-3.5 h-3.5 my-auto mx-0" />
-                                    <span className='ml-1.5'>{getTime(data.startTime)} - {getTime(data.endTime)}</span>
+                            </div>
+                        </div>
+                    </section>
+                    <section className='mb-8 mx-5'>
+                        <div>
+                            <h3 className='text-base font-semibold mb-3' style={{ letterSpacing: '-0.32px' }}>어떤 계획인가요?</h3>
+                            <div className='mt-4'>
+                                <div className='text-sm textGray2' style={{ letterSpacing: '-0.28px' }}>
+                                    <pre className="max-w-full whitespace-pre-wrap">{data.description}</pre>
                                 </div>
                             </div>
                         </div>
+                    </section>
+                    {/* <PlanWeek data={data}/> */}
+                    <PlanItem subject={subject} field={field} />
+                    <PlanTab commonPlanUid={commonPlanUid} ite />
+                </main>
+                <aside className='fixed bottom-0 left-0 right-0 z-100'>
+                    <div className='relative mx-auto my-0 bg-white'>
+                        <Link
+                            href={{
+                                pathname: '/plan/regist', query: { commonPlanUid }
+                            }}>
+                            <nav className='flex items-center box-border relative' style={{ height: '90px' }}>
+                                <span className='text-sm text-white text-center p-4 m-5 w-full rounded-md bg5'
+                                    style={{ letterSpacing: '-0.28px' }}>내 캘린더에 등록하기</span>
+                            </nav>
+                        </Link>
                     </div>
-                </section>
-                <section className='mb-8 mx-5'>
-                    <div>
-                        <h3 className='text-base font-semibold mb-3' style={{ letterSpacing: '-0.32px' }}>어떤 계획인가요?</h3>
-                        <div className='mt-4'>
-                            <div className='text-sm textGray2' style={{ letterSpacing: '-0.28px' }}>
-                                {data.description}
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                {/* <PlanWeek data={data}/> */}
-                <PlanItem subject={subject} field={field} />
-                <PlanTab commonPlanUid={commonPlanUid} />
-            </main>
-            <aside className='fixed bottom-0 left-0 right-0 z-100'>
-                <div className='relative mx-auto my-0 bg-white'>
-                    <Link
-                        href={{
-                            pathname: '/plan/regist', query: { commonPlanUid }
-                        }}>
-                        <nav className='flex items-center box-border relative' style={{ height: '90px' }}>
-                            <span className='text-sm text-white text-center p-4 m-5 w-full rounded-md bg5'
-                                style={{ letterSpacing: '-0.28px' }}>내 캘린더에 등록하기</span>
-                        </nav>
-                    </Link>
-                </div>
-            </aside>
-        </>
+                </aside>
+            </> : <div className="h-screen w-screen">
+                <CircleLoading />
+            </div>
     )
 }
 
 export default Plan2;
+
+Plan2.getInitialProps = async (ctx) => {
+    return {
+        query: ctx.query
+    }
+}

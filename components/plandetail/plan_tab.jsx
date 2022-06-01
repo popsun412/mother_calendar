@@ -12,8 +12,8 @@ const PlanTab = (props) => {
     }
 
     const obj = {
-        0: <PlanConfirm commonPlanUid={commonPlanUid}/>,
-        1: <PlanCondition commonPlanUid={commonPlanUid}/>
+        0: <PlanConfirm commonPlanUid={commonPlanUid} />,
+        1: <PlanCondition commonPlanUid={commonPlanUid} />
     }
 
     return (

@@ -441,7 +441,7 @@ const CategoryItem = (props) => {
                                     }} key={idx}>
                                         <div>
                                             <div className='block relative'>
-                                                <img src={item.image} className='rounded-md' style={{ width: '154px', height: '154px' }} />
+                                                <img src={item.image} className='rounded-md' />
                                                 {
                                                     item.bookmark ? <img src='/images/ic_bookmarked.png' className='block absolute bottom-0 right-0 pr-2.5 pb-3' />
                                                         : <img src='/images/ic_bookmark.png' className='block absolute bottom-0 right-0 pr-2.5 pb-3' />

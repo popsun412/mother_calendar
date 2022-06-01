@@ -12,12 +12,10 @@ const PlanItem = (props) => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        const getData = async() => {
+        const getData = async () => {
             const res = await network.post('/item/recommItem', {
-                params: {
-                    subject: subject,
-                    field: field
-                }
+                subject: subject,
+                field: field
             })
             res.data ? setData(res.data) : null;
         }
@@ -33,37 +31,37 @@ const PlanItem = (props) => {
                     <Swiper
                         slidesPerView={3.1}
                     >
-                    {
-                        data.map((item, idx) => {
-                            return (
-                                <SwiperSlide key={idx}>
-                                    <Link href={{
-                                        pathname: '/item',
-                                        query: {
-                                            itemUid: item.commonItemUid, 
-                                            subject: item.subject,
-                                            field: item.field
-                                        }
-                                    }}>
-                                        <div className='w-24'>
-                                            <div className='block relative'>
-                                                <img src={item.image} className='rounded-md' style={{width: '94px', height: '94px'}}/>
-                                                {
-                                                    item.pick? <span className='block absolute top-0 left-0 text-xs text-white px-1.5 py-1 bg-blue3 rounded-tl-md rounded-br-md'>PICK</span> : ''
-                                                }
-                                                <img src={`/images/ic_${item.bookmark? 'bookmarked.png' : 'bookmark.png'}`}  className='block absolute bottom-0 right-0 mb-1.5 mr-2' />
+                        {
+                            data.map((item, idx) => {
+                                return (
+                                    <SwiperSlide key={idx}>
+                                        <Link href={{
+                                            pathname: '/item',
+                                            query: {
+                                                itemUid: item.commonItemUid,
+                                                subject: item.subject,
+                                                field: item.field
+                                            }
+                                        }}>
+                                            <div className='w-24'>
+                                                <div className='block relative'>
+                                                    <img src={item.image} className='rounded-md' style={{ width: '94px', height: '94px' }} />
+                                                    {
+                                                        item.pick ? <span className='block absolute top-0 left-0 text-xs text-white px-1.5 py-1 bg-blue3 rounded-tl-md rounded-br-md'>PICK</span> : ''
+                                                    }
+                                                    <img src={`/images/ic_${item.bookmark ? 'bookmarked.png' : 'bookmark.png'}`} className='block absolute bottom-0 right-0 mb-1.5 mr-2' />
+                                                </div>
+                                                <div className='text-sm leading-snug mt-1.5' style={{ letterSpacing: '-0.26px' }}>{item.name}</div>
+                                                <div className='flex mt-1'>
+                                                    <span className='py-1 px-1.5 rounded text-center text-xs textGray3 mr-1 bg5' style={{ backgroundColor: '#f0f5f8' }}>{item.field}</span>
+                                                    <span className='py-1 px-1.5 rounded text-center text-xs textGray3 mr-1 bg5' style={{ backgroundColor: '#f0f5f8' }}>{item.subject}</span>
+                                                </div>
                                             </div>
-                                            <div className='text-sm leading-snug mt-1.5' style={{ letterSpacing: '-0.26px' }}>{item.name}</div>
-                                            <div className='flex mt-1'>
-                                                <span className='py-1 px-1.5 rounded text-center text-xs textGray3 mr-1 bg5' style={{ backgroundColor: '#f0f5f8' }}>{item.field}</span>
-                                                <span className='py-1 px-1.5 rounded text-center text-xs textGray3 mr-1 bg5' style={{ backgroundColor: '#f0f5f8' }}>{item.subject}</span>
-                                            </div>
-                                        </div>
-                                    </Link>
-                                </SwiperSlide>
-                            )
-                        })
-                    }
+                                        </Link>
+                                    </SwiperSlide>
+                                )
+                            })
+                        }
                     </Swiper>
                 </div>
             </section>
