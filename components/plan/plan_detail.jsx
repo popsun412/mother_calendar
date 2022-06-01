@@ -5,9 +5,27 @@ import moment from "moment";
 import { styled } from '@mui/material/styles';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import { useRouter } from "next/router"
+import PlanMoreButton from "./plan_more_button";
+import { useEffect } from "react";
+import Link from "next/link";
 
 export default function PlaneDetail(props) {
     const router = useRouter();
+
+    const status = () => {
+        const _endDate = moment(props.plan.endDate);
+        const _todayAuth = props.plan.auths.findIndex((_auth) => moment().unix(_auth.authDt).format("YYYY-MM-DD") == moment("YYYY-MM-DD")) >= 0;
+
+        // 오늘 인증 함
+        if (_todayAuth) return 1;
+
+        // 반복인 경우
+        // const _needToday = (props.plan.repeatDay != null && props.plan.repeatDay.findIndex((_day) => _day == parseInt(moment().format('d')) - 1) >= 0);
+
+        if (_endDate <= moment()) return 2;
+
+        return 0;
+    }
 
     const repeatDayFormat = () => {
         if (props.plan.repeatDay == null) return "";
@@ -47,6 +65,10 @@ export default function PlaneDetail(props) {
 
     const _percent = () => Math.round(props.plan.auths.length / calcPercent(props.plan));
 
+    useEffect(() => {
+        status()
+    });
+
     return (
         <>
             <div className="px-5">
@@ -54,9 +76,8 @@ export default function PlaneDetail(props) {
                     <svg className="w-7 h-8 textGray2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" onClick={() => router.back()}>
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
                     </svg>
-                    <svg className="w-6 h-6 textGray3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path>
-                    </svg>
+
+                    <PlanMoreButton plan={props.plan} />
                 </div>
 
                 <div className="flex flex-row pb-6">
@@ -141,10 +162,10 @@ export default function PlaneDetail(props) {
                     {/* 실행 현황 */}
                 </div>
 
-                <div className="fixed flex items-center justify-center relative">
-                    <span className="px-5 py-3 bg5 text-base text-white font-medium rounded-full fixed bottom-6">오늘 하루 인증하기</span>
-                    {/* <span className="px-5 py-3 bg-gray4 text-base text-white font-medium rounded-full fixed bottom-6">오늘 인증을 완료했어요!</span>
-                    <span className="px-5 py-3 bg5 text-base text-white font-medium rounded-full fixed bottom-6">종료 계획 재시작하기</span> */}
+                <div className="fixed flex items-center justify-center left-0 right-0 bottom-6">
+                    {(status() == 0) ? <Link href={`/plan/certify?planUid=${props.plan.planUid}`} passHref><span className="px-5 py-3 bg5 text-base text-white font-medium rounded-full">오늘 하루 인증하기</span></Link> : <></>}
+                    {(status() == 1) ? <span className="px-5 py-3 bg-gray4 text-base text-white font-medium rounded-full fixed bottom-6">오늘 인증을 완료했어요!</span> : <></>}
+                    {(status() == 2) ? <span className="px-5 py-3 bg5 text-base text-white font-medium rounded-full fixed bottom-6">종료 계획 재시작하기</span> : <></>}
                 </div>
             </div>
 

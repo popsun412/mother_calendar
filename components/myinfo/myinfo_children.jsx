@@ -1,90 +1,105 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect } from 'react';
-import moment from 'moment';
-import { Add } from '@material-ui/icons';
+import SignUpBabyAvatar from "../../components/signup/sign_up_baby_avatar";
+import CustomMobileDatepicker from "../../components/common/custom_mobile_datepicker";
+import CircleLoadingOpacity from "../../components/common/circle_loading_opacity";
+import network from "../../util/network";
+import moment from "moment";
 
-const children = [
-    {
-        id: 1,
-        birth: '20130302',
-        gender: 'male',
-        img: '/images/child1.png'
-    },
-    {
-        id: 2,
-        birth: '20160202',
-        gender: 'female',
-        img: '/images/child2.png'
+const ChildrenInfo = (props) => {
+    const [saving, setSaving] = useState(false);
+    const [selectedIndex, setSelectedIndex] = useState(0);
+
+    const addBaby = () => {
+        if (props.userInfo.babys.length >= 5) {
+            return;
+        }
+
+        setSelectedIndex((props.userInfo.babys.length));
+        props.setUserInfo({ ...props.userInfo, babys: props.userInfo.babys.concat([{ babyUid: null, birth: moment().format("YYYY-MM-DD"), sex: "female" }]) });
     }
-]
 
-const ChildrenInfo = () => {
+    const babyAge = (_datetime) => {
+        const nowDate = moment(_datetime);
+        return `${moment().year() - nowDate.year() + 1}세`;
+    }
 
-    const [select, setSelect] = useState(1);
-    const [gender, setGender] = useState(children[0].gender);
-    const [age, setAge] = useState(0);
-    const [birthday, setBirthday] = useState(children[0].birth);
+    // 성별 변경
+    const changeSex = (_sex) => {
+        props.userInfo.babys[selectedIndex].sex = _sex;
+        props.setUserInfo({ ...props.userInfo, babys: props.userInfo.babys });
+    }
 
-    const changeTab = (param) => {
-        setSelect(param + 1);
-        const birth = parseInt(children[param].birth.substring(0, 4));
-        const year = parseInt(moment(new Date()).format('YYYY'));
+    // 생일 변경
+    const changeBirth = (datetime) => {
+        props.userInfo.babys[selectedIndex].birth = moment(datetime).format("YYYY-MM-DD");
+        props.setUserInfo({ ...props.userInfo, babys: props.userInfo.babys });
+    }
 
-        setAge(year - birth);
-        setGender(children[param].gender);
-        setBirthday(children[param].birth);
+    // 아이 정보 저장
+    const onSave = async () => {
+        setSaving(true);
+
+        const _result = await network.put('/userInfo/babys', { babys: props.userInfo.babys });
+
+        console.log(_result);
+
+        setSaving(false);
     }
 
     return (
-        <div className=''>
-            <div className='mt-9 mb-10 mx-5'>
-                <div className='flex'>
-                    {
-                        children.map((item, idx) => {
-                            return (
-                                <div className='mr-3' key={idx} onClick={() => { changeTab(idx) }}>
-                                    <img src={`/images/child${select === item.id ? '2.png' : '1.png'}`} style={{ width: '37px', height: '37px' }} />
-                                    <div className={`mt-2.5 text-xs text-center ${select === item.id ? 'textOrange5' : 'textGray4'}`}>
-                                        {item.id === 1 ? '첫째아이' : item.id === 2 ? '둘째아이' : item.id === 3 ? '셋째아이' : item.id === 4 ? '넷째아이' : '다섯째아이'}
-                                    </div>
-                                </div>
-                            )
-                        })
-                    }
-                    <div className='border-2 border-dotted border-color4 rounded-full text-center' style={{ width: '37px', height: '37px' }}>
-                        <Add className='textGray4 mt-1' />
+        <>
+            <div className="pt-9 px-5 space-y-9">
+                <div className="flex space-x-4">
+                    {props.userInfo.babys.map((_item, index) =>
+                        <SignUpBabyAvatar key={index} active={index == selectedIndex} onClick={() => setSelectedIndex(index)} />
+                    )}
+                    {(
+                        props.userInfo.babys.length < 5 ? <button className="rounded-full w-9 h-9 border-dashed border-gary3 border flex items-center justify-center" onClick={addBaby}>
+                            <svg className="w-6 h-6 text-[#bdbdbd]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                        </button> : <></>
+                    )}
+                </div>
+                <div className="space-y-4">
+                    <span className="text-sm font-medium textGray1">아이 생년월일</span>
+                    <CustomMobileDatepicker
+                        onChange={changeBirth}
+                        value={moment(props.userInfo.babys[selectedIndex].birth).toDate()}
+                        auto={true}
+                    >
+                        <div className="flex w-full space-x-3 text-center text-base font-normal textGray1 items-center justify-center">
+                            <div className="flex-auto border border-color4 rounded-md py-2 col-span-3 text-center outline-none appearance-none bg-white">
+                                <span>{`${moment(props.userInfo.babys[selectedIndex].birth).year()}년`}</span>
+                            </div>
+                            <div className="flex-auto border border-color4 rounded-md py-2 col-span-3 text-center outline-none appearance-none bg-white">
+                                <span>{`${moment(props.userInfo.babys[selectedIndex].birth).format("M월")}`}</span>
+                            </div>
+                            <div className="flex-auto border border-color4 rounded-md py-2 col-span-3 text-center outline-none appearance-none bg-white">
+                                <span>{`${moment(props.userInfo.babys[selectedIndex].birth).format("D일")}`}</span>
+                            </div>
+                            <div className="py-2 textOrange4">{babyAge(props.userInfo.babys[selectedIndex].birth)}</div>
+                        </div>
+                    </CustomMobileDatepicker>
+                </div>
+                <div className="space-y-4">
+                    <span className="text-sm font-medium textGray1">아이 성별</span>
+                    <div className="grid grid-cols-2 gap-3 items-center justify-center">
+                        <div className={`border rounded-md py-2 text-center font-medium ${(props.userInfo.babys[selectedIndex].sex == 'female') ? " border-[#FF6035] text-[#FF6035]" : "border-color4  textGray4"}`} onClick={() => changeSex("female")}>여아</div>
+                        <div className={`border rounded-md py-2 text-center font-medium ${(props.userInfo.babys[selectedIndex].sex == 'male') ? " border-[#FF6035] text-[#FF6035]" : "border-color4  textGray4"}`} onClick={() => changeSex("male")}>남아</div>
                     </div>
                 </div>
-            </div>
-            <div className='mb-8 mx-5'>
-                <div className='mb-4' style={{ fontSize: '15px' }}>아이 생년월일</div>
-                <div className='grid grid-cols-9 w-full gap-x-3 text-center text-base' style={{ letterSpacing: '-0.32px' }}>
-                    <div className='col-span-3 border border-solid rounded-md border-color4' style={{ height: '44px', lineHeight: '44px' }}>{moment(birthday).format('YYYY')}년</div>
-                    <div className='col-span-2 border border-solid rounded-md border-color4' style={{ height: '44px', lineHeight: '44px' }}>{moment(birthday).format('M')}월</div>
-                    <div className='col-span-2 border border-solid rounded-md border-color4' style={{ height: '44px', lineHeight: '44px' }}>{moment(birthday).format('D')}일</div>
-                    <div className='col-span-2' style={{ height: '44px', lineHeight: '44px', color: '#FF734D' }}>{age}세</div>
+                <div className="rounded-md bg-[#ff6035] absolute bottom-6 left-6 right-6">
+                    <button
+                        className="w-full py-4 text-sm font-semibold text-white"
+                        onClick={onSave}
+                    >완료</button>
                 </div>
             </div>
-            <div className='mb-8 mx-5'>
-                <div className='mb-4' style={{ fontSize: '15px' }}>아이 성별</div>
-                <div className='grid grid-cols-2 w-full gap-x-3'>
-                    <label className='relative'>
-                        <input type='checkbox' value='female' className='absolute top-0 left-0 opacity-0 hidden' onChange={() => { }} />
-                        <span className={`border border-solid rounded-md text-base flex w-full box-border justify-center ${gender === 'female' ? 'textOrange5 border-orange5' : 'textColor4 border-color4'}`}
-                            style={{ height: '46px', lineHeight: '46px' }}>여아</span>
-                    </label>
-                    <label className='relative'>
-                        <input type='checkbox' value='male' className='absolute top-0 left-0 opacity-0 hidden' onChange={() => { }} />
-                        <span className={`border border-solid rounded-md text-base flex w-full box-border justify-center ${gender === 'male' ? 'textOrange5 border-orange5' : 'textColor4 border-color4'}`}
-                            style={{ height: '46px', lineHeight: '46px' }}>남아</span>
-                    </label>
-                </div>
-            </div>
-            <div className='mt-14 mb-9 absolute bottom-0 flex flex-1 w-full'>
-                <button className='w-full h-12 text-center bg-gray3 rounded-md text-white mx-5' disabled={true}>완료</button>
-            </div>
-        </div>
+            {(saving) ? <CircleLoadingOpacity /> : <></>}
+        </>
     )
 }
 

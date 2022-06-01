@@ -28,3 +28,13 @@ export function weekDayFormat(_day) {
     if (_day == 5) return "금";
     if (_day == 6) return "토";
 }
+
+export function profileImageCheck(_user, uploadImage = null) {
+    if (uploadImage != null && uploadImage.preview_URL && uploadImage.preview_URL != "") return uploadImage.preview_URL;
+
+    if (_user.profileImage == null) {
+        return (_user.sex == 'female') ? '/images/img_profile_mom.png' : '/images/img_profile_dad.png';
+    }
+
+    return _user.profileImage;
+};

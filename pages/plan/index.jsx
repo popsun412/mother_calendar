@@ -1,4 +1,4 @@
-// import PlanCertify from "../../components/plan/plan_certify";
+import PlanCertify from "../../components/plan/plan_certify";
 // import PlanCompletion from "../../components/plan/plan_completion";
 // import PlaneDetail from "../../components/plan/plan_detail";
 // import PlanDetailModify from "../../components/plan/plan_detail_ modify";
