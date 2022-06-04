@@ -1,51 +1,70 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Global } from '@emotion/react';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
-import React, { useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/router';
-import DaumPostcode from 'react-daum-postcode';
+import React, { useEffect, useState } from 'react';
 import StarRatings from 'react-star-ratings';
 import network from '../util/network';
 
 import GlobalStyles from '@mui/material/GlobalStyles';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-
+import CircleLoadingOpacity from "../components/common/circle_loading_opacity";
 import { ko } from 'date-fns/locale';
+import { getAuth } from "firebase/auth";
+import { useRouter } from 'next/router';
 
-const AddPlace = () => {
-
+const AddPlace = (props) => {
     const router = useRouter();
-    const commonItemUid = router.query.commonItemUid;
-
-    const [data, setData] = useState([]);
-    const [disabled, setDisabled] = useState(true);
-    const [placetitle, setPlaceTitle] = useState('');
-    const [image, setImage] = useState({
-        image_file: '',
-        preview_URL: ''
-    });
-    const [loaded, setLoaded] = useState('loading');
-    const [status, setStatus] = useState('방문예정');
-    const [field, setField] = useState();
-    const [area, setArea] = useState();
-    const [rating, setRating] = useState(0);
-    const [address, setAddress] = useState('');
-    const [open, setOpen] = useState(false);
-    const [startDate, setStartDate] = useState(new Date());
+    const auth = getAuth();
+    const [saving, setSaving] = useState(false);
 
     let inputRef;
+    const _fields = ["놀이터", "키즈카페", "지식전시", "자연동물", "식당숙박", "기타"];
+    const [loaded, setLoaded] = useState('loading');
+
+    const [itemInfo, setItemInfo] = useState({
+        name: "",
+        image: null,
+        status: null,
+        address: null,
+        detailAddress: null,
+        field: null,
+        region: null,
+        score: 0,
+        regDt: new Date()
+    });
+
+    const [uploadImage, setUploadImage] = useState({
+        image_file: null,
+        preview_URL: ''
+    });
+
+    const getData = async () => {
+        if (!props.query.commonItemUid) return;
+
+        const res = await network.get('/item/commonItem/' + props.query.commonItemUid);
+        setItemInfo({
+            ...itemInfo,
+            name: res.data.name,
+            image: res.data.image,
+            status: res.data.status,
+            address: res.data.address,
+            detailAddress: res.data.detailAddress,
+            field: res.data.field,
+            region: res.data.region
+        });
+    }
 
     useEffect(() => {
-        const getData = async () => {
-            const res = await network.get('/item/commonItem/' + commonItemUid);
-            if (res.data) {
-                setData(res.data);
-                setLoaded(true);
-                setImage({ image_file: res.data.image, preview_URL: res.data.image });
-                setPlaceTitle(res.data.name);
+        auth.onAuthStateChanged(async (_user) => {
+            if (_user) {
+                await getData();
+            } else {
+                router.push('/');
             }
-        }
-        commonItemUid != undefined ? getData() : null;
+        });
     }, [])
 
     const saveImage = (e) => {
@@ -58,90 +77,91 @@ const AddPlace = () => {
         }
 
         fileReader.onload = () => {
-            setImage(
-                {
-                    imge_file: e.target.files[0],
-                    preview_URL: fileReader.result
-                }
-            )
-            setLoaded(true)
+            setUploadImage({ image_file: e.target.files[0], preview_URL: fileReader.result });
+            setLoaded(true);
         }
     }
-
-    const deleteImage = (e) => {
-        e.preventDefault();
-        setImage({
-            image_file: '',
-            preview_URL: ''
-        });
-        setLoaded('loading');
-    }
-
-    const titleChange = (e) => {
-        data.name ? setPlaceTitle(data.name) : setPlaceTitle(e.target.value);
-    }
-
-    const handleStatus = (e) => {
-        const val = e.target.offsetParent.value;
-        setStatus(val);
-    }
-
-    const fieldClick = (e) => {
-        e.target.checked ? setField(e.target.value) : setField('');
-    }
-
-    const areaClick = (e) => {
-        e.target.checked ? setArea(e.target.value) : setArea('');
-    }
-
-    const handleRating = (newVal) => {
-        setRating(newVal);
-    }
-
-    useEffect(() => {
-        if (status === '방문예정') {
-            rating > 0 && placetitle != '' && image.image_file != '' && field != '' && area != '' ? setDisabled(false) : setDisabled(true)
-        } else {
-            placetitle != '' && image.image_file != '' && field != '' && area != '' ? setDisabled(false) : setDisabled(true)
-        }
-    }, [status, rating, image, field, area]);
 
     const onSubmit = async (e) => {
+        setSaving(true);
+
         e.preventDefault();
 
-        let statusVal = 0;
-        let name = '';
-        let image = '';
-
-        status == '방문예정' ? statusVal = 0 : statusVal = 1;
-        data.name ? name = data.name : name = placetitle;
-        data.image ? image = data.image : image.imge_file;
-
         const formData = new FormData();
-        formData.append('name', name);
-        formData.append('status', statusVal);
-        formData.append('subject', field);
-        formData.append('lockerType', "학원지도");
-        formData.append('image', image);
-        status == '방문완료' ? formData.append('buyDt', startDate) : null;
-        status == '방문완료' ? formData.append('score', rating) : null;
+        formData.append('name', itemInfo.name);
+        formData.append('status', itemInfo.status);
+        formData.append('field', itemInfo.field);
+        formData.append('lockerType', "체험장소");
+        formData.append('image', itemInfo.image);
+        formData.append('address', itemInfo.address);
+        formData.append('detailAddress', itemInfo.detailAddress);
+        formData.append('region', itemInfo.region);
+        if (uploadImage.image_file != null) {
+            formData.append('uploadImage', uploadImage.image_file);
+        }
+        itemInfo.status == 1 ? formData.append('regDt', itemInfo.regDt) : null;
+        itemInfo.status == 1 ? formData.append('score', itemInfo.score) : null;
 
-        const res = await network.post('/locker', formData)
-            .then((res) => {
-                if (res.status == 200) {
-                    alert('보관함 등록을 완료했습니다.');
-                    window.history.back();
+        await network.post('/locker', formData);
+
+        router.push('/instimap?type=place');
+
+        setSaving(false);
+    }
+
+    const disabled = () => {
+        if (itemInfo.name.trim() == "") return true;
+        if (itemInfo.image == null && uploadImage.image_file == null) return true;
+        if (itemInfo.status != 0 && itemInfo.status != 1 && itemInfo.status != 2) return true;
+        if ((itemInfo.address ?? "").trim() == "") return true;
+        if ((itemInfo.detailAddress ?? "").trim() == "") return true;
+        if (_fields.findIndex((_item) => _item == itemInfo.field) < 0) return true;
+
+        return false;
+    }
+
+    function sample6_execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function (data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                var addr = ''; // 주소 변수
+                var extraAddr = ''; // 참고항목 변수
+
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    addr = data.roadAddress;
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    addr = data.jibunAddress;
                 }
-            })
-            .catch((err) => console.log(err));
+
+                // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                if (data.userSelectedType === 'R') {
+                    // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                    // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                    if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                        extraAddr += data.bname;
+                    }
+                    // 건물명이 있고, 공동주택일 경우 추가한다.
+                    if (data.buildingName !== '' && data.apartment === 'Y') {
+                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                    if (extraAddr !== '') {
+                        extraAddr = ' (' + extraAddr + ')';
+                    }
+                } else {
+                }
+
+                setItemInfo({ ...itemInfo, address: addr, region: data.sido });
+            }
+        }).open();
     }
 
-    const onCompletePost = (data) => {
-        setAddress(data.address);
-        setOpen(false);
-    }
 
-    return (
+    return (<>
         <div>
             <header className='sticky top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{ marginBottom: '-50px' }}>
                 <div className='my-auto mx-auto py-0 px-4 relative flex items-center w-full bg-white' style={{ height: '50px' }}>
@@ -150,7 +170,7 @@ const AddPlace = () => {
                             <img src='/images/ic_back.png' />
                         </div>
                         <div className='my-0 mx-auto text-base font-medium' style={{ letterSpacing: '-0.3px' }}>체험장소 등록</div>
-                        <button className={`flex ${disabled ? 'textGray4' : 'textOrange5'}`} style={{ fontSize: '15px' }} disabled={disabled} onClick={onSubmit}>완료</button>
+                        <button className={`flex ${disabled() ? 'textGray4' : 'textOrange5'}`} style={{ fontSize: '15px' }} disabled={disabled()} onClick={onSubmit}>완료</button>
                     </div>
                 </div>
             </header>
@@ -158,30 +178,28 @@ const AddPlace = () => {
                 <section className='pt-5 mx-5 my-6'>
                     <div className='mb-6'>
                         <div className='rounded-md my-0 mx-auto relative' style={{ width: '120px', height: '120px', backgroundColor: '#f2f2f2' }}>
-                            <button type='primary' onClick={() => inputRef.click()}>
-                                <input type='file' accept='image/*' onChange={saveImage} ref={refParam => inputRef = refParam} style={{ display: 'none' }} />
-                                {
-                                    loaded == false || loaded == true ? (
-                                        <img src={image.preview_URL} className='rounded-md' style={{ width: '120px', height: '120px' }} />
-                                    ) : <img src='/images/ic_camera.png' className='absolute top-10 left-10' />
-                                }
-                            </button>
                             {
-                                (loaded == false || loaded == true) && !data.image ?
-                                    <button className='block absolute' style={{ top: '-10px', right: '-10px' }} onClick={deleteImage}>
-                                        <img src='/images/ic_delete.png' />
-                                    </button> : ''
+                                itemInfo.image != null
+                                    ? <img src={itemInfo.image} className='rounded-md' />
+                                    : <button type='primary' onClick={() => inputRef.click()}>
+                                        <input type='file' accept='image/*' onChange={saveImage} ref={refParam => inputRef = refParam} style={{ display: 'none' }} />
+                                        {
+                                            loaded == false || loaded == true ? (
+                                                <img src={uploadImage.preview_URL} className='rounded-md' style={{ width: '120px', height: '120px' }} />
+                                            ) : <img src='/images/ic_camera.png' className='absolute top-10 left-10' />
+                                        }
+                                    </button>
                             }
                         </div>
-                        {
-                            (loaded == false || loaded == true) && !data.image ?
-                                <button className='flex pt-2 mx-auto text-xs textGray3 underline' onClick={() => inputRef.click()}>수정</button> : ''
-                        }
                     </div>
                     <div>
                         <div>
-                            <input type='text' placeholder='체험장소 이름을 입력해주세요.' value={placetitle} onChange={titleChange}
-                                className='block w-full h-10 px-5 box-border border border-solid border-color4 rounded-md text-sm textGray4' />
+                            <input
+                                type='text'
+                                placeholder='체험장소 이름을 입력해주세요.'
+                                value={itemInfo.name ?? ""} onChange={(e) => setItemInfo({ ...itemInfo, name: e.currentTarget.value })}
+                                className='block w-full h-10 px-5 box-border border border-solid border-color4 rounded-md text-sm outline-none'
+                            />
                         </div>
                     </div>
                 </section>
@@ -202,180 +220,104 @@ const AddPlace = () => {
                             }}
                         />
                         <ToggleButtonGroup
-                            value={status}
-                            onChange={handleStatus}
+                            value={itemInfo.status}
                             aria-label="status" className='w-full'>
-                            <ToggleButton value="방문예정" aria-label="방문예정" className='w-full'>방문예정</ToggleButton>
-                            <ToggleButton value='방문완료' arai-label='방문완료' className='w-full'>방문완료</ToggleButton>
+                            <ToggleButton value={0} aria-label="방문예정" className='w-full' onClick={() => setItemInfo({ ...itemInfo, status: 0 })}>방문예정</ToggleButton>
+                            <ToggleButton value={1} arai-label='방문완료' className='w-full' onClick={() => setItemInfo({ ...itemInfo, status: 1 })}>방문완료</ToggleButton>
                         </ToggleButtonGroup>
                     </div>
                 </section>
                 <section className='mx-5 my-6'>
-                    <div className='text-sm textGray2 font-medium'>분야</div>
-                    <div className='mt-6'>
-                        <div className='grid grid-cols-4 gap-3'>
-                            <label>
-                                <input type='checkbox' value='국어' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick} />
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '국어' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category1.png' className={`mr-1 ${field == '국어' ? '' : 'grayscale'}`}
-                                        style={{ width: '17px', height: '17px' }} />국어
-                                </span>
-                            </label>
-                            <label>
-                                <input type='checkbox' value='영어' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick} />
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '영어' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category2.png' className={`mr-1 ${field == '영어' ? '' : 'grayscale'}`}
-                                        style={{ width: '17px', height: '17px' }} />영어
-                                </span>
-                            </label>
-                            <label>
-                                <input type='checkbox' value='수학' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick} />
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '수학' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category3.png' className={`mr-1 ${field == '수학' ? '' : 'grayscale'}`}
-                                        style={{ width: '17px', height: '17px' }} />수학
-                                </span>
-                            </label>
-                            <label>
-                                <input type='checkbox' value='과학' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick} />
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '과학' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category4.png' className={`mr-1 ${field == '과학' ? '' : 'grayscale'}`}
-                                        style={{ width: '17px', height: '17px' }} />과학
-                                </span>
-                            </label>
-                            <label>
-                                <input type='checkbox' value='사회' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick} />
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '사회' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category5.png' className={`mr-1 ${field == '사회' ? '' : 'grayscale'}`}
-                                        style={{ width: '17px', height: '17px' }} />사회
-                                </span>
-                            </label>
-                            <label>
-                                <input type='checkbox' value='미술' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick} />
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '미술' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category6.png' className={`mr-1 ${field == '미술' ? '' : 'grayscale'}`}
-                                        style={{ width: '17px', height: '17px' }} />미술
-                                </span>
-                            </label>
-                            <label>
-                                <input type='checkbox' value='음악' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick} />
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '음악' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category7.png' className={`mr-1 ${field == '음악' ? '' : 'grayscale'}`}
-                                        style={{ width: '17px', height: '17px' }} />음악
-                                </span>
-                            </label>
-                            <label>
-                                <input type='checkbox' value='체육' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick} />
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '체육' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category8.png' className={`mr-1 ${field == '체육' ? '' : 'grayscale'}`}
-                                        style={{ width: '17px', height: '17px' }} />체육
-                                </span>
-                            </label>
-                            <label>
-                                <input type='checkbox' value='놀이' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick} />
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '놀이' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category9.png' className={`mr-1 ${field == '놀이' ? '' : 'grayscale'}`}
-                                        style={{ width: '17px', height: '17px' }} />놀이
-                                </span>
-                            </label>
-                            <label>
-                                <input type='checkbox' value='기타' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick} />
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '기타' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category11.png' className={`mr-1 ${field == '기타' ? '' : 'grayscale'}`}
-                                        style={{ width: '17px', height: '17px' }} />기타
-                                </span>
-                            </label>
-                            <label>
-                                <input type='checkbox' value='부모' className='absolute top-0 left-0 opacity-0 hidden' onChange={fieldClick} />
-                                <span className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${field === '부모' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}>
-                                    <img src='/images/category12.png' className={`mr-1 ${field == '부모' ? '' : 'grayscale'}`}
-                                        style={{ width: '17px', height: '17px' }} />부모
-                                </span>
-                            </label>
-                        </div>
+                    <div className='text-sm textGray2 font-medium'>영역</div>
+                    <div className='mt-5 flex flex-wrap'>
+                        {_fields.map((_fieldItem, index) => {
+                            return <span className={`block text-sm px-3 py-1.5 border border-solid rounded-sm mr-3 mb-3
+                            ${itemInfo.field == _fieldItem ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`} onClick={() => setItemInfo({
+                                ...itemInfo,
+                                field: _fieldItem
+                            })} key={index}>{_fieldItem}</span>
+                        })}
                     </div>
                 </section>
                 <section className='mx-5 my-6'>
                     <div className='text-sm textGray2 font-medium'>주소</div>
-                    <div className='mt-3 relative'>
-                        {
-                            address.length > 0 ?
-                                <>
-                                    <div className='bg-gray2 rounded-md'>
-                                        <div className='flex mx-5 justify-between' style={{ paddingTop: '11px' }}>
-                                            <div className='textGray1 text-sm'>{address}</div>
-                                            <div className='textGray2 text-sm underline' onClick={() => { setOpen(!open) }}>수정</div>
-                                        </div>
-                                        <div className='textGray3 text-sm mx-5' style={{ paddingTop: '5px', paddingBottom: '11px' }}>
-                                            {address}
-                                        </div>
-                                    </div>
-                                    {
-                                        open ?
-                                            <DaumPostcode autoClose onComplete={onCompletePost} /> : ''
-                                    }
-                                </>
-                                : <>
-                                    <i className='block absolute top-1/2 right-2.5' onClick={() => { setOpen(!open) }}>
-                                        <img src='/images/ic_search_black.png' className='w-4 h-4' style={{ transform: 'translateY(-50%)' }} />
-                                    </i>
-                                    <input type='text' placeholder='주소를 입력해주세요.' className='h-9 rounded-md border border-solid border-color4 w-full text-sm pr-3 pl-5' style={{ height: '39px' }} onChange={() => { }} />
-                                    {
-                                        open ?
-                                            <DaumPostcode autoClose onComplete={onCompletePost} /> : ''
-                                    }
-                                </>
-                        }
+                    <div className='mb-8'>
+                        <div className="flex relative mb-2.5" onClick={() => {
+                            sample6_execDaumPostcode();
+                        }}>
+                            <input type='text'
+                                placeholder="주소"
+                                value={itemInfo.address ?? ""}
+                                className='h-9 rounded-md bg-gray2 w-full text-sm px-5 outline-none'
+                                readOnly style={{ height: '39px' }}
+                            />
+                        </div>
+
+                        {(itemInfo.address != null && itemInfo.address.length > 0) ? <input
+                            type='text'
+                            value={itemInfo.detailAddress ?? ""}
+                            className='h-9 rounded-md bg-gray2 w-full text-sm px-5'
+                            style={{ height: '39px' }}
+                            placeholder="상세주소"
+                            onChange={(e) => setItemInfo({ ...itemInfo, detailAddress: e.currentTarget.value })}
+                        /> : <></>}
                     </div>
                 </section>
-                {
-                    status === '방문완료' ?
-                        <section className='mx-5 my-6'>
-                            <div className='text-sm textGray2 font-medium'>방문시기 <span className='textGray4'>(선택)</span></div>
-                            <div className='mt-5'>
-                                <GlobalStyles
-                                    styles={{
-                                        'input': {
-                                            width: '114px',
-                                            fontSize: '14px',
-                                            borderRadius: '6px',
-                                            border: 'solid 1px #bdbdbd'
-                                        }
-                                    }}
-                                />
-                                <DatePicker
-                                    locale={ko}
-                                    selected={startDate}
-                                    onChange={(date) => setStartDate(date)}
-                                    dateFormat='yyyy년 MM월'
-                                    showMonthYearPicker
-                                    showFullMonthYearPicker
-                                    showTwoColumnMonthYearPicker
-                                    className='mr-6 py-1 px-4 text-sm border border-solid border-gray3 rounded-md bg-white'
-                                />
-                            </div>
-                        </section> : ''
-                }
-                {
-                    status === '방문완료' ?
-                        <section className='mx-5 my-6'>
-                            <div className='text-sm textGray2 font-medium'>만족도 <span className='textGray4'>(선택)</span></div>
-                            <div className='flex mt-3'>
-                                <StarRatings
-                                    rating={rating}
-                                    changeRating={handleRating}
-                                    numberOfStars={5}
-                                    name='rating'
-                                    starDimension='36px'
-                                    starSpacing='3px'
-                                    starRatedColor='rgb(255, 96, 53)'
-                                    starHoverColor='rgb(255, 96, 53)'
-                                />
-                            </div>
-                        </section> : ''
+                {itemInfo.status === 1
+                    ? <section className='mx-5 my-6'>
+                        <div className='text-sm textGray2 font-medium'>방문시기 <span className='textGray4'>(선택)</span></div>
+                        <div className='mt-5'>
+                            <GlobalStyles
+                                styles={{
+                                    'input': {
+                                        width: '114px',
+                                        fontSize: '14px',
+                                        borderRadius: '6px',
+                                        border: 'solid 1px #bdbdbd'
+                                    }
+                                }}
+                            />
+                            <DatePicker
+                                locale={ko}
+                                selected={itemInfo.regDt}
+                                onChange={(date) => setItemInfo({ ...itemInfo, regDt: date })}
+                                dateFormat='yyyy년 MM월'
+                                showMonthYearPicker
+                                showFullMonthYearPicker
+                                showTwoColumnMonthYearPicker
+                                className='mr-6 py-1 px-4 text-sm border border-solid border-gray3 rounded-md bg-white'
+                            />
+                        </div>
+                    </section> : ''}
+                {itemInfo.status === 1
+                    ? <section className='mx-5 my-6'>
+                        <div className='text-sm textGray2 font-medium'>만족도 <span className='textGray4'>(선택)</span></div>
+                        <div className='flex mt-3'>
+                            <StarRatings
+                                rating={itemInfo.score}
+                                changeRating={(value) => setItemInfo({ ...itemInfo, score: value })}
+                                numberOfStars={5}
+                                name='rating'
+                                starDimension='36px'
+                                starSpacing='3px'
+                                starRatedColor='rgb(255, 96, 53)'
+                                starHoverColor='rgb(255, 96, 53)'
+                            />
+                        </div>
+                    </section>
+                    : ''
                 }
             </main>
         </div>
+        {(saving) ? <CircleLoadingOpacity /> : <></>}
+    </>
     )
 }
 
 export default AddPlace;
+
+AddPlace.getInitialProps = async (ctx) => {
+    return {
+        query: ctx.query
+    }
+}

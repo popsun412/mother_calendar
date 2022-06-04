@@ -359,9 +359,9 @@ const Experience = () => {
                         </div>
                         <div className='my-0 mx-auto text-base font-medium' style={{ letterSpacing: '-0.3px' }}>체험</div>
                         <div className='flex mr-2' style={{ width: '50px' }}>
-                            <Link href='/map'>
+                            {/* <Link href='/map'>
                                 <img src='/images/ic_map.png' className='mr-3' />
-                            </Link>
+                            </Link> */}
                             <img src='/images/filter.png' onClick={onClick('right', true)} />
                         </div>
                     </div>
@@ -387,8 +387,9 @@ const Experience = () => {
                                     <div>
                                         <h3 className='text-base font-semibold mb-1.5'>{item.name}</h3>
                                         <div className='flex'>
+                                            <span className='py-1 px-1.5 mr-1.5 rounded text-xs textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.region}</span>
                                             <span className='py-1 px-1.5 mr-1.5 rounded text-xs textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.field}</span>
-                                            <span className='py-1 px-1.5 mr-1.5 rounded text-xs textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.subject}</span>
+
                                         </div>
                                     </div>
                                 </div >

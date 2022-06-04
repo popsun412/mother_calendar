@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
 import CalendarHome from "../components/calendar/calendar_home";
 import CalendarMiddle from "../components/calendar/calendar_ middle";

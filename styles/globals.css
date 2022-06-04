@@ -2,6 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  font-family: "SuncheonR";
+}
+
+@font-face {
+  font-family: "Bazzi";
+  src: url("/fonts/Bazzi.otf") format("truetype");
+}
+
+@font-face {
+  font-family: "SuncheonR";
+  src: url("/fonts/SuncheonR.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "SuncheonB";
+  src: url("/fonts/SuncheonB.ttf") format("truetype");
+}
+
 /* 백그라운 색상 */
 .bg1 {
     background-color: #FFD6C2;
@@ -229,4 +248,14 @@
 
 .top-29 {
     top: 116px;
+}
+
+.swiper-pagination-bullet {
+    background-color: #e0e0e0 !important;
+    opacity: 1 !important;
+}
+
+.swiper-pagination-bullet-active {
+     background-color: #ff6035 !important;
+     opacity: 1 !important;
 }

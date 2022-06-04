@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Login from '../components/login/login';
 import { getAuth } from "firebase/auth";
 import network from '../util/network';
@@ -15,12 +16,13 @@ export default function Home() {
   useEffect(() => {
     auth.onAuthStateChanged(async (_user) => {
       if (_user) {
-        router.push('/calendar');
+        if (_user.emailVerified) router.push('/calendar');
+        if (!_user.emailVerified) router.push('/emailauth');
       } else {
         setLoad(true);
       }
     });
-  })
+  }, [])
 
   return (load) ?
     <Login />

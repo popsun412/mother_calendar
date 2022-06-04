@@ -53,7 +53,18 @@ const ChildrenInfo = (props) => {
             <div className="pt-9 px-5 space-y-9">
                 <div className="flex space-x-4">
                     {props.userInfo.babys.map((_item, index) =>
-                        <SignUpBabyAvatar key={index} active={index == selectedIndex} onClick={() => setSelectedIndex(index)} />
+                        <SignUpBabyAvatar
+                            key={index}
+                            index={index}
+                            active={index == selectedIndex}
+                            onClick={() => setSelectedIndex(index)}
+                            onDelete={() => {
+                                props.userInfo.babys.splice(index, 1);
+                                if (selectedIndex > (props.userInfo.babys.length - 1)) setSelectedIndex(props.userInfo.babys.length - 1);
+                                props.setUserInfo({ ...props.userInfo, babys: [].concat(props.userInfo.babys) });
+                            }}
+                            deleteActive={props.userInfo.babys.length > 1}
+                        />
                     )}
                     {(
                         props.userInfo.babys.length < 5 ? <button className="rounded-full w-9 h-9 border-dashed border-gary3 border flex items-center justify-center" onClick={addBaby}>

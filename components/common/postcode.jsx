@@ -20,10 +20,9 @@ export default function PostCode(props) {
     }
 
     return (
-        <div className="absolute top-0 left-0 right-0 bottom-0">
+        <div className="fixed top-0 left-0 right-0 bottom-0 p-4 bg-black bg-opacity-60">
             <DaumPostcode
                 onComplete={handleComplete}
-                autoClose={true}
                 style={{ height: '100%' }}
             />
         </div>

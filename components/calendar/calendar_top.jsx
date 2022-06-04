@@ -32,7 +32,7 @@ export default function CalendarTop(props) {
                 sex={userInfo.sex}
             />
 
-            {userInfo.friends.map((_friend) => (
+            {(userInfo.friends ?? []).map((_friend) => (
                 <span className={`rounded-full w-9 h-9 ${props.selectedUserUid == _friend.uid ? "ring-[3px] ring-[#FF6035]" : "ring-1 ring-[#e0e0e0]"}`} key={_friend.uid} onClick={() => router.push(`/calendar?friend=${_friend.uid}`)}>
                     <img src={profileImage(_friend)} className="w-full rounded-full" />
                 </span>

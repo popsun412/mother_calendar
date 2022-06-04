@@ -108,8 +108,8 @@ const Plan2 = (props) => {
     return (
         (load) ?
             <>
-                <PlanHeader name={data.name} />
-                <main>
+                <PlanHeader name={data.name} subject={data.subject} />
+                <main style={{ fontFamily: "SuncheonR" }}>
                     <section className='mb-6'>
                         <div className='block relative'>
                             <img src='/images/banner.png' className="w-full" />
@@ -131,7 +131,7 @@ const Plan2 = (props) => {
                     </section>
                     <section className='mb-8 mx-5'>
                         <div>
-                            <h3 className='text-base font-semibold mb-3' style={{ letterSpacing: '-0.32px' }}>추천 루틴</h3>
+                            <span className='text-base font-semibold mb-3'>추천 루틴</span>
                             <div className="bg-gray2 rounded-md px-5 py-3.5 mb-5">
                                 <p className="textGray2 font-semibold text-base mb-3">주 {num}회  |  매주 {getRepeatDay(data.repeatDay)}</p>
                                 <div className="textGray3 font-normal text-sm flex flex-col space-y-2.5">
@@ -152,7 +152,7 @@ const Plan2 = (props) => {
                             <h3 className='text-base font-semibold mb-3' style={{ letterSpacing: '-0.32px' }}>어떤 계획인가요?</h3>
                             <div className='mt-4'>
                                 <div className='text-sm textGray2' style={{ letterSpacing: '-0.28px' }}>
-                                    <pre className="max-w-full whitespace-pre-wrap">{data.description}</pre>
+                                    <pre className="max-w-full whitespace-pre-wrap" style={{ fontFamily: "SuncheonR" }}>{data.description}</pre>
                                 </div>
                             </div>
                         </div>

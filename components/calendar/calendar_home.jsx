@@ -55,12 +55,8 @@ export default function CalendarHome(props) {
                 date: moment(props.selectedDate).format("yyyy-MM-D")
             });
 
-
-            if (_dayResult.status == 200 && _dayResult.data != false) {
-                _items = _dayResult.data;
-            } else {
-                setOpen(false);
-            }
+            if (!_dayResult.data.isShare) setOpen(false);
+            if (_dayResult.status == 200) _items = _dayResult.data.items;
         }
 
         // 주간 데이터 목록 갖고오기
@@ -71,11 +67,10 @@ export default function CalendarHome(props) {
                 endDate: _dates[1],
             });
 
-            if (_weekResult.status == 200 && _weekResult.data != false) {
-                _items = _weekResult.data;
-            } else {
-                setOpen(false);
-            }
+            console.log(_weekResult);
+
+            if (!_weekResult.data.isShare) setOpen(false);
+            if (_weekResult.status == 200) _items = _weekResult.data.items;
         }
 
         setItems(_items);
@@ -92,14 +87,17 @@ export default function CalendarHome(props) {
                 <CircleLoading />
             </div>
             : <div className="bg-gray2 flex-auto overflow-y-auto flex flex-col p-5 pb-0">
-                <div className="flex text-sm textGray2">
-                    <div className="flex bg-white py-1.5 px-7 rounded-t-xl mr-1" onClick={() => setType(1)}>
-                        <span>일간</span>
+                {(items.length > 0)
+                    ? <div className="flex text-sm textGray2">
+                        <div className="flex bg-white py-1.5 px-7 rounded-t-xl mr-1" onClick={() => setType(1)}>
+                            <span>일간</span>
+                        </div>
+                        <div className="flex py-1.5 px-7 rounded-t-xl" style={{ backgroundColor: "#E0E0E0" }} onClick={() => setType(2)}>
+                            <span>주간</span>
+                        </div>
                     </div>
-                    <div className="flex py-1.5 px-7 rounded-t-xl" style={{ backgroundColor: "#E0E0E0" }} onClick={() => setType(2)}>
-                        <span>주간</span>
-                    </div>
-                </div>
+                    : <></>
+                }
                 {(open)
                     ? <>
                         {(items.length == 0) ? <EmptyPlan /> : <></>}

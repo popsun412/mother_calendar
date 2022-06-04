@@ -21,7 +21,7 @@ export default function Regist(props) {
     const auth = getAuth();
 
     // 상태관리
-    const [checked, setChecked] = useState(false);
+    const [checked, setChecked] = useState(true);
     const [common, setCommon] = useState(false);
 
     const [registInfo, setRegistInfo] = useState(
@@ -29,11 +29,11 @@ export default function Regist(props) {
             name: "",
             subject: null,
             category: null,
-            repeatDay: [],
-            startDate: new Date(),
-            endDate: new Date(),
-            startTime: new Date(),
-            endTime: new Date(),
+            repeatDay: [0, 1, 2, 3, 4, 5, 6],
+            startDate: null,
+            endDate: null,
+            startTime: null,
+            endTime: null,
             notification: [],
         }
     );
@@ -56,15 +56,22 @@ export default function Regist(props) {
         const _result = await network.get(`/plan/commonPlan/${props.query.commonPlanUid}`);
 
         if (_result.status == 200) {
+
+
             setChecked(_result.data.repeatDay.length > 0);
 
             registInfo.name = _result.data.name;
             registInfo.subject = _result.data.subject;
             registInfo.category = _result.data.category;
             registInfo.repeatDay = _result.data.repeatDay;
-            if (_result.data.recommTerm != null) registInfo.endDate = moment(registInfo.endDate).add('M', _result.data.recommTerm).toDate();
+            if (_result.data.recommTerm != null) {
+                const _newDate = new Date();
+                registInfo.startDate = _newDate;
+                registInfo.endDate = moment(_newDate).add('M', _result.data.recommTerm).toDate();
+            }
+
             if (_result.data.startTime != null) registInfo.startTime = moment(_result.data.startTime, "HH:mm:ss");
-            if (_result.data.endTime != null) registInfo.endTime = moment(_result.data.endTime, "HH:mm:ss")
+            // if (_result.data.endTime != null) registInfo.endTime = moment(_result.data.endTime, "HH:mm:ss");
             setCommon(true);
         }
     }
@@ -94,6 +101,8 @@ export default function Regist(props) {
 
     // 계획 등록
     const planRegist = async () => {
+        if (!registActive()) return;
+
         registInfo.repeatDay = checked ? registInfo.repeatDay : [];
 
         const _result = await network.post('/plan', {
@@ -104,7 +113,7 @@ export default function Regist(props) {
         });
 
         if (_result.status == 200) {
-            router.push(`/plan/${_result.data.planUid}`);
+            router.push(`/calendar`);
         }
     }
 
@@ -129,6 +138,18 @@ export default function Regist(props) {
         return `${koA} ${koH}${(koM == "00") ? "" : " " + koM + "분"}`;
     }
 
+    // active 체크
+    const registActive = () => {
+        if (registInfo.name.trim() == "") return false;
+        if (registInfo.subject == null) return false;
+        if (checked && registInfo.length == 0) return false;
+        if (registInfo.startDate == null || registInfo.endDate == null) return false;
+        if (registInfo.startTime != null && registInfo.endTime == null) return false;
+        if (registInfo.endTime != null && registInfo.startTime == null) return false;
+
+        return true;
+    }
+
     return (<>
         {(load)
             ? <div className="">
@@ -140,7 +161,7 @@ export default function Regist(props) {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
                         </svg>
 
-                        <span className={`pr-4 text-base font-medium textGray4 textOrange5`} value="false" onClick={planRegist}>완료</span>
+                        <span className={`pr-4 text-base font-medium ${registActive() ? "textOrange5" : "textGray4"}`} value="false" onClick={planRegist}>완료</span>
                     </div>
                 </div>
 
@@ -203,15 +224,16 @@ export default function Regist(props) {
                                 onChange={(date) => setRegistInfo({ ...registInfo, startDate: date })}
                                 value={registInfo.startDate}
                                 auto={true}
+                                maxDate={registInfo.endDate}
                             >
                                 <div className='flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center'>
-                                    <span className="text-xs font-medium pl-2">{moment(registInfo.startDate).format("YYYY년 M월 D일")}</span>
+                                    <span className={`text-xs font-medium pl-2 ${registInfo.startDate == null ? "textGray4" : ""}`}>{registInfo.startDate == null ? "시작날짜" : moment(registInfo.startDate).format("YYYY년 M월 D일")}</span>
                                     <ChevronRight className="rotate-90" />
                                 </div>
                             </CustomMobileDatepicker>
 
                             <div className='flex items-center justify-center'>
-                                <svg className="w-3 h-2 textGray4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <svg className="w-5 h-2 textGray4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                     <path fillRule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"></path>
                                 </svg>
                             </div>
@@ -220,9 +242,10 @@ export default function Regist(props) {
                                 onChange={(date) => setRegistInfo({ ...registInfo, endDate: date })}
                                 value={registInfo.endDate}
                                 auto={true}
+                                minDate={registInfo.startDate}
                             >
                                 <div className='flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center'>
-                                    <span className="text-xs font-medium pl-2">{moment(registInfo.endDate).format("YYYY년 M월 D일")}</span>
+                                    <span className={`text-xs font-medium pl-2 ${registInfo.endDate == null ? "textGray4" : ""}`}>{registInfo.endDate == null ? "종료날짜" : moment(registInfo.endDate).format("YYYY년 M월 D일")}</span>
                                     <ChevronRight className="rotate-90" />
                                 </div>
                             </CustomMobileDatepicker>
@@ -239,6 +262,7 @@ export default function Regist(props) {
                             <CustomTimepicker
                                 onChange={(time) => setRegistInfo({ ...registInfo, startTime: time })}
                                 value={registInfo.startTime}
+                                maxTime={registInfo.endTime}
                             >
                                 <div className='flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center'>
                                     <span className={`text-xs font-medium pl-2 ${registInfo.startTime == null ? "textGray4" : ""}`}>
@@ -257,6 +281,7 @@ export default function Regist(props) {
                             <CustomTimepicker
                                 onChange={(time) => setRegistInfo({ ...registInfo, endTime: time })}
                                 value={registInfo.endTime}
+                                minTime={registInfo.startTime}
                             >
                                 <div className='flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center'>
                                     <span className={`text-xs font-medium pl-2 ${registInfo.endTime == null ? "textGray4" : ""}`}>

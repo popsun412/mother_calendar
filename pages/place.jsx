@@ -38,8 +38,8 @@ const Place = () => {
         }
     }
 
-    const getData = async() => {
-        const res = await network.get('/item/commonItem/'+commonItemUid);
+    const getData = async () => {
+        const res = await network.get('/item/commonItem/' + commonItemUid);
         res.data ? setData(res.data) : null;
     }
 
@@ -60,26 +60,26 @@ const Place = () => {
 
     return (
         <div>
-            <PlaceHeader name={data.name}/>
+            <PlaceHeader name={data.name} />
             <main className='mb-28'>
                 <section className='mb-7'>
                     <div className='block relative'>
-                        <img src={data.image} style={{minWidth: '360px', maxHeight: '207px'}}/>
-                        <span className='block absolute bottom-0 left-0 text-lg text-white font-bold ml-5 mb-11' style={{fontFamily: 'NanumSquareRoundOTF'}}>{data.name}</span>
+                        <img src={data.image} style={{ minWidth: '360px', maxHeight: '207px' }} />
+                        <span className='block absolute bottom-0 left-0 text-lg text-white font-bold ml-5 mb-11' style={{ fontFamily: 'NanumSquareRoundOTF' }}>{data.name}</span>
                         <div className='block absolute bottom-0 left-0 ml-5 mb-5'>
-                            <span className='textOrange1 text-xs rounded p-1 mr-1' style={{fontFamily: 'NanumSquareRoundOTF', backgroundColor: 'rgba(219, 239, 253, 0.2)'}}>{data.subject}</span>
-                            <span className='textOrange1 text-xs rounded p-1' style={{fontFamily: 'NanumSquareRoundOTF', backgroundColor: 'rgba(219, 239, 253, 0.2)'}}>{data.field}</span>
+                            <span className='textOrange1 text-xs rounded p-1 mr-1' style={{ fontFamily: 'NanumSquareRoundOTF', backgroundColor: 'rgba(219, 239, 253, 0.2)' }}>{data.subject}</span>
+                            <span className='textOrange1 text-xs rounded p-1' style={{ fontFamily: 'NanumSquareRoundOTF', backgroundColor: 'rgba(219, 239, 253, 0.2)' }}>{data.field}</span>
                         </div>
                         <div className='block absolute bottom-0 right-0 mr-5 mb-5'>
-                            <img src={`/images/ic_${data.bookmark? 'bookmarked.png' : 'bookmark.png'}`} className='mx-auto'/>
+                            <img src={`/images/ic_${data.bookmark ? 'bookmarked.png' : 'bookmark.png'}`} className='mx-auto' />
                             <span className='text-xs text-white'>135</span>
                         </div>
                     </div>
                 </section>
                 <section className='mx-5'>
-                    <div className='text-base font-semibold mb-2' style={{letterSpacing: '-0.32px'}}>어떤 체험장소인가요?</div>
-                    <div className='text-sm break-all' style={{letterSpacing: '-0.28px', lineHeight: '21px'}}>
-                        {data.description}
+                    <div className='text-base font-semibold mb-2' style={{ letterSpacing: '-0.32px' }}>어떤 체험장소인가요?</div>
+                    <div className='text-sm break-all' style={{ letterSpacing: '-0.28px', lineHeight: '21px' }}>
+                        <pre className="max-w-full whitespace-pre-wrap">{data.description}</pre>
                     </div>
                 </section>
             </main>
@@ -91,9 +91,9 @@ const Place = () => {
                     }
                 }}>
                     <div className='relative mx-auto my-0 bg-white'>
-                        <nav className='flex items-center box-border relative' style={{height: '90px'}}>
-                            <span className='text-sm text-white text-center p-4 m-5 w-full rounded-md bg5' 
-                                style={{letterSpacing: '-0.28px'}}>내 보관함에 등록하기</span>
+                        <nav className='flex items-center box-border relative' style={{ height: '90px' }}>
+                            <span className='text-sm text-white text-center p-4 m-5 w-full rounded-md bg5'
+                                style={{ letterSpacing: '-0.28px' }}>내 보관함에 등록하기</span>
                         </nav>
                     </div>
                 </Link>

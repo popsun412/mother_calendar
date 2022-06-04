@@ -4,6 +4,8 @@ import moment from "moment";
 
 export default function PlanListDay(props) {
     const timeFormat = (_time) => {
+        if (_time == null) return "";
+
         let tempTime = _time.split(":");
         let dt = new Date();
         dt.setHours(tempTime[0]);

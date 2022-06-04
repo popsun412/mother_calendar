@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Toast from '../common/toast';
 import network from '../../util/network';
 import Link from 'next/link';
+import { getSubjectImage } from "../../util/helper";
 
 const CategoryPlan = (props) => {
 
@@ -67,10 +68,10 @@ const CategoryPlan = (props) => {
                                                     key={_index}
                                                     passHref
                                                 >
-                                                    <div className='py-5 px-4 rounded-2xl text-sm flex mb-4' style={{ backgroundColor: '#f8f6f5' }}>
+                                                    <div className='py-5 px-4 rounded-2xl text-sm flex items-center mb-4' style={{ backgroundColor: '#f8f6f5' }}>
 
                                                         <div className='flex'>
-                                                            <img src='/images/category1.png' className='mr-4' />
+                                                            <img src={`${getSubjectImage(_item.subject)}`} className='mr-4 w-6 h-6' />
                                                             <div className='my-auto mx-0'>{_item.name}</div>
                                                         </div>
                                                         <a className='ml-auto' onClick={handleToast}>

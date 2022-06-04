@@ -4,6 +4,8 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import PlanTitle from '../calendar/plan_title';
 import { TextareaAutosize } from "@mui/material"
+import Link from "next/link";
+import network from "../../util/network";
 
 export default function PlanCertify(props) {
     const router = useRouter();
@@ -36,6 +38,19 @@ export default function PlanCertify(props) {
         setUploadImage({ image_file: null, preview_URL: '' });
     }
 
+    // 실행 인증
+    const onSave = async () => {
+        const formData = new FormData();
+        formData.append("planUid", props.plan.planUid);
+        formData.append("commonPlanUid", props.plan.commonPlanUid);
+        formData.append('uploadImage', uploadImage.image_file);
+        formData.append('review', review);
+        formData.append('itemUids', props.lockers.map((_locker) => _locker.itemUid));
+
+        const _result = await network.post('/plan/auth', formData);
+        console.log(_result);
+    }
+
     return (
         <>
             <div className="flex  py-4 items-center justify-center">
@@ -43,19 +58,28 @@ export default function PlanCertify(props) {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
                 <span className="flex-auto text-center text-base font-medium textGray1">실행 인증</span>
-                <span className={`pr-4 text-base font-medium ${review.length == 0 ? "textGray4" : "textOrange5"}`} value="false">완료</span>
+                <span className={`pr-4 text-base font-medium ${review.length == 0 ? "textGray4" : "textOrange5"}`} onClick={onSave}>완료</span>
             </div>
             <div className='px-5 relative'>
-                <div className="flex mt-4">
+                <div className="flex mt-4 mb-6">
                     <PlanTitle subject={props.plan.subject} />
                     <p className="textGray1 text-lg font-semibold">{props.plan.name}</p>
                 </div>
-                <div className="flex items-center justify-center border border-color4 rounded-md mt-6 py-3">
-                    <svg className="w-4 h-5 textGray4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
-                    </svg>
-                    <span className="text-sm font-medium textGray4">아이템 추가하기</span>
-                </div>
+                {
+                    props.lockers.map((_locker) => {
+                        return <div className="flex items-center justify-center border border-color4 rounded-md mb-4 py-3" key={_locker.itemUid}>
+                            <span className="text-sm font-semibold textOrange4">{_locker.name}</span>
+                        </div>
+                    })
+                }
+                <Link href="/plan/items" passHref>
+                    <div className="flex items-center justify-center border border-color4 rounded-md mb-4 py-3">
+                        <svg className="w-4 h-5 textGray4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                        </svg>
+                        <span className="text-sm font-medium textGray4">아이템 추가하기</span>
+                    </div>
+                </Link>
                 <div className='flex items-center justify-center mt-9 mb-20'>
                     {/* 이미지가 없을 때*/}
                     {(uploadImage.image_file == null)

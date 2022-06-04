@@ -13,12 +13,17 @@ import { getAuth } from "firebase/auth";
 // api호출
 import network from "../../util/network";
 
+// 글로벌 상태관리
+import { useRecoilState } from "recoil";
+import { certifyLockerState } from "../../states/certify_locker";
+
 export default function Certify(props) {
     const auth = getAuth();
     const router = useRouter();
 
     const [load, setLoad] = useState(false);
     const [plan, setPlan] = useState(null);
+    const [lockers, setLockers] = useRecoilState(certifyLockerState);
 
     // 유저 정보 갖고오기
     const getUser = async () => {
@@ -50,7 +55,7 @@ export default function Certify(props) {
 
     return (load) ?
         <>
-            <PlanCertify plan={plan} />
+            <PlanCertify plan={plan} lockers={lockers} />
         </>
         : <div className="h-screen w-screen">
             <CircleLoading />

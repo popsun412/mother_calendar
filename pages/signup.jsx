@@ -2,21 +2,27 @@ import { useState } from "react";
 import SignIn1 from "../components/signup/sign_in_1";
 import SignIn2 from "../components/signup/sign_in_2";
 import SignIn3 from "../components/signup/sign_in_3";
+import moment from "moment";
+import { useRouter } from "next/router";
 
 export default function Logo() {
+    const router = useRouter();
+
     const [signupInfo, setSignupInfo] = useState({
         nickName: "",
-        sex: "female",
+        sex: "",
         tel1: "010",
         tel2: "",
         tel3: "",
         address: "",
-        interest: [],
+        detailAddress: "",
+        interest: null,
         babys: [
-            { year: 2022, month: "01", day: "01", sex: "female" }
+            { birth: null, sex: null }
         ],
         email: "",
-        password: ""
+        password: "",
+        region: null,
     });
 
     const [step, setStep] = useState(1);

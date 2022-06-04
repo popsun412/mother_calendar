@@ -8,9 +8,10 @@ import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 import 'swiper/components/pagination/pagination.min.css';
 import network from '../../util/network';
+import { useRouter } from 'next/router';
 
 const HomeSlider = () => {
-
+    const router = useRouter();
     const [data, setData] = useState([]);
 
     useEffect(() => {
@@ -24,7 +25,7 @@ const HomeSlider = () => {
     SwiperCore.use([Pagination, Autoplay]);
 
     return (
-        <section>
+        <section className="relative">
             <Swiper
                 modules={[Pagination, Autoplay]}
                 slidesPerView={1}
@@ -38,17 +39,27 @@ const HomeSlider = () => {
                     data.map((item, idx) => {
                         return (
                             <SwiperSlide key={idx}>
-                                <img src={item.image} style={{width: '360px'}}/>
-                                <img src="/images/arrow-right-circle.png" className="absolute bottom-3 right-3"/>
-                                <span className='block absolute bottom-28 left-2.5 text-xs text-center text-white w-21 h-6 py-1 px-2 rounded-xl' style={{ backgroundColor: '#ff6035' }}>
-                                    {item.count}명 참여중👦
-                                </span>
-                                <span className='bottom-14 left-2.5 block text-center absolute py-2 pr-2.5 text-white text-base font-semibold' style={{ letterSpacing: '-0.48px' }}>
-                                    {item.name}
-                                </span>
-                                <div className='flex absolute bottom-8 left-2.5'>
-                                    <span className='text-xs font-bold text-center textOrange1 py-1 px-2 mr-2 rounded' style={{ backgroundColor: 'rgba(219, 239, 253, 0.2)' }}>{item.subject}</span>
-                                    <span className='text-xs font-bold text-center textOrange1 py-1 px-2 mr-2 rounded' style={{ backgroundColor: 'rgba(219, 239, 253, 0.2)' }}>{item.field}</span>
+                                <div onClick={() => {
+                                    router.push(`/plan/regist?commonPlanUid=${item.commonPlanUid}`);
+                                }}>
+                                    <div
+                                        className="before:bg-black before:bg-opacity-50 before:top-0 before:right-0 before:bottom-0 before:left-0 before:absolute"
+                                        style={{
+                                            backgroundImage: `url("${item.image}")`,
+                                            backgroundRepeat: "no-repeat",
+                                            backgroundSize: "cover",
+                                            width: "100%",
+                                            paddingTop: "60%",
+                                            backgroundPosition: "center center"
+                                        }}
+                                    />
+                                    <span className='bottom-14 left-4 block text-center absolute py-2 pr-2.5 text-white text-base font-semibold' style={{ letterSpacing: '-0.48px' }}>
+                                        {item.name}
+                                    </span>
+                                    <div className='flex absolute bottom-8 left-4'>
+                                        <span className='text-xs font-bold text-center textOrange1 py-1 px-2 mr-2 rounded' style={{ backgroundColor: 'rgba(219, 239, 253, 0.3)' }}>{item.subject}</span>
+                                        <span className='text-xs font-bold text-center textOrange1 py-1 px-2 mr-2 rounded' style={{ backgroundColor: 'rgba(219, 239, 253, 0.3)' }}>{item.field}</span>
+                                    </div>
                                 </div>
                             </SwiperSlide>
                         )

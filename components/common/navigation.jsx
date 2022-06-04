@@ -37,7 +37,7 @@ const Navigation = (props) => {
                         <Link href='/calendar'>
                             <div className='flex-1 mt-2.5 my-0 mx-auto'>
                                 <div className='text-center'>
-                                    <img src={`${pathname === 'calendar' ? '/images/calendar_navi.png' : '/images/calendar_navi.png'}`} className='mx-auto w-6 h-6' />
+                                    <img src={`${pathname === 'calendar' ? '/images/calendar_navi_select.png' : '/images/calendar_navi.png'}`} className='mx-auto w-6 h-6' />
                                 </div>
                                 <div className='text-center'>
                                     <span className={`text-xs ${pathname === 'calendar' ? 'textOrange5' : 'textGray4'}`} style={{ letterSpacing: '-0.36px' }}>캘린더</span>

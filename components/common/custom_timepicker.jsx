@@ -18,6 +18,8 @@ export default function CustomTimepicker({ children, ...props }) {
                     value={props.value}
                     onChange={(time) => { props.onChange(time); }}
                     onClose={() => { setOpen(false); }}
+                    maxTime={props.maxTime ?? null}
+                    minTime={props.minTime ?? null}
                     renderInput={(params) => <TextField
                         size="small"
                         className="outline-none border-0 focus:outline-none"

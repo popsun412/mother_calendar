@@ -1,8 +1,11 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState } from 'react';
+import { getSubjectImage } from "../../util/helper";
 
 const PlanHeader = (props) => {
 
-    const { name } = props;
+    const { name, subject } = props;
     const [scrollPosition, setScrollPosition] = useState(0);
 
     const updateScroll = () => {
@@ -20,12 +23,14 @@ const PlanHeader = (props) => {
                         ${scrollPosition > 60 ? 'bg-white border-b border-solid border-gray3' : ''}`} style={{ height: '50px' }}>
                     {
                         scrollPosition > 60 ?
-                            <div className='flex mx-5 w-full'>
+                            <div className='flex mx-5 w-full items-center relative'>
+                                <div className='absolute flex justify-center items-center mx-3 left-0 right-0'>
+                                    <img className="w-4 h-4 mr-2" src={getSubjectImage(subject)} onClick={() => { window.history.back() }} />
+                                    <span>{name}</span>
+                                </div>
                                 <div>
                                     <img src='/images/ic_back.png' onClick={() => { window.history.back() }} />
                                 </div>
-                                <div className='text-center flex-1'>🧩 {name}</div>
-                                <img src='/images/ic_back.png' className='hidden' />
                             </div> : <img src='/images/ic_banner_aos.png' onClick={() => { window.history.back() }} />
                     }
                 </div>

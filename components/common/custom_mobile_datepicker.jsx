@@ -19,6 +19,8 @@ export default function CustomMobileDatepicker({ children, ...props }) {
                     value={props.value}
                     onChange={(date) => { props.onChange(date); }}
                     onClose={() => { setOpen(false) }}
+                    maxDate={props.maxDate ?? null}
+                    minDate={props.minDate ?? null}
                     renderInput={(params) => <TextField
                         id="selcedtedDatePicker"
                         size="small"

@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Box, Drawer } from '@material-ui/core';
@@ -61,7 +63,7 @@ const Bookshelf = () => {
     }, [])
 
     useEffect(() => {
-        setParams({...params, ['status']: activeTab});
+        setParams({ ...params, ['status']: activeTab });
     }, [activeTab])
 
     const tabClick = (index) => {
@@ -121,7 +123,7 @@ const Bookshelf = () => {
     };
 
     const getSubject = () => {
-        
+
         const subject = [];
 
         field[1] ? subject.push('국어') : null;
@@ -139,7 +141,7 @@ const Bookshelf = () => {
     }
 
     const getField = () => {
-        
+
         const field = [];
 
         area[1] ? field.push('대전집') : null;
@@ -213,9 +215,9 @@ const Bookshelf = () => {
     ]
 
     const obj = {
-        0: <BookshelfInstock params={params} activeTab={activeTab}/>,
-        1: <BookshelfPurchase params={params} activeTab={activeTab}/>,
-        2: <BookshelfSell params={params} activeTab={activeTab}/>
+        0: <BookshelfInstock params={params} activeTab={activeTab} />,
+        1: <BookshelfPurchase params={params} activeTab={activeTab} />,
+        2: <BookshelfSell params={params} activeTab={activeTab} />
     }
 
     const list = (anchor) => (
@@ -342,7 +344,7 @@ const Bookshelf = () => {
                     </div>
                 </Link>
             </div>
-            : <CircleLoading />
+            : <div className="w-screen h-screen"><CircleLoading /></div>
     }</>)
 }
 

@@ -9,12 +9,17 @@ import PlanMoreButton from "./plan_more_button";
 import { useEffect } from "react";
 import Link from "next/link";
 
+// 글로벌 상태관리
+import { useRecoilState } from "recoil";
+import { certifyLockerState } from "../../states/certify_locker";
+
 export default function PlaneDetail(props) {
     const router = useRouter();
+    const [lockers, setLockers] = useRecoilState(certifyLockerState);
 
     const status = () => {
         const _endDate = moment(props.plan.endDate);
-        const _todayAuth = props.plan.auths.findIndex((_auth) => moment().unix(_auth.authDt).format("YYYY-MM-DD") == moment("YYYY-MM-DD")) >= 0;
+        const _todayAuth = props.plan.auths.findIndex((_auth) => moment(_auth.authDt).format("YYYY-MM-DD") == moment().format("YYYY-MM-DD")) >= 0;
 
         // 오늘 인증 함
         if (_todayAuth) return 1;
@@ -63,7 +68,9 @@ export default function PlaneDetail(props) {
         },
     }));
 
-    const _percent = () => Math.round(props.plan.auths.length / calcPercent(props.plan));
+    const _percent = () => {
+        return Math.round(props.plan.auths.length / calcPercent(props.plan) * 100);
+    }
 
     useEffect(() => {
         status()
@@ -149,11 +156,15 @@ export default function PlaneDetail(props) {
                     <div className="grid grid-cols-3 gap-1">
                         {
                             props.plan.auths.map((_auth) =>
-                                <div className={`bg-[url(${_auth.image ? _auth.image : "/images/rectangle.png"})] bg-center bg-no-repeat bg-cover relative h-[7.5rem]`} key={_auth.planAuthUid}>
+                                <div
+                                    className={`bg-center bg-no-repeat bg-cover relative h-[7.5rem]`}
+                                    key={_auth.planAuthUid}
+                                    style={{ backgroundImage: `url(${_auth.image})` }}
+                                >
                                     <div className="w-full h-full absolute top-0 left-0 bg-[rgba(0,0,0,0.4)]" />
                                     <div className="flex flex-col absolute left-2.5 bottom-2.5">
-                                        <span className="text-[#dbeffd] text-xs font-light">{moment.unix(_auth.authDt).format("YYYY년")}</span>
-                                        <span className="text-white font-normal text-sm shadow-[0px 0px 4px rgba(0,0,0,0.25)]">{moment.unix(_auth.authDt).format("M월D일")}</span>
+                                        <span className="text-[#dbeffd] text-xs font-light">{moment(_auth.authDt).format("YYYY년")}</span>
+                                        <span className="text-white font-normal text-sm shadow-[0px 0px 4px rgba(0,0,0,0.25)]">{moment(_auth.authDt).format("M월D일")}</span>
                                     </div>
                                 </div>)
                         }
@@ -163,9 +174,12 @@ export default function PlaneDetail(props) {
                 </div>
 
                 <div className="fixed flex items-center justify-center left-0 right-0 bottom-6">
-                    {(status() == 0) ? <Link href={`/plan/certify?planUid=${props.plan.planUid}`} passHref><span className="px-5 py-3 bg5 text-base text-white font-medium rounded-full">오늘 하루 인증하기</span></Link> : <></>}
+                    {(status() == 0) ? <span className="px-5 py-3 bg5 text-base text-white font-medium rounded-full" onClick={() => {
+                        setLockers([]);
+                        router.push(`/plan/certify?planUid=${props.plan.planUid}`);
+                    }}>오늘 하루 인증하기</span> : <></>}
                     {(status() == 1) ? <span className="px-5 py-3 bg-gray4 text-base text-white font-medium rounded-full fixed bottom-6">오늘 인증을 완료했어요!</span> : <></>}
-                    {(status() == 2) ? <span className="px-5 py-3 bg5 text-base text-white font-medium rounded-full fixed bottom-6">종료 계획 재시작하기</span> : <></>}
+                    {(status() == 2) ? <Link href={`/plan/edit?planUid=${props.plan.planUid}`} passHref><span className="px-5 py-3 bg5 text-base text-white font-medium rounded-full fixed bottom-6">종료 계획 재시작하기</span></Link> : <></>}
                 </div>
             </div>
 

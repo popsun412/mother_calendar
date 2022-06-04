@@ -10,7 +10,7 @@ const HomeCategory = () => {
             url: '/category?id=10',
             title: '체험',
             recommend: true,
-            
+
         },
         {
             id: 1,
@@ -95,40 +95,40 @@ const HomeCategory = () => {
         <section className='mx-5'>
             <div className='my-8'>
                 <div className='grid grid-cols-4'>
-                {
-                    data.map((item, idx) => {
-                        let category = '';
-                        item.id == 10 ? category = '체험' : item.id == 12 ? category = '부모' : item.id == 11 ? category == '기타' : category = '교육'
+                    {
+                        data.map((item, idx) => {
+                            let category = '';
+                            item.id == 10 ? category = '체험' : item.id == 12 ? category = '부모' : item.id == 11 ? category == '기타' : category = '교육'
 
-                        if (item.id == 11) {
-                            category = 'etc';
-                        }
-                        return (
-                            <Link key={idx}
-                                href={{
-                                    pathname: '/category',
-                                    query: { 
-                                        type: category,
-                                        id: item.title
-                                    }
-                                }}
-                            >
-                                <div className={`flex justify-center flex-col my-0 mx-auto ${item.recommend ? 'border border-solid rounded-lg border-color2' : ''}`} style={{height: '87px', width: '62px'}}>
-                                    <div className={`${item.recommend ? 'block relative' : ''}`}>
-                                        {
-                                            item.recommend ? <span className='block absolute px-1 rounded bg-blue2 text-white' 
-                                                style={{fontSize: '10px', top: '-20px', left: '-10px', paddingTop: '3px', paddingBottom: '3px'}}>추천</span> : ''
-                                        }
-                                        <img src={item.imgUrl} className='my-0 mx-auto'/>
-                                        <div className='text-center my-0 mx-auto'>
-                                            <span className='text-xs font-medium textGray2' style={{letterSpacing: '-0.26px'}}>{item.title}</span>
+                            if (item.id == 11) {
+                                category = 'etc';
+                            }
+
+                            let _href = { pathname: '/category', query: { type: category, id: item.title } };
+                            if (category == "체험") _href = { pathname: '/experience' };
+                            if (category == "부모") _href = { pathname: '/parents' };
+                            if (category == "기타") _href = { pathname: '/etc' };
+
+                            return (
+                                <Link key={idx} href={_href}
+                                    passHref
+                                >
+                                    <div className={`flex justify-center flex-col my-0 mx-auto ${item.recommend ? 'border border-solid rounded-lg border-color2' : ''}`} style={{ height: '87px', width: '62px' }}>
+                                        <div className={`${item.recommend ? 'block relative' : ''}`}>
+                                            {
+                                                item.recommend ? <span className='block absolute px-1 rounded bg-blue2 text-white'
+                                                    style={{ fontSize: '10px', top: '-20px', left: '-10px', paddingTop: '3px', paddingBottom: '3px' }}>추천</span> : ''
+                                            }
+                                            <img src={item.imgUrl} className='my-0 mx-auto w-full px-3' />
+                                            <div className='text-center my-0 mx-auto'>
+                                                <span className='text-xs font-medium textGray2' style={{ letterSpacing: '-0.26px' }}>{item.title}</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </Link>
-                        )
-                    })
-                }
+                                </Link>
+                            )
+                        })
+                    }
                 </div>
             </div>
         </section>

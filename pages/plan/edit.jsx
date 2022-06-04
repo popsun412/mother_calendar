@@ -55,10 +55,10 @@ export default function Edit(props) {
         const _result = await network.get(`/plan/${router.query.planUid}`);
 
         if (_result.status == 200) {
-            setChecked(_result.data.repeatDay.length > 0);
+            setChecked((_result.data.repeatDay ?? []).length > 0);
             planInfo.planUid = _result.data.planUid;
             planInfo.commonPlanUid = _result.data.commonPlanUid;
-            planInfo.repeatDay = _result.data.repeatDay;
+            planInfo.repeatDay = _result.data.repeatDay ?? [];
             if (_result.data.recommTerm != null) planInfo.endDate = moment(planInfo.endDate).add('M', _result.data.recommTerm).toDate();
             if (_result.data.startTime != null) planInfo.startTime = moment(_result.data.startTime, "HH:mm:ss");
             if (_result.data.endTime != null) planInfo.endTime = moment(_result.data.endTime, "HH:mm:ss")
@@ -72,7 +72,7 @@ export default function Edit(props) {
         const _days = ["일", "월", "화", "수", "목", "금", "토"];
         for (let i = 0; i < 7; i++) {
             const _index = (i < 7) ? i : 0;
-            const _daysIndex = planInfo.repeatDay.findIndex((_item) => _item == _index);
+            const _daysIndex = (planInfo.repeatDay ?? []).findIndex((_item) => _item == _index);
 
             result.push(
                 <div

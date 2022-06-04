@@ -1,23 +1,27 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @next/next/no-img-element */
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import network from '../../util/network';
+import StarRatings from 'react-star-ratings';
 
 const BookshelfPurchase = (props) => {
 
     const { params, activeTab } = props;
     const [data, setData] = useState([]);
 
-    const getData = async() => {
+    const getData = async () => {
         const res = await network.post('/locker/items', params);
 
         res.data ? setData(res.data) : null;
     }
 
     useEffect(() => {
-        if(activeTab == 1) {
+        if (activeTab == 1) {
             params['status'] = 1;
             getData();
-        } 
+        }
     }, [params, activeTab]);
 
     return (
@@ -33,7 +37,17 @@ const BookshelfPurchase = (props) => {
                                 <div>
                                     <div className='font-semibold' style={{ fontSize: '15px', letterSpacing: '-0.3px' }}>{item.name}</div>
                                     <div className='textGray3' style={{ fontSize: '13px' }}>{moment(item.data).format('YYYY.MM.DD')} 구매</div>
-                                    <div></div>
+                                    <div className="relative -top-1 ">
+                                        <StarRatings
+                                            rating={item.score}
+                                            numberOfStars={5}
+                                            name='rating'
+                                            starDimension='15px'
+                                            starSpacing='1.5px'
+                                            starRatedColor='rgb(255, 96, 53)'
+                                            starHoverColor='rgb(255, 96, 53)'
+                                        />
+                                    </div>
                                     <div>
                                         <span className='px-1.5 text-xs textGray3 rounded mr-1.5'
                                             style={{ paddingTop: '3px', paddingBottom: '3px', backgroundColor: '#f0f5f8' }}>{item.subject}</span>
@@ -52,7 +66,7 @@ const BookshelfPurchase = (props) => {
                             </div>
                         </div>
                     </div>
-                }
+            }
         </div>
     )
 }

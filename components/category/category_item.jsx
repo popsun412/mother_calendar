@@ -12,17 +12,15 @@ const CategoryItem = (props) => {
     const [data, setData] = useState([]);
 
     const getData = async (param) => {
-        const res = await network.post('/home/recommItems', {
-            params: {
-                subject: category
-            }
-        })
+        let _param = {};
+        if (category != "전체" && category != "") _param = { subject: category };
+
+        const res = await network.post('/home/recommItems', _param)
         res.data ? setData(res.data) : ''
     }
 
     useEffect(() => {
         getData(category);
-
     }, [category])
 
     const marks = [
@@ -433,12 +431,8 @@ const CategoryItem = (props) => {
                                 return (
                                     <Link href={{
                                         pathname: '/item',
-                                        query: {
-                                            itemUid: item.commonItemUid,
-                                            subject: item.subject,
-                                            field: item.field
-                                        }
-                                    }} key={idx}>
+                                        query: { commonItemUid: item.commonItemUid }
+                                    }} key={idx} passHref>
                                         <div>
                                             <div className='block relative'>
                                                 <img src={item.image} className='rounded-md' />
@@ -448,10 +442,10 @@ const CategoryItem = (props) => {
                                                 }
 
                                             </div>
-                                            <div className='my-2 text-sm'>가베가족 알파벳 교구</div>
+                                            <div className='my-2 text-sm'>{item.name}</div>
                                             <div>
-                                                <span className='mr-1.5 py-1 px-1.5 rounded text-xs text-center textGray3' style={{ backgroundColor: '#f0f5f8' }}>영어</span>
-                                                <span className='mr-1.5 py-1 px-1.5 rounded text-xs text-center textGray3' style={{ backgroundColor: '#f0f5f8' }}>교구</span>
+                                                <span className='mr-1.5 py-1 px-1.5 rounded text-xs text-center textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.field}</span>
+                                                <span className='mr-1.5 py-1 px-1.5 rounded text-xs text-center textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.subject}</span>
                                             </div>
                                         </div>
                                     </Link>

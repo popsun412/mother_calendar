@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
 import React, { useState } from 'react';
 
@@ -9,21 +11,18 @@ const HomeHeader = () => {
         setValue(e.target.value)
     }
 
-    return (
-        <header className='sticky top-0 left-0 right-0 opacity-100 visible px-3.5 bg-white z-100' style={{marginBottom: '-74px'}}>
-            <div className='relative box-border flex items-center h-18 my-0 mx-auto' style={{height: '74px'}}>
-                    <div className='my-0'>
-                        <img src={`/images/logo_new.png`} alt='logo'/>
-                    </div>
-                    <Link href='/search'>
-                        <div className='relative'>
-                            <input className='rounded-3xl block box-border border border-solid px-4' type='text' value={value} placeholder='' 
-                                style={{width: '190px', height: '30px', borderColor: '#ff734d'}} onChange={onChange}/>
-                            <img src='/images/ic_search.png' className='absolute right-3 top-1' />
-                        </div>
-                    </Link>
+    return (<header className='sticky top-0 left-0 right-0 visible opacity-100 bg-white z-100'>
+        <div className='my-auto mx-auto py-0 px-4 relative flex items-center w-full bg-white border-b border-solid border-gray3' style={{ height: '50px' }}>
+            <div className='flex-1 flex items-center justify-between'>
+                <div>
+                    <img src='/images/logo_new.png' width={139} />
+                </div>
+                <Link href='/search' passHref>
+                    <img src='/images/ic_search.png' className='w-6 h-6' />
+                </Link>
             </div>
-        </header>
+        </div>
+    </header>
     )
 }
 
