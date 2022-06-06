@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import HomeHeader from '../components/home/home_header';
 import HomeSlider from '../components/home/home_slider';
@@ -6,6 +7,7 @@ import HomeItem from '../components/home/home_item';
 import HomePlace from '../components/home/home_place';
 import HomeTheme from '../components/home/home_theme';
 import Navigation from '../components/common/navigation';
+import CircleLoading from "../components/common/circle_loading";
 
 import { getAuth } from "firebase/auth";
 import { useRecoilState } from "recoil";
@@ -23,11 +25,6 @@ const Home = () => {
     const [userInfo, setUserInfo] = useRecoilState(userInfoState);
     const [load, setLoad] = useState(false);
 
-    // 아이템 불러오기
-    const getItem = async () => {
-        setLoad(true);
-    }
-
     // 유저 정보 갖고오기
     const getUser = async () => {
         const _result = await network.post('/userInfo');
@@ -41,21 +38,18 @@ const Home = () => {
     }
 
     useEffect(() => {
-        if (userInfo == null) {
-            auth.onAuthStateChanged(async (_user) => {
-                if (_user) {
-                    getUser();
-                } else {
-                    setUserInfo(null);
-                    router.push('/');
-                }
-            });
-        }
+        auth.onAuthStateChanged(async (_user) => {
+            if (_user) {
+                await getUser();
+                setLoad(true);
+            } else {
+                setUserInfo(null);
+                router.push('/');
+            }
+        });
+    }, [])
 
-        if (userInfo != null && !load) getItem();
-    })
-
-    return (
+    return (load) ?
         <div className="w-screen h-screen overflow-y-auto scrollbar-hide">
             <HomeHeader />
             <main>
@@ -69,8 +63,10 @@ const Home = () => {
                 <HomeTheme />
             </main>
             <Navigation path={'home'} />
+        </div> : <div className="h-screen w-screen">
+            <CircleLoading />
         </div>
-    )
+
 }
 
 export default Home;

@@ -8,7 +8,7 @@ const Search = () => {
     return (
         <div className="w-screen h-screen overflow-y-auto scrollbar-hide">
             <SearchHeader />
-            <main className='mt-20'>
+            <main>
                 <SearchTag />
             </main>
         </div>

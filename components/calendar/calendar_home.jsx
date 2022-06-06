@@ -67,8 +67,6 @@ export default function CalendarHome(props) {
                 endDate: _dates[1],
             });
 
-            console.log(_weekResult);
-
             if (!_weekResult.data.isShare) setOpen(false);
             if (_weekResult.status == 200) _items = _weekResult.data.items;
         }

@@ -146,16 +146,17 @@ export default function PlaneDetail(props) {
                         </span>
                     </div>
                 </div>
+                <div className="mb-4 relative">
+                    <p className="mb-3.5 font-bold">실행인증</p>
+                </div>
+                <div className="grid grid-cols-2 text-center border-b-[0.38px] border-gary4 mb-1" />
                 <div>
-                    <div className="grid grid-cols-2 text-center border-b-[0.38px] border-gary4 mb-1">
-                        <span className="textGray3 font-normal text-sm pb-2 hover:border-b-2 hover:text-[#3c81e1] hover:border-[#3c81e1] hover:font-semibold">실행인증</span>
-                        <span className="textGray3 font-normal text-sm pb-2 hover:border-b-2 hover:text-[#3c81e1] hover:border-[#3c81e1] hover:font-semibold">실행현황</span>
-                    </div>
-
-                    {/* 실행 인증 */}
-                    <div className="grid grid-cols-3 gap-1">
-                        {
-                            props.plan.auths.map((_auth) =>
+                    {(props.plan.auths.length == 0)
+                        ? <div className="py-10">
+                            <p className="text-center textGray4 text-sm">인증 내역이 없습니다.</p>
+                        </div>
+                        : <div className="grid grid-cols-3 gap-1">
+                            {props.plan.auths.map((_auth) =>
                                 <div
                                     className={`bg-center bg-no-repeat bg-cover relative h-[7.5rem]`}
                                     key={_auth.planAuthUid}
@@ -166,11 +167,9 @@ export default function PlaneDetail(props) {
                                         <span className="text-[#dbeffd] text-xs font-light">{moment(_auth.authDt).format("YYYY년")}</span>
                                         <span className="text-white font-normal text-sm shadow-[0px 0px 4px rgba(0,0,0,0.25)]">{moment(_auth.authDt).format("M월D일")}</span>
                                     </div>
-                                </div>)
-                        }
-                    </div>
-
-                    {/* 실행 현황 */}
+                                </div>
+                            )}
+                        </div>}
                 </div>
 
                 <div className="fixed flex items-center justify-center left-0 right-0 bottom-6">

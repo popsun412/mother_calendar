@@ -22,20 +22,6 @@ const Account = () => {
 
     const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
 
-    const [checked1, setChecked1] = useState(true);
-    const [checked2, setChecked2] = useState(true);
-    const [checked3, setChecked3] = useState(true);
-
-    const handleChange = (e) => {
-        if (e.target.value === '1') {
-            setChecked1(e.target.checked);
-            setChecked2(e.target.checked);
-            setChecked3(e.target.checked);
-        } else {
-            e.target.value === '2' ? setChecked2(e.target.checked) : setChecked3(e.target.checked);
-        }
-    }
-
     // 유저 정보 갖고오기
     const getUser = async () => {
         const _result = await network.post('/userInfo');
@@ -48,18 +34,7 @@ const Account = () => {
         }
     }
 
-    const changeShare = async () => {
-        const updateShare = !(userInfo?.isShare ?? false);
-
-        network.put("/userInfo/isShare", { isShare: !(userInfo?.isShare ?? false) });
-        setUserInfo({ ...userInfo, isShare: updateShare });
-        setBottomSheetOpen(false);
-    }
-
     useEffect(() => {
-        checked2 && checked3 ?
-            setChecked1(true) : '';
-
         auth.onAuthStateChanged(async (_user) => {
             if (_user) {
                 await getUser();
@@ -69,6 +44,18 @@ const Account = () => {
             }
         });
     }, [])
+
+    // 유저 수정
+    const updateUser = () => {
+        network.put(
+            '/userInfo/update', { isShare: userInfo.isShare, marketingAgree: userInfo.marketingAgree, emailAgree: userInfo.emailAgree, smsAgree: userInfo.smsAgree }
+        );
+        setBottomSheetOpen(false);
+    }
+
+    useEffect(() => {
+        if (load) updateUser();
+    }, [userInfo])
 
     const list = (anchor) => (
         <Box
@@ -91,12 +78,16 @@ const Account = () => {
                     ? <div>
                         <div className='text-base mb-5'>캘린더 비공개 전환하시겠어요?</div>
                         <div className='text-sm textGray4 mb-8'>본인만 회원님의 캘린더 및 보관함을 볼 수 있습니다. 회원님을 즐겨찾기한 다른 회원님도 볼 수 없습니다.</div>
-                        <div className='w-full h-12 bg5 leading-12 text-center text-white rounded-md' onClick={changeShare}>캘린더 비공개로 전환</div>
+                        <div className='w-full h-12 bg5 leading-12 text-center text-white rounded-md' onClick={() => {
+                            setUserInfo({ ...userInfo, isShare: false })
+                        }}>캘린더 비공개로 전환</div>
                     </div>
                     : <div>
                         <div className='text-base mb-5'>캘린더 공개 전환하시겠어요?</div>
                         <div className='text-sm textGray4 mb-8'>누구나 회원님의 캘린더 및 보관함을 볼 수 있습니다.</div>
-                        <div className='w-full h-12 bg5 leading-12 text-center text-white rounded-md' onClick={changeShare}>캘린더 공개로 전환</div>
+                        <div className='w-full h-12 bg5 leading-12 text-center text-white rounded-md' onClick={() => {
+                            setUserInfo({ ...userInfo, isShare: true })
+                        }}>캘린더 공개로 전환</div>
                     </div>
 
                 }
@@ -140,16 +131,30 @@ const Account = () => {
                         <div style={{ fontSize: '15px', lineHeight: '50px' }}>마케팅 정보 수신 동의</div>
                         <div>
                             <Checkbox
-                                value={1}
-                                checked={checked1}
-                                onChange={handleChange}
+                                checked={userInfo.marketingAgree}
+                                onChange={() => setUserInfo({ ...userInfo, marketingAgree: !userInfo.marketingAgree })}
                                 style={{ color: '#FF6035' }}
                             />
-                            <span className='textGray3 text-xs font-medium'>마케팅 정보 수신에 동의합니다.</span>
+                            <span className='textGray3 text-xs font-medium'>마케팅 활용에 동의합니다. </span>
+                        </div>
+                        <div>
+                            <Checkbox
+                                checked={(userInfo.emailAgree && userInfo.smsAgree)}
+                                onChange={() => {
+                                    const _changeCheck = !(userInfo.emailAgree && userInfo.smsAgree);
+                                    setUserInfo({
+                                        ...userInfo,
+                                        emailAgree: _changeCheck,
+                                        smsAgree: _changeCheck
+                                    });
+                                }}
+                                style={{ color: '#FF6035' }}
+                            />
+                            <span className='textGray3 text-xs font-medium'>광고성 정보 수신에 동의합니다. </span>
                         </div>
                         <div className='ml-9' style={{ marginTop: '-10px' }}>
-                            <Checkbox value={2} checked={checked2} onChange={handleChange} style={{ color: '#FF6035' }} /><span className='textGray3 text-xs font-medium'>이메일</span>
-                            <Checkbox value={3} checked={checked3} onChange={handleChange} style={{ color: '#FF6035' }} /><span className='textGray3 text-xs font-medium'>SMS</span>
+                            <Checkbox checked={userInfo.emailAgree} onChange={() => setUserInfo({ ...userInfo, emailAgree: !userInfo.emailAgree })} style={{ color: '#FF6035' }} /><span className='textGray3 text-xs font-medium'>이메일</span>
+                            <Checkbox checked={userInfo.smsAgree} onChange={() => setUserInfo({ ...userInfo, smsAgree: !userInfo.smsAgree })} style={{ color: '#FF6035' }} /><span className='textGray3 text-xs font-medium'>SMS</span>
                         </div>
                     </div>
                     <div className='flex absolute bottom-0 w-full items-center justify-evenly text-sm textGray4' style={{ height: '70px' }}>

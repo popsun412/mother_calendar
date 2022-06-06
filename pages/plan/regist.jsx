@@ -71,7 +71,7 @@ export default function Regist(props) {
             }
 
             if (_result.data.startTime != null) registInfo.startTime = moment(_result.data.startTime, "HH:mm:ss");
-            // if (_result.data.endTime != null) registInfo.endTime = moment(_result.data.endTime, "HH:mm:ss");
+            if (_result.data.endTime != null) registInfo.endTime = moment(_result.data.endTime, "HH:mm:ss");
             setCommon(true);
         }
     }
@@ -262,7 +262,6 @@ export default function Regist(props) {
                             <CustomTimepicker
                                 onChange={(time) => setRegistInfo({ ...registInfo, startTime: time })}
                                 value={registInfo.startTime}
-                                maxTime={registInfo.endTime}
                             >
                                 <div className='flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center'>
                                     <span className={`text-xs font-medium pl-2 ${registInfo.startTime == null ? "textGray4" : ""}`}>
@@ -281,7 +280,6 @@ export default function Regist(props) {
                             <CustomTimepicker
                                 onChange={(time) => setRegistInfo({ ...registInfo, endTime: time })}
                                 value={registInfo.endTime}
-                                minTime={registInfo.startTime}
                             >
                                 <div className='flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center'>
                                     <span className={`text-xs font-medium pl-2 ${registInfo.endTime == null ? "textGray4" : ""}`}>

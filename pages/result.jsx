@@ -4,16 +4,13 @@ import ResultBody from '../components/result/result_body';
 import ResultHeader from '../components/result/result_header';
 
 const Result = () => {
-
     const router = useRouter();
     const [keyword, setKeyword] = useState(router.query.value);
 
-    console.log(keyword);
-
     return (
         <div className="w-screen h-screen overflow-y-auto scrollbar-hide">
-            <ResultHeader keyword={keyword} setKeyword={setKeyword}/>
-            <ResultBody keyword={keyword} setKeyword={setKeyword}/>
+            <ResultHeader keyword={keyword} setKeyword={setKeyword} />
+            <ResultBody keyword={keyword} setKeyword={setKeyword} />
         </div>
     )
 }

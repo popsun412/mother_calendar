@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Fragment } from 'react';
 import { useRouter } from 'next/router';
 import FeedHeader from "../components/feed/feed_header";
 import FeedItem from '../components/feed/feed_item';
@@ -10,8 +10,17 @@ import CircleLoading from "../components/common/circle_loading";
 import { getAuth } from "firebase/auth";
 import InfiniteScroll from "react-infinite-scroll-component";
 import network from "../util/network";
+import FeedFilter from '../components/feed/feed_filter';
+import { Drawer } from "@mui/material";
 
 export default function Feed() {
+    const [param, setParam] = useState({
+        regions: [],
+        subjects: [],
+        age: [1, 4],
+        interests: [],
+    });
+
     const [hasMore, setHasMore] = useState(true);
     const [items, setItems] = useState([]);
 
@@ -22,13 +31,16 @@ export default function Feed() {
     const [load, setLoad] = useState();
 
     const getItems = async () => {
-        const _result = await network.get(`/feeds?offset=${items.length}&limit=${20}`);
+        moreITems(true);
+
+        const _result = await network.post(`/feeds`, { ...param, offset: items.length });
         if (_result.data.length == 0) setHasMore(false);
         setItems(_result.data);
     }
 
     const moreITems = async () => {
-        const _result = await network.get(`/feeds?offset=${items.length}&limit=${20}`);
+        const _result = await network.post(`/feeds`, { ...param, offset: items.length });
+        if (_result.data == 0) moreITems(false);
         setItems(items.concat(_result.data));
     }
 
@@ -53,10 +65,15 @@ export default function Feed() {
             <FeedHeader setFilterOpen={setFilterOpen} />
             <div className="pt-4 pb-20 flex flex-col space-y-10">
                 {items.map((_item) => {
-                    return <FeedItem item={_item} key={_item.planAuthUid} />
+                    return <FeedItem item={_item} key={_item.planAuthUid} ages={param.age} />
                 })}
             </div>
             <Navigation path={'feed'} />
         </InfiniteScroll>
+        <Fragment>
+            <Drawer open={filterOpen} onClose={() => setFilterOpen(false)} anchor='right' PaperProps={{ sx: { width: "80%" } }}>
+                <FeedFilter setFilterOpen={setFilterOpen} param={param} setParam={setParam} getItems={getItems} />
+            </Drawer>
+        </Fragment>
     </> : <div className="w-screen h-screen flex justify-center items-center"><CircleLoading /></div>
 }

@@ -3,28 +3,37 @@
 import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import network from '../../util/network';
+import Toast from '../common/toast';
 
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 import Link from 'next/link';
 
 const HomeItem = (props) => {
-
+    const [ToastStatus, setToastStatus] = useState(false);
     const [data, setData] = useState([]);
 
     useEffect(() => {
         const getData = async () => {
-            const res = await network.post('/best/edu')
+            const res = await network.post('/best/edu');
             res.data ? setData(res.data) : null;
         }
         getData();
     }, [])
 
-    const addBookmark = () => {
-
+    // 내 보관함 등록
+    const addBookmark = async (commonItemUid, idx) => {
+        const _result = await network.post('/locker/addbookmark', { commonItemUid });
+        data[idx].bookmark = true;
+        setToastStatus(true);
+        setData([].concat(data));
     }
 
-    return (
+    useEffect(() => {
+        if (ToastStatus) setTimeout(() => setToastStatus(false), 1000);
+    }, [ToastStatus]);
+
+    return (<>
         <section style={{ margin: '0 20px' }}>
             <h3 className='text-xl font-semibold mb-5' style={{ letterSpacing: '-0.4px' }}>인기 교육템</h3>
             <div>
@@ -39,7 +48,11 @@ const HomeItem = (props) => {
                                                 <span className='absolute block top-0 py-1 px-2 text-xs text-white bg-blue3 rounded-tl-md rounded-br-md'>{idx + 1}위</span>
                                                 <img src={item.image} className='rounded-md' style={{ width: '94px', height: '94px' }} />
                                                 <img src={`/images/ic_${item.bookmark ? 'bookmarked.png' : 'bookmark.png'}`}
-                                                    className='block absolute bottom-0 right-0 mr-2 mb-1.5' onClick={addBookmark} />
+                                                    className='block absolute bottom-0 right-0 mr-2 mb-1.5' onClick={(e) => {
+                                                        e.preventDefault();
+                                                        if (item.bookmark) return;
+                                                        addBookmark(item.commonItemUid, idx)
+                                                    }} />
                                             </div>
 
                                             <div className='text-xs leading-tight my-1.5' style={{ letterSpacing: '-0.26px' }}>
@@ -60,7 +73,8 @@ const HomeItem = (props) => {
                 </Swiper>
             </div>
         </section>
-    )
+        {ToastStatus ? <Toast msg={'보관함에 추가되었습니다.'} /> : <></>}
+    </>)
 }
 
 export default HomeItem;

@@ -97,7 +97,7 @@ const InstiMap = (props) => {
                 </div>
             </Link>
             <Fragment>
-                <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)} anchor={"right"} PaperProps={{ sx: { width: "80%" } }}                >
+                <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)} anchor={"right"} PaperProps={{ sx: { width: "80%" } }}>
                     <PlaceListDrawer param={param} setParam={setParam} setDrawerOpen={setDrawerOpen} getItems={getItems} />
                 </Drawer>
             </Fragment>

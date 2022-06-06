@@ -4,13 +4,14 @@ import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import _ from 'lodash';
 import network from '../../util/network';
+import Toast from '../common/toast';
 
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 import Link from 'next/link';
 
 const HomeTheme = (props) => {
-
+    const [ToastStatus, setToastStatus] = useState(false);
     const [theme, setTheme] = useState('');
     const [themeData, setThemeData] = useState([]);
     const [data, setData] = useState([]);
@@ -23,6 +24,10 @@ const HomeTheme = (props) => {
         }
         getData();
     }, [])
+
+    useEffect(() => {
+        if (ToastStatus) setTimeout(() => setToastStatus(false), 1000);
+    }, [ToastStatus]);
 
     const getTheme = (data) => {
         const arr = [];
@@ -46,7 +51,15 @@ const HomeTheme = (props) => {
         setTheme(param);
     }
 
-    return (
+    // 내 보관함 등록
+    const addBookmark = async (commonItemUid, idx) => {
+        const _result = await network.post('/locker/addbookmark', { commonItemUid });
+        data[idx].bookmark = true;
+        setToastStatus(true);
+        setData([].concat(data));
+    }
+
+    return <>
         <section className='mt-5 mb-20 mx-5'>
             <h3 className='text-xl font-semibold' style={{ letterSpacing: '-0.4px' }}>인기 테마연계</h3>
             <div className='mt-4 mb-6'>
@@ -82,9 +95,13 @@ const HomeTheme = (props) => {
                                             <div className='w-24'>
                                                 <div className='block relative '>
                                                     <img src={item.image} className='rounded-md' style={{ width: '94px', height: '94px' }} />
-                                                    <img src={`/images/ic_${item.bookmark ? 'bookmarked.png' : 'bookmark.png'}`} className='block absolute bottom-0 right-0 mr-2 mb-1.5' />
+                                                    <img src={`/images/ic_${item.bookmark ? 'bookmarked.png' : 'bookmark.png'}`} className='block absolute bottom-0 right-0 mr-2 mb-1.5' onClick={(e) => {
+                                                        e.preventDefault();
+                                                        if (item.bookmark) return;
+                                                        addBookmark(item.commonItemUid, idx)
+                                                    }} />
                                                 </div>
-                                                <div className='text-sm leading-snug mt-1.5' style={{ letterSpacing: '-0.26px' }}>
+                                                <div className='text-xs leading-snug mt-1.5' style={{ letterSpacing: '-0.26px' }}>
                                                     <p className='w-full whitespace-nowrap break-words overflow-hidden text-ellipsis m-0'>
                                                         {item.name}
                                                     </p>
@@ -107,7 +124,8 @@ const HomeTheme = (props) => {
                 </Swiper>
             </div>
         </section>
-    )
+        {ToastStatus ? <Toast msg={'보관함에 추가되었습니다.'} /> : <></>}
+    </>
 }
 
 export default HomeTheme;

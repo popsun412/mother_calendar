@@ -2,18 +2,16 @@ import moment from "moment";
 
 export function calcPercent(plan) {
     if (plan.repeatDay == null || plan.repeatDay.length == 0) return 1;
+    if (plan.startDate == null || plan.endDate == null) return 1;
 
-    let _temp_startDt = moment(plan.startDate);
+    const _startDate = moment(plan.startDate);
+    const _endDate = moment(plan.endDate);
+    const _days = _endDate.diff(_startDate, 'days');
+
     let count = 0;
-
-    while (true) {
-        const _day = parseInt(_temp_startDt.format("d"));
-
-        if (plan.repeatDay.findIndex((_repeat) => _repeat == _day) >= 0) count++;
-
-        _temp_startDt = _temp_startDt.add(1, "d");
-
-        if (_temp_startDt > moment(plan.endDate)) break;
+    for (let index = 0; index <= _days; index++) {
+        const _tempDate = _startDate.add(index, "d");
+        if (plan.repeatDay.findIndex((_repeat) => _repeat == parseInt(_tempDate.format("d"))) >= 0) count++;
     }
 
     return count;

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState } from 'react';
@@ -5,8 +6,11 @@ import Toast from '../common/toast';
 import network from '../../util/network';
 import Link from 'next/link';
 import { getSubjectImage } from "../../util/helper";
+import { useRouter } from "next/router";
+
 
 const CategoryPlan = (props) => {
+    const router = useRouter();
 
     const { type, category, setCategory } = props;
     const [visible, setVisible] = useState(false);
@@ -60,26 +64,25 @@ const CategoryPlan = (props) => {
                                 {
                                     data.map((_item, _index) => {
                                         return (
-                                            _item.level == _level ?
-                                                <Link
-                                                    href={{
-                                                        pathname: '/plandetail', query: { commonPlanUid: _item.commonPlanUid }
-                                                    }}
+                                            _item.level == _level
+                                                ? <Link
+                                                    href={{ pathname: '/plandetail', query: { commonPlanUid: _item.commonPlanUid } }}
                                                     key={_index}
                                                     passHref
                                                 >
                                                     <div className='py-5 px-4 rounded-2xl text-sm flex items-center mb-4' style={{ backgroundColor: '#f8f6f5' }}>
 
-                                                        <div className='flex'>
+                                                        <div className='flex flex-auto'>
                                                             <img src={`${getSubjectImage(_item.subject)}`} className='mr-4 w-6 h-6' />
                                                             <div className='my-auto mx-0'>{_item.name}</div>
                                                         </div>
-                                                        <a className='ml-auto' onClick={handleToast}>
-                                                            <img src='/images/ic_check_circle.png' />
-                                                        </a>
+                                                        <img src={`${_item.bookmark ? "" : "/images/ic_check_circle.png"}`} onClick={(e) => {
+                                                            e.preventDefault();
+                                                            router.push(`/plan/regist?commonPlanUid=${_item.commonPlanUid}`);
+                                                        }} />
                                                     </div>
                                                 </Link>
-                                                : ''
+                                                : <></>
                                         )
                                     })
                                 }

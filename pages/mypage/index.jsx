@@ -112,10 +112,10 @@ const MyPage = () => {
                         <span style={{ marginLeft: '18px', fontSize: '15px' }}>1:1 문의</span>
                         <span style={{ marginRight: '23px' }}></span>
                     </div>
-                    <div className='flex items-center justify-between h-15'>
+                    {/* <div className='flex items-center justify-between h-15'>
                         <span style={{ marginLeft: '18px', fontSize: '15px' }}>버전 정보</span>
                         <span className='text-sm textGray4' style={{ marginRight: '23px' }}>1.02 ver</span>
-                    </div>
+                    </div> */}
                 </section>
             </main>
             <Navigation path={'mypage'} />

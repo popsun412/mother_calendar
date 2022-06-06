@@ -88,8 +88,16 @@
         "destination": "/map.html"
       },
       {
-        "source": "mypage/**",
-        "destination": "/mypage/**.html"
+        "source": "mypage",
+        "destination": "/mypage.html"
+      },
+      {
+        "source": "mypage/myinfo",
+        "destination": "/mypage/myinfo.html"
+      },
+      {
+        "source": "mypage/runtype",
+        "destination": "/mypage/runtype.html"
       },
       {
         "source": "parents",
@@ -102,6 +110,30 @@
       {
         "source": "plan",
         "destination": "/plan.html"
+      },
+      {
+        "source": "plan/*",
+        "destination": "/plan/[planUid].html"
+      },
+      {
+        "source": "plan/certify",
+        "destination": "/plan.html"
+      },
+      {
+        "source": "plan/edit",
+        "destination": "/plan/edit.html"
+      },
+      {
+        "source": "plan/items",
+        "destination": "/plan/items.html"
+      },
+      {
+        "source": "plan/list",
+        "destination": "/plan/list.html"
+      },
+      {
+        "source": "plan/regist",
+        "destination": "/plan/regist.html"
       },
       {
         "source": "plandetail",

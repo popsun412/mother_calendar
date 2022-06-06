@@ -12,15 +12,8 @@ import network from "../../util/network";
 // firebase
 import { getAuth } from "firebase/auth";
 
-// 글로벌 상태관리
-import { useRecoilState } from "recoil";
-import { userInfoState } from "../../states/user_info";
-
 export default function MyPlanList() {
     const auth = getAuth();
-
-    // 글로벌 상태관리
-    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
 
     // 화면 상태관리
     const [items, setItems] = useState([]);
@@ -48,11 +41,10 @@ export default function MyPlanList() {
     useEffect(() => {
         auth.onAuthStateChanged(async (_user) => {
             if (_user) {
-                await getUser();
                 await getItem();
                 setLoad(true);
             } else {
-                setUserInfo(null);
+                // setUserInfo(null);
                 router.push('/');
             }
         });
