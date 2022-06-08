@@ -102,17 +102,13 @@ const Calendar = (props) => {
                     selectedDate={selectedDate}
                     selectedUserInfo={selectedUserInfo}
                 />
-                {/* <CalendarBottom />
-
-                <ItemDetail />
-                 */}
-                <div className="flex fixed right-5 bottom-20">
+                {(auth.currentUser.uid == selectedUserUid) ? <div className="flex fixed right-5 bottom-20">
                     <Fab color="primary" aria-label="add" style={{ backgroundColor: '#ff6035' }} onClick={() => {
                         router.push('/plan/regist');
                     }}>
                         <Add />
                     </Fab>
-                </div>
+                </div> : <></>}
                 <Navigation path={'calendar'} />
             </div>
             // 로딩 바

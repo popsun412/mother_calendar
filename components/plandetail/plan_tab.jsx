@@ -25,11 +25,7 @@ const PlanTab = (props) => {
                         <li className={`flex-1 my-0 mx-auto text-center ${activeTab === 1 ? 'textBlue4 border-blue4 border-b border-solid border-b-3' : ''}`} onClick={() => { tabClick(1) }}>실행 현황</li>
                     </ul>
                 </div>
-                <div>
-                    {
-                        obj[activeTab]
-                    }
-                </div>
+                <div>{obj[activeTab]}</div>
             </section>
         </>
     )

@@ -3,7 +3,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Global } from '@emotion/react';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import StarRatings from 'react-star-ratings';
 import network from '../util/network';
 
@@ -14,14 +14,14 @@ import CircleLoadingOpacity from "../components/common/circle_loading_opacity";
 import { ko } from 'date-fns/locale';
 import { getAuth } from "firebase/auth";
 import { useRouter } from 'next/router';
+import moment from "moment";
 
-const AddPlace = (props) => {
-    const router = useRouter();
+const AddAcademy = (props) => {
     const auth = getAuth();
+    const router = useRouter();
     const [saving, setSaving] = useState(false);
 
     let inputRef;
-    const _fields = ["놀이터", "키즈카페", "지식전시", "자연동물", "식당숙박", "기타"];
     const [loaded, setLoaded] = useState('loading');
 
     const [itemInfo, setItemInfo] = useState({
@@ -30,7 +30,7 @@ const AddPlace = (props) => {
         status: null,
         address: null,
         detailAddress: null,
-        field: null,
+        subject: null,
         region: null,
         score: 0,
         regDt: new Date()
@@ -42,18 +42,18 @@ const AddPlace = (props) => {
     });
 
     const getData = async () => {
-        if (!props.query.commonItemUid) return;
+        const _result = await network.get(`/item/${props.query.itemUid}`);
 
-        const res = await network.get('/item/commonItem/' + props.query.commonItemUid);
         setItemInfo({
-            ...itemInfo,
-            name: res.data.name,
-            image: res.data.image,
-            status: res.data.status,
-            address: res.data.address,
-            detailAddress: res.data.detailAddress,
-            field: res.data.field,
-            region: res.data.region
+            name: _result.data.name,
+            image: _result.data.image,
+            status: _result.data.status,
+            address: _result.data.address,
+            detailAddress: _result.data.detailAddress,
+            subject: _result.data.subject,
+            region: _result.data.region,
+            score: _result.data.score,
+            regDt: _result.data.regDt == null ? null : moment(_result.data.regDt).toDate(),
         });
     }
 
@@ -62,7 +62,7 @@ const AddPlace = (props) => {
             if (_user) {
                 await getData();
             } else {
-                router.push('/');
+                router.back();
             }
         });
     }, [])
@@ -78,6 +78,7 @@ const AddPlace = (props) => {
 
         fileReader.onload = () => {
             setUploadImage({ image_file: e.target.files[0], preview_URL: fileReader.result });
+            setItemInfo({ ...itemInfo, image: null });
             setLoaded(true);
         }
     }
@@ -88,10 +89,11 @@ const AddPlace = (props) => {
         e.preventDefault();
 
         const formData = new FormData();
+        formData.append('itemUid', props.query.itemUid);
         formData.append('name', itemInfo.name);
         formData.append('status', itemInfo.status);
-        formData.append('field', itemInfo.field);
-        formData.append('lockerType', "체험장소");
+        formData.append('subject', itemInfo.subject);
+        formData.append('lockerType', "학원장소");
         formData.append('image', itemInfo.image);
         formData.append('address', itemInfo.address);
         formData.append('detailAddress', itemInfo.detailAddress);
@@ -102,9 +104,9 @@ const AddPlace = (props) => {
         itemInfo.status == 0 ? null : formData.append('regDt', itemInfo.regDt);
         itemInfo.status == 0 ? null : formData.append('score', itemInfo.score);
 
-        await network.post('/locker', formData);
+        await network.post('/locker/update', formData);
 
-        router.push('/instimap?type=place');
+        router.push('/instimap?type=academy');
 
         setSaving(false);
     }
@@ -115,7 +117,7 @@ const AddPlace = (props) => {
         if (itemInfo.status != 0 && itemInfo.status != 1 && itemInfo.status != 2) return true;
         if ((itemInfo.address ?? "").trim() == "") return true;
         if ((itemInfo.detailAddress ?? "").trim() == "") return true;
-        if (_fields.findIndex((_item) => _item == itemInfo.field) < 0) return true;
+        if (["국어", "영어", "수학", "과학", "사회", "미술", "음악", "체육", "놀이", "기타", "부모"].findIndex((_item) => _item == itemInfo.subject) < 0) return true;
 
         return false;
     }
@@ -169,7 +171,7 @@ const AddPlace = (props) => {
                         <div onClick={() => { window.history.back() }}>
                             <img src='/images/ic_back.png' />
                         </div>
-                        <div className='my-0 mx-auto text-base font-medium' style={{ letterSpacing: '-0.3px' }}>체험장소 등록</div>
+                        <div className='my-0 mx-auto text-base font-medium' style={{ letterSpacing: '-0.3px' }}>학원장소 등록</div>
                         <button className={`flex ${disabled() ? 'textGray4' : 'textOrange5'}`} style={{ fontSize: '15px' }} disabled={disabled()} onClick={onSubmit}>완료</button>
                     </div>
                 </div>
@@ -178,25 +180,47 @@ const AddPlace = (props) => {
                 <section className='pt-5 mx-5 my-6'>
                     <div className='mb-6'>
                         <div className='rounded-md my-0 mx-auto relative' style={{ width: '120px', height: '120px', backgroundColor: '#f2f2f2' }}>
-                            {
-                                itemInfo.image != null
-                                    ? <img src={itemInfo.image} className='rounded-md' />
-                                    : <button type='primary' onClick={() => inputRef.click()}>
-                                        <input type='file' accept='image/*' onChange={saveImage} ref={refParam => inputRef = refParam} style={{ display: 'none' }} />
-                                        {
-                                            loaded == false || loaded == true ? (
-                                                <img src={uploadImage.preview_URL} className='rounded-md' style={{ width: '120px', height: '120px' }} />
-                                            ) : <img src='/images/ic_camera.png' className='absolute top-10 left-10' />
-                                        }
-                                    </button>
-                            }
+                            <button className="w-full h-full" type='primary' onClick={() => inputRef.click()}>
+                                <input type='file' accept='image/*' onChange={saveImage} ref={refParam => inputRef = refParam} style={{ display: 'none' }} />
+                                {
+                                    itemInfo.image != null
+                                        ? <div
+                                            className="before:top-0 before:right-0 before:bottom-0 before:left-0 before:absolute rounded-md"
+                                            style={{
+                                                backgroundImage: `url("${itemInfo.image}")`,
+                                                backgroundRepeat: "no-repeat",
+                                                backgroundSize: "cover",
+                                                width: "100%",
+                                                paddingTop: "100%",
+                                                backgroundPosition: "center center"
+                                            }}
+                                        />
+                                        : <div>
+                                            {
+                                                loaded == false || loaded == true ? (
+                                                    <div
+                                                        className="before:top-0 before:right-0 before:bottom-0 before:left-0 before:absolute rounded-md"
+                                                        style={{
+                                                            backgroundImage: `url("${uploadImage.preview_URL}")`,
+                                                            backgroundRepeat: "no-repeat",
+                                                            backgroundSize: "cover",
+                                                            width: "100%",
+                                                            paddingTop: "100%",
+                                                            backgroundPosition: "center center"
+                                                        }}
+                                                    />
+                                                ) : <img src='/images/ic_camera.png' className='absolute top-10 left-10' />
+                                            }
+                                        </div>
+                                }
+                            </button>
                         </div>
                     </div>
                     <div>
                         <div>
                             <input
                                 type='text'
-                                placeholder='체험장소 이름을 입력해주세요.'
+                                placeholder='학원장소 이름을 입력해주세요.'
                                 value={itemInfo.name ?? ""} onChange={(e) => setItemInfo({ ...itemInfo, name: e.currentTarget.value })}
                                 className='block w-full h-10 px-5 box-border border border-solid border-color4 rounded-md text-sm outline-none'
                             />
@@ -228,15 +252,119 @@ const AddPlace = (props) => {
                     </div>
                 </section>
                 <section className='mx-5 my-6'>
-                    <div className='text-sm textGray2 font-medium'>영역</div>
-                    <div className='mt-5 flex flex-wrap'>
-                        {_fields.map((_fieldItem, index) => {
-                            return <span className={`block text-sm px-3 py-1.5 border border-solid rounded-sm mr-3 mb-3
-                            ${itemInfo.field == _fieldItem ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`} onClick={() => setItemInfo({
-                                ...itemInfo,
-                                field: _fieldItem
-                            })} key={index}>{_fieldItem}</span>
-                        })}
+                    <div className='text-sm textGray2 font-medium'>분야</div>
+                    <div className='mt-6'>
+                        <div className='grid grid-cols-4 gap-3'>
+                            <span
+                                className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${itemInfo.subject === '국어' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}
+                                onClick={() => setItemInfo({
+                                    ...itemInfo,
+                                    subject: "국어"
+                                })}
+                            >
+                                <img src='/images/category1.png' className={`mr-1 ${itemInfo.subject == '국어' ? '' : 'grayscale'}`} style={{ width: '17px', height: '17px' }} />국어
+                            </span>
+
+                            <span
+                                className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${itemInfo.subject === '영어' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}
+                                onClick={() => setItemInfo({
+                                    ...itemInfo,
+                                    subject: "영어"
+                                })}
+                            >
+                                <img src='/images/category2.png' className={`mr-1 ${itemInfo.subject == '영어' ? '' : 'grayscale'}`} style={{ width: '17px', height: '17px' }} />영어
+                            </span>
+
+                            <span
+                                className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${itemInfo.subject === '수학' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}
+                                onClick={() => setItemInfo({
+                                    ...itemInfo,
+                                    subject: "수학"
+                                })}
+                            >
+                                <img src='/images/category3.png' className={`mr-1 ${itemInfo.subject == '수학' ? '' : 'grayscale'}`} style={{ width: '17px', height: '17px' }} />수학
+                            </span>
+
+                            <span
+                                className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${itemInfo.subject === '과학' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}
+                                onClick={() => setItemInfo({
+                                    ...itemInfo,
+                                    subject: "과학"
+                                })}
+                            >
+                                <img src='/images/category4.png' className={`mr-1 ${itemInfo.subject == '과학' ? '' : 'grayscale'}`} style={{ width: '17px', height: '17px' }} />과학
+                            </span>
+
+                            <span
+                                className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${itemInfo.subject === '사회' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}
+                                onClick={() => setItemInfo({
+                                    ...itemInfo,
+                                    subject: "사회"
+                                })}
+                            >
+                                <img src='/images/category5.png' className={`mr-1 ${itemInfo.subject == '사회' ? '' : 'grayscale'}`} style={{ width: '17px', height: '17px' }} />사회
+                            </span>
+
+                            <span
+                                className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${itemInfo.subject === '미술' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}
+                                onClick={() => setItemInfo({
+                                    ...itemInfo,
+                                    subject: "미술"
+                                })}
+                            >
+                                <img src='/images/category6.png' className={`mr-1 ${itemInfo.subject == '미술' ? '' : 'grayscale'}`} style={{ width: '17px', height: '17px' }} />미술
+                            </span>
+
+                            <span
+                                className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${itemInfo.subject === '음악' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}
+                                onClick={() => setItemInfo({
+                                    ...itemInfo,
+                                    subject: "음악"
+                                })}
+                            >
+                                <img src='/images/category7.png' className={`mr-1 ${itemInfo.subject == '음악' ? '' : 'grayscale'}`} style={{ width: '17px', height: '17px' }} />음악
+                            </span>
+
+                            <span
+                                className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${itemInfo.subject === '체육' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}
+                                onClick={() => setItemInfo({
+                                    ...itemInfo,
+                                    subject: "체육"
+                                })}
+                            >
+                                <img src='/images/category8.png' className={`mr-1 ${itemInfo.subject == '체육' ? '' : 'grayscale'}`} style={{ width: '17px', height: '17px' }} />체육
+                            </span>
+
+                            <span
+                                className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${itemInfo.subject === '놀이' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}
+                                onClick={() => setItemInfo({
+                                    ...itemInfo,
+                                    subject: "놀이"
+                                })}
+                            >
+                                <img src='/images/category9.png' className={`mr-1 ${itemInfo.subject == '놀이' ? '' : 'grayscale'}`} style={{ width: '17px', height: '17px' }} />놀이
+                            </span>
+
+                            <span
+                                className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${itemInfo.subject === '기타' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}
+                                onClick={() => setItemInfo({
+                                    ...itemInfo,
+                                    subject: "기타"
+                                })}
+                            >
+                                <img src='/images/category11.png' className={`mr-1 ${itemInfo.subject == '기타' ? '' : 'grayscale'}`} style={{ width: '17px', height: '17px' }} />기타
+                            </span>
+
+                            <span
+                                className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${itemInfo.subject === '부모' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}
+                                onClick={() => setItemInfo({
+                                    ...itemInfo,
+                                    subject: "부모"
+                                })}
+                            >
+                                <img src='/images/category12.png' className={`mr-1 ${itemInfo.subject == '부모' ? '' : 'grayscale'}`} style={{ width: '17px', height: '17px' }} />부모
+                            </span>
+                        </div>
                     </div>
                 </section>
                 <section className='mx-5 my-6'>
@@ -263,7 +391,7 @@ const AddPlace = (props) => {
                         /> : <></>}
                     </div>
                 </section>
-                {itemInfo.status === 1
+                {itemInfo.status != 0
                     ? <section className='mx-5 my-6'>
                         <div className='text-sm textGray2 font-medium'>방문시기 <span className='textGray4'>(선택)</span></div>
                         <div className='mt-5'>
@@ -289,7 +417,7 @@ const AddPlace = (props) => {
                             />
                         </div>
                     </section> : ''}
-                {itemInfo.status != 0
+                {itemInfo.status === 1
                     ? <section className='mx-5 my-6'>
                         <div className='text-sm textGray2 font-medium'>만족도 <span className='textGray4'>(선택)</span></div>
                         <div className='flex mt-3'>
@@ -314,9 +442,9 @@ const AddPlace = (props) => {
     )
 }
 
-export default AddPlace;
+export default AddAcademy;
 
-AddPlace.getInitialProps = async (ctx) => {
+AddAcademy.getInitialProps = async (ctx) => {
     return {
         query: ctx.query
     }

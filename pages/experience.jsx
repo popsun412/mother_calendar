@@ -6,14 +6,20 @@ import network from '../util/network';
 import { Drawer } from "@mui/material";
 import ExperienceFilter from "../components/experience/experience_filter";
 import InfiniteScroll from "react-infinite-scroll-component";
+import Toast from '../components/common/toast';
+import { getAuth } from "firebase/auth";
+import Link from "next/link";
 
 const Experience = () => {
+    const auth = getAuth();
+    const [ToastStatus, setToastStatus] = useState(false);
+
     const [hasMore, setHasMore] = useState(true);
 
     const [param, setParam] = useState({
         order: "reg",
         regions: [],
-        subjects: [],
+        fields: [],
         age: [1, 4]
     });
 
@@ -34,8 +40,23 @@ const Experience = () => {
 
 
     useEffect(() => {
-        getItems();
+        auth.onAuthStateChanged(async (_user) => {
+            if (_user) {
+                getItems();
+            }
+        });
     }, [])
+
+    const addBookmark = async (commonItemUid, idx) => {
+        const _result = await network.post('/locker/addbookmark', { commonItemUid });
+        items[idx].bookmark = true;
+        setToastStatus(true);
+        setItems([].concat(items));
+    }
+
+    useEffect(() => {
+        if (ToastStatus) setTimeout(() => setToastStatus(false), 1000);
+    }, [ToastStatus]);
 
     return (<>
         <InfiniteScroll
@@ -58,20 +79,22 @@ const Experience = () => {
                         {
                             items.map((item, idx) => {
                                 return (
-                                    <div className='flex mb-5' key={idx}>
-                                        <div className='mr-4 block relative'>
-                                            <img src={item.image} className='rounded-md' style={{ width: '94px', height: '94px' }} />
-                                            <img src={`/images/ic_${item.bookmark ? 'bookmarked.png' : 'bookmark.png'}`} className='block absolute bottom-0 right-0 mr-2 mb-1.5' />
-                                        </div >
-                                        <div>
-                                            <h3 className='text-base font-semibold mb-1.5'>{item.name}</h3>
-                                            <div className='flex'>
-                                                <span className='py-1 px-1.5 mr-1.5 rounded text-xs textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.region}</span>
-                                                <span className='py-1 px-1.5 mr-1.5 rounded text-xs textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.field}</span>
+                                    <Link href={{ pathname: '/item', query: { commonItemUid: item.commonItemUid } }} key={idx} passHref>
+                                        <div className='flex mb-5'>
+                                            <div className='mr-4 block relative'>
+                                                <img src={item.image} className='rounded-md' style={{ width: '94px', height: '94px' }} />
+                                                <img src={`/images/ic_${item.bookmark ? 'bookmarked.png' : 'bookmark.png'}`} className='block absolute bottom-0 right-0 mr-2 mb-1.5' onClick={() => addBookmark(item.commonItemUid, idx)} />
+                                            </div >
+                                            <div>
+                                                <h3 className='text-base font-semibold mb-1.5'>{item.name}</h3>
+                                                <div className='flex'>
+                                                    <span className='py-1 px-1.5 mr-1.5 rounded text-xs textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.region}</span>
+                                                    <span className='py-1 px-1.5 mr-1.5 rounded text-xs textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.field}</span>
 
+                                                </div>
                                             </div>
                                         </div>
-                                    </div >
+                                    </Link>
                                 )
                             })
                         }
@@ -79,6 +102,7 @@ const Experience = () => {
                 </main >
             </div>
         </InfiniteScroll>
+        {ToastStatus ? <Toast msg={'보관함에 추가되었습니다.'} /> : <></>}
         <Fragment>
             <Drawer open={filterOpen} onClose={() => setFilterOpen(false)} anchor='right' PaperProps={{ sx: { width: "80%" } }}>
                 <ExperienceFilter setFilterOpen={setFilterOpen} param={param} setParam={setParam} getItems={getItems} />

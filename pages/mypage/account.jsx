@@ -77,7 +77,7 @@ const Account = () => {
                 {(userInfo?.isShare ?? false)
                     ? <div>
                         <div className='text-base mb-5'>캘린더 비공개 전환하시겠어요?</div>
-                        <div className='text-sm textGray4 mb-8'>본인만 회원님의 캘린더 및 보관함을 볼 수 있습니다. 회원님을 즐겨찾기한 다른 회원님도 볼 수 없습니다.</div>
+                        <div className='text-sm textGray4 mb-8'>회원님만 회원님의 캘린더 및 보관함을 볼 수 있습니다. 회원님을 즐겨찾기한 다른 회원님도 볼 수 없습니다.</div>
                         <div className='w-full h-12 bg5 leading-12 text-center text-white rounded-md' onClick={() => {
                             setUserInfo({ ...userInfo, isShare: false })
                         }}>캘린더 비공개로 전환</div>

@@ -5,9 +5,10 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import network from '../../util/network';
 import StarRatings from 'react-star-ratings';
+import { useRouter } from 'next/router';
 
 const BookshelfPurchase = (props) => {
-
+    const router = useRouter();
     const { params, activeTab } = props;
     const [data, setData] = useState([]);
 
@@ -30,13 +31,13 @@ const BookshelfPurchase = (props) => {
                 data.length > 0 ?
                     data.map((item, index) => {
                         return (
-                            <div className='flex' key={index} style={{ marginBottom: '22px' }}>
+                            <div className='flex' key={index} style={{ marginBottom: '22px' }} onClick={() => router.push(`/editbook?itemUid=${item.itemUid}`)}>
                                 <div className='mr-4'>
                                     <img src={item.image} className='rounded-md border border-solid border-color4' style={{ width: '94px', height: '94px' }} />
                                 </div>
                                 <div>
                                     <div className='font-semibold' style={{ fontSize: '15px', letterSpacing: '-0.3px' }}>{item.name}</div>
-                                    <div className='textGray3' style={{ fontSize: '13px' }}>{moment(item.data).format('YYYY.MM.DD')} 구매</div>
+                                    {(item.regDt != null) ? <div className='textGray3' style={{ fontSize: '13px' }}>{moment(item.regDt).format('YYYY.MM')} 구매</div> : <></>}
                                     <div className="relative -top-1 ">
                                         <StarRatings
                                             rating={item.score}

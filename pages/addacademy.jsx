@@ -98,12 +98,12 @@ const AddAcademy = (props) => {
         if (uploadImage.image_file != null) {
             formData.append('uploadImage', uploadImage.image_file);
         }
-        itemInfo.status == 1 ? formData.append('regDt', itemInfo.regDt) : null;
-        itemInfo.status == 1 ? formData.append('score', itemInfo.score) : null;
+        itemInfo.status == 0 ? null : formData.append('regDt', itemInfo.regDt);
+        itemInfo.status == 0 ? null : formData.append('score', itemInfo.score);
 
         await network.post('/locker', formData);
 
-        router.push('/instimap');
+        router.push('/instimap?type=academy');
 
         setSaving(false);
     }
@@ -180,11 +180,21 @@ const AddAcademy = (props) => {
                             {
                                 itemInfo.image != null
                                     ? <img src={itemInfo.image} className='rounded-md' />
-                                    : <button type='primary' onClick={() => inputRef.click()}>
+                                    : <button className="w-full h-full" type='primary' onClick={() => inputRef.click()}>
                                         <input type='file' accept='image/*' onChange={saveImage} ref={refParam => inputRef = refParam} style={{ display: 'none' }} />
                                         {
                                             loaded == false || loaded == true ? (
-                                                <img src={uploadImage.preview_URL} className='rounded-md' style={{ width: '120px', height: '120px' }} />
+                                                <div
+                                                    className="before:top-0 before:right-0 before:bottom-0 before:left-0 before:absolute rounded-md"
+                                                    style={{
+                                                        backgroundImage: `url("${uploadImage.preview_URL}")`,
+                                                        backgroundRepeat: "no-repeat",
+                                                        backgroundSize: "cover",
+                                                        width: "100%",
+                                                        paddingTop: "100%",
+                                                        backgroundPosition: "center center"
+                                                    }}
+                                                />
                                             ) : <img src='/images/ic_camera.png' className='absolute top-10 left-10' />
                                         }
                                     </button>
@@ -366,7 +376,7 @@ const AddAcademy = (props) => {
                         /> : <></>}
                     </div>
                 </section>
-                {itemInfo.status === 1
+                {itemInfo.status != 0
                     ? <section className='mx-5 my-6'>
                         <div className='text-sm textGray2 font-medium'>방문시기 <span className='textGray4'>(선택)</span></div>
                         <div className='mt-5'>

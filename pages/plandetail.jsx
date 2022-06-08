@@ -14,7 +14,6 @@ import moment from 'moment';
 
 import PlanHeader from '../components/plandetail/plan_header';
 import PlanItem from '../components/plandetail/plan_item';
-// import PlanWeek from '../components/plandetail/plan_week';
 import PlanTab from '../components/plandetail/plan_tab';
 import CircleLoading from "../components/common/circle_loading";
 
@@ -119,19 +118,17 @@ const Plan2 = (props) => {
                                 <span className='mr-2 py-1 px-1.5 rounded textOrange1' style={{ letterSpacing: '-0.12px', backgroundColor: 'rgba(219, 239, 253, 0.2)' }}>{data.subject}</span>
                                 <span className='py-1 px-1.5 rounded textOrange1' style={{ letterSpacing: '-0.12px', backgroundColor: 'rgba(219, 239, 253, 0.2)' }}>{data.field}</span>
                             </div>
-                            {
-                                (!data.isMyPlan) ? <div className='block absolute bottom-0 right-0'>
-                                    <div className='mr-5 mb-1'>
-                                        <img src={`${data.isMyPlan ? "" : "/images/ic_check_circle.png"}`} onClick={(e) => {
-                                            e.preventDefault();
-                                            router.push(`/plan/regist?commonPlanUid=${data.commonPlanUid}`);
-                                        }} />
-                                        <div className='mb-5 text-xs text-white text-center mx-auto'>
-                                            <p>{data.planCount}</p>
-                                        </div>
+                            <div className='block absolute bottom-0 right-0'>
+                                <div className='mr-5 mb-1'>
+                                    <img src={`${data.isMyPlan ? "" : "/images/ic_check_circle.png"}`} onClick={(e) => {
+                                        e.preventDefault();
+                                        router.push(`/plan/regist?commonPlanUid=${data.commonPlanUid}`);
+                                    }} />
+                                    <div className='mb-5 text-xs text-white text-center mx-auto'>
+                                        <p>{data.planCount}</p>
                                     </div>
-                                </div> : <></>
-                            }
+                                </div>
+                            </div>
                         </div>
                     </section>
                     <section className='mb-8 mx-5'>
@@ -162,21 +159,18 @@ const Plan2 = (props) => {
                             </div>
                         </div>
                     </section>
-                    {/* <PlanWeek data={data}/> */}
                     <PlanItem subject={subject} field={field} />
-                    <PlanTab commonPlanUid={commonPlanUid} ite />
+                    <PlanTab commonPlanUid={commonPlanUid} />
                 </main>
                 <aside className='fixed bottom-0 left-0 right-0 z-100'>
                     <div className='relative mx-auto my-0 bg-white'>
-                        <Link
-                            href={{
-                                pathname: '/plan/regist', query: { commonPlanUid }
-                            }}>
-                            <nav className='flex items-center box-border relative' style={{ height: '90px' }}>
-                                <span className='text-sm text-white text-center p-4 m-5 w-full rounded-md bg5'
-                                    style={{ letterSpacing: '-0.28px' }}>내 캘린더에 등록하기</span>
-                            </nav>
-                        </Link>
+                        <nav className='flex items-center box-border relative' style={{ height: '90px' }} onClick={() => {
+                            if (data.isMyPlan) return;
+
+                            router.push({ pathname: '/plan/regist', query: { commonPlanUid } });
+                        }}>
+                            <span className={`text-sm text-white text-center p-4 m-5 w-full rounded-md ${data.isMyPlan ? "bg-gray4" : "bg5"}`}>내 캘린더에 등록하기</span>
+                        </nav>
                     </div>
                 </aside>
             </> : <div className="h-screen w-screen">

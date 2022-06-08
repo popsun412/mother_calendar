@@ -38,6 +38,7 @@ const CategoryItem = (props) => {
         setToastStatus(true);
         setData([].concat(data));
     }
+
     useEffect(() => {
         if (ToastStatus) setTimeout(() => setToastStatus(false), 1000);
     }, [ToastStatus]);
@@ -96,8 +97,8 @@ const CategoryItem = (props) => {
                                         </div>
                                         <div className='my-2 text-sm'>{item.name}</div>
                                         <div>
-                                            <span className='mr-1.5 py-1 px-1.5 rounded text-xs text-center textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.field}</span>
                                             <span className='mr-1.5 py-1 px-1.5 rounded text-xs text-center textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.subject}</span>
+                                            <span className='mr-1.5 py-1 px-1.5 rounded text-xs text-center textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.field}</span>
                                         </div>
                                     </div>
                                 </Link>

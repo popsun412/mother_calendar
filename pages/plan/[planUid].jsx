@@ -17,7 +17,7 @@ import { userInfoState } from "../../states/user_info";
 // api호출
 import network from "../../util/network";
 
-export default function Plan() {
+export default function PlanIndex() {
     const auth = getAuth();
     const router = useRouter();
 

@@ -40,7 +40,7 @@ const HomeSlider = () => {
                         return (
                             <SwiperSlide key={idx}>
                                 <div onClick={() => {
-                                    router.push(`/plan/regist?commonPlanUid=${item.commonPlanUid}`);
+                                    router.push(`/plandetail?commonPlanUid=${item.commonPlanUid}`);
                                 }}>
                                     <div
                                         className="before:bg-black before:bg-opacity-50 before:top-0 before:right-0 before:bottom-0 before:left-0 before:absolute"

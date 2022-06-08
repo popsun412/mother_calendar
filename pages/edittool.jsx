@@ -13,22 +13,18 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
 import { getAuth } from "firebase/auth";
-import { useRecoilState } from "recoil";
-import { userInfoState } from "../states/user_info";
 import { ko } from "date-fns/locale";
 import CircleLoadingOpacity from "../components/common/circle_loading_opacity";
 import moment from "moment";
 
-const AddTool = (props) => {
+const EditTool = (props) => {
     const _fields = ["교구", "교재", "영상", "게임", "블록", "퍼즐", "기타"];
 
+    const [load, setLoad] = useState(false);
     const [saving, setSaving] = useState(false);
     const auth = getAuth();
-    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
-    const [load, setLoad] = useState(false);
 
     const router = useRouter();
-    const commonItemUid = props.query.commonItemUid;
 
     const [itemInfo, setItemInfo] = useState({
         name: "",
@@ -51,55 +47,30 @@ const AddTool = (props) => {
 
     // 아이템 불러오기
     const getItem = async () => {
+        const _result = await network.get(`/item/${props.query.itemUid}`);
+
+        setItemInfo({
+            name: _result.data.name,
+            image: _result.data.image,
+            status: _result.data.status,
+            subject: _result.data.subject,
+            field: _result.data.field,
+            score: _result.data.score,
+            regDt: _result.data.regDt == null ? null : moment(_result.data.regDt).toDate()
+        });
+
         setLoad(true);
     }
 
-    // 유저 정보 갖고오기
-    const getUser = async () => {
-        const _result = await network.post('/userInfo');
-
-        // data 통신
-        if (_result.status == 200) {
-            setUserInfo(_result.data);
-        } else {
-            router.push('/');
-        }
-    }
-
     useEffect(() => {
-        if (userInfo == null) {
-            auth.onAuthStateChanged(async (_user) => {
-                if (_user) {
-                    getUser();
-                } else {
-                    setUserInfo(null);
-                    router.push('/');
-                }
-            });
-        }
-
-        if (userInfo != null && !load) getItem();
-    })
-
-    useEffect(() => {
-        const getData = async () => {
-            const res = await network.get('/item/commonItem/' + commonItemUid);
-            let _regDt = null
-            if (res.data.regDt != null) _regDt = moment(res.data.regDt).toDate();
-
-            setItemInfo({
-                ...itemInfo,
-                image: res.data.image,
-                name: res.data.name,
-                status: res.data.status,
-                subject: res.data.subject,
-                field: res.data.field,
-                regDt: _regDt ?? new Date(),
-                score: res.data.score ?? 0,
-            })
-        }
-
-        if (commonItemUid) getData();
+        auth.onAuthStateChanged(async (_user) => {
+            if (_user) {
+                getItem();
+            } else {
+                setUserInfo(null);
+                router.push('/');
+            }
+        });
     }, [])
 
     const saveImage = (e) => {
@@ -123,6 +94,7 @@ const AddTool = (props) => {
         e.preventDefault();
 
         const formData = new FormData();
+        formData.append('itemUid', props.query.itemUid);
         formData.append('name', itemInfo.name);
         formData.append('status', itemInfo.status);
         formData.append('subject', itemInfo.subject);
@@ -130,10 +102,10 @@ const AddTool = (props) => {
         formData.append('lockerType', "교구장");
         formData.append('image', itemInfo.image);
         if (uploadImage.imge_file != null) formData.append('uploadImage', uploadImage.imge_file)
-        itemInfo.status == 0 ? null : formData.append('buyDt', itemInfo.regDt);
+        itemInfo.status == 0 || itemInfo.regDt == null ? null : formData.append('regDt', itemInfo.regDt);
         itemInfo.status == 0 ? null : formData.append('score', itemInfo.score);
 
-        await network.post('/locker', formData);
+        await network.post('/locker/update', formData);
         router.push('/edutool');
         setSaving(false);
     }
@@ -357,7 +329,7 @@ const AddTool = (props) => {
                     </div>
                 </section>
                 {
-                    itemInfo.status === 1 ?
+                    itemInfo.status != 0 ?
                         <section className='mx-5 my-6'>
                             <div className='text-sm textGray2 font-medium'>구매시기 <span className='textGray4'>(선택)</span></div>
                             <div className='mt-5'>
@@ -409,9 +381,9 @@ const AddTool = (props) => {
     )
 }
 
-export default AddTool;
+export default EditTool;
 
-AddTool.getInitialProps = async (ctx) => {
+EditTool.getInitialProps = async (ctx) => {
     return {
         query: ctx.query
     }

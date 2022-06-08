@@ -1,10 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
+import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
 import network from '../../util/network';
 
 const BookshelfInstock = (props) => {
-
+    const router = useRouter();
     const { params, activeTab } = props;
     const [data, setData] = useState([]);
 
@@ -27,7 +29,7 @@ const BookshelfInstock = (props) => {
                 data.length > 0 ?
                     data.map((item, index) => {
                         return (
-                            <div className='flex' key={index} style={{ marginBottom: '22px' }}>
+                            <div className='flex' key={index} style={{ marginBottom: '22px' }} onClick={() => router.push(`/editbook?itemUid=${item.itemUid}`)}>
                                 <div className='mr-4'>
                                     <img src={item.image} className='rounded-md border border-solid border-color4' style={{ width: '94px', height: '94px' }} />
                                 </div>

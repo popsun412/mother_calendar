@@ -5,10 +5,15 @@
 import React, { useEffect, useState } from 'react';
 import network from '../util/network';
 import InfiniteScroll from "react-infinite-scroll-component";
+import Link from "next/link";
+import Toast from '../components/common/toast';
+import { getAuth } from "firebase/auth";
 
 const Etc = () => {
+    const auth = getAuth();
+    const [ToastStatus, setToastStatus] = useState(false);
     const [hasMore, setHasMore] = useState(true);
-    const _orders = [{ value: "name", label: "이름순" }, { value: "reg", label: "최신순" }];
+    const _orders = [{ value: "reg", label: "최신순" }, { value: "name", label: "이름순" }];
     const [items, setItems] = useState([]);
     const [order, setOrder] = useState(_orders[0]);
 
@@ -18,8 +23,12 @@ const Etc = () => {
     }
 
     useEffect(() => {
-        getItems();
-    }, [order])
+        auth.onAuthStateChanged(async (_user) => {
+            if (_user) {
+                getItems();
+            }
+        });
+    }, [])
 
     const clickOrder = () => {
         setOrder(order.value == "name" ? _orders[1] : _orders[0]);
@@ -30,6 +39,17 @@ const Etc = () => {
         if (res.data.length == 0) setHasMore(false);
         setItems(items.concat(res.data));
     }
+
+    const addBookmark = async (commonItemUid, idx) => {
+        const _result = await network.post('/locker/addbookmark', { commonItemUid });
+        items[idx].bookmark = true;
+        setToastStatus(true);
+        setItems([].concat(items));
+    }
+
+    useEffect(() => {
+        if (ToastStatus) setTimeout(() => setToastStatus(false), 1000);
+    }, [ToastStatus]);
 
     return (
         <InfiniteScroll
@@ -57,18 +77,24 @@ const Etc = () => {
                             {
                                 items.map((item, idx) => {
                                     return (
-                                        <div className='flex mt-5' key={idx}>
-                                            <div className='mr-4 w-24 h-24'>
-                                                <img src={item.image} className='rounded-md' />
-                                            </div>
-                                            <div>
-                                                <h3 className='text-base font-semibold mb-1.5' style={{ letterSpacing: '-0.3px' }}>{item.name}</h3>
-                                                <div className='flex'>
-                                                    <span className='py-1 px-1.5 mr-1.5 rounded text-xs textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.field}</span>
-                                                    <span className='py-1 px-1.5 mr-1.5 rounded text-xs textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.subject}</span>
+                                        <Link href={{ pathname: '/item', query: { commonItemUid: item.commonItemUid } }} key={idx} passHref>
+                                            <div className='flex mt-5'>
+                                                <div className='mr-4 block relative'>
+                                                    <img src={item.image} className='rounded-md' style={{ width: '94px', height: '94px' }} />
+                                                    <img src={`/images/ic_${item.bookmark ? 'bookmarked.png' : 'bookmark.png'}`} className='block absolute bottom-0 right-0 mr-2 mb-1.5' onClick={(e) => {
+                                                        e.preventDefault();
+                                                        addBookmark(item.commonItemUid, idx);
+                                                    }} />
+                                                </div >
+                                                <div>
+                                                    <h3 className='text-base font-semibold mb-1.5' style={{ letterSpacing: '-0.3px' }}>{item.name}</h3>
+                                                    <div className='flex'>
+                                                        <span className='py-1 px-1.5 mr-1.5 rounded text-xs textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.subject}</span>
+                                                        <span className='py-1 px-1.5 mr-1.5 rounded text-xs textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.field}</span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </Link>
                                     )
                                 })
                             }
@@ -76,6 +102,7 @@ const Etc = () => {
                     </div>
                 </main>
             </div>
+            {ToastStatus ? <Toast msg={'보관함에 추가되었습니다.'} /> : <></>}
         </InfiniteScroll>
     )
 }

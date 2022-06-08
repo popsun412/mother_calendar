@@ -5,9 +5,8 @@ import { Range, getTrackBackground } from 'react-range';
 
 export default function ExperienceFilter(props) {
     const _orders = [
-        { value: "reg", label: "방문순" },
-        { value: "name", label: "이름순" },
-        { value: "score", label: "별점순" },
+        { value: "reg", label: "최신순" },
+        { value: "name", label: "이름순" }
     ]
 
     const STEP = 1;
@@ -60,21 +59,25 @@ export default function ExperienceFilter(props) {
             </div>
 
             <div className='mb-7 mx-3.5'>
-                <h3 className='mb-4 text-base font-semibold'>분야 <span className="textGray4 text-xs">(필터)</span></h3>
+                <h3 className='mb-4 text-base font-semibold'>영역 <span className="textGray4 text-xs">(필터)</span></h3>
                 <div className='flex flex-wrap'>
-                    {["국어", "영어", "수학", "과학", "사회", "미술", "음악", "체육", "놀이", "기타", "부모"].map((_subject, index) => {
-                        const _checkIndex = props.param.subjects.findIndex((_item) => _item == _subject);
-                        return (
-                            <div className={`py-2 px-2 mr-3 mb-3 rounded border text-center ${_checkIndex >= 0 ? "border-orange4 textOrange4" : "border-gray4 textGray4"}`} key={index} onClick={() => {
-                                if (_checkIndex >= 0) {
-                                    props.param.subjects.splice(_checkIndex, 1);
-                                } else {
-                                    props.param.subjects.push(_subject);
-                                }
+                    {["놀이터", "키즈카페", "지식전시", "자연동물", "식당숙박", "기타"].map((_field, index) => {
+                        const _checkIndex = props.param.fields.findIndex((_item) => _item == _field);
 
-                                props.setParam({ ...props.param, region: [].concat(props.param.subjects) });
-                            }}>
-                                <span>{_subject}</span>
+                        return (
+                            <div
+                                className={`py-2 px-2 mr-3 mb-3 rounded border text-center ${_checkIndex >= 0 ? "border-orange4 textOrange4" : "border-gray4 textGray4"}`}
+                                key={index}
+                                onClick={() => {
+                                    if (_checkIndex >= 0) {
+                                        props.param.fields.splice(_checkIndex, 1);
+                                    } else {
+                                        props.param.fields.push(_field);
+                                    }
+
+                                    props.setParam({ ...props.param, field: [].concat(props.param.fields) })
+                                }}>
+                                <span>{_field}</span>
                             </div>
                         )
                     })}

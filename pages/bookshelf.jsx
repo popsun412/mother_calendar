@@ -1,7 +1,8 @@
+/* eslint-disable @next/next/link-passhref */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { Box, Drawer } from '@material-ui/core';
 import BookshelfInstock from '../components/bookshelf/bookshelf_instock';
 import BookshelfPurchase from '../components/bookshelf/bookshelf_purchase';
@@ -13,8 +14,11 @@ import { getAuth } from "firebase/auth";
 import network from '../util/network';
 import { useRouter } from 'next/router';
 import CircleLoading from "../components/common/circle_loading";
+import { BookmarkBorderOutlined } from "@mui/icons-material"
+import LockerDrawer from "../components/calendar/locker_drawer";
 
 const Bookshelf = () => {
+    const [lockerDrawerOpen, setLockerDrawerOpen] = useState(false);
     const [load, setLoad] = useState(false);
     const [activeTab, setActiveTab] = useState(1);
     const [params, setParams] = useState({
@@ -302,48 +306,58 @@ const Bookshelf = () => {
 
     return (<>{
         (load)
-            ? <div>
-                <header className='sticky top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{ marginBottom: '-50px' }}>
-                    <div className='my-auto mx-auto py-0 px-4 relative flex items-center w-full bg-white' style={{ height: '50px' }}>
-                        <div className='flex-1 flex items-center'>
-                            <div onClick={() => { window.history.back() }}>
-                                <img src='/images/ic_back.png' />
-                            </div>
-                            <div className='my-0 mx-auto text-base font-medium' style={{ letterSpacing: '-0.3px' }}>책장</div>
-                            <div className='flex'>
-                                <img src='/images/filter.png' onClick={onClick('right', true)} />
+            ? <>
+                <div>
+                    <header className='sticky top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{ marginBottom: '-50px' }}>
+                        <div className='my-auto mx-auto py-0 px-4 relative flex items-center w-full bg-white' style={{ height: '50px' }}>
+                            <div className='flex items-center justify-between w-full'>
+                                <div className="flex items-center">
+                                    <div onClick={() => { window.history.back() }} className="mr-2">
+                                        <img src='/images/ic_back.png' />
+                                    </div>
+                                    <BookmarkBorderOutlined onClick={() => setLockerDrawerOpen(true)} />
+                                </div>
+                                <div className='flex'>
+                                    <img src='/images/filter.png' onClick={onClick('right', true)} />
+                                </div>
+                                <div className='absolute left-0 right-0 mx-20 text-base font-medium text-center' style={{ letterSpacing: '-0.3px' }}>책장</div>
                             </div>
                         </div>
-                    </div>
-                </header>
-                <Drawer
-                    anchor='right'
-                    open={state['right']}
-                    onClose={onClick('right', false)}
-                >
-                    {list('right')}
-                </Drawer>
-                <main className='mt-12'>
-                    <div className='grid grid-cols-3 text-center text-sm textGray4 border-b border-solid border-gray3' style={{ height: '40px' }}>
-                        <div className={`font-semibold ${activeTab === 0 ? 'textBlue4 border-b-3 border-solid border-blue4' : ''}`}
-                            style={{ lineHeight: '40px' }} onClick={() => { tabClick(0) }}>구매예정</div>
-                        <div className={`font-semibold ${activeTab === 1 ? 'textBlue4 border-b-3 border-solid border-blue4' : ''}`}
-                            style={{ lineHeight: '40px' }} onClick={() => { tabClick(1) }}>보유중</div>
-                        <div className={`font-semibold ${activeTab === 2 ? 'textBlue4 border-b-3 border-solid border-blue4' : ''}`}
-                            style={{ lineHeight: '40px' }} onClick={() => { tabClick(2) }}>판매완료</div>
-                    </div>
-                    <section>
-                        {
-                            obj[activeTab]
-                        }
-                    </section>
-                </main>
-                <Link href='/addbook'>
-                    <div className='fixed bottom-0 right-0 z-100'>
-                        <img src='/images/ic_float.png' />
-                    </div>
-                </Link>
-            </div>
+                    </header>
+                    <Drawer
+                        anchor='right'
+                        open={state['right']}
+                        onClose={onClick('right', false)}
+                    >
+                        {list('right')}
+                    </Drawer>
+                    <main className='mt-12'>
+                        <div className='grid grid-cols-3 text-center text-sm textGray4 border-b border-solid border-gray3' style={{ height: '40px' }}>
+                            <div className={`font-semibold ${activeTab === 0 ? 'textBlue4 border-b-3 border-solid border-blue4' : ''}`}
+                                style={{ lineHeight: '40px' }} onClick={() => { tabClick(0) }}>구매예정</div>
+                            <div className={`font-semibold ${activeTab === 1 ? 'textBlue4 border-b-3 border-solid border-blue4' : ''}`}
+                                style={{ lineHeight: '40px' }} onClick={() => { tabClick(1) }}>보유중</div>
+                            <div className={`font-semibold ${activeTab === 2 ? 'textBlue4 border-b-3 border-solid border-blue4' : ''}`}
+                                style={{ lineHeight: '40px' }} onClick={() => { tabClick(2) }}>판매완료</div>
+                        </div>
+                        <section>
+                            {
+                                obj[activeTab]
+                            }
+                        </section>
+                    </main>
+                    <Link href={`/addbook?status=${activeTab}`}>
+                        <div className='fixed bottom-0 right-0 z-100'>
+                            <img src='/images/ic_float.png' />
+                        </div>
+                    </Link>
+                </div>
+                <Fragment>
+                    <Drawer open={lockerDrawerOpen} onClose={() => setLockerDrawerOpen(false)}                >
+                        <LockerDrawer />
+                    </Drawer>
+                </Fragment>
+            </>
             : <div className="w-screen h-screen"><CircleLoading /></div>
     }</>)
 }

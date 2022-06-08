@@ -14,8 +14,9 @@ import CircleLoadingOpacity from "../components/common/circle_loading_opacity";
 import { ko } from 'date-fns/locale';
 import { getAuth } from "firebase/auth";
 import { useRouter } from 'next/router';
+import moment from "moment";
 
-const AddPlace = (props) => {
+const EditPlace = (props) => {
     const router = useRouter();
     const auth = getAuth();
     const [saving, setSaving] = useState(false);
@@ -42,18 +43,18 @@ const AddPlace = (props) => {
     });
 
     const getData = async () => {
-        if (!props.query.commonItemUid) return;
+        const _result = await network.get(`/item/${props.query.itemUid}`);
 
-        const res = await network.get('/item/commonItem/' + props.query.commonItemUid);
         setItemInfo({
-            ...itemInfo,
-            name: res.data.name,
-            image: res.data.image,
-            status: res.data.status,
-            address: res.data.address,
-            detailAddress: res.data.detailAddress,
-            field: res.data.field,
-            region: res.data.region
+            name: _result.data.name,
+            image: _result.data.image,
+            status: _result.data.status,
+            address: _result.data.address,
+            detailAddress: _result.data.detailAddress,
+            field: _result.data.field,
+            region: _result.data.region,
+            score: _result.data.score,
+            regDt: _result.data.regDt == null ? null : moment(_result.data.regDt).toDate(),
         });
     }
 
@@ -88,6 +89,7 @@ const AddPlace = (props) => {
         e.preventDefault();
 
         const formData = new FormData();
+        formData.append('itemUid', props.query.itemUid);
         formData.append('name', itemInfo.name);
         formData.append('status', itemInfo.status);
         formData.append('field', itemInfo.field);
@@ -102,7 +104,7 @@ const AddPlace = (props) => {
         itemInfo.status == 0 ? null : formData.append('regDt', itemInfo.regDt);
         itemInfo.status == 0 ? null : formData.append('score', itemInfo.score);
 
-        await network.post('/locker', formData);
+        await network.post('/locker/update', formData);
 
         router.push('/instimap?type=place');
 
@@ -178,18 +180,40 @@ const AddPlace = (props) => {
                 <section className='pt-5 mx-5 my-6'>
                     <div className='mb-6'>
                         <div className='rounded-md my-0 mx-auto relative' style={{ width: '120px', height: '120px', backgroundColor: '#f2f2f2' }}>
-                            {
-                                itemInfo.image != null
-                                    ? <img src={itemInfo.image} className='rounded-md' />
-                                    : <button type='primary' onClick={() => inputRef.click()}>
-                                        <input type='file' accept='image/*' onChange={saveImage} ref={refParam => inputRef = refParam} style={{ display: 'none' }} />
-                                        {
-                                            loaded == false || loaded == true ? (
-                                                <img src={uploadImage.preview_URL} className='rounded-md' style={{ width: '120px', height: '120px' }} />
-                                            ) : <img src='/images/ic_camera.png' className='absolute top-10 left-10' />
-                                        }
-                                    </button>
-                            }
+                            <button className="w-full h-full" type='primary' onClick={() => inputRef.click()}>
+                                <input type='file' accept='image/*' onChange={saveImage} ref={refParam => inputRef = refParam} style={{ display: 'none' }} />
+                                {
+                                    itemInfo.image != null
+                                        ? <div
+                                            className="before:top-0 before:right-0 before:bottom-0 before:left-0 before:absolute rounded-md"
+                                            style={{
+                                                backgroundImage: `url("${itemInfo.image}")`,
+                                                backgroundRepeat: "no-repeat",
+                                                backgroundSize: "cover",
+                                                width: "100%",
+                                                paddingTop: "100%",
+                                                backgroundPosition: "center center"
+                                            }}
+                                        />
+                                        : <div>
+                                            {
+                                                loaded == false || loaded == true ? (
+                                                    <div
+                                                        className="before:top-0 before:right-0 before:bottom-0 before:left-0 before:absolute rounded-md"
+                                                        style={{
+                                                            backgroundImage: `url("${uploadImage.preview_URL}")`,
+                                                            backgroundRepeat: "no-repeat",
+                                                            backgroundSize: "cover",
+                                                            width: "100%",
+                                                            paddingTop: "100%",
+                                                            backgroundPosition: "center center"
+                                                        }}
+                                                    />
+                                                ) : <img src='/images/ic_camera.png' className='absolute top-10 left-10' />
+                                            }
+                                        </div>
+                                }
+                            </button>
                         </div>
                     </div>
                     <div>
@@ -314,9 +338,9 @@ const AddPlace = (props) => {
     )
 }
 
-export default AddPlace;
+export default EditPlace;
 
-AddPlace.getInitialProps = async (ctx) => {
+EditPlace.getInitialProps = async (ctx) => {
     return {
         query: ctx.query
     }

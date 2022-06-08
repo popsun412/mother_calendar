@@ -6,9 +6,15 @@ import DaumPostcode from 'react-daum-postcode';
 import { profileImageCheck } from "../../util/helper";
 import CircleLoadingOpacity from "../../components/common/circle_loading_opacity";
 import network from "../../util/network";
+import Toast from '../../components/common/toast';
+
 
 const ParentsInfo = (props) => {
-    const [open, setOpen] = useState(false);
+    const [ToastStatus, setToastStatus] = useState(false);
+    useEffect(() => {
+        if (ToastStatus) setTimeout(() => setToastStatus(false), 1000);
+    }, [ToastStatus]);
+
     const [saving, setSaving] = useState(false);
 
     const [nickname, setNickname] = useState(props.userInfo.nickName);
@@ -18,6 +24,7 @@ const ParentsInfo = (props) => {
     const [tel2, setTel2] = useState(props.userInfo.tel.substr(3, 4));
     const [tel3, setTel3] = useState(props.userInfo.tel.substr(7, 4));
     const [interest, setInterest] = useState(props.userInfo.interest);
+    const [region, setRegion] = useState(props.userInfo.region);
 
     const [uploadImage, setUploadImage] = useState({
         image_file: null,
@@ -52,12 +59,6 @@ const ParentsInfo = (props) => {
         setUploadImage({ image_file: null, preview_URL: '' });
     }
 
-    const onCompletePost = (data) => {
-        setAddress(data.address);
-        setDetailAddress("");
-        setOpen(false);
-    }
-
     const getButtonActive = () => {
         if (gender != "male" && gender != "female") return false;
         if (tel1.trim() == "" || tel2.trim() == "" || tel3.trim() == "") return false;
@@ -84,6 +85,7 @@ const ParentsInfo = (props) => {
         formData.append('address', address);
         formData.append('detailAddress', detailAddress);
         formData.append('interest', interest);
+        formData.append('region', region);
 
         const _result = await network.post("/userInfo/update", formData);
         props.setUserInfo({
@@ -94,10 +96,55 @@ const ParentsInfo = (props) => {
             address: _result.data.address,
             detailAddress: _result.data.detailAddress,
             interest: _result.data.interest,
-            profileImage: _result.data.profileImage
+            profileImage: _result.data.profileImage,
+            region: _result.data.region,
         });
+
+        setToastStatus(true);
         setSaving(false);
     };
+
+    function sample6_execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function (data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                var addr = ''; // 주소 변수
+                var extraAddr = ''; // 참고항목 변수
+
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    addr = data.roadAddress;
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    addr = data.jibunAddress;
+                }
+
+                // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                if (data.userSelectedType === 'R') {
+                    // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                    // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                    if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                        extraAddr += data.bname;
+                    }
+                    // 건물명이 있고, 공동주택일 경우 추가한다.
+                    if (data.buildingName !== '' && data.apartment === 'Y') {
+                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                    if (extraAddr !== '') {
+                        extraAddr = ' (' + extraAddr + ')';
+                    }
+                } else {
+                }
+
+                setAddress(addr);
+                setRegion(data.sido);
+                setDetailAddress("");
+            }
+        }).open();
+    }
 
     const selectedInterestStyle = "textOrange4 border-orange5";
     const nonSelectedInterstStyle = "textGray4 border-gray3";
@@ -157,13 +204,12 @@ const ParentsInfo = (props) => {
             </div>
             <div className='mb-8'>
                 <div className='mb-4' style={{ fontSize: '15px' }}>주소</div>
-                <div className="flex relative mb-2.5">
+                <div className="flex relative mb-2.5" onClick={() => sample6_execDaumPostcode()}>
                     <input type='text'
                         value={address}
                         className='h-9 rounded-md bg-gray2 w-full text-sm px-5 outline-none'
                         readOnly style={{ height: '39px' }}
                     />
-                    <i className='block absolute top-1/2 right-0 mr-3 text-sm textBlue4 not-italic' style={{ transform: 'translateY(-50%)' }} onClick={() => { setOpen(!open) }}>수정</i>
                 </div>
 
                 {(address.length > 0) ? <input
@@ -174,10 +220,6 @@ const ParentsInfo = (props) => {
                     onChange={(e) => setDetailAddress(e.currentTarget.value)}
                     placeholder="상세주소"
                 /> : <></>}
-
-                {open ? <div className="fixed p-5 flex items-center justify-center left-0 right-0 bottom-0 top-0 bg-black bg-opacity-60 overflow-y-auto" onClick={() => setOpen(false)}>
-                    <DaumPostcode autoClose onComplete={onCompletePost} />
-                </div> : <></>}
             </div>
             <div className='mb-8'>
                 <div className='mb-4' style={{ fontSize: '15px' }}>주 관심사</div>
@@ -196,6 +238,7 @@ const ParentsInfo = (props) => {
             </div>
         </div>
         {(saving) ? <CircleLoadingOpacity /> : <></>}
+        {ToastStatus && (<><Toast msg={'수정되었습니다.'} /></>)}
     </>)
 }
 

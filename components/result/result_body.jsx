@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import network from '../../util/network';
@@ -41,7 +42,7 @@ const ResultBody = (props) => {
                                         <div>
                                             <h3 className='font-semibold text-base' style={{ letterSpacing: '-0.3px' }}>{item.name}</h3>
                                             <div>
-                                                <span className='text-center font-medium text-xs rounded textGray3 px-1.5 py-1 mr-1.5' style={{ backgroundColor: '#f0f5f8' }}>{item.subject}</span>
+                                                <span className='text-center font-medium text-xs rounded textGray3 px-1.5 py-1 mr-1.5' style={{ backgroundColor: '#f0f5f8' }}>{item.subject == "체험" ? item.region : item.subject}</span>
                                                 <span className='text-center font-medium text-xs rounded textGray3 px-1.5 py-1 mr-1.5' style={{ backgroundColor: '#f0f5f8' }}>{item.field}</span>
                                             </div>
                                         </div>

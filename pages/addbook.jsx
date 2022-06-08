@@ -31,7 +31,7 @@ const AddBook = (props) => {
     const [itemInfo, setItemInfo] = useState({
         name: "",
         image: null,
-        status: null,
+        status: (props.query.status) ? parseInt(props.query.status) : null,
         subject: null,
         field: null,
         score: 0,
@@ -128,8 +128,8 @@ const AddBook = (props) => {
         formData.append('lockerType', "책장");
         formData.append('image', itemInfo.image);
         if (uploadImage.imge_file != null) formData.append('uploadImage', uploadImage.imge_file)
-        itemInfo.status == 1 ? formData.append('buyDt', itemInfo.regDt) : null;
-        itemInfo.status == 1 ? formData.append('score', itemInfo.score) : null;
+        itemInfo.status == 0 ? null : formData.append('regDt', itemInfo.regDt);
+        itemInfo.status == 0 ? null : formData.append('score', itemInfo.score);
 
         await network.post('/locker', formData);
         router.push('/bookshelf');
@@ -154,7 +154,7 @@ const AddBook = (props) => {
                         <div onClick={() => { window.history.back(); }}>
                             <img src='/images/ic_back.png' />
                         </div>
-                        <div className='my-0 mx-auto text-base font-medium' style={{ letterSpacing: '-0.3px' }}>책등록</div>
+                        <div className='my-0 mx-auto text-base font-medium' style={{ letterSpacing: '-0.3px' }}>책 등록</div>
                         <button disabled={disabled()} className={`flex ${disabled() ? 'textGray4' : 'textOrange5'}`} style={{ fontSize: '15px' }} onClick={onSubmit}>완료</button>
                     </div>
                 </div>
@@ -396,7 +396,7 @@ const AddBook = (props) => {
                         </section> : ''
                 }
                 {
-                    itemInfo.status === 1 ?
+                    itemInfo.status != 0 ?
                         <section className='mx-5 my-6'>
                             <div className='text-sm textGray2 font-medium'>만족도 <span className='textGray4'>(선택)</span></div>
                             <div className='flex mt-3'>

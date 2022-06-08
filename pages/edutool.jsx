@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @next/next/no-img-element */
+import React, { useEffect, useState, Fragment } from 'react';
 import Link from 'next/link';
 import { Box, Drawer } from '@material-ui/core';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
@@ -12,8 +14,11 @@ import network from '../util/network';
 import { getAuth } from "firebase/auth";
 import { useRouter } from 'next/router';
 import CircleLoading from '../components/common/circle_loading';
+import { BookmarkBorderOutlined } from "@mui/icons-material"
+import LockerDrawer from "../components/calendar/locker_drawer";
 
 const EduTool = () => {
+    const [lockerDrawerOpen, setLockerDrawerOpen] = useState(false);
 
     const [data, setData] = useState([]);
     const [load, setLoad] = useState(false);
@@ -102,11 +107,11 @@ const EduTool = () => {
     }, [])
 
     const fieldClick = (e) => {
-        setField({ ...field, [e.target.value]: e.target.checked});
+        setField({ ...field, [e.target.value]: e.target.checked });
     }
 
     const areaClick = (e) => {
-        setArea({ ...area, [e.target.value]: e.target.checked});
+        setArea({ ...area, [e.target.value]: e.target.checked });
     }
 
     const clickReturn = () => {
@@ -207,13 +212,13 @@ const EduTool = () => {
     ]
 
     const obj = {
-        0: <EduToolInstock params={params} activeTab={activeTab}/>,
-        1: <EduToolPurchase params={params} activeTab={activeTab}/>,
-        2: <EduToolSell params={params} activeTab={activeTab}/>
+        0: <EduToolInstock params={params} activeTab={activeTab} />,
+        1: <EduToolPurchase params={params} activeTab={activeTab} />,
+        2: <EduToolSell params={params} activeTab={activeTab} />
     }
 
     const applyFilter = () => {
-        
+
         setParams({
             offset: 0,
             limit: 20,
@@ -230,7 +235,7 @@ const EduTool = () => {
     }
 
     const getSubject = () => {
-        
+
         const subject = [];
 
         field[1] ? subject.push('국어') : null;
@@ -249,7 +254,7 @@ const EduTool = () => {
     }
 
     const getField = () => {
-        
+
         const field = [];
 
         area[1] ? field.push('교구') : null;
@@ -267,13 +272,13 @@ const EduTool = () => {
     const list = (anchor) => (
 
         <Box
-        sx={{ width: 250 }}
-        role="presentation"
-        onKeyDown={onClick(anchor, false, false)}
+            sx={{ width: 250 }}
+            role="presentation"
+            onKeyDown={onClick(anchor, false, false)}
         >
             <div className='my-2.5'>
                 <div className='mx-3.5'>
-                    <img src='/images/ic_close.png' className='ml-auto' onClick={onClick(anchor, false, false)}/>
+                    <img src='/images/ic_close.png' className='ml-auto' onClick={onClick(anchor, false, false)} />
                 </div>
                 <div className='mb-7 mx-3.5'>
                     <h3 className='mb-4 text-base font-semibold'>정렬</h3>
@@ -300,44 +305,44 @@ const EduTool = () => {
                 </div>
                 <div className='mb-7 mx-3.5'>
                     <h3 className='mb-4 text-base font-semibold'>분야</h3>
-                    <div className='flex flex-wrap gap-y-2' style={{columnGap: '7px'}}>
+                    <div className='flex flex-wrap gap-y-2' style={{ columnGap: '7px' }}>
                         {
                             fields.map((item, idx) => {
                                 return (
-                                <label className='block relative' key={idx}>
-                                    <input type='checkbox' value={item.id} className='opacity-0 absolute top-0 left-0' onChange={fieldClick}/>
-                                    <span className={`block border border-solid bg-white text-xs 
-                                        ${field[item.id]? 'textBlue4 border-blue4' : 'textGray4 border-gray3'}`} 
-                                        style={{borderRadius: '2px', padding: '5px 8px 6px'}}>{item.label}</span>
-                                </label>
+                                    <label className='block relative' key={idx}>
+                                        <input type='checkbox' value={item.id} className='opacity-0 absolute top-0 left-0' onChange={fieldClick} />
+                                        <span className={`block border border-solid bg-white text-xs 
+                                        ${field[item.id] ? 'textBlue4 border-blue4' : 'textGray4 border-gray3'}`}
+                                            style={{ borderRadius: '2px', padding: '5px 8px 6px' }}>{item.label}</span>
+                                    </label>
                                 )
                             })
-                        }                       
+                        }
                     </div>
                 </div>
                 <div className='mb-7 mx-3.5'>
                     <h3 className='mb-4 text-base font-semibold'>영역</h3>
-                    <div className='flex flex-wrap gap-y-2' style={{columnGap: '7px'}}>
+                    <div className='flex flex-wrap gap-y-2' style={{ columnGap: '7px' }}>
                         {
                             areas.map((item, idx) => {
                                 return (
-                                <label className='block relative' key={idx}>
-                                    <input type='checkbox' value={item.id} className='opacity-0 absolute top-0 left-0' onChange={areaClick}/>
-                                    <span className={`block border border-solid bg-white text-xs 
-                                        ${area[item.id]? 'textBlue4 border-blue4' : 'textGray4 border-gray3'}`} 
-                                        style={{borderRadius: '2px', padding: '5px 8px 6px'}}>{item.label}</span>
-                                </label>
+                                    <label className='block relative' key={idx}>
+                                        <input type='checkbox' value={item.id} className='opacity-0 absolute top-0 left-0' onChange={areaClick} />
+                                        <span className={`block border border-solid bg-white text-xs 
+                                        ${area[item.id] ? 'textBlue4 border-blue4' : 'textGray4 border-gray3'}`}
+                                            style={{ borderRadius: '2px', padding: '5px 8px 6px' }}>{item.label}</span>
+                                    </label>
                                 )
                             })
-                        }                       
+                        }
                     </div>
                 </div>
-                <div className='block absolute bottom-0 mb-6 mx-3.5' style={{width: '90%'}}>
-                    <div className='grid grid-cols-2 gap-x-2 text-center text-sm' style={{height: '44px'}} onClick={clickReturn}>
+                <div className='block absolute bottom-0 mb-6 mx-3.5' style={{ width: '90%' }}>
+                    <div className='grid grid-cols-2 gap-x-2 text-center text-sm' style={{ height: '44px' }} onClick={clickReturn}>
                         <div className='flex justify-center rounded-md bg-gray2 items-center'>
-                            <img src='/images/ic_refresh.png' className='w-4 h-4 mr-1'/>다시설정
+                            <img src='/images/ic_refresh.png' className='w-4 h-4 mr-1' />다시설정
                         </div>
-                        <div className='rounded-md bg-blue4 text-white' style={{lineHeight: '44px'}} onClick={applyFilter}>적용하기</div>
+                        <div className='rounded-md bg-blue4 text-white' style={{ lineHeight: '44px' }} onClick={applyFilter}>적용하기</div>
                     </div>
                 </div>
             </div>
@@ -346,48 +351,56 @@ const EduTool = () => {
 
     return (<>{
         (load)
-            ? <div>
-            <header className='sticky top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{marginBottom: '-50px'}}>
-                <div className='my-auto mx-auto py-0 px-4 relative flex items-center w-full bg-white' style={{height: '50px'}}>
-                    <div className='flex-1 flex items-center'>
-                        <div onClick={() => {window.history.back()}}>
-                            <img src='/images/ic_back.png' />
+            ? <>
+                <div>
+                    <header className='sticky top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{ marginBottom: '-50px' }}>
+                        <div className='flex py-0 px-4 relative items-center w-full bg-white justify-between' style={{ height: '50px' }}>
+                            <div className="flex items-center">
+                                <div onClick={() => { window.history.back() }} className="mr-2">
+                                    <img src='/images/ic_back.png' />
+                                </div>
+                                <BookmarkBorderOutlined onClick={() => setLockerDrawerOpen(true)} />
+                            </div>
+                            <div className='flex'>
+                                <img src='/images/filter.png' onClick={onClick('right', true)} />
+                            </div>
+                            <div className='absolute left-0 right-0 mx-20 text-base font-medium text-center' style={{ letterSpacing: '-0.3px' }}>교구장</div>
                         </div>
-                        <div className='my-0 mx-auto text-base font-medium' style={{letterSpacing: '-0.3px'}}>교구장</div>
-                        <div className='flex'>
-                            <img src='/images/filter.png' onClick={onClick('right', true)}/>
+                    </header>
+                    <Drawer
+                        anchor='right'
+                        open={state['right']}
+                        onClose={onClick('right', false)}
+                    >
+                        {list('right')}
+                    </Drawer>
+                    <main className='mt-12'>
+                        <div className='grid grid-cols-3 text-center text-sm textGray4 border-b border-solid border-gray3' style={{ height: '40px' }}>
+                            <div className={`font-semibold ${activeTab === 0 ? 'textBlue4 border-b-3 border-solid border-blue4' : ''}`}
+                                style={{ lineHeight: '40px' }} onClick={() => { tabClick(0) }}>구매예정</div>
+                            <div className={`font-semibold ${activeTab === 1 ? 'textBlue4 border-b-3 border-solid border-blue4' : ''}`}
+                                style={{ lineHeight: '40px' }} onClick={() => { tabClick(1) }}>보유중</div>
+                            <div className={`font-semibold ${activeTab === 2 ? 'textBlue4 border-b-3 border-solid border-blue4' : ''}`}
+                                style={{ lineHeight: '40px' }} onClick={() => { tabClick(2) }}>판매완료</div>
                         </div>
-                    </div>
+                        <section>
+                            {
+                                obj[activeTab]
+                            }
+                        </section>
+                    </main>
+                    <Link href={`/addtool?status=${activeTab}`} passHref>
+                        <div className='fixed bottom-0 right-0 z-100'>
+                            <img src='/images/ic_float.png' />
+                        </div>
+                    </Link>
                 </div>
-            </header>
-            <Drawer
-                anchor='right'
-                open={state['right']}
-                onClose={onClick('right', false)}
-            >
-                {list('right')}
-            </Drawer>
-            <main className='mt-12'>
-                <div className='grid grid-cols-3 text-center text-sm textGray4 border-b border-solid border-gray3' style={{height: '40px'}}>
-                    <div className={`font-semibold ${activeTab === 0 ? 'textBlue4 border-b-3 border-solid border-blue4' : ''}`} 
-                        style={{lineHeight: '40px'}} onClick={() => {tabClick(0)}}>구매예정</div>
-                    <div className={`font-semibold ${activeTab === 1 ? 'textBlue4 border-b-3 border-solid border-blue4' : ''}`} 
-                        style={{lineHeight: '40px'}} onClick={() => {tabClick(1)}}>보유중</div>
-                    <div className={`font-semibold ${activeTab === 2 ? 'textBlue4 border-b-3 border-solid border-blue4' : ''}`} 
-                        style={{lineHeight: '40px'}} onClick={() => {tabClick(2)}}>판매완료</div>
-                </div>
-                <section>
-                {
-                    obj[activeTab]
-                }
-                </section>
-            </main>
-            <Link href='/addtool'>
-                <div className='fixed bottom-0 right-0 z-100'>
-                    <img src='/images/ic_float.png'/>
-                </div>
-            </Link>
-        </div>
+                <Fragment>
+                    <Drawer open={lockerDrawerOpen} onClose={() => setLockerDrawerOpen(false)}                >
+                        <LockerDrawer />
+                    </Drawer>
+                </Fragment>
+            </>
             : <CircleLoading />
     }</>)
 }

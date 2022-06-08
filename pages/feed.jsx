@@ -64,8 +64,8 @@ export default function Feed() {
         >
             <FeedHeader setFilterOpen={setFilterOpen} />
             <div className="pt-4 pb-20 flex flex-col space-y-10">
-                {items.map((_item) => {
-                    return <FeedItem item={_item} key={_item.planAuthUid} ages={param.age} />
+                {items.map((_item, idx) => {
+                    return <FeedItem item={_item} key={idx} ages={param.age} />
                 })}
             </div>
             <Navigation path={'feed'} />

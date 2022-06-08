@@ -28,9 +28,11 @@ export function weekDayFormat(_day) {
 }
 
 export function profileImageCheck(_user, uploadImage = null) {
+    console.log(_user);
+
     if (uploadImage != null && uploadImage.preview_URL && uploadImage.preview_URL != "") return uploadImage.preview_URL;
 
-    if (_user.profileImage == null) {
+    if ((_user?.profileImage ?? null) == null) {
         return (_user.sex == 'female') ? '/images/img_profile_mom.png' : '/images/img_profile_dad.png';
     }
 

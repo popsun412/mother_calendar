@@ -23,6 +23,7 @@ export default function Regist(props) {
     // 상태관리
     const [checked, setChecked] = useState(true);
     const [common, setCommon] = useState(false);
+    const [openTime, setOpenTime] = useState(true);
 
     const [registInfo, setRegistInfo] = useState(
         {
@@ -30,7 +31,7 @@ export default function Regist(props) {
             subject: null,
             category: null,
             repeatDay: [0, 1, 2, 3, 4, 5, 6],
-            startDate: null,
+            startDate: new Date(),
             endDate: null,
             startTime: null,
             endTime: null,
@@ -72,6 +73,8 @@ export default function Regist(props) {
 
             if (_result.data.startTime != null) registInfo.startTime = moment(_result.data.startTime, "HH:mm:ss");
             if (_result.data.endTime != null) registInfo.endTime = moment(_result.data.endTime, "HH:mm:ss");
+            if (_result.data.startTime == null && _result.data.endTime == null) setOpenTime(false);
+
             setCommon(true);
         }
     }
@@ -104,6 +107,11 @@ export default function Regist(props) {
         if (!registActive()) return;
 
         registInfo.repeatDay = checked ? registInfo.repeatDay : [];
+
+        if (!openTime) {
+            registInfo.startTime = null;
+            registInfo.endTime = null;
+        }
 
         const _result = await network.post('/plan', {
             ...registInfo,
@@ -172,6 +180,7 @@ export default function Regist(props) {
                             className="bg-transparent outline-none w-full px-10 text-sm text-black text-center"
                             placeholder='계획명을 입력해주세요.'
                             value={registInfo.name}
+                            maxLength={30}
                             disabled={common}
                             onChange={(e) => setRegistInfo({ ...registInfo, name: e.currentTarget.value })}
                         />
@@ -200,6 +209,9 @@ export default function Regist(props) {
                             }))}
                         </div>
                     </div>
+
+                    {(common) ? <p className="text-center m-0 text-xs textGray4 mb-7">공동 계획은 계획명과 분야를 수정할 수 없습니다.</p> : <></>}
+
                     {/* 반복요일 */}
                     <div className='mb-8'>
                         <div className='relative'>
@@ -207,7 +219,10 @@ export default function Regist(props) {
                                 <span className='text-sm font-medium textGray2'>반복요일</span>
                                 <Switch
                                     checked={checked}
-                                    onChange={checked => { setChecked(checked) }}
+                                    onChange={checked => {
+                                        setChecked(checked);
+                                        if (!checked) setRegistInfo({ ...registInfo, endDate: registInfo.startDate });
+                                    }}
                                     offColor="#e0e0e0"
                                     onColor="#3C81E1"
                                 />
@@ -224,41 +239,48 @@ export default function Regist(props) {
                                 onChange={(date) => setRegistInfo({ ...registInfo, startDate: date })}
                                 value={registInfo.startDate}
                                 auto={true}
-                                maxDate={registInfo.endDate}
+                                maxDate={checked ? registInfo.endDate : null}
                             >
                                 <div className='flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center'>
                                     <span className={`text-xs font-medium pl-2 ${registInfo.startDate == null ? "textGray4" : ""}`}>{registInfo.startDate == null ? "시작날짜" : moment(registInfo.startDate).format("YYYY년 M월 D일")}</span>
                                     <ChevronRight className="rotate-90" />
                                 </div>
                             </CustomMobileDatepicker>
-
-                            <div className='flex items-center justify-center'>
-                                <svg className="w-5 h-2 textGray4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path fillRule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"></path>
-                                </svg>
-                            </div>
-
-                            <CustomMobileDatepicker
-                                onChange={(date) => setRegistInfo({ ...registInfo, endDate: date })}
-                                value={registInfo.endDate}
-                                auto={true}
-                                minDate={registInfo.startDate}
-                            >
-                                <div className='flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center'>
-                                    <span className={`text-xs font-medium pl-2 ${registInfo.endDate == null ? "textGray4" : ""}`}>{registInfo.endDate == null ? "종료날짜" : moment(registInfo.endDate).format("YYYY년 M월 D일")}</span>
-                                    <ChevronRight className="rotate-90" />
+                            {(checked) ? <>
+                                <div className='flex items-center justify-center'>
+                                    <svg className="w-5 h-2 textGray4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path fillRule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"></path>
+                                    </svg>
                                 </div>
-                            </CustomMobileDatepicker>
+
+                                <CustomMobileDatepicker
+                                    onChange={(date) => setRegistInfo({ ...registInfo, endDate: date })}
+                                    value={registInfo.endDate}
+                                    auto={true}
+                                    minDate={registInfo.startDate}
+                                >
+                                    <div className='flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center'>
+                                        <span className={`text-xs font-medium pl-2 ${registInfo.endDate == null ? "textGray4" : ""}`}>{registInfo.endDate == null ? "종료날짜" : moment(registInfo.endDate).format("YYYY년 M월 D일")}</span>
+                                        <ChevronRight className="rotate-90" />
+                                    </div>
+                                </CustomMobileDatepicker></>
+                                : <></>}
                         </div>
                     </div>
 
                     {/* 한나님과 같이 작업 */}
                     {/* 시간 */}
                     <div className='mb-8 flex flex-col'>
-                        <span className="textGray2 text-sm font-medium">시간
-                            <span className='textGray4'> (선택)</span>
-                        </span>
-                        <div className='flex space-x-1.5 mt-3'>
+                        <div className="flex justify-between items-center">
+                            <span className="textGray2 text-sm font-medium">시간<span className='textGray4'> (선택)</span></span>
+                            <Switch
+                                checked={openTime}
+                                onChange={() => setOpenTime(!openTime)}
+                                offColor="#e0e0e0"
+                                onColor="#3C81E1"
+                            />
+                        </div>
+                        {(openTime) ? <div className='flex space-x-1.5 mt-3'>
                             <CustomTimepicker
                                 onChange={(time) => setRegistInfo({ ...registInfo, startTime: time })}
                                 value={registInfo.startTime}
@@ -288,7 +310,7 @@ export default function Regist(props) {
                                     <ChevronRight className="rotate-90" />
                                 </div>
                             </CustomTimepicker>
-                        </div>
+                        </div> : <></>}
                     </div>
 
                     {/* 우선 빈값 */}

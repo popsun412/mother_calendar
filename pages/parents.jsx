@@ -5,10 +5,11 @@
 import React, { useEffect, useState } from 'react';
 import network from '../util/network';
 import InfiniteScroll from "react-infinite-scroll-component";
+import Link from 'next/link';
 
 const Parents = () => {
     const [hasMore, setHasMore] = useState(true);
-    const _orders = [{ value: "name", label: "이름순" }, { value: "reg", label: "최신순" }];
+    const _orders = [{ value: "reg", label: "최신순" }, { value: "name", label: "이름순" }];
     const [items, setItems] = useState([]);
     const [order, setOrder] = useState(_orders[0]);
 
@@ -57,18 +58,20 @@ const Parents = () => {
                             {
                                 items.map((item, idx) => {
                                     return (
-                                        <div className='flex mt-5' key={idx}>
-                                            <div className='mr-4 w-24 h-24'>
-                                                <img src={item.image} className='rounded-md' />
-                                            </div>
-                                            <div>
-                                                <h3 className='text-base font-semibold mb-1.5' style={{ letterSpacing: '-0.3px' }}>{item.name}</h3>
-                                                <div className='flex'>
-                                                    <span className='py-1 px-1.5 mr-1.5 rounded text-xs textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.field}</span>
-                                                    <span className='py-1 px-1.5 mr-1.5 rounded text-xs textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.subject}</span>
+                                        <Link href={{ pathname: '/item', query: { commonItemUid: item.commonItemUid } }} key={idx} passHref>
+                                            <div className='flex mt-5'>
+                                                <div className='mr-4 w-24 h-24'>
+                                                    <img src={item.image} className='rounded-md' />
+                                                </div>
+                                                <div>
+                                                    <h3 className='text-base font-semibold mb-1.5' style={{ letterSpacing: '-0.3px' }}>{item.name}</h3>
+                                                    <div className='flex'>
+                                                        <span className='py-1 px-1.5 mr-1.5 rounded text-xs textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.subject}</span>
+                                                        <span className='py-1 px-1.5 mr-1.5 rounded text-xs textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.field}</span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </Link>
                                     )
                                 })
                             }

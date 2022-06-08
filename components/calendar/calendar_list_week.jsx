@@ -50,7 +50,7 @@ export default function PlanListWeek(props) {
         if (_item.repeatDay != null && _item.repeatDay.length > 0) {
             const _checkDay = _item.repeatDay.findIndex((_repeat) => _repeat == _dayIndex);
             if (_checkDay >= 0) {
-                return (_day.date.unix() > moment().unix()) ? 2 : 0;
+                return ((_day.date.unix() + (60 * 60 * 24)) > moment().unix()) ? 2 : 0;
             } else {
                 return 3;
             }
@@ -62,7 +62,7 @@ export default function PlanListWeek(props) {
     return (
         <div className="w-full flex-auto flex-col items-stretch p-2" style={{ backgroundColor: "#E0E0E0", borderTopRightRadius: "15px" }}>
             {props.items.map((_item) => {
-                return <Link href={`/plan/edit?planUid=${_item.planUid}`} key={_item.planUid} passHref>
+                return <Link href={`/plan/${_item.planUid}`} key={_item.planUid} passHref>
                     <div className="bg-white flex flex-col px-4 py-4 mb-2 space-y-2" style={{ borderRadius: "10px" }}>
                         <PlanTitle title={_item.name} subject={_item.subject} />
                         <div className="flex justify-between">

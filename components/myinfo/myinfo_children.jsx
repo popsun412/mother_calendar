@@ -6,10 +6,16 @@ import CustomMobileDatepicker from "../../components/common/custom_mobile_datepi
 import CircleLoadingOpacity from "../../components/common/circle_loading_opacity";
 import network from "../../util/network";
 import moment from "moment";
+import Toast from '../../components/common/toast';
+
 
 const ChildrenInfo = (props) => {
     const [saving, setSaving] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const [ToastStatus, setToastStatus] = useState(false);
+    useEffect(() => {
+        if (ToastStatus) setTimeout(() => setToastStatus(false), 1000);
+    }, [ToastStatus]);
 
     const addBaby = () => {
         if (props.userInfo.babys.length >= 5) {
@@ -17,10 +23,12 @@ const ChildrenInfo = (props) => {
         }
 
         setSelectedIndex((props.userInfo.babys.length));
-        props.setUserInfo({ ...props.userInfo, babys: props.userInfo.babys.concat([{ babyUid: null, birth: moment().format("YYYY-MM-DD"), sex: "female" }]) });
+        props.setUserInfo({ ...props.userInfo, babys: props.userInfo.babys.concat([{ babyUid: null, birth: null, sex: null }]) });
     }
 
     const babyAge = (_datetime) => {
+        if (_datetime == null) return "세";
+
         const nowDate = moment(_datetime);
         return `${moment().year() - nowDate.year() + 1}세`;
     }
@@ -43,9 +51,12 @@ const ChildrenInfo = (props) => {
 
         const _result = await network.put('/userInfo/babys', { babys: props.userInfo.babys });
 
-        console.log(_result);
-
+        setToastStatus(true);
         setSaving(false);
+    }
+
+    const getButtonActive = () => {
+        return props.userInfo.babys.findIndex((_baby) => _baby.birth == null || _baby.sex == null) < 0;
     }
 
     return (
@@ -83,13 +94,13 @@ const ChildrenInfo = (props) => {
                     >
                         <div className="flex w-full space-x-3 text-center text-base font-normal textGray1 items-center justify-center">
                             <div className="flex-auto border border-color4 rounded-md py-2 col-span-3 text-center outline-none appearance-none bg-white">
-                                <span>{`${moment(props.userInfo.babys[selectedIndex].birth).year()}년`}</span>
+                                <span>{`${props.userInfo.babys[selectedIndex].birth == null ? "" : moment(props.userInfo.babys[selectedIndex].birth).year()}년`}</span>
                             </div>
                             <div className="flex-auto border border-color4 rounded-md py-2 col-span-3 text-center outline-none appearance-none bg-white">
-                                <span>{`${moment(props.userInfo.babys[selectedIndex].birth).format("M월")}`}</span>
+                                <span>{`${props.userInfo.babys[selectedIndex].birth == null ? "" : moment(props.userInfo.babys[selectedIndex].birth).format("M")}월`}</span>
                             </div>
                             <div className="flex-auto border border-color4 rounded-md py-2 col-span-3 text-center outline-none appearance-none bg-white">
-                                <span>{`${moment(props.userInfo.babys[selectedIndex].birth).format("D일")}`}</span>
+                                <span>{`${props.userInfo.babys[selectedIndex].birth == null ? "" : moment(props.userInfo.babys[selectedIndex].birth).format("D")}일`}</span>
                             </div>
                             <div className="py-2 textOrange4">{babyAge(props.userInfo.babys[selectedIndex].birth)}</div>
                         </div>
@@ -104,12 +115,14 @@ const ChildrenInfo = (props) => {
                 </div>
                 <div className="rounded-md bg-[#ff6035] absolute bottom-6 left-6 right-6">
                     <button
-                        className="w-full py-4 text-sm font-semibold text-white"
+                        className={`w-full h-12 text-center rounded-md text-white ${getButtonActive() ? "bg5" : "bg-gray4"}`}
+                        disabled={!getButtonActive()}
                         onClick={onSave}
                     >완료</button>
                 </div>
             </div>
             {(saving) ? <CircleLoadingOpacity /> : <></>}
+            {ToastStatus && (<><Toast msg={'수정되었습니다.'} /></>)}
         </>
     )
 }

@@ -13,12 +13,17 @@ import Link from "next/link";
 import { useRecoilState } from "recoil";
 import { certifyLockerState } from "../../states/certify_locker";
 
+// firebase
+import { getAuth } from "firebase/auth";
+
 export default function PlaneDetail(props) {
+    const auth = getAuth();
+
     const router = useRouter();
     const [lockers, setLockers] = useRecoilState(certifyLockerState);
 
     const status = () => {
-        const _endDate = moment(props.plan.endDate);
+        const _endDate = moment(props.plan.endDate).add(1, 'd');
         const _todayAuth = props.plan.auths.findIndex((_auth) => moment(_auth.authDt).format("YYYY-MM-DD") == moment().format("YYYY-MM-DD")) >= 0;
 
         // 오늘 인증 함
@@ -69,6 +74,9 @@ export default function PlaneDetail(props) {
     }));
 
     const _percent = () => {
+        const _totalCount = calcPercent(props.plan);
+        if (_totalCount == 0) return 0;
+
         return Math.round(props.plan.auths.length / calcPercent(props.plan) * 100);
     }
 
@@ -84,24 +92,24 @@ export default function PlaneDetail(props) {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
                     </svg>
 
-                    <PlanMoreButton plan={props.plan} />
+                    {(auth.currentUser.uid == props.plan.createUserUid) ? <PlanMoreButton plan={props.plan} /> : <></>}
                 </div>
 
                 <div className="flex flex-row pb-6">
                     <PlanTitle subject={props.plan.subject} />
                     <p className="textGray1 text-lg font-normal">{props.plan.name}</p>
                 </div>
-                {
-                    props.plan.commonPlanUid
-                        ? <div className="border rounded-md border-color2 flex justify-between p-3 mb-4">
-                            <div className="flex flex-row">
-                                <img src="/images/group.png" alt="그룹이미지" className="w-5 h-5 mr-3" />
-                                <span className="textGray2 text-sm font-normal">공동 계획입니다!</span>
-                            </div>
-                            <span className="textBlue1 text-sm font-normal">현황 보러가기</span>
+                {props.plan.commonPlanUid
+                    ? <div className="border rounded-md border-color2 flex justify-between p-3 mb-4" onClick={() => {
+                        router.push(`/plandetail?commonPlanUid=${props.plan.commonPlanUid}`);
+                    }}>
+                        <div className="flex flex-row">
+                            <img src="/images/group.png" alt="그룹이미지" className="w-5 h-5 mr-3" />
+                            <span className="textGray2 text-sm font-normal">공동 계획입니다!</span>
                         </div>
-                        : <></>
-                }
+                        <span className="textBlue1 text-sm font-normal">현황 보러가기</span>
+                    </div>
+                    : <></>}
                 <div className="bg-gray2 rounded-md px-5 py-3.5 mb-5">
                     {
                         (props.plan.repeatDay == null)
@@ -161,6 +169,9 @@ export default function PlaneDetail(props) {
                                     className={`bg-center bg-no-repeat bg-cover relative h-[7.5rem]`}
                                     key={_auth.planAuthUid}
                                     style={{ backgroundImage: `url(${_auth.image})` }}
+                                    onClick={() => {
+                                        router.push(`/certify/complete?planAuthUid=${_auth.planAuthUid}`);
+                                    }}
                                 >
                                     <div className="w-full h-full absolute top-0 left-0 bg-[rgba(0,0,0,0.4)]" />
                                     <div className="flex flex-col absolute left-2.5 bottom-2.5">
@@ -172,14 +183,14 @@ export default function PlaneDetail(props) {
                         </div>}
                 </div>
 
-                <div className="fixed flex items-center justify-center left-0 right-0 bottom-6">
+                {(auth.currentUser.uid == props.plan.createUserUid) ? <div className="fixed flex items-center justify-center left-0 right-0 bottom-6">
                     {(status() == 0) ? <span className="px-5 py-3 bg5 text-base text-white font-medium rounded-full" onClick={() => {
                         setLockers([]);
                         router.push(`/plan/certify?planUid=${props.plan.planUid}`);
                     }}>오늘 하루 인증하기</span> : <></>}
                     {(status() == 1) ? <span className="px-5 py-3 bg-gray4 text-base text-white font-medium rounded-full fixed bottom-6">오늘 인증을 완료했어요!</span> : <></>}
                     {(status() == 2) ? <Link href={`/plan/edit?planUid=${props.plan.planUid}`} passHref><span className="px-5 py-3 bg5 text-base text-white font-medium rounded-full fixed bottom-6">종료 계획 재시작하기</span></Link> : <></>}
-                </div>
+                </div> : <></>}
             </div>
 
         </>

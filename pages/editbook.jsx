@@ -19,21 +19,18 @@ import { ko } from "date-fns/locale";
 import CircleLoadingOpacity from "../components/common/circle_loading_opacity";
 import moment from "moment";
 
-const AddTool = (props) => {
-    const _fields = ["교구", "교재", "영상", "게임", "블록", "퍼즐", "기타"];
-
+const EditBook = (props) => {
     const [saving, setSaving] = useState(false);
     const auth = getAuth();
-    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
     const [load, setLoad] = useState(false);
 
     const router = useRouter();
-    const commonItemUid = props.query.commonItemUid;
 
     const [itemInfo, setItemInfo] = useState({
+        itemUid: null,
         name: "",
         image: null,
-        status: props.query.status ? parseInt(props.query.status) : null,
+        status: (props.query.status) ? parseInt(props.query.status) : null,
         subject: null,
         field: null,
         score: 0,
@@ -51,55 +48,29 @@ const AddTool = (props) => {
 
     // 아이템 불러오기
     const getItem = async () => {
+        const _result = await network.get(`/item/${props.query.itemUid}`);
+
+        setItemInfo({
+            name: _result.data.name,
+            image: _result.data.image,
+            status: _result.data.status,
+            subject: _result.data.subject,
+            field: _result.data.field,
+            score: _result.data.score,
+            regDt: _result.data.regDt == null ? null : moment(_result.data.regDt).toDate()
+        });
+
         setLoad(true);
     }
 
-    // 유저 정보 갖고오기
-    const getUser = async () => {
-        const _result = await network.post('/userInfo');
-
-        // data 통신
-        if (_result.status == 200) {
-            setUserInfo(_result.data);
-        } else {
-            router.push('/');
-        }
-    }
-
     useEffect(() => {
-        if (userInfo == null) {
-            auth.onAuthStateChanged(async (_user) => {
-                if (_user) {
-                    getUser();
-                } else {
-                    setUserInfo(null);
-                    router.push('/');
-                }
-            });
-        }
-
-        if (userInfo != null && !load) getItem();
-    })
-
-    useEffect(() => {
-        const getData = async () => {
-            const res = await network.get('/item/commonItem/' + commonItemUid);
-            let _regDt = null
-            if (res.data.regDt != null) _regDt = moment(res.data.regDt).toDate();
-
-            setItemInfo({
-                ...itemInfo,
-                image: res.data.image,
-                name: res.data.name,
-                status: res.data.status,
-                subject: res.data.subject,
-                field: res.data.field,
-                regDt: _regDt ?? new Date(),
-                score: res.data.score ?? 0,
-            })
-        }
-
-        if (commonItemUid) getData();
+        auth.onAuthStateChanged(async (_user) => {
+            if (_user) {
+                await getItem();
+            } else {
+                router.push('/');
+            }
+        });
     }, [])
 
     const saveImage = (e) => {
@@ -123,18 +94,19 @@ const AddTool = (props) => {
         e.preventDefault();
 
         const formData = new FormData();
+        formData.append('itemUid', props.query.itemUid);
         formData.append('name', itemInfo.name);
         formData.append('status', itemInfo.status);
         formData.append('subject', itemInfo.subject);
         formData.append('field', itemInfo.field);
-        formData.append('lockerType', "교구장");
+        formData.append('lockerType', "책장");
         formData.append('image', itemInfo.image);
         if (uploadImage.imge_file != null) formData.append('uploadImage', uploadImage.imge_file)
-        itemInfo.status == 0 ? null : formData.append('buyDt', itemInfo.regDt);
+        itemInfo.status == 0 ? null : formData.append('regDt', itemInfo.regDt);
         itemInfo.status == 0 ? null : formData.append('score', itemInfo.score);
 
-        await network.post('/locker', formData);
-        router.push('/edutool');
+        await network.post('/locker/update', formData);
+        router.push('/bookshelf');
         setSaving(false);
     }
 
@@ -143,12 +115,12 @@ const AddTool = (props) => {
         if (itemInfo.image == null && uploadImage.imge_file == null) return true;
         if (itemInfo.status != 0 && itemInfo.status != 1 && itemInfo.status != 2) return true;
         if (["국어", "영어", "수학", "과학", "사회", "미술", "음악", "체육", "놀이", "기타", "부모"].findIndex((_item) => _item == itemInfo.subject) < 0) return true;
-        if (_fields.findIndex((_item) => _item == itemInfo.field) < 0) return true;
+        if (["대전집", "소전집", "단행본", "기타"].findIndex((_item) => _item == itemInfo.field) < 0) return true;
 
         return false;
     }
 
-    return (<>
+    return load ? <>
         <div>
             <header className='sticky top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{ marginBottom: '-50px' }}>
                 <div className='my-auto mx-auto py-0 px-4 relative flex items-center w-full bg-white' style={{ height: '50px' }}>
@@ -156,7 +128,7 @@ const AddTool = (props) => {
                         <div onClick={() => { window.history.back(); }}>
                             <img src='/images/ic_back.png' />
                         </div>
-                        <div className='my-0 mx-auto text-base font-medium' style={{ letterSpacing: '-0.3px' }}>교구 등록</div>
+                        <div className='my-0 mx-auto text-base font-medium' style={{ letterSpacing: '-0.3px' }}>책 등록</div>
                         <button disabled={disabled()} className={`flex ${disabled() ? 'textGray4' : 'textOrange5'}`} style={{ fontSize: '15px' }} onClick={onSubmit}>완료</button>
                     </div>
                 </div>
@@ -189,7 +161,7 @@ const AddTool = (props) => {
                                         name: e.currentTarget.value
                                     })
                                 }}
-                                placeholder="교구 이름을 입력해주세요."
+                                placeholder="책 이름을 입력해주세요."
                             />
                         </div>
                     </div>
@@ -347,17 +319,30 @@ const AddTool = (props) => {
                 <section className='mx-5 my-6'>
                     <div className='text-sm textGray2 font-medium'>영역</div>
                     <div className='mt-5 flex flex-wrap'>
-                        {_fields.map((_fieldItem, index) => {
-                            return <span className={`block text-sm px-3 py-1.5 border border-solid rounded-sm mr-3 mb-3
-                            ${itemInfo.field == _fieldItem ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`} onClick={() => setItemInfo({
-                                ...itemInfo,
-                                field: _fieldItem
-                            })} key={index}>{_fieldItem}</span>
-                        })}
+                        <span className={`block text-sm px-3 py-1.5 border border-solid rounded-sm mr-3 
+                                ${itemInfo.field == '대전집' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`} onClick={() => setItemInfo({
+                            ...itemInfo,
+                            field: "대전집"
+                        })}>대전집</span>
+                        <span className={`block text-sm px-3 py-1.5 border border-solid rounded-sm mr-3 
+                                ${itemInfo.field == '소전집' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`} onClick={() => setItemInfo({
+                            ...itemInfo,
+                            field: "소전집"
+                        })}>소전집</span>
+                        <span className={`block text-sm px-3 py-1.5 border border-solid rounded-sm mr-3 
+                                ${itemInfo.field == '단행본' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`} onClick={() => setItemInfo({
+                            ...itemInfo,
+                            field: "단행본"
+                        })}>단행본</span>
+                        <span className={`block text-sm px-3 py-1.5 border border-solid rounded-sm mr-3 
+                                ${itemInfo.field == '기타' ? 'textOrange5 border-orange5' : 'textGray4 border-gray3'}`} onClick={() => setItemInfo({
+                            ...itemInfo,
+                            field: "기타"
+                        })}>기타</span>
                     </div>
                 </section>
                 {
-                    itemInfo.status === 1 ?
+                    itemInfo.status != 0 ?
                         <section className='mx-5 my-6'>
                             <div className='text-sm textGray2 font-medium'>구매시기 <span className='textGray4'>(선택)</span></div>
                             <div className='mt-5'>
@@ -405,13 +390,12 @@ const AddTool = (props) => {
             </main>
         </div>
         {(saving) ? <CircleLoadingOpacity /> : <></>}
-    </>
-    )
+    </> : <></>
 }
 
-export default AddTool;
+export default EditBook;
 
-AddTool.getInitialProps = async (ctx) => {
+EditBook.getInitialProps = async (ctx) => {
     return {
         query: ctx.query
     }

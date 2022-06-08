@@ -9,6 +9,8 @@ export default function CalendarFullPlan(props) {
 
     const checkComplete = (_plan) => {
         const _totalDays = (_plan.repeatDay != null) ? calcPercent(_plan) : 1;
+        if (_totalDays == 0) return 0;
+
         return Math.round((_plan.authCount / _totalDays) * 100);
     }
 

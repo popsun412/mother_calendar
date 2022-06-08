@@ -4,8 +4,10 @@ import { useState } from "react";
 import { MoreVert } from "@mui/icons-material"
 import { profileImageCheck } from "../../util/helper";
 import moment from "moment";
+import { useRouter } from "next/router";
 
 const FeedItem = (props) => {
+    const router = useRouter();
     const [closed, setClosed] = useState(false);
 
     // show model
@@ -43,7 +45,7 @@ const FeedItem = (props) => {
         let _result = false;
         const _now = new Date();
 
-        props.item.babys.map((_baby) => {
+        (props.item?.babys ?? []).map((_baby) => {
             const _birth = moment(_baby.birth, 'YYYY-MM-DD').toDate();
             const _babyAge = _now.getFullYear() - _birth.getFullYear() + 1;
             if (_minAge <= _babyAge && _maxAge >= _babyAge) _result = true;
@@ -56,7 +58,9 @@ const FeedItem = (props) => {
         <div>
             <div className='mx-5 mb-6 flex justify-between items-start'>
                 <div className='flex'>
-                    <div className='mr-3'>
+                    <div className='mr-3' onClick={() => {
+                        router.push({ pathname: '/calendar', query: { friend: props.item.userUid } });
+                    }}>
                         <img src={profileImageCheck(props.item.userInfo)} className='w-10 h-10 rounded-full' />
                     </div>
                     <div>
