@@ -106,17 +106,15 @@ const EditPlace = (props) => {
 
         await network.post('/locker/update', formData);
 
-        router.push('/instimap?type=place');
+        router.push('/placemap');
 
         setSaving(false);
     }
 
     const disabled = () => {
         if (itemInfo.name.trim() == "") return true;
-        if (itemInfo.image == null && uploadImage.image_file == null) return true;
         if (itemInfo.status != 0 && itemInfo.status != 1 && itemInfo.status != 2) return true;
-        if ((itemInfo.address ?? "").trim() == "") return true;
-        if ((itemInfo.detailAddress ?? "").trim() == "") return true;
+        // if ((itemInfo.address ?? "").trim() == "") return true;
         if (_fields.findIndex((_item) => _item == itemInfo.field) < 0) return true;
 
         return false;
@@ -162,6 +160,10 @@ const EditPlace = (props) => {
         }).open();
     }
 
+    const deleteFileImage = (e) => {
+        setItemInfo({ ...itemInfo, image: null });
+        setUploadImage({ image_file: null, preview_URL: '' });
+    }
 
     return (<>
         <div>
@@ -171,7 +173,7 @@ const EditPlace = (props) => {
                         <div onClick={() => { window.history.back() }}>
                             <img src='/images/ic_back.png' />
                         </div>
-                        <div className='my-0 mx-auto text-base font-medium' style={{ letterSpacing: '-0.3px' }}>체험장소 등록</div>
+                        <div className='my-0 mx-auto text-base font-medium' style={{ letterSpacing: '-0.3px' }}>체험장소 수정</div>
                         <button className={`flex ${disabled() ? 'textGray4' : 'textOrange5'}`} style={{ fontSize: '15px' }} disabled={disabled()} onClick={onSubmit}>완료</button>
                     </div>
                 </div>
@@ -214,6 +216,12 @@ const EditPlace = (props) => {
                                         </div>
                                 }
                             </button>
+                            {(itemInfo.image != null || uploadImage.image_file != null)
+                                ? <svg className="w-7 h-7 absolute -top-3 -right-3 bg-gray4 rounded-full ring ring-white p-1 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" onClick={deleteFileImage}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                                : <></>
+                            }
                         </div>
                     </div>
                     <div>
@@ -264,7 +272,7 @@ const EditPlace = (props) => {
                     </div>
                 </section>
                 <section className='mx-5 my-6'>
-                    <div className='text-sm textGray2 font-medium'>주소</div>
+                    <div className='text-sm textGray2 font-medium mb-6'>주소</div>
                     <div className='mb-8'>
                         <div className="flex relative mb-2.5" onClick={() => {
                             sample6_execDaumPostcode();

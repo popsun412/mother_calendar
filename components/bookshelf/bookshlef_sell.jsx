@@ -12,7 +12,7 @@ const BookshelfSell = (props) => {
     const [data, setData] = useState([]);
 
     const getData = async () => {
-        const res = await network.post('/locker/items', params);
+        const res = await network.post('/locker/items', { ...params, userUid: props.userUid });
         console.log(res.data);
 
         res.data ? setData(res.data) : null;
@@ -31,7 +31,10 @@ const BookshelfSell = (props) => {
                 data.length > 0 ?
                     data.map((item, index) => {
                         return (
-                            <div className='flex opacity-30' key={index} style={{ marginBottom: '22px' }} onClick={() => router.push(`/editbook?itemUid=${item.itemUid}`)}>
+                            <div className='flex opacity-30' key={index} style={{ marginBottom: '22px' }} onClick={() => {
+                                if (!props.isMe) return;
+                                router.push(`/editbook?itemUid=${item.itemUid}`);
+                            }}>
                                 <div className='mr-4'>
                                     <img src={item.image} className='rounded-md border border-solid border-color4' style={{ width: '94px', height: '94px' }} />
                                 </div>
@@ -52,7 +55,7 @@ const BookshelfSell = (props) => {
                             <img src='/images/no_result.png' width={'93px'} height={'113px'} style={{ margin: '0 auto' }} />
                             <div className='text-sm text-center textGray4 mt-2.5' style={{ lineHeight: 1.7, letterSpacing: '-0.28px' }}>
                                 아이템이 없습니다.<br />
-                                내가 판매완료한 아이템으로 채워주세요!
+                                {props.isMe ? "내가 판매완료한 아이템으로 채워주세요!" : ""}
                             </div>
                         </div>
                     </div>

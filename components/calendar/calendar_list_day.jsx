@@ -26,13 +26,13 @@ export default function PlanListDay(props) {
     }
 
     return (
-        <div className="w-full h-full overflow-y-auto flex-col items-stretch bg-white px-5 pt-4" style={{ borderTopRightRadius: "15px" }}>
+        <div className="w-full h-full overflow-y-auto flex-col items-stretch bg-white px-5 pt-4 pb-28" style={{ borderTopRightRadius: "15px" }}>
             {props.items.map((_item) => {
                 return <Link href={`/plan/${_item.planUid}`} key={_item.planUid} passHref>
                     <div className="flex py-4">
                         <div className="w-7 h-7 my-1.5 checkbox m-2 text-center flex items-center justify-center" onClick={(e) => {
                             e.preventDefault();
-                            if (_item.userUid != auth.currentUser.uid) return;
+                            if (_item.createUserUid != auth.currentUser.uid) return;
 
                             let _href = { pathname: '/plan/certify', query: { planUid: _item.planUid } }
                             if (_item.isAuth) _href = { pathname: '/certify/complete', query: { planAuthUid: _item.planAuthUid } };

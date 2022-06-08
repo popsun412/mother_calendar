@@ -17,7 +17,7 @@ import CircleLoading from '../components/common/circle_loading';
 import { BookmarkBorderOutlined } from "@mui/icons-material"
 import LockerDrawer from "../components/calendar/locker_drawer";
 
-const EduTool = () => {
+const EduTool = (props) => {
     const [lockerDrawerOpen, setLockerDrawerOpen] = useState(false);
 
     const [data, setData] = useState([]);
@@ -129,6 +129,12 @@ const EduTool = () => {
         setAligns(e.currentTarget.value);
     };
 
+    const isMe = () => {
+        if (props.query.userUid == undefined || props.query.userUid == "") return true;
+
+        return (auth.currentUser?.uid ?? "") == props.query.userUid;
+    };
+
     const fields = [
         {
             id: 1,
@@ -212,9 +218,9 @@ const EduTool = () => {
     ]
 
     const obj = {
-        0: <EduToolInstock params={params} activeTab={activeTab} />,
-        1: <EduToolPurchase params={params} activeTab={activeTab} />,
-        2: <EduToolSell params={params} activeTab={activeTab} />
+        0: <EduToolInstock params={params} activeTab={activeTab} userUid={props.query.userUid} isMe={isMe()} />,
+        1: <EduToolPurchase params={params} activeTab={activeTab} userUid={props.query.userUid} isMe={isMe()} />,
+        2: <EduToolSell params={params} activeTab={activeTab} userUid={props.query.userUid} isMe={isMe()} />
     }
 
     const applyFilter = () => {
@@ -356,7 +362,7 @@ const EduTool = () => {
                     <header className='sticky top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{ marginBottom: '-50px' }}>
                         <div className='flex py-0 px-4 relative items-center w-full bg-white justify-between' style={{ height: '50px' }}>
                             <div className="flex items-center">
-                                <div onClick={() => { window.history.back() }} className="mr-2">
+                                <div onClick={() => { router.push('/calendar'); }} className="mr-4">
                                     <img src='/images/ic_back.png' />
                                 </div>
                                 <BookmarkBorderOutlined onClick={() => setLockerDrawerOpen(true)} />
@@ -389,15 +395,15 @@ const EduTool = () => {
                             }
                         </section>
                     </main>
-                    <Link href={`/addtool?status=${activeTab}`} passHref>
+                    {isMe() ? <Link href={`/addtool?status=${activeTab}`} passHref>
                         <div className='fixed bottom-0 right-0 z-100'>
                             <img src='/images/ic_float.png' />
                         </div>
-                    </Link>
+                    </Link> : <></>}
                 </div>
                 <Fragment>
                     <Drawer open={lockerDrawerOpen} onClose={() => setLockerDrawerOpen(false)}                >
-                        <LockerDrawer />
+                        <LockerDrawer userUid={props.query.userUid ?? auth.currentUser.uid} />
                     </Drawer>
                 </Fragment>
             </>
@@ -406,3 +412,10 @@ const EduTool = () => {
 }
 
 export default EduTool;
+
+
+EduTool.getInitialProps = async (ctx) => {
+    return {
+        query: ctx.query
+    }
+}

@@ -7,7 +7,7 @@ const LockerDrawer = (props) => {
         <div className="h-screen px-6 flex flex-col">
             <h3 className='text-2xl font-semibold py-6'>보관함</h3>
             <div className="flex-auto flex flex-col justify-around">
-                <Link href={{ pathname: '/bookshelf' }} passHref>
+                <Link href={{ pathname: '/bookshelf', query: { userUid: props.userUid ?? "" } }} passHref>
                     <div className='flex justify-center items-center'
                         style={{ width: '200px', height: '140px', borderRadius: '15px', backgroundColor: '#f8f6f5', marginBottom: '18px' }}>
 
@@ -19,7 +19,7 @@ const LockerDrawer = (props) => {
 
                     </div>
                 </Link>
-                <Link href={{ pathname: '/edutool' }} passHref>
+                <Link href={{ pathname: '/edutool', query: { userUid: props.userUid ?? "" } }} passHref>
                     <div className='flex justify-center items-center'
                         style={{ width: '200px', height: '140px', borderRadius: '15px', backgroundColor: '#f8f6f5', marginBottom: '18px' }}>
                         <div className='text-center'>
@@ -29,7 +29,7 @@ const LockerDrawer = (props) => {
                         </div>
                     </div>
                 </Link>
-                <Link href={{ pathname: '/instimap', query: { type: "academy" } }} passHref>
+                <Link href={{ pathname: '/academymap', query: { userUid: props.userUid ?? "" } }} passHref>
                     <div className='flex justify-center items-center'
                         style={{ width: '200px', height: '140px', borderRadius: '15px', backgroundColor: '#f8f6f5', marginBottom: '18px' }}>
 
@@ -41,7 +41,7 @@ const LockerDrawer = (props) => {
 
                     </div>
                 </Link>
-                <Link href={{ pathname: '/instimap', query: { type: "place" } }} passHref>
+                <Link href={{ pathname: '/placemap', query: { userUid: props.userUid ?? "" } }} passHref>
                     <div className='flex justify-center items-center'
                         style={{ width: '200px', height: '140px', borderRadius: '15px', backgroundColor: '#f8f6f5', marginBottom: '18px' }}>
                         <div className='text-center'>

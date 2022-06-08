@@ -17,7 +17,7 @@ import CircleLoading from "../components/common/circle_loading";
 import { BookmarkBorderOutlined } from "@mui/icons-material"
 import LockerDrawer from "../components/calendar/locker_drawer";
 
-const Bookshelf = () => {
+const Bookshelf = (props) => {
     const [lockerDrawerOpen, setLockerDrawerOpen] = useState(false);
     const [load, setLoad] = useState(false);
     const [activeTab, setActiveTab] = useState(1);
@@ -33,22 +33,15 @@ const Bookshelf = () => {
 
     const auth = getAuth();
     const router = useRouter();
+    const isMe = () => {
+        if (props.query.userUid == undefined || props.query.userUid == "") return true;
 
-    // 유저 정보 갖고오기
-    const getUser = async () => {
-        const _result = await network.post('/userInfo');
-
-        // data 통신
-        if (_result.status == 200) {
-        } else {
-            router.push('/');
-        }
-    }
+        return (auth.currentUser?.uid ?? "") == props.query.userUid;
+    };
 
     useEffect(() => {
         auth.onAuthStateChanged(async (_user) => {
             if (_user) {
-                await getUser();
                 setLoad(true);
             } else {
                 router.push('/');
@@ -197,6 +190,10 @@ const Bookshelf = () => {
             id: 10,
             label: '기타'
         },
+        {
+            id: 11,
+            label: '부모'
+        },
     ]
 
     const areas = [
@@ -219,9 +216,9 @@ const Bookshelf = () => {
     ]
 
     const obj = {
-        0: <BookshelfInstock params={params} activeTab={activeTab} />,
-        1: <BookshelfPurchase params={params} activeTab={activeTab} />,
-        2: <BookshelfSell params={params} activeTab={activeTab} />
+        0: <BookshelfInstock params={params} activeTab={activeTab} userUid={props.query.userUid} isMe={isMe()} />,
+        1: <BookshelfPurchase params={params} activeTab={activeTab} userUid={props.query.userUid} isMe={isMe()} />,
+        2: <BookshelfSell params={params} activeTab={activeTab} userUid={props.query.userUid} isMe={isMe()} />
     }
 
     const list = (anchor) => (
@@ -312,7 +309,7 @@ const Bookshelf = () => {
                         <div className='my-auto mx-auto py-0 px-4 relative flex items-center w-full bg-white' style={{ height: '50px' }}>
                             <div className='flex items-center justify-between w-full'>
                                 <div className="flex items-center">
-                                    <div onClick={() => { window.history.back() }} className="mr-2">
+                                    <div onClick={() => { router.push('/calendar'); }} className="mr-4">
                                         <img src='/images/ic_back.png' />
                                     </div>
                                     <BookmarkBorderOutlined onClick={() => setLockerDrawerOpen(true)} />
@@ -346,15 +343,15 @@ const Bookshelf = () => {
                             }
                         </section>
                     </main>
-                    <Link href={`/addbook?status=${activeTab}`}>
+                    {isMe() ? <Link href={`/addbook?status=${activeTab}`}>
                         <div className='fixed bottom-0 right-0 z-100'>
                             <img src='/images/ic_float.png' />
                         </div>
-                    </Link>
+                    </Link> : <></>}
                 </div>
                 <Fragment>
                     <Drawer open={lockerDrawerOpen} onClose={() => setLockerDrawerOpen(false)}                >
-                        <LockerDrawer />
+                        <LockerDrawer userUid={props.query.userUid ?? auth.currentUser.uid} />
                     </Drawer>
                 </Fragment>
             </>
@@ -363,3 +360,9 @@ const Bookshelf = () => {
 }
 
 export default Bookshelf;
+
+Bookshelf.getInitialProps = async (ctx) => {
+    return {
+        query: ctx.query
+    }
+}

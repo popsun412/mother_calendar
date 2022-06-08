@@ -76,7 +76,7 @@ const CategoryPlan = (props) => {
                                                             <img src={`${getSubjectImage(_item.subject)}`} className='mr-4 w-6 h-6' />
                                                             <div className='my-auto mx-0'>{_item.name}</div>
                                                         </div>
-                                                        <img src={`${_item.bookmark ? "" : "/images/ic_check_circle.png"}`} onClick={(e) => {
+                                                        <img className="w-6" src={`${_item.bookmark ? "/images/vector.png" : "/images/ic_check_circle.png"}`} onClick={(e) => {
                                                             e.preventDefault();
                                                             router.push(`/plan/regist?commonPlanUid=${_item.commonPlanUid}`);
                                                         }} />

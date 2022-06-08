@@ -59,9 +59,11 @@ export default function Edit(props) {
             planInfo.planUid = _result.data.planUid;
             planInfo.commonPlanUid = _result.data.commonPlanUid;
             planInfo.repeatDay = _result.data.repeatDay ?? [];
+            planInfo.startDate = moment(_result.data.startDate).toDate();
+            planInfo.endDate = moment(_result.data.endDate).toDate();
             if (_result.data.recommTerm != null) planInfo.endDate = moment(planInfo.endDate).add('M', _result.data.recommTerm).toDate();
-            if (_result.data.startTime != null) planInfo.startTime = moment(_result.data.startTime, "HH:mm:ss");
-            if (_result.data.endTime != null) planInfo.endTime = moment(_result.data.endTime, "HH:mm:ss")
+            planInfo.startTime = _result.data.startTime == null ? null : moment(_result.data.startTime, "HH:mm:ss");
+            planInfo.endTime = _result.data.endTime == null ? null : moment(_result.data.endTime, "HH:mm:ss")
             setCommon(_result.data.commonPlanUid != null);
         }
     }
@@ -167,7 +169,13 @@ export default function Edit(props) {
                         <span className="textGray2 text-sm font-medium">기간</span>
                         <div className='mt-3 flex'>
                             <CustomMobileDatepicker
-                                onChange={(date) => setPlanInfo({ ...planInfo, startDate: date })}
+                                onChange={(date) => {
+                                    setPlanInfo({
+                                        ...planInfo,
+                                        startDate: date,
+                                        endDate: moment(date).unix() > moment(planInfo.endDate).unix() ? date : planInfo.endDate
+                                    });
+                                }}
                                 value={planInfo.startDate}
                                 auto={true}
                             >
@@ -184,7 +192,13 @@ export default function Edit(props) {
                             </div>
 
                             <CustomMobileDatepicker
-                                onChange={(date) => setPlanInfo({ ...planInfo, endDate: date })}
+                                onChange={(date) => {
+                                    setPlanInfo({
+                                        ...planInfo,
+                                        endDate: date,
+                                        startDate: moment(date).unix() < moment(planInfo.startDate).unix() ? date : planInfo.startDate
+                                    });
+                                }}
                                 value={planInfo.endDate}
                                 auto={true}
                             >

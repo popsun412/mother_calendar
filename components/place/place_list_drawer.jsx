@@ -14,8 +14,8 @@ export default function PlaceListDrawer(props) {
                 },
                 '.MuiToggleButton-root.Mui-selected': {
                     backgroundColor: '#fff!important',
-                    color: '#FF6035',
-                    borderColor: '#FF6035',
+                    color: '#3C81E1',
+                    borderColor: '#3C81E1',
                     borderRadius: '6px'
                 },
             }}
@@ -28,7 +28,7 @@ export default function PlaceListDrawer(props) {
                 <h3 className='mb-4 text-base font-semibold'>정렬</h3>
                 <div className='flex'>
                     <ToggleButtonGroup value={props.param.order} aria-label='aligns' className='w-full'>
-                        <ToggleButton value='reg' aria-label='구매순' className='w-full' onClick={() => props.setParam({ ...props.param, order: "reg" })}>구매순</ToggleButton>
+                        <ToggleButton value='reg' aria-label='방문순' className='w-full' onClick={() => props.setParam({ ...props.param, order: "reg" })}>방문순</ToggleButton>
                         <ToggleButton value='name' aria-label='이름순' className='w-full' onClick={() => props.setParam({ ...props.param, order: "name" })}>이름순</ToggleButton>
                         <ToggleButton value='score' aria-label='별점순' className='w-full' onClick={() => props.setParam({ ...props.param, order: "score" })}>별점순</ToggleButton>
                     </ToggleButtonGroup>
@@ -38,21 +38,53 @@ export default function PlaceListDrawer(props) {
             <div className='mb-7 mx-3.5'>
                 <h3 className='mb-4 text-base font-semibold'>상태</h3>
                 <div className='flex justify-between space-x-2'>
-                    {[0, 1].map((_status, index) => {
-                        return (
-                            <div className={`flex-auto py-2 px-5 rounded border text-center ${props.param.status == _status ? "border-orange4 textOrange4" : "border-gray4 textGray4"}`} key={index} onClick={() => props.setParam({ ...props.param, status: _status })}>
-                                <span>{_status == 1 ? "방문완료" : "방문예정"}</span>
-                            </div>
-                        )
-                    })}
+                    <div className={`flex-auto py-2 px-5 rounded border text-center ${props.param.status.findIndex((_status) => _status == 0) >= 0 ? "border-blue4 textBlue4" : "border-gray4 textGray4"}`}
+                        onClick={() => {
+                            const _checkIndex = props.param.status.findIndex((_status) => _status == 0);
+
+                            if (_checkIndex >= 0) {
+                                props.param.status.splice(_checkIndex, 1);
+                            } else {
+                                props.param.status.push(0);
+                            }
+
+                            props.setParam({ ...props.param, status: [].concat(props.param.status) });
+                        }}>
+                        <span>방문예정</span>
+                    </div>
+                    <div className={`flex-auto py-2 px-5 rounded border text-center ${props.param.status.findIndex((_status) => _status == 1) >= 0 ? "border-blue4 textBlue4" : "border-gray4 textGray4"}`}
+                        onClick={() => {
+                            const _checkIndex = props.param.status.findIndex((_status) => _status == 1);
+
+                            if (_checkIndex >= 0) {
+                                props.param.status.splice(_checkIndex, 1);
+                            } else {
+                                props.param.status.push(1);
+                            }
+
+                            props.setParam({ ...props.param, status: [].concat(props.param.status) });
+                        }}>
+                        <span>방문완료</span>
+                    </div>
                 </div>
             </div>
             <div className='mb-7 mx-3.5'>
                 <h3 className='mb-4 text-base font-semibold'>지역</h3>
                 <div className='flex justify-between space-x-2'>
                     {["서울", "경기", "기타"].map((_region, index) => {
+                        const _checkIndex = props.param.region.findIndex((_checkItem) => _checkItem == _region);
+
                         return (
-                            <div className={`flex-auto py-2 px-3 rounded border text-center ${props.param.region == _region ? "border-orange4 textOrange4" : "border-gray4 textGray4"}`} key={index} onClick={() => props.setParam({ ...props.param, region: _region })}>
+                            <div className={`flex-auto py-2 px-3 rounded border text-center ${_checkIndex >= 0 ? "border-blue4 textBlue4" : "border-gray4 textGray4"}`} key={index} onClick={() => {
+
+                                if (_checkIndex >= 0) {
+                                    props.param.region.splice(_checkIndex, 1);
+                                } else {
+                                    props.param.region.push(_region);
+                                }
+
+                                props.setParam({ ...props.param, region: [].concat(props.param.region) });
+                            }}>
                                 <span>{_region}</span>
                             </div>
                         )
@@ -64,8 +96,19 @@ export default function PlaceListDrawer(props) {
                     <h3 className='mb-4 text-base font-semibold'>분야</h3>
                     <div className='flex flex-wrap'>
                         {["국어", "영어", "수학", "과학", "사회", "미술", "음악", "체육", "놀이", "기타", "부모"].map((_subject, index) => {
+                            const _checkIndex = props.param.subject.findIndex((_checkItem) => _checkItem == _subject);
+
                             return (
-                                <div className={`py-2 px-2 mr-3 mb-3 rounded border text-center ${props.param.subject == _subject ? "border-orange4 textOrange4" : "border-gray4 textGray4"}`} key={index} onClick={() => props.setParam({ ...props.param, subject: _subject })}>
+                                <div className={`py-2 px-2 mr-3 mb-3 rounded border text-center ${_checkIndex >= 0 ? "border-blue4 textBlue4" : "border-gray4 textGray4"}`} key={index} onClick={() => {
+
+                                    if (_checkIndex >= 0) {
+                                        props.param.subject.splice(_checkIndex, 1);
+                                    } else {
+                                        props.param.subject.push(_subject);
+                                    }
+
+                                    props.setParam({ ...props.param, subject: [].concat(props.param.subject) });
+                                }}>
                                     <span>{_subject}</span>
                                 </div>
                             )
@@ -76,7 +119,7 @@ export default function PlaceListDrawer(props) {
                     <div className='flex flex-wrap'>
                         {["놀이터", "키즈카페", "지식전시", "자연동물", "식당숙박", "기타"].map((_field, index) => {
                             return (
-                                <div className={`py-2 px-2 mr-3 mb-3 rounded border text-center ${props.param.field == _field ? "border-orange4 textOrange4" : "border-gray4 textGray4"}`} key={index} onClick={() => props.setParam({ ...props.param, field: _field })}>
+                                <div className={`py-2 px-2 mr-3 mb-3 rounded border text-center ${props.param.field == _field ? "border-blue4 textBlue4" : "border-gray4 textGray4"}`} key={index} onClick={() => props.setParam({ ...props.param, field: _field })}>
                                     <span>{_field}</span>
                                 </div>
                             )

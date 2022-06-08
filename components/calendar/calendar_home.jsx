@@ -84,7 +84,7 @@ export default function CalendarHome(props) {
             ? <div className="flex-auto bg-gray2">
                 <CircleLoading />
             </div>
-            : <div className="bg-gray2 flex-auto overflow-y-auto flex flex-col p-5 pb-0">
+            : <div className="bg-gray2 flex-auto overflow-y-auto flex flex-col p-5">
                 {(items.length > 0)
                     ? <div className="flex text-sm textGray2">
                         <div className="flex bg-white py-1.5 px-7 rounded-t-xl mr-1" onClick={() => setType(1)}>

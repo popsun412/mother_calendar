@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 import PlanTitle from "../calendar/plan_title";
 import { weekDayFormat, calcPercent } from "../../util/helper";
@@ -33,6 +34,10 @@ export default function PlaneDetail(props) {
         // const _needToday = (props.plan.repeatDay != null && props.plan.repeatDay.findIndex((_day) => _day == parseInt(moment().format('d')) - 1) >= 0);
 
         if (_endDate <= moment()) return 2;
+
+        // 요일 확인
+        const _day = parseInt(moment().format("d"));
+        if (props.plan.repeatDay.findIndex((_repeatDay) => _repeatDay == _day) < 0) return 3;
 
         return 0;
     }
@@ -82,7 +87,7 @@ export default function PlaneDetail(props) {
 
     useEffect(() => {
         status()
-    });
+    }, []);
 
     return (
         <>

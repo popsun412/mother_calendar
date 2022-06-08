@@ -115,7 +115,7 @@ export default function CalendarName(props) {
                 </CustomMobileDatepicker>
                 <div className="flex space-x-1 flex-row">
                     {(showModel.isMe) ? <Link href={'/plan/list'} passHref><div className='checkbox textGray2 text-xs font-normal px-3 py-1.5'>전체계획</div></Link> : <></>}
-                    {(showModel.isMe && showModel.isShare) ? <div className='flex checkbox textGray2 text-xs font-normal px-3 py-1.5 items-center' onClick={() => setDrawerOpen(true)}>
+                    {(showModel.isShare) ? <div className='flex checkbox textGray2 text-xs font-normal px-3 py-1.5 items-center' onClick={() => setDrawerOpen(true)}>
                         보관함
                         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
@@ -125,7 +125,7 @@ export default function CalendarName(props) {
             </div>
             <Fragment>
                 <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)}                >
-                    <LockerDrawer />
+                    <LockerDrawer userUid={props.selectedUserUid} />
                 </Drawer>
             </Fragment>
         </>

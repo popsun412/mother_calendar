@@ -120,7 +120,7 @@ const Plan2 = (props) => {
                             </div>
                             <div className='block absolute bottom-0 right-0'>
                                 <div className='mr-5 mb-1'>
-                                    <img src={`${data.isMyPlan ? "" : "/images/ic_check_circle.png"}`} onClick={(e) => {
+                                    <img className="w-6 mb-1" src={`${data.isMyPlan ? "/images/vector.png" : "/images/ic_check_circle.png"}`} onClick={(e) => {
                                         e.preventDefault();
                                         router.push(`/plan/regist?commonPlanUid=${data.commonPlanUid}`);
                                     }} />

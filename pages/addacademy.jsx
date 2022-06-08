@@ -103,20 +103,23 @@ const AddAcademy = (props) => {
 
         await network.post('/locker', formData);
 
-        router.push('/instimap?type=academy');
+        router.push('/academymap');
 
         setSaving(false);
     }
 
     const disabled = () => {
         if (itemInfo.name.trim() == "") return true;
-        if (itemInfo.image == null && uploadImage.image_file == null) return true;
         if (itemInfo.status != 0 && itemInfo.status != 1 && itemInfo.status != 2) return true;
-        if ((itemInfo.address ?? "").trim() == "") return true;
-        if ((itemInfo.detailAddress ?? "").trim() == "") return true;
+        // if ((itemInfo.address ?? "").trim() == "") return true;
         if (["국어", "영어", "수학", "과학", "사회", "미술", "음악", "체육", "놀이", "기타", "부모"].findIndex((_item) => _item == itemInfo.subject) < 0) return true;
 
         return false;
+    }
+
+    const deleteFileImage = () => {
+        setItemInfo({ ...itemInfo, image: null });
+        setUploadImage({ image_file: null, preview_URL: '' });
     }
 
     function sample6_execDaumPostcode() {
@@ -183,7 +186,7 @@ const AddAcademy = (props) => {
                                     : <button className="w-full h-full" type='primary' onClick={() => inputRef.click()}>
                                         <input type='file' accept='image/*' onChange={saveImage} ref={refParam => inputRef = refParam} style={{ display: 'none' }} />
                                         {
-                                            loaded == false || loaded == true ? (
+                                            uploadImage.image_file != null ? (
                                                 <div
                                                     className="before:top-0 before:right-0 before:bottom-0 before:left-0 before:absolute rounded-md"
                                                     style={{
@@ -198,6 +201,13 @@ const AddAcademy = (props) => {
                                             ) : <img src='/images/ic_camera.png' className='absolute top-10 left-10' />
                                         }
                                     </button>
+                            }
+
+                            {(itemInfo.image != null || uploadImage.image_file != null)
+                                ? <svg className="w-7 h-7 absolute -top-3 -right-3 bg-gray4 rounded-full ring ring-white p-1 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" onClick={deleteFileImage}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                                : <></>
                             }
                         </div>
                     </div>
@@ -353,7 +363,7 @@ const AddAcademy = (props) => {
                     </div>
                 </section>
                 <section className='mx-5 my-6'>
-                    <div className='text-sm textGray2 font-medium'>주소</div>
+                    <div className='text-sm textGray2 font-medium mb-6'>주소</div>
                     <div className='mb-8'>
                         <div className="flex relative mb-2.5" onClick={() => {
                             sample6_execDaumPostcode();

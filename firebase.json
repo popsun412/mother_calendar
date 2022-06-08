@@ -64,8 +64,12 @@
         "destination": "/home.html"
       },
       {
-        "source": "instimap",
-        "destination": "/instimap.html"
+        "source": "academymap",
+        "destination": "/academymap.html"
+      },
+      {
+        "source": "placemap",
+        "destination": "/placemap.html"
       },
       {
         "source": "item",
