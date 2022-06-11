@@ -31,7 +31,7 @@ const Etc = () => {
     }, [])
 
     const clickOrder = () => {
-        setOrder(order.value == "name" ? _orders[1] : _orders[0]);
+        setOrder(order.value == "name" ? _orders[0] : _orders[1]);
     }
 
     const moreITems = async () => {
@@ -102,7 +102,7 @@ const Etc = () => {
                     </div>
                 </main>
             </div>
-            {ToastStatus ? <Toast msg={'보관함에 추가되었습니다.'} /> : <></>}
+            {ToastStatus ? <Toast msg={'보관함에 등록되었습니다.'} /> : <></>}
         </InfiniteScroll>
     )
 }

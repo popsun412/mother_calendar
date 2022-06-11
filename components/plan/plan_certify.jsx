@@ -7,10 +7,13 @@ import { TextareaAutosize } from "@mui/material"
 import Link from "next/link";
 import network from "../../util/network";
 import { getLocktypeImage } from "../../util/helper";
-
+import { useRecoilState } from "recoil";
+import { certifyLockerState, selectedLockerState } from "../../states/certify_locker";
 
 export default function PlanCertify(props) {
     const router = useRouter();
+
+    const [selectedLockerIndex, setSelectedLockerIndex] = useRecoilState(selectedLockerState);
 
     const [uploadImage, setUploadImage] = useState({
         image_file: null,
@@ -76,22 +79,24 @@ export default function PlanCertify(props) {
                     <PlanTitle subject={props.plan.subject} />
                     <p className="textGray1 text-lg font-semibold">{props.plan.name}</p>
                 </div>
-                {
-                    props.lockers.map((_locker) => {
-                        return <div className="flex items-center justify-center border border-color4 rounded-md mb-4 py-3" key={_locker.itemUid}>
-                            <img className="w-4 h-4 mr-2" src={getLocktypeImage(_locker.lockerType)} />
-                            <span className="text-sm font-semibold textOrange4">{_locker.name}</span>
-                        </div>
-                    })
-                }
-                <Link href="/plan/items" passHref>
-                    <div className="flex items-center justify-center border border-color4 rounded-md mb-4 py-3">
-                        <svg className="w-4 h-5 textGray4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
-                        </svg>
-                        <span className="text-sm font-medium textGray4">아이템 추가하기</span>
+                {props.lockers.map((_locker, idx) => {
+                    return <div className="flex items-center justify-center border border-color4 rounded-md mb-4 py-3" key={_locker.itemUid} onClick={() => {
+                        setSelectedLockerIndex(idx);
+                        router.push("/plan/items");
+                    }}>
+                        <img className="w-4 h-4 mr-2" src={getLocktypeImage(_locker.lockerType)} />
+                        <span className="text-sm font-semibold textOrange4">{_locker.name}</span>
                     </div>
-                </Link>
+                })}
+                {props.lockers.length < 5 ? <div className="flex items-center justify-center border border-color4 rounded-md mb-4 py-3" onClick={() => {
+                    setSelectedLockerIndex(null);
+                    router.push("/plan/items");
+                }}>
+                    <svg className="w-4 h-5 textGray4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                    </svg>
+                    <span className="text-sm font-medium textGray4">아이템 추가하기</span>
+                </div> : <></>}
                 <div className='flex items-center justify-center mt-9 mb-20'>
                     {/* 이미지가 없을 때*/}
                     {(uploadImage.image_file == null && image == null)

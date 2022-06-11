@@ -24,6 +24,7 @@ export default function Edit(props) {
     const [checked, setChecked] = useState(false);
     const [common, setCommon] = useState(false);
     const [saving, setSaving] = useState(false);
+    const [openTime, setOpenTime] = useState(true);
 
     const [planInfo, setPlanInfo] = useState(
         {
@@ -64,6 +65,8 @@ export default function Edit(props) {
             if (_result.data.recommTerm != null) planInfo.endDate = moment(planInfo.endDate).add('M', _result.data.recommTerm).toDate();
             planInfo.startTime = _result.data.startTime == null ? null : moment(_result.data.startTime, "HH:mm:ss");
             planInfo.endTime = _result.data.endTime == null ? null : moment(_result.data.endTime, "HH:mm:ss")
+
+            if (_result.data.startTime == null && _result.data.endTime == null) setOpenTime(false);
             setCommon(_result.data.commonPlanUid != null);
         }
     }
@@ -93,20 +96,41 @@ export default function Edit(props) {
 
     // 계획 등록
     const onSave = async () => {
+        if (!isActive()) return;
+
         setSaving(true);
 
-        planInfo.repeatDay = checked ? planInfo.repeatDay : [];
+        planInfo.repeatDay = checked ? planInfo.repeatDay : null;
+        if (!openTime) {
+            planInfo.startTime = null;
+            planInfo.endTime = null;
+        }
 
-        const _result = await network.put('/plan', {
+        const _updateParam = {
             ...planInfo,
             commonPlanUid: common ? props.query.commonPlanUid : null,
+            endDate: (!checked) ? planInfo.startDate : planInfo.endDate,
             startTime: (planInfo.startTime == null) ? null : moment(planInfo.startTime).format("HH:mm"),
             endTime: (planInfo.endTime == null) ? null : moment(planInfo.endTime).format("HH:mm"),
-        });
+        };
 
-        if (_result.status == 200) {
-            router.push(`/plan/${planInfo.planUid}`);
+        // 확인 필요
+        let _isRest = false;
+        if (checked) {
+            const _editCheckResult = await network.post('/plan/editCheck', _updateParam);
+            _isRest = _editCheckResult.data;
         }
+
+        // 새로 만들기
+        if (_isRest) {
+            const _rebuildResult = await network.post('/plan/rebuild', _updateParam);
+            if (_rebuildResult.status == 200) router.replace(`/calendar`);
+            return;
+        }
+
+        // 그대로 저장
+        const _result = await network.put('/plan', _updateParam);
+        if (_result.status == 200) router.back();
 
         setSaving(false);
     }
@@ -132,6 +156,17 @@ export default function Edit(props) {
         return `${koA} ${koH}${(koM == "00") ? "" : " " + koM + "분"}`;
     }
 
+    // active 체크
+    const isActive = () => {
+        if (checked && (planInfo.repeatDay == null || planInfo.repeatDay.length == 0)) return false;
+        if (planInfo.startDate == null || planInfo.endDate == null) return false;
+        if (planInfo.startTime != null && planInfo.endTime == null) return false;
+        if (planInfo.endTime != null && planInfo.startTime == null) return false;
+        if (checked && moment(planInfo.startDate).format("YYYY-MM-DD") == moment(planInfo.endDate).format("YYYY-MM-DD")) return false;
+
+        return true;
+    }
+
     return (<>
         {(load)
             ? <div className="">
@@ -143,7 +178,7 @@ export default function Edit(props) {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
                         </svg>
 
-                        <span className={`pr-4 text-base font-medium textGray4 textOrange5`} value="false" onClick={onSave}>완료</span>
+                        <span className={`pr-4 text-base font-medium ${isActive() ? "textOrange5" : "textGray4"}`} value="false" onClick={onSave}>완료</span>
                     </div>
                 </div>
 
@@ -155,7 +190,10 @@ export default function Edit(props) {
                                 <span className='text-sm font-medium textGray2'>반복요일</span>
                                 <Switch
                                     checked={checked}
-                                    onChange={checked => { setChecked(checked) }}
+                                    onChange={checked => {
+                                        if (!checked) setPlanInfo({ ...planInfo, endDate: planInfo.startDate });
+                                        setChecked(checked);
+                                    }}
                                     offColor="#e0e0e0"
                                     onColor="#3C81E1"
                                 />
@@ -177,45 +215,55 @@ export default function Edit(props) {
                                     });
                                 }}
                                 value={planInfo.startDate}
+                                disabled={moment().unix() > moment(planInfo.startDate).unix()}
                                 auto={true}
+                                maxDate={planInfo.endDate}
                             >
                                 <div className='flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center'>
                                     <span className="text-xs font-medium pl-2">{moment(planInfo.startDate).format("YYYY년 M월 D일")}</span>
                                     <ChevronRight className="rotate-90" />
                                 </div>
                             </CustomMobileDatepicker>
-
-                            <div className='flex items-center justify-center'>
-                                <svg className="w-3 h-2 textGray4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path fillRule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"></path>
-                                </svg>
-                            </div>
-
-                            <CustomMobileDatepicker
-                                onChange={(date) => {
-                                    setPlanInfo({
-                                        ...planInfo,
-                                        endDate: date,
-                                        startDate: moment(date).unix() < moment(planInfo.startDate).unix() ? date : planInfo.startDate
-                                    });
-                                }}
-                                value={planInfo.endDate}
-                                auto={true}
-                            >
-                                <div className='flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center'>
-                                    <span className="text-xs font-medium pl-2">{moment(planInfo.endDate).format("YYYY년 M월 D일")}</span>
-                                    <ChevronRight className="rotate-90" />
+                            {(checked) ? <>
+                                <div className='flex items-center justify-center'>
+                                    <svg className="w-3 h-2 textGray4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path fillRule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"></path>
+                                    </svg>
                                 </div>
-                            </CustomMobileDatepicker>
+
+                                <CustomMobileDatepicker
+                                    onChange={(date) => {
+                                        setPlanInfo({
+                                            ...planInfo,
+                                            endDate: date,
+                                            startDate: moment(date).unix() < moment(planInfo.startDate).unix() ? date : planInfo.startDate
+                                        });
+                                    }}
+                                    value={planInfo.endDate}
+                                    minDate={moment().toDate()}
+                                    auto={true}
+                                >
+                                    <div className='flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center'>
+                                        <span className="text-xs font-medium pl-2">{moment(planInfo.endDate).format("YYYY년 M월 D일")}</span>
+                                        <ChevronRight className="rotate-90" />
+                                    </div>
+                                </CustomMobileDatepicker>
+                            </> : <></>}
                         </div>
                     </div>
 
                     {/* 시간 */}
                     <div className='mb-8 flex flex-col'>
-                        <span className="textGray2 text-sm font-medium">시간
-                            <span className='textGray4'> (선택)</span>
-                        </span>
-                        <div className='flex space-x-1.5 mt-3'>
+                        <div className="flex justify-between items-center">
+                            <span className="textGray2 text-sm font-medium">시간<span className='textGray4'> (선택)</span></span>
+                            <Switch
+                                checked={openTime}
+                                onChange={() => setOpenTime(!openTime)}
+                                offColor="#e0e0e0"
+                                onColor="#3C81E1"
+                            />
+                        </div>
+                        {(openTime) ? <div className='flex space-x-1.5 mt-3'>
                             <CustomTimepicker
                                 onChange={(time) => setPlanInfo({ ...planInfo, startTime: time })}
                                 value={planInfo.startTime}
@@ -245,7 +293,7 @@ export default function Edit(props) {
                                     <ChevronRight className="rotate-90" />
                                 </div>
                             </CustomTimepicker>
-                        </div>
+                        </div> : <></>}
                     </div>
                 </div>
                 {(saving) ? <CircleLoadingOpacity /> : <></>}

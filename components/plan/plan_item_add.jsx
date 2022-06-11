@@ -18,14 +18,16 @@ import { getAuth } from "firebase/auth";
 
 // 글로벌 상태관리
 import { useRecoilState } from "recoil";
-import { certifyLockerState } from "../../states/certify_locker";
+import { certifyLockerState, selectedLockerState } from "../../states/certify_locker";
+import { planLockerTypeState } from "../../states/locker_type";
 
-export default function PlanItemAdd() {
+export default function PlanItemAdd(props) {
     const auth = getAuth();
     const router = useRouter();
     const [lockers, setLockers] = useRecoilState(certifyLockerState);
+    const [planLockerType, setPlanLockerType] = useRecoilState(planLockerTypeState);
+    const [selectedLockerIndex, setSelectedLockerIndex] = useRecoilState(selectedLockerState);
 
-    const [lockerType, setLockerType] = useState("책장");
     const [items, setItems] = useState([]);
     const [load, setLoad] = useState(false);
     const [getting, setGetting] = useState(false);
@@ -40,7 +42,8 @@ export default function PlanItemAdd() {
         const _result = await network.post('/locker/items', {
             order: "reg",
             status: 1,
-            lockerType
+            lockerType: planLockerType ?? "책장",
+            removeLockers: lockers.map((_locker) => _locker.itemUid)
         });
 
         setItems(_result.data);
@@ -68,19 +71,31 @@ export default function PlanItemAdd() {
                 router.push('/');
             }
         });
-    }, [router, lockerType]);
-
-    const addLink = () => {
-        if (lockerType == "책장") return "/addbook";
-        if (lockerType == "교구장") return "/addtool";
-        if (lockerType == "학원지도") return "/addacademy";
-        if (lockerType == "체험지도") return "/addplace";
-        return "";
-    }
+    }, [router, planLockerType]);
 
     const addLocker = (_item) => {
-        if (lockers.findIndex((_locker) => _locker.itemUid == _item.itemUid) < 0) setLockers(lockers.concat([_item]));
+        if (selectedLockerIndex == null) {
+            lockers = lockers.concat([_item]);
+        } else {
+            const _tempLockers = lockers.map((_locker, index) => {
+                if (index !== selectedLockerIndex) return _locker
+                return _item;
+            });
+
+            console.log(_tempLockers);
+
+            lockers = [].concat(_tempLockers);
+        }
+
+        setLockers([].concat(lockers));
         router.back();
+    }
+
+    const _infoText = () => {
+        if (planLockerType == "책장") return "내가 보유중인 아이템으로 채워주세요."
+        if (planLockerType == "교구장") return "내가 보유중인 아이템으로 채워주세요."
+        if (planLockerType == "학원") return "내가 방문한 아이템으로 채워주세요."
+        if (planLockerType == "체험") return "내가 방문한 아이템으로 채워주세요."
     }
 
     return (load) ?
@@ -96,10 +111,10 @@ export default function PlanItemAdd() {
 
             <div className="flex-auto flex flex-col">
                 <div className="grid grid-cols-4 text-center border-b-[0.38px] border-gary4 mb-2.5 justify-center items-center" id="myTab" data-tabs-toggle="#myTabContent">
-                    <span className={`py-3 ${lockerType == "책장" ? selectedStyle : nonSelectedStyle}`} onClick={() => setLockerType("책장")}>책장</span>
-                    <span className={`py-3 ${lockerType == "교구장" ? selectedStyle : nonSelectedStyle}`} onClick={() => setLockerType("교구장")}>교구장</span>
-                    <span className={`py-3 ${lockerType == "학원지도" ? selectedStyle : nonSelectedStyle}`} onClick={() => setLockerType("학원지도")}>학원지도</span>
-                    <span className={`py-3 ${lockerType == "체험지도" ? selectedStyle : nonSelectedStyle}`} onClick={() => setLockerType("체험지도")}>체험지도</span>
+                    <span className={`py-3 ${planLockerType == "책장" ? selectedStyle : nonSelectedStyle}`} onClick={() => setPlanLockerType("책장")}>책장</span>
+                    <span className={`py-3 ${planLockerType == "교구장" ? selectedStyle : nonSelectedStyle}`} onClick={() => setPlanLockerType("교구장")}>교구장</span>
+                    <span className={`py-3 ${planLockerType == "학원" ? selectedStyle : nonSelectedStyle}`} onClick={() => setPlanLockerType("학원")}>학원지도</span>
+                    <span className={`py-3 ${planLockerType == "체험" ? selectedStyle : nonSelectedStyle}`} onClick={() => setPlanLockerType("체험")}>체험지도</span>
                 </div>
 
                 <div className="flex-auto flex flex-col px-5">
@@ -107,10 +122,10 @@ export default function PlanItemAdd() {
                         ? <div className="flex-auto flex justify-center items-center"><CircleLoading /></div>
                         : <>
                             {items.map((_item) => {
-                                if (lockerType == "책장") return <BookCard key={_item.itemUid} item={_item} onClick={() => addLocker(_item)} />
-                                if (lockerType == "교구장") return <EduCard key={_item.itemUid} item={_item} onClick={() => addLocker(_item)} />
-                                if (lockerType == "학원지도") return <PlaceCard key={_item.itemUid} item={_item} onClick={() => addLocker(_item)} />
-                                if (lockerType == "체험지도") return <PlaceCard key={_item.itemUid} item={_item} onClick={() => addLocker(_item)} />
+                                if (planLockerType == "책장") return <BookCard key={_item.itemUid} item={_item} onClick={() => addLocker(_item)} />
+                                if (planLockerType == "교구장") return <EduCard key={_item.itemUid} item={_item} onClick={() => addLocker(_item)} />
+                                if (planLockerType == "학원") return <PlaceCard key={_item.itemUid} item={_item} onClick={() => addLocker(_item)} />
+                                if (planLockerType == "체험") return <PlaceCard key={_item.itemUid} item={_item} onClick={() => addLocker(_item)} />
                             })}
 
                             {/* 아이템이 없습니다 */}
@@ -119,15 +134,13 @@ export default function PlanItemAdd() {
                                     <img src='/images/no_result.png' width={'93px'} height={'113px'} style={{ margin: '0 auto' }} />
                                     <div className='text-sm text-center textGray4 mt-2.5' style={{ lineHeight: 1.7, letterSpacing: '-0.28px' }}>
                                         아이템이 없습니다.<br />
-                                        내가 구매예정인 아이템으로 채워주세요!
+                                        {_infoText()}
                                     </div>
                                 </div> : <></>}
                         </>}
-                    <Link href={addLink()} passHref>
-                        <div className='fixed bottom-0 right-0 z-100'>
-                            <img src='/images/ic_float.png' />
-                        </div>
-                    </Link>
+                    {(!props.menuOpen) ? <div className='fixed bottom-0 right-0 z-100' onClick={() => props.setMenuOpen(true)}>
+                        <img src='/images/ic_float.png' />
+                    </div> : <></>}
                 </div>
             </div>
         </div> : <div className="w-screen h-screen flex justify-center items-center">

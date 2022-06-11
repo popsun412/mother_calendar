@@ -56,7 +56,7 @@ const CategoryItem = (props) => {
         <GlobalStyles
             styles={{
                 ".MuiDrawer-paper": {
-                    width: "75% !important"
+                    width: "80% !important"
                 }
             }}
         />
@@ -67,7 +67,7 @@ const CategoryItem = (props) => {
                     <span className={`flex items-center py-1.5 px-3 border border-solid rounded text-xs ${filterStatus().value ? 'border-blue4 textBlue4' : 'border-gary3 textGray4'}`}
                         onClick={() => setFilterOpen(true)}>
                         <span style={{ marginRight: '3.4px' }}>
-                            <img src='/images/filter.png' style={{ width: '15px', height: '15px' }} />
+                            <img src='/images/filter.png' style={{ width: '15px' }} />
                         </span>
                         <span className={`text-sm ${filterStatus().value ? 'textBlue4' : 'textGray4'}`}>{filterStatus().label}</span>
                     </span>
@@ -108,7 +108,7 @@ const CategoryItem = (props) => {
                 </div>
             </div>
         </div>
-        {ToastStatus ? <Toast msg={'보관함에 추가되었습니다.'} /> : <></>}
+        {ToastStatus ? <Toast msg={'보관함에 등록되었습니다.'} /> : <></>}
         <Fragment>
             <Drawer open={filterOpen} onClose={() => setFilterOpen(false)} anchor='right'>
                 <CategoryItemFilter setFilterOpen={setFilterOpen} param={param} setParam={setParam} getItems={getItems} />

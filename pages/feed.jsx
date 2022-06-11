@@ -11,9 +11,12 @@ import { getAuth } from "firebase/auth";
 import InfiniteScroll from "react-infinite-scroll-component";
 import network from "../util/network";
 import FeedFilter from '../components/feed/feed_filter';
+import FeedReport from '../components/feed/feed_report';
 import { Drawer } from "@mui/material";
 
 export default function Feed() {
+    const [planAuthUid, setPlanAuthUid] = useState();
+
     const [param, setParam] = useState({
         regions: [],
         subjects: [],
@@ -27,6 +30,7 @@ export default function Feed() {
     const auth = getAuth();
     const router = useRouter();
 
+    const [declarationOpen, setDeclarationOpen] = useState(false);
     const [filterOpen, setFilterOpen] = useState(false);
     const [load, setLoad] = useState();
 
@@ -50,11 +54,18 @@ export default function Feed() {
                 await getItems();
                 setLoad(true);
             } else {
-                setUserInfo(null);
                 router.push('/');
             }
         });
     }, []);
+
+    const onReport = async (contents) => {
+        const _result = await network.post('/feed/report', { planAuthUid, contents });
+        console.log(_result);
+
+        setPlanAuthUid(null);
+        setDeclarationOpen(false);
+    }
 
     return (load) ? <>
         <InfiniteScroll
@@ -63,9 +74,12 @@ export default function Feed() {
             hasMore={hasMore}
         >
             <FeedHeader setFilterOpen={setFilterOpen} />
-            <div className="pt-4 pb-20 flex flex-col space-y-10">
+            <div className="pt-4 pb-20 flex flex-col space-y-10" style={{ marginTop: 50 }}>
                 {items.map((_item, idx) => {
-                    return <FeedItem item={_item} key={idx} ages={param.age} />
+                    return <FeedItem item={_item} key={idx} ages={param.age} onClick={() => {
+                        setPlanAuthUid(_item.planAuthUid);
+                        setDeclarationOpen(true);
+                    }} />
                 })}
             </div>
             <Navigation path={'feed'} />
@@ -73,6 +87,14 @@ export default function Feed() {
         <Fragment>
             <Drawer open={filterOpen} onClose={() => setFilterOpen(false)} anchor='right' PaperProps={{ sx: { width: "80%" } }}>
                 <FeedFilter setFilterOpen={setFilterOpen} param={param} setParam={setParam} getItems={getItems} />
+            </Drawer>
+        </Fragment>
+        <Fragment>
+            <Drawer open={declarationOpen} onClose={() => {
+                setPlanAuthUid(null);
+                setDeclarationOpen(false)
+            }} anchor='bottom'>
+                <FeedReport onReport={onReport} />
             </Drawer>
         </Fragment>
     </> : <div className="w-screen h-screen flex justify-center items-center"><CircleLoading /></div>

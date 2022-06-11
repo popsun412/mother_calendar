@@ -5,8 +5,6 @@ import CalendarHome from "../components/calendar/calendar_home";
 import CalendarMiddle from "../components/calendar/calendar_ middle";
 import CalendarDate from "../components/calendar/calendar_date";
 import CalendarTop from "../components/calendar/calendar_top";
-import CalendarBottom from "../components/calendar/calendar_bottom";
-import ItemDetail from "../components/main/itme_detail";
 import Navigation from '../components/common/navigation';
 import CircleLoading from "../components/common/circle_loading";
 import { Fab } from "@material-ui/core";
@@ -20,19 +18,18 @@ import { useRouter } from "next/router";
 // firebase
 import { getAuth } from "firebase/auth";
 
-// 글로벌 상태관리
-import { useRecoilState } from "recoil";
-import { userInfoState } from "../states/user_info";
-
 // api호출
 import network from "../util/network";
+
+import { useRecoilState } from "recoil";
+import { selectedDateState } from "../states/calendar_states";
 
 const Calendar = (props) => {
     const auth = getAuth();
     const router = useRouter();
 
     // 글로벌 상태관리
-    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+    const [userInfo, setUserInfo] = useState(null);
 
     // 로그인 확인
     const [load, setLoad] = useState(false);
@@ -42,7 +39,7 @@ const Calendar = (props) => {
     const [selectedUserInfo, setSelectedUserInfo] = useState(null);
 
     // 날짜 선택
-    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [selectedDate, setSelectedDate] = useRecoilState(selectedDateState);
 
     // 유저 정보 갖고오기
     const getUser = async () => {
@@ -83,6 +80,7 @@ const Calendar = (props) => {
                 <CalendarTop
                     selectedUserUid={selectedUserUid}
                     setSelectedUserUid={setSelectedUserUid}
+                    userInfo={userInfo}
                 />
                 <CalendarMiddle
                     selectedUserUid={selectedUserUid}
@@ -90,17 +88,23 @@ const Calendar = (props) => {
                     selectedUserInfo={selectedUserInfo}
                     selectedDate={selectedDate}
                     setSelectedDate={setSelectedDate}
+                    userInfo={userInfo}
+                    setUserInfo={setUserInfo}
                 />
                 <CalendarDate
                     selectedUserUid={selectedUserUid}
                     selectedDate={selectedDate}
                     setSelectedDate={setSelectedDate}
                     selectedUserInfo={selectedUserInfo}
+                    userInfo={userInfo}
+                    setUserInfo={setUserInfo}
                 />
                 <CalendarHome
                     selectedUserUid={selectedUserUid}
                     selectedDate={selectedDate}
                     selectedUserInfo={selectedUserInfo}
+                    userInfo={userInfo}
+                    setUserInfo={setUserInfo}
                 />
                 {(auth.currentUser.uid == selectedUserUid) ? <div className="flex fixed right-5 bottom-20">
                     <Fab color="primary" aria-label="add" style={{ backgroundColor: '#ff6035' }} onClick={() => {

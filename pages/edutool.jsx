@@ -1,14 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState, Fragment } from 'react';
 import Link from 'next/link';
-import { Box, Drawer } from '@material-ui/core';
-import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
+import { Drawer } from '@material-ui/core';
 
 import EduToolInstock from '../components/edutool/edutool_instock';
 import EduToolPurchase from '../components/edutool/edutool_purchase';
 import EduToolSell from '../components/edutool/edutool_sell';
-import { Global } from '@emotion/react';
 
 import network from '../util/network';
 import { getAuth } from "firebase/auth";
@@ -16,22 +15,18 @@ import { useRouter } from 'next/router';
 import CircleLoading from '../components/common/circle_loading';
 import { BookmarkBorderOutlined } from "@mui/icons-material"
 import LockerDrawer from "../components/calendar/locker_drawer";
+import EdutoolFilterDrawer from "../components/edutool/edutool_filter_drawer";
+import { useRecoilState } from "recoil";
+import { edutoolActiveState } from "../states/locker_states";
+import GlobalStyles from '@mui/material/GlobalStyles';
 
 const EduTool = (props) => {
+    const [filterOpen, setFilterOpen] = useState(false);
     const [lockerDrawerOpen, setLockerDrawerOpen] = useState(false);
 
-    const [data, setData] = useState([]);
     const [load, setLoad] = useState(false);
-    const [activeTab, setActiveTab] = useState(1);
-    const [params, setParams] = useState({
-        offset: 0,
-        limit: 20,
-        status: activeTab,
-        subject: '',
-        field: '',
-        lockerType: "교구장",
-        region: ""
-    });
+    const [activeTab, setActiveTab] = useRecoilState(edutoolActiveState);
+    const [params, setParams] = useState({ order: "reg", subject: [], field: [], lockerType: '교구장' });
 
     const auth = getAuth();
     const router = useRouter();
@@ -56,304 +51,18 @@ const EduTool = (props) => {
                 router.push('/');
             }
         });
-
-        fields.forEach((item, idx) => {
-            field[idx] = false;
-            returnField[idx] = false;
-        })
-
-        areas.forEach((item, idx) => {
-            area[idx] = false;
-            returnArea[idx] = false;
-        })
     }, []);
-
-    const tabClick = (index) => {
-        setActiveTab(index);
-    }
-
-    const [state, setState] = useState({
-        top: false,
-        left: false,
-        bottom: false,
-        right: false,
-    });
-
-    const onClick = (anchor, open) => (event) => {
-        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-            return;
-        }
-
-        setState({ ...state, [anchor]: open });
-    };
-
-    const [field, setField] = useState({});
-    const [area, setArea] = useState({});
-
-    const returnField = {};
-    const returnArea = {};
-
-    useEffect(() => {
-        fields.forEach((item, index) => {
-            field[index] = false;
-            returnField[index] = false;
-        })
-
-        areas.forEach((item, index) => {
-            area[index] = false;
-            returnArea[index] = false;
-        })
-
-    }, [])
-
-    const fieldClick = (e) => {
-        setField({ ...field, [e.target.value]: e.target.checked });
-    }
-
-    const areaClick = (e) => {
-        setArea({ ...area, [e.target.value]: e.target.checked });
-    }
-
-    const clickReturn = () => {
-        setField(returnField);
-        setArea(returnArea);
-    }
-
-    const clickApply = () => {
-        onClick(anchor, false);
-    }
-
-    const [aligns, setAligns] = useState('구매순');
-
-    const handleAligns = (e) => {
-        setAligns(e.currentTarget.value);
-    };
 
     const isMe = () => {
         if (props.query.userUid == undefined || props.query.userUid == "") return true;
-
         return (auth.currentUser?.uid ?? "") == props.query.userUid;
     };
-
-    const fields = [
-        {
-            id: 1,
-            label: '국어'
-        },
-        {
-            id: 2,
-            label: '영어'
-        },
-        {
-            id: 3,
-            label: '수학'
-        },
-        {
-            id: 4,
-            label: '과학'
-        },
-        {
-            id: 5,
-            label: '사회'
-        },
-        {
-            id: 6,
-            label: '미술'
-        },
-        {
-            id: 7,
-            label: '음악'
-        },
-        {
-            id: 8,
-            label: '체육'
-        },
-        {
-            id: 9,
-            label: '놀이'
-        },
-        {
-            id: 10,
-            label: '기타'
-        },
-        {
-            id: 11,
-            label: '부모'
-        }
-    ]
-
-    const areas = [
-        {
-            id: 1,
-            label: '교구'
-        },
-        {
-            id: 2,
-            label: '교재'
-        },
-        {
-            id: 3,
-            label: '영상'
-        },
-        {
-            id: 4,
-            label: '게임'
-        },
-        {
-            id: 5,
-            label: '블록'
-        },
-        {
-            id: 6,
-            label: '퍼즐'
-        },
-        {
-            id: 7,
-            label: '재료'
-        },
-        {
-            id: 8,
-            label: '기타'
-        },
-    ]
 
     const obj = {
         0: <EduToolInstock params={params} activeTab={activeTab} userUid={props.query.userUid} isMe={isMe()} />,
         1: <EduToolPurchase params={params} activeTab={activeTab} userUid={props.query.userUid} isMe={isMe()} />,
         2: <EduToolSell params={params} activeTab={activeTab} userUid={props.query.userUid} isMe={isMe()} />
     }
-
-    const applyFilter = () => {
-
-        setParams({
-            offset: 0,
-            limit: 20,
-            status: activeTab,
-            subject: getSubject(),
-            field: getField(),
-            lockerType: "교구장",
-            region: ""
-        });
-
-        console.log(params);
-
-        setState({ ...state, ['right']: false });
-    }
-
-    const getSubject = () => {
-
-        const subject = [];
-
-        field[1] ? subject.push('국어') : null;
-        field[2] ? subject.push('영어') : null;
-        field[3] ? subject.push('수학') : null;
-        field[4] ? subject.push('과학') : null;
-        field[5] ? subject.push('사회') : null;
-        field[6] ? subject.push('미술') : null;
-        field[7] ? subject.push('음악') : null;
-        field[8] ? subject.push('체육') : null;
-        field[9] ? subject.push('놀이') : null;
-        field[10] ? subject.push('기타') : null;
-        field[11] ? subject.push('부모') : null;
-
-        return subject;
-    }
-
-    const getField = () => {
-
-        const field = [];
-
-        area[1] ? field.push('교구') : null;
-        area[2] ? field.push('교재') : null;
-        area[3] ? field.push('영상') : null;
-        area[4] ? field.push('게임') : null;
-        area[5] ? field.push('블록') : null;
-        area[6] ? field.push('퍼즐') : null;
-        area[7] ? field.push('재료') : null;
-        area[8] ? field.push('기타') : null;
-
-        return field;
-    }
-
-    const list = (anchor) => (
-
-        <Box
-            sx={{ width: 250 }}
-            role="presentation"
-            onKeyDown={onClick(anchor, false, false)}
-        >
-            <div className='my-2.5'>
-                <div className='mx-3.5'>
-                    <img src='/images/ic_close.png' className='ml-auto' onClick={onClick(anchor, false, false)} />
-                </div>
-                <div className='mb-7 mx-3.5'>
-                    <h3 className='mb-4 text-base font-semibold'>정렬</h3>
-                    <div className='flex'>
-                        <Global
-                            styles={{
-                                'MuiToggleButtonGroup-root': {
-                                    borderRadius: '6px'
-                                },
-                                '.MuiToggleButton-root.Mui-selected': {
-                                    backgroundColor: '#fff!important',
-                                    color: '#3C81E1',
-                                    borderColor: '#3C81E1',
-                                    borderRadius: '6px'
-                                },
-                            }}
-                        />
-                        <ToggleButtonGroup value={aligns} onChange={handleAligns} aria-label='aligns' className='w-full'>
-                            <ToggleButton value='구매순' aria-label='구매순' className='w-full'>구매순</ToggleButton>
-                            <ToggleButton value='이름순' aria-label='이름순' className='w-full'>이름순</ToggleButton>
-                            <ToggleButton value='별점순' aria-label='별점순' className='w-full'>별점순</ToggleButton>
-                        </ToggleButtonGroup>
-                    </div>
-                </div>
-                <div className='mb-7 mx-3.5'>
-                    <h3 className='mb-4 text-base font-semibold'>분야</h3>
-                    <div className='flex flex-wrap gap-y-2' style={{ columnGap: '7px' }}>
-                        {
-                            fields.map((item, idx) => {
-                                return (
-                                    <label className='block relative' key={idx}>
-                                        <input type='checkbox' value={item.id} className='opacity-0 absolute top-0 left-0' onChange={fieldClick} />
-                                        <span className={`block border border-solid bg-white text-xs 
-                                        ${field[item.id] ? 'textBlue4 border-blue4' : 'textGray4 border-gray3'}`}
-                                            style={{ borderRadius: '2px', padding: '5px 8px 6px' }}>{item.label}</span>
-                                    </label>
-                                )
-                            })
-                        }
-                    </div>
-                </div>
-                <div className='mb-7 mx-3.5'>
-                    <h3 className='mb-4 text-base font-semibold'>영역</h3>
-                    <div className='flex flex-wrap gap-y-2' style={{ columnGap: '7px' }}>
-                        {
-                            areas.map((item, idx) => {
-                                return (
-                                    <label className='block relative' key={idx}>
-                                        <input type='checkbox' value={item.id} className='opacity-0 absolute top-0 left-0' onChange={areaClick} />
-                                        <span className={`block border border-solid bg-white text-xs 
-                                        ${area[item.id] ? 'textBlue4 border-blue4' : 'textGray4 border-gray3'}`}
-                                            style={{ borderRadius: '2px', padding: '5px 8px 6px' }}>{item.label}</span>
-                                    </label>
-                                )
-                            })
-                        }
-                    </div>
-                </div>
-                <div className='block absolute bottom-0 mb-6 mx-3.5' style={{ width: '90%' }}>
-                    <div className='grid grid-cols-2 gap-x-2 text-center text-sm' style={{ height: '44px' }} onClick={clickReturn}>
-                        <div className='flex justify-center rounded-md bg-gray2 items-center'>
-                            <img src='/images/ic_refresh.png' className='w-4 h-4 mr-1' />다시설정
-                        </div>
-                        <div className='rounded-md bg-blue4 text-white' style={{ lineHeight: '44px' }} onClick={applyFilter}>적용하기</div>
-                    </div>
-                </div>
-            </div>
-        </Box>
-    );
 
     return (<>{
         (load)
@@ -368,26 +77,19 @@ const EduTool = (props) => {
                                 <BookmarkBorderOutlined onClick={() => setLockerDrawerOpen(true)} />
                             </div>
                             <div className='flex'>
-                                <img src='/images/filter.png' onClick={onClick('right', true)} />
+                                <img src='/images/filter.png' onClick={() => setFilterOpen(true)} style={{ width: 24 }} />
                             </div>
                             <div className='absolute left-0 right-0 mx-20 text-base font-medium text-center' style={{ letterSpacing: '-0.3px' }}>교구장</div>
                         </div>
                     </header>
-                    <Drawer
-                        anchor='right'
-                        open={state['right']}
-                        onClose={onClick('right', false)}
-                    >
-                        {list('right')}
-                    </Drawer>
                     <main className='mt-12'>
                         <div className='grid grid-cols-3 text-center text-sm textGray4 border-b border-solid border-gray3' style={{ height: '40px' }}>
                             <div className={`font-semibold ${activeTab === 0 ? 'textBlue4 border-b-3 border-solid border-blue4' : ''}`}
-                                style={{ lineHeight: '40px' }} onClick={() => { tabClick(0) }}>구매예정</div>
+                                style={{ lineHeight: '40px' }} onClick={() => { setActiveTab(0) }}>구매예정</div>
                             <div className={`font-semibold ${activeTab === 1 ? 'textBlue4 border-b-3 border-solid border-blue4' : ''}`}
-                                style={{ lineHeight: '40px' }} onClick={() => { tabClick(1) }}>보유중</div>
+                                style={{ lineHeight: '40px' }} onClick={() => { setActiveTab(1) }}>보유중</div>
                             <div className={`font-semibold ${activeTab === 2 ? 'textBlue4 border-b-3 border-solid border-blue4' : ''}`}
-                                style={{ lineHeight: '40px' }} onClick={() => { tabClick(2) }}>판매완료</div>
+                                style={{ lineHeight: '40px' }} onClick={() => { setActiveTab(2) }}>판매완료</div>
                         </div>
                         <section>
                             {
@@ -395,7 +97,7 @@ const EduTool = (props) => {
                             }
                         </section>
                     </main>
-                    {isMe() ? <Link href={`/addtool?status=${activeTab}`} passHref>
+                    {isMe() ? <Link href={`/addtool`} passHref>
                         <div className='fixed bottom-0 right-0 z-100'>
                             <img src='/images/ic_float.png' />
                         </div>
@@ -406,8 +108,15 @@ const EduTool = (props) => {
                         <LockerDrawer userUid={props.query.userUid ?? auth.currentUser.uid} />
                     </Drawer>
                 </Fragment>
+
+                <GlobalStyles styles={{ ".MuiDrawer-paper": { width: "70% !important" } }} />
+                <Fragment>
+                    <Drawer anchor='right' open={filterOpen} onClose={() => setFilterOpen(false)}>
+                        <EdutoolFilterDrawer setFilterOpen={setFilterOpen} params={params} setParams={setParams} />
+                    </Drawer>
+                </Fragment>
             </>
-            : <CircleLoading />
+            : <div className="w-screen h-screen"><CircleLoading /></div>
     }</>)
 }
 

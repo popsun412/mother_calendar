@@ -13,18 +13,20 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
 import { getAuth } from "firebase/auth";
-import { useRecoilState } from "recoil";
-import { userInfoState } from "../states/user_info";
 import { ko } from "date-fns/locale";
 import CircleLoadingOpacity from "../components/common/circle_loading_opacity";
 import moment from "moment";
+import { useRecoilState } from "recoil";
+import { edutoolActiveState } from "../states/locker_states";
 
 const AddTool = (props) => {
-    const _fields = ["교구", "교재", "영상", "게임", "블록", "퍼즐", "기타"];
+    const [status, setStatus] = useRecoilState(edutoolActiveState);
+
+    const _fields = ["교구", "교재", "영상", "게임", "블록", "퍼즐", "재료", "기타"];
 
     const [saving, setSaving] = useState(false);
     const auth = getAuth();
-    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+    const [userInfo, setUserInfo] = useState(null);
     const [load, setLoad] = useState(false);
 
     const router = useRouter();
@@ -33,7 +35,7 @@ const AddTool = (props) => {
     const [itemInfo, setItemInfo] = useState({
         name: "",
         image: null,
-        status: props.query.status ? parseInt(props.query.status) : null,
+        status: status ?? null,
         subject: null,
         field: null,
         score: 0,
@@ -70,6 +72,7 @@ const AddTool = (props) => {
         if (userInfo == null) {
             auth.onAuthStateChanged(async (_user) => {
                 if (_user) {
+                    if (props.query.isLocker) setItemInfo({ ...itemInfo, status: 1 });
                     getUser();
                 } else {
                     setUserInfo(null);
@@ -79,7 +82,7 @@ const AddTool = (props) => {
         }
 
         if (userInfo != null && !load) getItem();
-    })
+    }, [])
 
     useEffect(() => {
         const getData = async () => {
@@ -134,7 +137,15 @@ const AddTool = (props) => {
         itemInfo.status == 0 ? null : formData.append('score', itemInfo.score);
 
         await network.post('/locker', formData);
-        router.push('/edutool');
+
+        setStatus(itemInfo.status);
+
+        if (props.query.isLocker) {
+            router.back();
+        } else {
+            router.push('/edutool');
+        }
+
         setSaving(false);
     }
 
@@ -224,18 +235,27 @@ const AddTool = (props) => {
                         <ToggleButtonGroup
                             value={itemInfo.status}
                             aria-label="status" className='w-full'>
-                            <ToggleButton value={0} aria-label="purchase" className='w-full' onClick={() => setItemInfo({
-                                ...itemInfo,
-                                status: 0
-                            })}>구매예정</ToggleButton>
-                            <ToggleButton value={1} arai-label='inbox' className='w-full' onClick={() => setItemInfo({
-                                ...itemInfo,
-                                status: 1
-                            })}>보유중</ToggleButton>
-                            <ToggleButton value={2} arai-label='sell' className='w-full' onClick={() => setItemInfo({
-                                ...itemInfo,
-                                status: 2
-                            })}>판매완료</ToggleButton>
+                            <ToggleButton value={0} aria-label="purchase" className='w-full' onClick={() => {
+                                if (props.query.isLocker) return;
+                                setItemInfo({
+                                    ...itemInfo,
+                                    status: 0
+                                })
+                            }}>구매예정</ToggleButton>
+                            <ToggleButton value={1} arai-label='inbox' className='w-full' onClick={() => {
+                                if (props.query.isLocker) return;
+                                setItemInfo({
+                                    ...itemInfo,
+                                    status: 1
+                                })
+                            }}>보유중</ToggleButton>
+                            <ToggleButton value={2} arai-label='sell' className='w-full' onClick={() => {
+                                if (props.query.isLocker) return;
+                                setItemInfo({
+                                    ...itemInfo,
+                                    status: 2
+                                })
+                            }}>판매완료</ToggleButton>
                         </ToggleButtonGroup>
                     </div>
                 </section>

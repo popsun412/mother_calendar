@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import moment from "moment";
 
 export default function CalendarDateItem(props) {
@@ -7,7 +6,7 @@ export default function CalendarDateItem(props) {
         if (props.date.planCount == 0) return "bg-gray1";
 
         // 계획 입력, 100% 실행
-        if (props.date.planCount == props.date.authCount) return "bg4 text-white";
+        if (props.date.planCount <= props.date.authCount) return "bg4 text-white";
 
         // 계획 입력, 실행전
         return "bg-white border-dotted border border-color3";

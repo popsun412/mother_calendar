@@ -35,7 +35,7 @@ const HomePlace = (props) => {
                 {
                     data.map((item, idx) => {
                         return (
-                            <Link href={{ pathname: '/place', query: { commonItemUid: item.commonItemUid } }} passHref key={idx}>
+                            <Link href={{ pathname: '/item', query: { commonItemUid: item.commonItemUid } }} passHref key={idx}>
                                 <div className='flex mx-0 my-5'>
                                     <div className='mr-3 block relative'>
                                         <span className='absolute block top-0 py-1 px-2 text-xs text-white bg-blue3 rounded-tl-md rounded-br-md'>{idx + 1}위</span>
@@ -65,7 +65,7 @@ const HomePlace = (props) => {
                 }
             </div>
         </section>
-        {ToastStatus ? <Toast msg={'보관함에 추가되었습니다.'} /> : <></>}
+        {ToastStatus ? <Toast msg={'보관함에 등록되었습니다.'} /> : <></>}
     </>
 }
 

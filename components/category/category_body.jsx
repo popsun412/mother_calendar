@@ -40,6 +40,10 @@ const CategoryBody = (props) => {
         });
     }, []);
 
+    useEffect(() => {
+        setCategory(router.query.id);
+    }, [router.query.id])
+
     return (load) ?
         <main className='mt-14'>
             <CategoryMenu type={type} category={category} setCategory={setCategory} />

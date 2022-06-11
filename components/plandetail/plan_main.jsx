@@ -10,7 +10,7 @@ const PlanMain = (props) => {
                 <div className='block relative'>
                     <img src='/images/banner.png' />
                     <span className='block absolute text-white font-bold bottom-0 left-0 text-lg mb-12 ml-5'
-                        style={{ letterSpacing: '-0.54px', fontFamily: 'NanumSquareRoundOTF' }}>{data.name}</span>
+                        style={{ letterSpacing: '-0.54px' }}>{data.name}</span>
                     <div className='block absolute bottom-0 left-0 mb-6 ml-5 mt-1 text-xs'>
                         <span className='mr-2 py-1 px-1.5 rounded textOrange1' style={{ letterSpacing: '-0.12px', backgroundColor: 'rgba(219, 239, 253, 0.2)' }}>{data.subject}</span>
                         <span className='py-1 px-1.5 rounded textOrange1' style={{ letterSpacing: '-0.12px', backgroundColor: 'rgba(219, 239, 253, 0.2)' }}>{data.field}</span>

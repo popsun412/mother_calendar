@@ -33,6 +33,9 @@ export default function PlanMoreButton(props) {
 
     // 플랜 삭제
     const planDelete = async () => {
+        const _check = confirm("계획 및 실행 내역 모두 즉시 삭제되고, 복원할 수 없습니다.\n삭제하시겠습니까?");
+        if (!_check) return;
+
         await network.delete(`/plan/${props.plan.planUid}`);
         router.push('/calendar');
     }
@@ -46,7 +49,7 @@ export default function PlanMoreButton(props) {
                 <MenuItem onClick={() => {
                     router.push({ pathname: '/plan/edit', query: { planUid: props.plan.planUid } })
                 }}>수정</MenuItem>
-                <MenuItem onClick={planEnd}>종료</MenuItem>
+                {(moment().unix() < moment(props.plan.endDate).add(1, "d").unix()) ? <MenuItem onClick={planEnd}>종료</MenuItem> : <></>}
                 <MenuItem onClick={planDelete}>삭제</MenuItem>
             </Menu>
         </div>

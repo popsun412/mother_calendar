@@ -11,15 +11,13 @@ import network from "../util/network";
 // firebase
 import { getAuth } from "firebase/auth";
 
-// 글로벌 상태관리
-import { useRecoilState } from "recoil";
-import { userInfoState } from "../states/user_info";
-
 export default function Neighbor() {
+    const router = useRouter();
+
     const auth = getAuth();
 
     // 글로벌 상태관리
-    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+    const [userInfo, setUserInfo] = useState(null);
 
     // 화면 상태관리
     const [items, setItems] = useState([]);

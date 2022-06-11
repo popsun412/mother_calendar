@@ -29,8 +29,17 @@ const Login = () => {
         // 파이어베이스 로그인 시도
         signInWithEmailAndPassword(auth, email, password).then(async (userCredential) => {
             if (userCredential.user.emailVerified) router.push('/calendar');
+        }).catch((error) => {
+            // 이메일 양식 확인
+            if (error.code == 'auth/invalid-email') {
+                alert("입력한 회원 정보를 다시 확인해주세요.");
+            } else if (error.code == 'auth/wrong-password') {
+                alert("입력한 회원 정보를 다시 확인해주세요.");
+            } else if (error.code == 'auth/user-not-found') {
+                alert("입력한 회원 정보를 다시 확인해주세요.");
+            } else {
+            }
 
-        }).catch(async (error) => {
             setLoginError(true);
         }).finally((value) => {
             setLoging(false);

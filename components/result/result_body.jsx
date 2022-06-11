@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
@@ -28,13 +30,7 @@ const ResultBody = (props) => {
                     data.length > 0 ?
                         data.map((item, idx) => {
                             return (
-                                <Link key={idx}
-                                    href={{
-                                        pathname: item.category == 'place' ? '/place' : '/item',
-                                        query: {
-                                            commonItemUid: item.commonItemUid
-                                        }
-                                    }}>
+                                <Link key={idx} href={{ pathname: '/item', query: { commonItemUid: item.commonItemUid } }} passHref>
                                     <div className='flex py-3 px-0'>
                                         <div style={{ marginRight: '15px' }}>
                                             <img src={item.image} width={'94px'} height={'94px'} className='rounded-md' />

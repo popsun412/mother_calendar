@@ -29,7 +29,17 @@ export default function CertifyCompleteHeader(props) {
         <div className="flex my-4 px-5 justify-between items-center">
             <div className="flex flex-auto items-center space-x-2">
                 <span className={`rounded-full w-10 h-10`}>
-                    <img src={profileImageCheck(props.userInfo)} className="w-full rounded-full" />
+                    <div
+                        className="rounded-full"
+                        style={{
+                            backgroundImage: `url("${profileImageCheck(props.userInfo)}")`,
+                            backgroundRepeat: "no-repeat",
+                            backgroundSize: "cover",
+                            width: "100%",
+                            paddingTop: "100%",
+                            backgroundPosition: "center center"
+                        }}
+                    />
                 </span>
                 <div className="flex flex-col space-y-1 overflow-hidden" style={{ maxWidth: 120 }}>
                     <span className="text-sm font-medium">{props.userInfo.nickName}</span>

@@ -2,9 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: "SuncheonR";
-}
 
 @font-face {
   font-family: "Bazzi";
@@ -19,6 +16,12 @@ body {
 @font-face {
   font-family: "SuncheonB";
   src: url("/fonts/SuncheonB.ttf") format("truetype");
+}
+
+@layer base {
+  html, body {
+    font-family: "SuncheonR";
+  }
 }
 
 /* 백그라운 색상 */

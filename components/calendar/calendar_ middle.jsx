@@ -11,6 +11,8 @@ export default function CalendarMiddle(props) {
                 selectedDate={props.selectedDate}
                 setSelectedDate={props.setSelectedDate}
                 selectedUserInfo={props.selectedUserInfo}
+                userInfo={props.userInfo}
+                setUserInfo={props.setUserInfo}
             />
         </div>
     );

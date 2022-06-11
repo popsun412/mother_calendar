@@ -25,17 +25,6 @@ export default function Certify(props) {
     const [plan, setPlan] = useState(null);
     const [lockers, setLockers] = useRecoilState(certifyLockerState);
 
-    // 유저 정보 갖고오기
-    const getUser = async () => {
-        const _result = await network.post('/userInfo');
-
-        // data 통신
-        if (_result.status == 200) {
-        } else {
-            router.push('/');
-        }
-    }
-
     const getItem = async () => {
         const _result = await network.get(`/plan/${props.query.planUid}`);
         setPlan(_result.data);
@@ -44,7 +33,6 @@ export default function Certify(props) {
     useEffect(() => {
         auth.onAuthStateChanged(async (_user) => {
             if (_user) {
-                await getUser();
                 await getItem();
                 setLoad(true);
             } else {

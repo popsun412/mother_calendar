@@ -30,14 +30,11 @@ export default function PlaneDetail(props) {
         // 오늘 인증 함
         if (_todayAuth) return 1;
 
-        // 반복인 경우
-        // const _needToday = (props.plan.repeatDay != null && props.plan.repeatDay.findIndex((_day) => _day == parseInt(moment().format('d')) - 1) >= 0);
-
         if (_endDate <= moment()) return 2;
 
         // 요일 확인
         const _day = parseInt(moment().format("d"));
-        if (props.plan.repeatDay.findIndex((_repeatDay) => _repeatDay == _day) < 0) return 3;
+        if (props.plan.repeatDay != null && props.plan.repeatDay.findIndex((_repeatDay) => _repeatDay == _day) < 0) return 3;
 
         return 0;
     }

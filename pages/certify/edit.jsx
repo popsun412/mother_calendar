@@ -28,7 +28,7 @@ export default function CertifyEdit(props) {
     const getItem = async () => {
         const _result = await network.get(`/auth/${props.query.planAuthUid}`);
         setItem(_result.data);
-        setLockers(_result.data.lockers);
+        if (lockers == null || lockers.length == 0) setLockers(_result.data.lockers);
     }
 
     useEffect(() => {
@@ -40,7 +40,7 @@ export default function CertifyEdit(props) {
                 router.push('/');
             }
         });
-    }, [router]);
+    }, []);
 
     return (load) ?
         <>

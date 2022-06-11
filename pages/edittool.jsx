@@ -56,7 +56,7 @@ const EditTool = (props) => {
             subject: _result.data.subject,
             field: _result.data.field,
             score: _result.data.score,
-            regDt: _result.data.regDt == null ? null : moment(_result.data.regDt).toDate()
+            regDt: _result.data.regDt == null ? new Date() : moment(_result.data.regDt).toDate()
         });
 
         setLoad(true);

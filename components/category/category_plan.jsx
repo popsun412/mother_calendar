@@ -52,7 +52,7 @@ const CategoryPlan = (props) => {
         <div className='mx-5'>
             {ToastStatus && (
                 <>
-                    <Toast msg={'보관함에 추가되었습니다.'} />
+                    <Toast msg={'보관함에 등록되었습니다.'} />
                 </>
             )}
             {

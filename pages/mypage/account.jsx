@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Checkbox, Drawer } from '@material-ui/core';
 import { GlobalStyles } from '@mui/material';
-import { getAuth } from "firebase/auth";
+import { getAuth, deleteUser } from "firebase/auth";
 import network from "../../util/network";
 import { useRouter } from 'next/router';
 import Switch from 'react-ios-switch';
@@ -128,7 +128,7 @@ const Account = () => {
                         />
                     </div>
                     <div className='mx-5 my-4 justify-between'>
-                        <div style={{ fontSize: '15px', lineHeight: '50px' }}>마케팅 정보 수신 동의</div>
+                        <div style={{ fontSize: '15px', lineHeight: '50px' }}>마케팅 활용 및 광고성 정보 수신 동의</div>
                         <div>
                             <Checkbox
                                 checked={userInfo.marketingAgree}
@@ -160,7 +160,14 @@ const Account = () => {
                     <div className='flex absolute bottom-0 w-full items-center justify-evenly text-sm textGray4' style={{ height: '70px' }}>
                         <div onClick={() => auth.signOut()}>로그아웃</div>
                         <div>|</div>
-                        <div>회원탈퇴</div>
+                        <div onClick={() => {
+                            const _result = confirm("회원정보, 계획/실행/인증 내역 즉시 삭제되고, 복원할 수 없습니다.\n회원탈퇴하시겠습니까?");
+                            if (!_result) return;
+
+                            deleteUser(auth.currentUser);
+                            network.delete('/userInfo');
+                            router.push('/');
+                        }}>회원탈퇴</div>
                     </div>
                     <Drawer
                         anchor='bottom'

@@ -22,11 +22,11 @@ export default function CalendarDate(props) {
     const getDateStatus = async (_newDates) => {
         const _result = await network.post("/calendar/weekStatus", {
             userUid: props.selectedUserUid,
-            dates: _newDates.map((_date) => _date.date.format("yyyy-MM-D"))
+            dates: _newDates.map((_date) => _date.date.format("YYYY-MM-DD"))
         });
 
         _result.data.map((_status) => {
-            const _findIndex = _newDates.findIndex((_date) => _date.date.format("yyyy-MM-D") == moment(_status.date, "yyyy-MM-D").format("yyyy-MM-D"));
+            const _findIndex = _newDates.findIndex((_date) => _date.date.format("YYYY-MM-DD") == moment(_status.date, "YYYY-MM-DD").format("YYYY-MM-DD"));
             _newDates[_findIndex] = {
                 ..._newDates[_findIndex],
                 authCount: _status.authCount,

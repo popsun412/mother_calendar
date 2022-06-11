@@ -10,10 +10,6 @@ import { useRouter } from "next/router"
 // firebase
 import { getAuth } from "firebase/auth";
 
-// 글로벌 상태관리
-import { useRecoilState } from "recoil";
-import { userInfoState } from "../../states/user_info";
-
 // api호출
 import network from "../../util/network";
 
@@ -22,7 +18,7 @@ export default function PlanIndex() {
     const router = useRouter();
 
     // 글로벌 상태관리
-    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+    const [userInfo, setUserInfo] = useState(null);
 
     // 로그인 확인
     const [load, setLoad] = useState(false);

@@ -65,7 +65,17 @@ const MyPage = () => {
                 <section>
                     <div className="h-48">
                         <div className='pt-7 mb-4'>
-                            <img src={profileImageCheck(userInfo)} className="rounded-full border border-solid border-color4 mx-auto" style={{ height: 75, width: 75 }} />
+                            <div
+                                className="rounded-full border border-solid border-color4 mx-auto"
+                                style={{
+                                    backgroundImage: `url("${profileImageCheck(userInfo)}")`,
+                                    backgroundRepeat: "no-repeat",
+                                    backgroundSize: "cover",
+                                    width: 75,
+                                    paddingTop: 75,
+                                    backgroundPosition: "center center"
+                                }}
+                            />
                         </div>
                         <div className='text-xl text-center mb-1.5' style={{ letterSpacing: '-0.6px' }}>
                             {userInfo.nickName}

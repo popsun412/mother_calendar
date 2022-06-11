@@ -5,13 +5,10 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useRecoilState } from "recoil";
-import { userInfoState } from "../../states/user_info";
 import CalendarTopAvatar from "./calendar_top_avatar";
 
 export default function CalendarTop(props) {
     const router = useRouter();
-    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
 
     const profileImage = (_friend) => {
         if (_friend.profileImage == null) {
@@ -24,17 +21,27 @@ export default function CalendarTop(props) {
     return (
         <div className="flex px-5 pt-4 pb-3 space-x-4 border-b border-color border-[#e0e0e0]">
             <CalendarTopAvatar
-                active={props.selectedUserUid == userInfo.uid}
+                active={props.selectedUserUid == props.userInfo.uid}
                 onClick={() => {
                     router.push('/calendar');
                 }}
-                profileImage={userInfo.profileImage ?? ""}
-                sex={userInfo.sex}
+                profileImage={props.userInfo.profileImage ?? ""}
+                sex={props.userInfo.sex}
             />
 
-            {(userInfo.friends ?? []).map((_friend) => (
+            {(props.userInfo.friends ?? []).map((_friend) => (
                 <span className={`rounded-full w-9 h-9 ${props.selectedUserUid == _friend.uid ? "ring-[3px] ring-[#FF6035]" : "ring-1 ring-[#e0e0e0]"}`} key={_friend.uid} onClick={() => router.push(`/calendar?friend=${_friend.uid}`)}>
-                    <img src={profileImage(_friend)} className="w-full rounded-full" />
+                    <div
+                        className="rounded-full"
+                        style={{
+                            backgroundImage: `url("${profileImage(_friend)}")`,
+                            backgroundRepeat: "no-repeat",
+                            backgroundSize: "cover",
+                            width: "100%",
+                            paddingTop: "100%",
+                            backgroundPosition: "center center"
+                        }}
+                    />
                 </span>
             ))}
 

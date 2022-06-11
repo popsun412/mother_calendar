@@ -50,7 +50,7 @@ export default function EmailAuth() {
                     }
                 }}
             >
-                <span>로그인</span>
+                <span className="textOrange5">로그인</span>
             </div>
         </div>
     </> : <></>

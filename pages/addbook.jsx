@@ -13,25 +13,27 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
 import { getAuth } from "firebase/auth";
-import { useRecoilState } from "recoil";
-import { userInfoState } from "../states/user_info";
 import { ko } from "date-fns/locale";
 import CircleLoadingOpacity from "../components/common/circle_loading_opacity";
 import moment from "moment";
+import { useRecoilState } from "recoil";
+import { bookshelfActiveState } from "../states/locker_states";
 
 const AddBook = (props) => {
+    const [status, setStatus] = useRecoilState(bookshelfActiveState);
+
     const [saving, setSaving] = useState(false);
     const auth = getAuth();
-    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+    const [userInfo, setUserInfo] = useState(null);
     const [load, setLoad] = useState(false);
 
     const router = useRouter();
-    const commonItemUid = props.query.commonItemUid;
+    let commonItemUid = null;
 
     const [itemInfo, setItemInfo] = useState({
         name: "",
         image: null,
-        status: (props.query.status) ? parseInt(props.query.status) : null,
+        status: status ?? null,
         subject: null,
         field: null,
         score: 0,
@@ -64,39 +66,37 @@ const AddBook = (props) => {
         }
     }
 
+    const getData = async () => {
+        const res = await network.get('/item/commonItem/' + commonItemUid);
+        let _regDt = null
+        if (res.data.regDt != null) _regDt = moment(res.data.regDt).toDate();
+
+        setItemInfo({
+            ...itemInfo,
+            image: res.data.image,
+            name: res.data.name,
+            status: res.data.status,
+            subject: res.data.subject,
+            field: res.data.field,
+            regDt: _regDt ?? new Date(),
+            score: res.data.score ?? 0,
+        })
+    }
+
     useEffect(() => {
-        if (userInfo == null) {
-            auth.onAuthStateChanged(async (_user) => {
-                if (_user) {
-                    getUser();
-                } else {
-                    setUserInfo(null);
-                    router.push('/');
-                }
-            });
-        }
+        commonItemUid = props.query.commonItemUid;
+
+        auth.onAuthStateChanged(async (_user) => {
+            if (_user) {
+                if (props.query.isLocker) setItemInfo({ ...itemInfo, status: 1 });
+                await getUser();
+            } else {
+                setUserInfo(null);
+                router.push('/');
+            }
+        });
 
         if (userInfo != null && !load) getItem();
-    })
-
-    useEffect(() => {
-        const getData = async () => {
-            const res = await network.get('/item/commonItem/' + commonItemUid);
-            let _regDt = null
-            if (res.data.regDt != null) _regDt = moment(res.data.regDt).toDate();
-
-            setItemInfo({
-                ...itemInfo,
-                image: res.data.image,
-                name: res.data.name,
-                status: res.data.status,
-                subject: res.data.subject,
-                field: res.data.field,
-                regDt: _regDt ?? new Date(),
-                score: res.data.score ?? 0,
-            })
-        }
-
         if (commonItemUid) getData();
     }, [])
 
@@ -131,8 +131,16 @@ const AddBook = (props) => {
         itemInfo.status == 0 ? null : formData.append('regDt', itemInfo.regDt);
         itemInfo.status == 0 ? null : formData.append('score', itemInfo.score);
 
-        await network.post('/locker', formData);
-        router.push('/bookshelf');
+        const _result = await network.post('/locker', formData);
+        console.log(_result);
+
+        setStatus(itemInfo.status);
+
+        if (props.query.isLocker) {
+            router.back();
+        } else {
+            router.push('/bookshelf');
+        }
         setSaving(false);
     }
 
@@ -222,18 +230,29 @@ const AddBook = (props) => {
                         <ToggleButtonGroup
                             value={itemInfo.status}
                             aria-label="status" className='w-full'>
-                            <ToggleButton value={0} aria-label="purchase" className='w-full' onClick={() => setItemInfo({
-                                ...itemInfo,
-                                status: 0
-                            })}>구매예정</ToggleButton>
-                            <ToggleButton value={1} arai-label='inbox' className='w-full' onClick={() => setItemInfo({
-                                ...itemInfo,
-                                status: 1
-                            })}>보유중</ToggleButton>
-                            <ToggleButton value={2} arai-label='sell' className='w-full' onClick={() => setItemInfo({
-                                ...itemInfo,
-                                status: 2
-                            })}>판매완료</ToggleButton>
+                            <ToggleButton value={0} aria-label="purchase" className='w-full' onClick={() => {
+                                if (props.query.isLocker) return;
+                                setItemInfo({
+                                    ...itemInfo,
+                                    status: 0
+                                })
+                            }}>구매예정</ToggleButton>
+                            <ToggleButton value={1} arai-label='inbox' className='w-full' onClick={() => {
+                                if (props.query.isLocker) return;
+
+                                setItemInfo({
+                                    ...itemInfo,
+                                    status: 1
+                                })
+                            }}>보유중</ToggleButton>
+                            <ToggleButton value={2} arai-label='sell' className='w-full' onClick={() => {
+                                if (props.query.isLocker) return;
+
+                                setItemInfo({
+                                    ...itemInfo,
+                                    status: 2
+                                })
+                            }}>판매완료</ToggleButton>
                         </ToggleButtonGroup>
                     </div>
                 </section>

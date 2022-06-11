@@ -70,7 +70,7 @@ const Experience = () => {
                         <div className='flex-1 flex items-center justify-between'>
                             <div className="absolute left-0 right-0 mx-10 text-center" style={{ letterSpacing: '-0.3px' }}>체험</div>
                             <img src='/images/ic_back.png' onClick={() => { window.history.back() }} />
-                            <img src='/images/filter.png' onClick={() => setFilterOpen(true)} />
+                            <img src='/images/filter.png' onClick={() => setFilterOpen(true)} style={{ width: 24 }} />
                         </div>
                     </div>
                 </header>
@@ -102,7 +102,7 @@ const Experience = () => {
                 </main >
             </div>
         </InfiniteScroll>
-        {ToastStatus ? <Toast msg={'보관함에 추가되었습니다.'} /> : <></>}
+        {ToastStatus ? <Toast msg={'보관함에 등록되었습니다.'} /> : <></>}
         <Fragment>
             <Drawer open={filterOpen} onClose={() => setFilterOpen(false)} anchor='right' PaperProps={{ sx: { width: "80%" } }}>
                 <ExperienceFilter setFilterOpen={setFilterOpen} param={param} setParam={setParam} getItems={getItems} />

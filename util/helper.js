@@ -1,4 +1,5 @@
 import moment from "moment";
+import "moment-duration-format";
 
 export function calcPercent(plan) {
     if (plan.repeatDay == null || plan.repeatDay.length == 0) return 1;
@@ -10,7 +11,7 @@ export function calcPercent(plan) {
 
     let count = 0;
     for (let index = 0; index <= _days; index++) {
-        const _tempDate = _startDate.add(index, "d");
+        const _tempDate = moment(_startDate.format("YYYY-MM-DD")).add(index, "d");
         if (plan.repeatDay.findIndex((_repeat) => _repeat == parseInt(_tempDate.format("d"))) >= 0) count++;
     }
 
@@ -28,8 +29,6 @@ export function weekDayFormat(_day) {
 }
 
 export function profileImageCheck(_user, uploadImage = null) {
-    console.log(_user);
-
     if (uploadImage != null && uploadImage.preview_URL && uploadImage.preview_URL != "") return uploadImage.preview_URL;
 
     if ((_user?.profileImage ?? null) == null) {
@@ -62,7 +61,23 @@ export function getSubjectImage(_subject) {
 
 export function getLocktypeImage(lockerType) {
     if (lockerType == "책장") return '/images/locker/locker1.png';
-    if (lockerType == "교구함") return '/images/locker/locker2.png';
-    if (lockerType == "학원지도") return '/images/locker/locker3.png';
-    if (lockerType == "체험지도") return '/images/locker/locker4.png';
+    if (lockerType == "교구장") return '/images/locker/locker2.png';
+    if (lockerType == "학원") return '/images/locker/locker3.png';
+    if (lockerType == "체험") return '/images/locker/locker4.png';
+
+    console.log(lockerType);
+}
+
+export function calcTime(authDt) {
+    const authDate = moment(authDt);
+    const seconds = moment().unix() - authDate.unix();
+    const duration = moment.duration(seconds, 'seconds');
+
+    let formatted = "";
+    if (seconds < 60) formatted = `${seconds}초 전`;
+    if (60 <= seconds && seconds < 60 * 60) formatted = `${duration.format("m")}분 전`;
+    if (60 * 60 <= seconds && seconds < 60 * 60 * 24) formatted = `${duration.format("H")}시간 전`;
+    if (60 * 60 * 24 <= seconds) formatted = `${duration.format("D")}일 전`;
+
+    return formatted;
 }

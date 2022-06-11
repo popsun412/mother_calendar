@@ -39,19 +39,6 @@ export default function Regist(props) {
         }
     );
 
-    // 유저 정보 갖고오기
-    const getUser = async () => {
-        const _result = await network.post('/userInfo');
-
-        // data 통신
-        if (_result.status == 200) {
-            if (props.query.commonPlanUid) await getCommonPlan();
-            setLoad(true);
-        } else {
-            router.push('/');
-        }
-    }
-
     // 공동 계획
     const getCommonPlan = async () => {
         const _result = await network.get(`/plan/commonPlan/${props.query.commonPlanUid}`);
@@ -106,7 +93,7 @@ export default function Regist(props) {
     const planRegist = async () => {
         if (!registActive()) return;
 
-        registInfo.repeatDay = checked ? registInfo.repeatDay : [];
+        registInfo.repeatDay = checked ? registInfo.repeatDay : null;
 
         if (!openTime) {
             registInfo.startTime = null;
@@ -116,19 +103,23 @@ export default function Regist(props) {
         const _result = await network.post('/plan', {
             ...registInfo,
             commonPlanUid: common ? props.query.commonPlanUid : null,
+            endDate: (!checked) ? registInfo.startDate : registInfo.endDate,
             startTime: (registInfo.startTime == null) ? null : moment(registInfo.startTime).format("HH:mm"),
             endTime: (registInfo.endTime == null) ? null : moment(registInfo.endTime).format("HH:mm"),
         });
 
-        if (_result.status == 200) {
-            router.push(`/calendar`);
-        }
+        console.log(_result);
+
+        // if (_result.status == 200) {
+        //     router.push(`/calendar`);
+        // }
     }
 
     useEffect(() => {
         auth.onAuthStateChanged(async (_user) => {
             if (_user) {
-                await getUser();
+                if (props.query.commonPlanUid) await getCommonPlan();
+                setLoad(true);
             } else {
                 setUserInfo(null);
                 router.push('/');
@@ -150,7 +141,7 @@ export default function Regist(props) {
     const registActive = () => {
         if (registInfo.name.trim() == "") return false;
         if (registInfo.subject == null) return false;
-        if (checked && registInfo.length == 0) return false;
+        if (checked && registInfo.repeatDay.length == 0) return false;
         if (registInfo.startDate == null || registInfo.endDate == null) return false;
         if (registInfo.startTime != null && registInfo.endTime == null) return false;
         if (registInfo.endTime != null && registInfo.startTime == null) return false;
@@ -239,6 +230,7 @@ export default function Regist(props) {
                                 onChange={(date) => setRegistInfo({ ...registInfo, startDate: date })}
                                 value={registInfo.startDate}
                                 auto={true}
+                                minDate={moment().toDate()}
                                 maxDate={checked ? registInfo.endDate : null}
                             >
                                 <div className='flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center'>
@@ -268,7 +260,6 @@ export default function Regist(props) {
                         </div>
                     </div>
 
-                    {/* 한나님과 같이 작업 */}
                     {/* 시간 */}
                     <div className='mb-8 flex flex-col'>
                         <div className="flex justify-between items-center">

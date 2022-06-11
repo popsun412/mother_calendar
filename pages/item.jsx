@@ -26,7 +26,7 @@ const Item = (props) => {
     const [recommData, setRecommData] = useState([]);
     const [scrollPosition, setScrollPosition] = useState(0);
 
-    const commonItemUid = props.query.commonItemUid;
+    const commonItemUid = null;
 
     SwiperCore.use([Pagination]);
 
@@ -43,6 +43,8 @@ const Item = (props) => {
             const res = await network.get('/item/commonItem/' + commonItemUid);
             res.data ? setData(res.data) : null;
 
+            console.log(res.data);
+
             getRecommItems(res.data.subject, res.data.field);
         }
     }
@@ -53,16 +55,19 @@ const Item = (props) => {
     }
 
     useEffect(() => {
-        auth.onAuthStateChanged(async (_user) => {
-            if (_user) {
-                await getData();
-                setLoad(true);
-            } else {
-                setUserInfo(null);
-                router.push('/');
-            }
-        });
-    }, []);
+        if (router.query.commonItemUid) {
+            auth.onAuthStateChanged(async (_user) => {
+                if (_user) {
+                    commonItemUid = router.query.commonItemUid;
+                    await getData();
+                    setLoad(true);
+                } else {
+                    setUserInfo(null);
+                    router.push('/');
+                }
+            });
+        }
+    }, [router.query]);
 
     // 내 보관함 등록
     const addBookmark = async () => {
@@ -110,10 +115,10 @@ const Item = (props) => {
                                 }}
                             />
 
-                            <span className='block absolute bottom-0 left-0 text-lg text-white font-bold ml-5 mb-11' style={{ fontFamily: 'NanumSquareRoundOTF' }}>{data.name}</span>
+                            <span className='block absolute bottom-0 left-0 text-lg text-white font-bold ml-5 mb-11' style={{}}>{data.name}</span>
                             <div className='block absolute bottom-0 left-0 ml-5 mb-5'>
-                                <span className='textOrange1 text-xs rounded p-1 mr-1' style={{ fontFamily: 'NanumSquareRoundOTF', backgroundColor: 'rgba(219, 239, 253, 0.2)' }}>{data.subject}</span>
-                                <span className='textOrange1 text-xs rounded p-1' style={{ fontFamily: 'NanumSquareRoundOTF', backgroundColor: 'rgba(219, 239, 253, 0.2)' }}>{data.field}</span>
+                                <span className='textOrange1 text-xs rounded p-1 mr-1' style={{ backgroundColor: 'rgba(219, 239, 253, 0.2)' }}>{data.subject}</span>
+                                <span className='textOrange1 text-xs rounded p-1' style={{ backgroundColor: 'rgba(219, 239, 253, 0.2)' }}>{data.field}</span>
                             </div>
                             <div className='block absolute bottom-0 right-0 mr-5 mb-5'>
                                 <img src={`/images/ic_${data.bookmark ? 'bookmarked.png' : 'bookmark.png'}`} className='mx-auto' onClick={(e) => {
@@ -125,13 +130,13 @@ const Item = (props) => {
                             </div>
                         </div>
                     </section>
-                    <section className='mx-5 mb-4'>
-                        <div className='text-xl font-semibold mb-5' style={{ letterSpacing: '-0.32px', fontFamily: "SuncheonR" }} >어떤 아이템인가요?</div>
+                    <section className='mx-5 mb-8'>
+                        <div className='text-base font-semibold mb-3' style={{ letterSpacing: '-0.32px', fontFamily: "SuncheonR" }} >어떤 아이템인가요?</div>
                         <div className='text-sm' style={{ letterSpacing: '-0.28px', lineHeight: '21px' }}>
-                            <pre className="max-w-full whitespace-pre-wrap break-all">{data.description}</pre>
+                            <pre className="max-w-full whitespace-pre-wrap break-all" style={{ fontFamily: "SuncheonR" }}>{data.description}</pre>
                         </div>
                     </section>
-                    <section className='mx-5'>
+                    {(recommData.length > 0) ? <section className='mx-5'>
                         <div className='text-base font-semibold mb-4' style={{ letterSpacing: '-0.32px' }}>추천 계획</div>
                         <div>
                             {
@@ -156,7 +161,7 @@ const Item = (props) => {
                                 })
                             }
                         </div>
-                    </section>
+                    </section> : <></>}
                 </main>
                 <aside className='fixed bottom-0 left-0 right-0 z-100'>
                     <div className='relative mx-auto my-0 bg-white'>
@@ -165,13 +170,13 @@ const Item = (props) => {
                             if (data.bookmark) return;
                             addBookmark();
                         }}>
-                            <span className='text-sm text-white text-center p-4 m-5 w-full rounded-md bg5'
+                            <span className={`text-sm text-white text-center p-4 m-5 w-full rounded-md ${!data.bookmark ? "bg5" : "bg-gray4"}`}
                                 style={{ letterSpacing: '-0.28px' }}>내 보관함에 등록하기</span>
                         </nav>
                     </div>
                 </aside>
             </div>
-            {ToastStatus ? <Toast msg={'보관함에 추가되었습니다.'} /> : <></>}
+            {ToastStatus ? <Toast msg={'보관함에 등록되었습니다.'} /> : <></>}
         </>
         : <></>
 }

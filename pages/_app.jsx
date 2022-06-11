@@ -3,6 +3,7 @@ import '../styles/toggle_switch.css'
 import { initializeApp } from "firebase/app";
 import { RecoilRoot } from 'recoil'
 import Script from "next/script";
+import Head from 'next/head';
 
 function MyApp({ Component, pageProps }) {
   const firebaseConfig = {
@@ -19,10 +20,21 @@ function MyApp({ Component, pageProps }) {
 
   initializeApp(firebaseConfig);
 
-  return <RecoilRoot>
-    <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" />
-    <Component {...pageProps} />
-  </RecoilRoot>
+  return <>
+    <Head>
+      <title>엄마의 캘린더</title>
+      <meta property="og:title" content="엄마의 캘린더" key="og:title" />
+      <meta property="og:url" content="https://mamadadacal.com" key="og:url" />
+      <meta property="description" content="3-7세 유아의 엄마아빠를 위한 육아동기방" key="description" />
+      <meta property="og:description" content="3-7세 유아의 엄마아빠를 위한 육아동기방" key="og:description" />
+      <meta property="og:image" content="/mamadadacal_600.png" key="og:image" />
+      <link rel="shortcut icon" href="/favicon.png" />
+    </Head>
+    <RecoilRoot>
+      <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" />
+      <Component {...pageProps} />
+    </RecoilRoot>
+  </>
 }
 
 export default MyApp

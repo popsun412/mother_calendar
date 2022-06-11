@@ -9,8 +9,8 @@ const PlanRecommend = (props) => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        const getData = async() => {
-            const res = await network.get('/plan/commonPlan/'+commonPlanUid)
+        const getData = async () => {
+            const res = await network.get('/plan/commonPlan/' + commonPlanUid)
             res.data ? setData(res.data) : null;
             console.log(res.data);
         }
@@ -26,8 +26,8 @@ const PlanRecommend = (props) => {
         let repDay = '';
 
         if (param) {
-            for(let i=0; i<param.length; i++) {
-                param[i] == 0 ? result.push('일요일') : param[i] == 1 ? result.push('월요일') : param[i] == 2 ? result.push('화요일') : 
+            for (let i = 0; i < param.length; i++) {
+                param[i] == 0 ? result.push('일요일') : param[i] == 1 ? result.push('월요일') : param[i] == 2 ? result.push('화요일') :
                     param[i] == 3 ? result.push('수요일') : param[i] == 4 ? result.push('목요일') : param[i] == 5 ? result.push('금요일') : result.push('토요일')
             }
         }
@@ -50,8 +50,8 @@ const PlanRecommend = (props) => {
         if (param) {
             const time = param.substring(0, 2) + ':' + param.substring(2, 4);
             const arr = time.split(':');
-    
-            parseInt(arr[0]) > 11 ? result += ('오후 ' + parseInt(arr[0]-12) + '시') : result += ('오전 ' + arr[0] + '시');
+
+            parseInt(arr[0]) > 11 ? result += ('오후 ' + parseInt(arr[0] - 12) + '시') : result += ('오전 ' + arr[0] + '시');
             parseInt(arr[1]) > 0 ? result += (arr[1] + '분') : '';
         }
 
@@ -62,7 +62,7 @@ const PlanRecommend = (props) => {
         <>
             <section className='mb-8 mx-5'>
                 <div>
-                    <h3 className='text-base font-semibold mb-3' style={{ letterSpacing: '-0.32px' }}>추천 루틴</h3>
+                    <h3 className='text-base font-semibold mb-3' style={{ letterSpacing: '-0.32px' }}>추천 계획</h3>
                     <div className="bg-gray2 rounded-md px-5 py-3.5 mb-5">
                         <p className="textGray2 font-semibold text-base mb-3">주 {repeatDay.length > 0 ? data.repeatDay.length : 0}회  |  매주 {getRepeatDay(data.repeatDay)}</p>
                         <div className="textGray3 font-normal text-sm flex flex-col space-y-2.5">

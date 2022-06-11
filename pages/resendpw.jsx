@@ -2,7 +2,7 @@
 import { ArrowBackIos } from '@mui/icons-material';
 import { useState } from 'react';
 import { validateEmail } from "../util/helper";
-import { sendPasswordResetEmail, getAuth } from "firebase/auth";
+import { sendPasswordResetEmail, getAuth, sendEmailVerification } from "firebase/auth";
 import CircleLoadingOpacity from "../components/common/circle_loading_opacity";
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -14,11 +14,11 @@ export default function ResendPw() {
     const [sendEmailStatus, setSendEmailStatus] = useState(false);
     const [sending, setSending] = useState(false);
 
-    const sendEmail = () => {
+    const sendEmail = async () => {
         if (!validateEmail(email)) return;
         setSending(true);
 
-        sendPasswordResetEmail(auth, email).then((value) => {
+        await sendPasswordResetEmail(auth, email).then((value) => {
             setSendEmailStatus(true);
         }).catch((error) => {
             alert("입력한 이메일을 다시 확인해주세요.");
@@ -56,7 +56,7 @@ export default function ResendPw() {
                     <div
                         className="bg5 rounded h-12 mx-5 mb-2 flex justify-center items-center text-white text-sm font-semibold hover:cursor-pointer"
                         onClick={async () => {
-                            await sendEmailVerification(auth.currentUser);
+                            await sendEmail();
                             alert("이메일이 발송되었습니다.");
                         }}
                     >

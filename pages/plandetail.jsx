@@ -5,8 +5,6 @@
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { getAuth } from "firebase/auth";
-import { useRecoilState } from "recoil";
-import { userInfoState } from "../states/user_info";
 
 import network from '../util/network';
 import { useRouter } from 'next/router';
@@ -17,33 +15,18 @@ import PlanItem from '../components/plandetail/plan_item';
 import PlanTab from '../components/plandetail/plan_tab';
 import CircleLoading from "../components/common/circle_loading";
 
-const Plan2 = (props) => {
+const Plan2 = () => {
+    let commonPlanUid = null;
 
     const auth = getAuth();
     const router = useRouter();
-
-    const commonPlanUid = props.query.commonPlanUid;
 
     const [data, setData] = useState({});
     const [field, setField] = useState('');
     const [subject, setSubject] = useState('');
     const [num, setNum] = useState(0);
 
-    // 글로벌 상태관리
-    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
     const [load, setLoad] = useState(false);
-
-    // 유저 정보 갖고오기
-    const getUser = async () => {
-        const _result = await network.post('/userInfo');
-
-        // data 통신
-        if (_result.status == 200) {
-            setUserInfo(_result.data);
-        } else {
-            router.push('/');
-        }
-    }
 
     // 아이템 불러오기
     const getData = async () => {
@@ -59,17 +42,20 @@ const Plan2 = (props) => {
         setLoad(true);
     }
 
-    useEffect(() => {
-        auth.onAuthStateChanged(async (_user) => {
-            if (_user) {
-                await getUser();
-                await getData();
-            } else {
-                setUserInfo(null);
-                router.push('/');
-            }
-        });
-    }, [])
+    useEffect(async () => {
+        if (router.query.commonPlanUid) {
+
+            auth.onAuthStateChanged(async (_user) => {
+                if (_user) {
+                    commonPlanUid = router.query.commonPlanUid;
+                    await getData();
+                } else {
+                    setUserInfo(null);
+                    router.push('/');
+                }
+            });
+        }
+    }, [router.query])
 
     const getRepeatDay = (param) => {
         const result = [];
@@ -111,9 +97,19 @@ const Plan2 = (props) => {
                 <main style={{ fontFamily: "SuncheonR" }}>
                     <section className='mb-6'>
                         <div className='block relative'>
-                            <img src='/images/banner.png' className="w-full" />
+                            <div
+                                className="before:bg-black before:bg-opacity-50 before:top-0 before:right-0 before:bottom-0 before:left-0 before:absolute"
+                                style={{
+                                    backgroundImage: `url("${data.image}")`,
+                                    backgroundRepeat: "no-repeat",
+                                    backgroundSize: "cover",
+                                    width: "100%",
+                                    paddingTop: "60%",
+                                    backgroundPosition: "center center"
+                                }}
+                            />
                             <span className='block absolute text-white font-bold bottom-0 left-0 text-lg mb-12 ml-5'
-                                style={{ letterSpacing: '-0.54px', fontFamily: 'NanumSquareRoundOTF' }}>{data.name}</span>
+                                style={{ letterSpacing: '-0.54px' }}>{data.name}</span>
                             <div className='block absolute bottom-0 left-0 mb-6 ml-5 mt-1 text-xs'>
                                 <span className='mr-2 py-1 px-1.5 rounded textOrange1' style={{ letterSpacing: '-0.12px', backgroundColor: 'rgba(219, 239, 253, 0.2)' }}>{data.subject}</span>
                                 <span className='py-1 px-1.5 rounded textOrange1' style={{ letterSpacing: '-0.12px', backgroundColor: 'rgba(219, 239, 253, 0.2)' }}>{data.field}</span>
@@ -133,7 +129,7 @@ const Plan2 = (props) => {
                     </section>
                     <section className='mb-8 mx-5'>
                         <div>
-                            <span className='text-base font-semibold mb-3'>추천 루틴</span>
+                            <span className='text-base font-semibold mb-3'>추천 계획</span>
                             <div className="bg-gray2 rounded-md px-5 py-3.5 mb-5">
                                 <p className="textGray2 font-semibold text-base mb-3">주 {num}회  |  매주 {getRepeatDay(data.repeatDay)}</p>
                                 <div className="textGray3 font-normal text-sm flex flex-col space-y-2.5">
@@ -160,14 +156,14 @@ const Plan2 = (props) => {
                         </div>
                     </section>
                     <PlanItem subject={subject} field={field} />
-                    <PlanTab commonPlanUid={commonPlanUid} />
+                    <PlanTab commonPlanUid={data.commonPlanUid} />
                 </main>
                 <aside className='fixed bottom-0 left-0 right-0 z-100'>
                     <div className='relative mx-auto my-0 bg-white'>
                         <nav className='flex items-center box-border relative' style={{ height: '90px' }} onClick={() => {
                             if (data.isMyPlan) return;
 
-                            router.push({ pathname: '/plan/regist', query: { commonPlanUid } });
+                            router.push({ pathname: '/plan/regist', query: { commonPlanUid: data.commonPlanUid } });
                         }}>
                             <span className={`text-sm text-white text-center p-4 m-5 w-full rounded-md ${data.isMyPlan ? "bg-gray4" : "bg5"}`}>내 캘린더에 등록하기</span>
                         </nav>
@@ -180,9 +176,3 @@ const Plan2 = (props) => {
 }
 
 export default Plan2;
-
-Plan2.getInitialProps = async (ctx) => {
-    return {
-        query: ctx.query
-    }
-}

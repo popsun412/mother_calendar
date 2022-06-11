@@ -27,7 +27,7 @@ const AddPlace = (props) => {
     const [itemInfo, setItemInfo] = useState({
         name: "",
         image: null,
-        status: null,
+        status: 1,
         address: null,
         detailAddress: null,
         field: null,
@@ -60,6 +60,7 @@ const AddPlace = (props) => {
     useEffect(() => {
         auth.onAuthStateChanged(async (_user) => {
             if (_user) {
+                if (props.query.isLocker) setItemInfo({ ...itemInfo, status: 1 });
                 await getData();
             } else {
                 router.push('/');
@@ -91,7 +92,7 @@ const AddPlace = (props) => {
         formData.append('name', itemInfo.name);
         formData.append('status', itemInfo.status);
         formData.append('field', itemInfo.field);
-        formData.append('lockerType', "체험장소");
+        formData.append('lockerType', "체험");
         formData.append('image', itemInfo.image);
         formData.append('address', itemInfo.address);
         formData.append('detailAddress', itemInfo.detailAddress);
@@ -101,10 +102,13 @@ const AddPlace = (props) => {
         }
         itemInfo.status == 0 ? null : formData.append('regDt', itemInfo.regDt);
         itemInfo.status == 0 ? null : formData.append('score', itemInfo.score);
-
         await network.post('/locker', formData);
 
-        router.push('/placemap');
+        if (props.query.isLocker) {
+            router.back();
+        } else {
+            router.push('/placemap');
+        }
 
         setSaving(false);
     }
@@ -231,8 +235,20 @@ const AddPlace = (props) => {
                         <ToggleButtonGroup
                             value={itemInfo.status}
                             aria-label="status" className='w-full'>
-                            <ToggleButton value={0} aria-label="방문예정" className='w-full' onClick={() => setItemInfo({ ...itemInfo, status: 0 })}>방문예정</ToggleButton>
-                            <ToggleButton value={1} arai-label='방문완료' className='w-full' onClick={() => setItemInfo({ ...itemInfo, status: 1 })}>방문완료</ToggleButton>
+                            <ToggleButton value={0} aria-label="방문예정" className='w-full' onClick={() => {
+                                if (props.query.isLocker) return;
+                                setItemInfo({
+                                    ...itemInfo,
+                                    status: 0
+                                })
+                            }}>방문예정</ToggleButton>
+                            <ToggleButton value={1} arai-label='방문완료' className='w-full' onClick={() => {
+                                if (props.query.isLocker) return;
+                                setItemInfo({
+                                    ...itemInfo,
+                                    status: 1
+                                })
+                            }}>방문완료</ToggleButton>
                         </ToggleButtonGroup>
                     </div>
                 </section>
@@ -257,7 +273,7 @@ const AddPlace = (props) => {
                             <input type='text'
                                 placeholder="주소"
                                 value={itemInfo.address ?? ""}
-                                className='h-9 rounded-md bg-gray2 w-full text-sm px-5 outline-none'
+                                className='h-9 rounded-md bg-gray2 w-full text-sm px-5 outline-none border-0'
                                 readOnly style={{ height: '39px' }}
                             />
                         </div>
@@ -265,7 +281,7 @@ const AddPlace = (props) => {
                         {(itemInfo.address != null && itemInfo.address.length > 0) ? <input
                             type='text'
                             value={itemInfo.detailAddress ?? ""}
-                            className='h-9 rounded-md bg-gray2 w-full text-sm px-5'
+                            className='h-9 rounded-md bg-gray2 w-full text-sm px-5 outline-none border-0'
                             style={{ height: '39px' }}
                             placeholder="상세주소"
                             onChange={(e) => setItemInfo({ ...itemInfo, detailAddress: e.currentTarget.value })}

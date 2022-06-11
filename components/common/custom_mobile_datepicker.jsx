@@ -15,6 +15,7 @@ export default function CustomMobileDatepicker({ children, ...props }) {
             <LocalizationProvider locale={ko} dateAdapter={AdapterDateFns}>
                 <MobileDatePicker
                     open={open}
+                    disabled={props.disabled ?? false}
                     inputFormat="yyyy년MM월dd일"
                     value={props.value}
                     onChange={(date) => { props.onChange(date); }}

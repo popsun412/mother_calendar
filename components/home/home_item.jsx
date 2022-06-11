@@ -73,7 +73,7 @@ const HomeItem = (props) => {
                 </Swiper>
             </div>
         </section>
-        {ToastStatus ? <Toast msg={'보관함에 추가되었습니다.'} /> : <></>}
+        {ToastStatus ? <Toast msg={'보관함에 등록되었습니다.'} /> : <></>}
     </>)
 }
 

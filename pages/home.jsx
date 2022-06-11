@@ -10,8 +10,6 @@ import Navigation from '../components/common/navigation';
 import CircleLoading from "../components/common/circle_loading";
 
 import { getAuth } from "firebase/auth";
-import { useRecoilState } from "recoil";
-import { userInfoState } from "../states/user_info";
 
 import network from '../util/network';
 import { useRouter } from 'next/router';
@@ -22,7 +20,7 @@ const Home = () => {
     const router = useRouter();
 
     // 글로벌 상태관리
-    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+    const [userInfo, setUserInfo] = useState(null);
     const [load, setLoad] = useState(false);
 
     // 유저 정보 갖고오기

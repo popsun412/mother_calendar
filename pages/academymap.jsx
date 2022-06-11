@@ -14,7 +14,7 @@ import PlaceListDrawer from "../components/place/place_list_drawer";
 import { BookmarkBorderOutlined } from "@mui/icons-material";
 import LockerDrawer from "../components/calendar/locker_drawer";
 import { useRouter } from 'next/router';
-
+import LockerItem from "../components/locker/locker_item";
 
 const AcademyMap = (props) => {
     const router = useRouter();
@@ -25,11 +25,12 @@ const AcademyMap = (props) => {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [items, setItems] = useState([]);
     const [param, setParam] = useState({
-        lockerType: "학원장소",
+        lockerType: "학원",
         order: "reg",
         status: [],
         region: [],
-        subject: []
+        subject: [],
+        field: [],
     });
 
     const auth = getAuth();
@@ -54,6 +55,17 @@ const AcademyMap = (props) => {
         return (auth.currentUser?.uid ?? "") == props.query.userUid;
     };
 
+    const onDelete = async (_item, index) => {
+        const _check = confirm("삭제하시겠습니까?");
+
+        if (_check) {
+            await network.delete(`/locker/${_item.itemUid}`);
+            data.splice(index, 1);
+            setData([].concat(data));
+        }
+    }
+
+
     return load
         ? <div className='w-screen h-screen overflow-y-auto scrollbar-hide'>
             <header className='sticky top-0 left-0 right-0 visible opacity-100 pb-3.5 bg-white z-100' style={{ marginBottom: '-50px' }}>
@@ -65,64 +77,24 @@ const AcademyMap = (props) => {
                     <div className='absolute left-0 right-0 mx-20 text-base font-medium text-center' style={{ letterSpacing: '-0.3px' }}>학원지도</div>
                     <div className='flex mr-2' style={{ width: '20px' }}>
                         <Link href='/exmap' passHref><img src='/images/ic_map.png' className='mr-3 hidden' /></Link>
-                        <img src='/images/filter.png' onClick={() => setDrawerOpen(true)} />
+                        <img src='/images/filter.png' onClick={() => setDrawerOpen(true)} style={{ width: 24 }} />
                     </div>
                 </div>
             </header>
             <main style={{ marginTop: '50px' }}>
-                <section className='mx-5' style={{ paddingTop: '18.7px' }}>
-                    <div>
-                        {items.length > 0 ? <>
-                            {items.map((_item) =>
-                                <div className={`flex ${_item.status == 1 ? "opacity-30" : ""}`} style={{ marginBottom: '22px' }} key={_item.itemUid} onClick={() => {
-                                    if (!isMe()) return;
-
-                                    const _href = { pathname: _type == 'academy' ? '/editacademy' : 'editplace', query: { itemUid: _item.itemUid } };
-                                    router.push(_href);
-                                }}>
-                                    <div className="relative" style={{ marginRight: '15px', width: '94px', height: '94px' }}>
-                                        <div
-                                            className="before:top-0 before:right-0 before:bottom-0 before:left-0 before:absolute"
-                                            style={{
-                                                backgroundImage: `url("${_item.image}")`,
-                                                backgroundRepeat: "no-repeat",
-                                                backgroundSize: "cover",
-                                                width: "100%",
-                                                paddingTop: "100%",
-                                                backgroundPosition: "center center"
-                                            }}
-                                        />
-
-                                    </div>
-                                    <div>
-                                        <div className='font-semibold mb-1' style={{ fontSize: '15px', letterSpacing: '-0.3px', color: '#333333' }}>{_item.name}</div>
-                                        {(_item.status == 1) ? <>
-                                            <div className='textGray3 mb-1' style={{ fontSize: '13px' }}>{moment(_item.regDt).format("YYYY.MM")} 방문</div>
-                                            <div className='flex mb-1'>
-                                                {(_item.score >= 1) ? <img src='/images/ic_star_color.png' /> : <img src='/images/ic_star_grey.png' />}
-                                                {(_item.score >= 2) ? <img src='/images/ic_star_color.png' /> : <img src='/images/ic_star_grey.png' />}
-                                                {(_item.score >= 3) ? <img src='/images/ic_star_color.png' /> : <img src='/images/ic_star_grey.png' />}
-                                                {(_item.score >= 4) ? <img src='/images/ic_star_color.png' /> : <img src='/images/ic_star_grey.png' />}
-                                                {(_item.score >= 5) ? <img src='/images/ic_star_color.png' /> : <img src='/images/ic_star_grey.png' />}
-                                            </div>
-                                        </> : <></>}
-                                        <div style={{ marginTop: '5px' }}>
-                                            {_item.region ? <span className='text-xs textGray3 px-1.5' style={{ marginRight: '5px', backgroundColor: '#f0f5f8', paddingTop: '3px', paddingBottom: '3px' }}>{_type == "academy" ? _item.subject : _item.region}</span> : <></>}
-                                            <span className='text-xs textGray3 px-1.5' style={{ backgroundColor: '#f0f5f8', paddingTop: '3px', paddingBottom: '3px' }}>학원</span>
-                                        </div>
-                                    </div>
+                <section className='mx-5 pt-5 space-y-5 flex flex-col'>
+                    {items.length > 0
+                        ? items.map((item, index) => <LockerItem key={index} item={item} onDelete={() => onDelete(item, index)} isMe={isMe()} />)
+                        : <div className='absolute top-1/2 left-4 right-4' style={{ transform: 'translateY(-50%)' }}>
+                            <div className='items-center justify-center'>
+                                <img src='/images/no_result.png' width={'93px'} height={'113px'} style={{ margin: '0 auto' }} />
+                                <div className='text-sm text-center textGray4 mt-2.5' style={{ lineHeight: 1.7, letterSpacing: '-0.28px' }}>
+                                    아이템이 없습니다.<br />
+                                    {isMe() ? "내가 방문한 아이템으로 채워주세요!" : ""}
                                 </div>
-                            )}</>
-                            : <div className='absolute top-1/2 left-4 right-4' style={{ transform: 'translateY(-50%)' }}>
-                                <div className='items-center justify-center'>
-                                    <img src='/images/no_result.png' width={'93px'} height={'113px'} style={{ margin: '0 auto' }} />
-                                    <div className='text-sm text-center textGray4 mt-2.5' style={{ lineHeight: 1.7, letterSpacing: '-0.28px' }}>
-                                        아이템이 없습니다.<br />
-                                        {isMe() ? "내가 방문한 아이템으로 채워주세요!" : ""}
-                                    </div>
-                                </div>
-                            </div>}
-                    </div>
+                            </div>
+                        </div>
+                    }
                 </section>
             </main>
             {
@@ -133,10 +105,11 @@ const AcademyMap = (props) => {
                 </Link> : <></>
             }
             <Fragment>
-                <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)} anchor={"right"} PaperProps={{ sx: { width: "80%" } }}>
+                <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)} anchor={"right"} PaperProps={{ sx: { width: "70%" } }}>
                     <PlaceListDrawer param={param} setParam={setParam} setDrawerOpen={setDrawerOpen} getItems={getItems} />
                 </Drawer>
             </Fragment>
+
             <Fragment>
                 <Drawer open={lockerDrawerOpen} onClose={() => setLockerDrawerOpen(false)}                >
                     <LockerDrawer userUid={props.query.userUid ?? auth.currentUser.uid} />

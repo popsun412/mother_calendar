@@ -54,7 +54,7 @@ const EditPlace = (props) => {
             field: _result.data.field,
             region: _result.data.region,
             score: _result.data.score,
-            regDt: _result.data.regDt == null ? null : moment(_result.data.regDt).toDate(),
+            regDt: _result.data.regDt == null ? new Date() : moment(_result.data.regDt).toDate(),
         });
     }
 
@@ -93,7 +93,7 @@ const EditPlace = (props) => {
         formData.append('name', itemInfo.name);
         formData.append('status', itemInfo.status);
         formData.append('field', itemInfo.field);
-        formData.append('lockerType', "체험장소");
+        formData.append('lockerType', "체험");
         formData.append('image', itemInfo.image);
         formData.append('address', itemInfo.address);
         formData.append('detailAddress', itemInfo.detailAddress);
@@ -280,7 +280,7 @@ const EditPlace = (props) => {
                             <input type='text'
                                 placeholder="주소"
                                 value={itemInfo.address ?? ""}
-                                className='h-9 rounded-md bg-gray2 w-full text-sm px-5 outline-none'
+                                className='h-9 rounded-md bg-gray2 w-full text-sm px-5 outline-none border-0'
                                 readOnly style={{ height: '39px' }}
                             />
                         </div>
@@ -288,14 +288,14 @@ const EditPlace = (props) => {
                         {(itemInfo.address != null && itemInfo.address.length > 0) ? <input
                             type='text'
                             value={itemInfo.detailAddress ?? ""}
-                            className='h-9 rounded-md bg-gray2 w-full text-sm px-5'
+                            className='h-9 rounded-md bg-gray2 w-full text-sm px-5 outline-none border-0'
                             style={{ height: '39px' }}
                             placeholder="상세주소"
                             onChange={(e) => setItemInfo({ ...itemInfo, detailAddress: e.currentTarget.value })}
                         /> : <></>}
                     </div>
                 </section>
-                {itemInfo.status === 1
+                {itemInfo.status != 0
                     ? <section className='mx-5 my-6'>
                         <div className='text-sm textGray2 font-medium'>방문시기 <span className='textGray4'>(선택)</span></div>
                         <div className='mt-5'>

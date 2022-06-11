@@ -24,22 +24,22 @@ export default function SignIn3(props) {
             return alert("비밀번호를 확인해주세요");
         }
 
-        try {
-            const _result = await network.post('/user/signup', props.signupInfo);
+        const _result = await network.post('/user/signup', props.signupInfo);
+        console.log(_result);
+
+        if (_result.data.status) {
             signInWithEmailAndPassword(auth, props.signupInfo.email, props.signupInfo.password).then((value) => {
                 sendEmailVerification(value.user);
             });
-        } catch (error) {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-
-            alert(errorMessage);
+        } else {
+            const _errorCode = _result.data.result.code;
+            if (_errorCode == "auth/email-already-in-use") alert("이미 가입된 이메일입니다.\n비밀번호 재설정 후 로그인해주세요.");
         }
     }
 
     const buttonActive = () => {
         if (!validateEmail()) return false;
-        if (props.signupInfo.password.trim().length < 8) return false;
+        if (props.signupInfo.password.trim().length < 0) return false;
         if (props.signupInfo.password != checkPassword) return false;
         if (!serviceAgree || !privateAgree) return false;
         return true;
@@ -83,7 +83,7 @@ export default function SignIn3(props) {
                             <input
                                 type={(showPassword) ? "text" : "password"}
                                 className="flex-auto h-14 text-sm font-normal placeholder-[#bbbbbb] outline-none"
-                                placeholder="비밀번호 (숫자, 영문 소문자 조합 8~20자 이내)"
+                                placeholder="비밀번호"
                                 value={props.signupInfo.password}
                                 onChange={(e) => props.setSignupInfo({ ...props.signupInfo, password: e.currentTarget.value })}
                             />
@@ -135,7 +135,10 @@ export default function SignIn3(props) {
                             </svg>
                         </div>
                         <p className="flex items-center justify-center text-xs textGray3">
-                            <a href="#" className="textBlue4 underline">서비스 이용약관</a>
+                            <a href="#" className="textBlue4 underline" onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                            }}>서비스 이용약관</a>
                             에 동의합니다.<span className="textOrange5 ml-1">(필수)</span>
                         </p>
                     </div>
@@ -146,7 +149,10 @@ export default function SignIn3(props) {
                             </svg>
                         </div>
                         <p className="flex items-center justify-center text-xs textGray3">
-                            <a href="#" className="textBlue4 underline">개인정보 취급방침</a>
+                            <a href="#" className="textBlue4 underline" onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                            }}>개인정보 취급방침</a>
                             에 동의합니다.<span className="textOrange5 ml-1">(필수)</span>
                         </p>
                     </div>

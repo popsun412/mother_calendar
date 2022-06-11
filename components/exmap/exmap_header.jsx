@@ -327,7 +327,7 @@ const ExMapHeader = () => {
                             <Link href='/instimap'>
                                 <img src='/images/ic_list.png' className='mr-3' />
                             </Link>
-                            <img src='/images/filter.png' onClick={onClick('right', true)} />
+                            <img src='/images/filter.png' onClick={onClick('right', true)} style={{ width: 24 }} />
                         </div>
                     </div>
                 </div>

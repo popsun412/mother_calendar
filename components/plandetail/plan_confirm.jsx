@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import network from '../../util/network';
 import { useRouter } from 'next/router';
+import { profileImageCheck } from "../../util/helper";
 
 const PlanConfirm = (props) => {
     const router = useRouter();
@@ -41,9 +42,19 @@ const PlanConfirm = (props) => {
                                     <span className="text-[#dbeffd] text-xs font-light">{moment(item.authDt).format("YYYY년")}</span>
                                     <span className="text-white font-normal text-sm shadow-[0px 0px 4px rgba(0,0,0,0.25)]">{moment(item.authDt).format("M월D일")}</span>
                                 </div>
-                                {(item.authImage == null) ? <div className="flex w-full h-full p-10 justify-center items-center">
-                                    <img src="/images/img-empty-image.png" className="w-full h-full" />
-                                </div> : <></>}
+                                <span className={`absolute top-2 left-2 rounded-full w-8 h-8`}>
+                                    <div
+                                        className="rounded-full"
+                                        style={{
+                                            backgroundImage: `url("${profileImageCheck(item)}")`,
+                                            backgroundRepeat: "no-repeat",
+                                            backgroundSize: "cover",
+                                            width: "100%",
+                                            paddingTop: "100%",
+                                            backgroundPosition: "center center"
+                                        }}
+                                    />
+                                </span>
                             </div>
                         )
                     })

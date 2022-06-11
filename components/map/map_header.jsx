@@ -327,7 +327,7 @@ const MapHeader = () => {
                             <Link href='/experience'>
                                 <img src='/images/ic_list.png' className='mr-3' />
                             </Link>
-                            <img src='/images/filter.png' onClick={onClick('right', true)} />
+                            <img src='/images/filter.png' onClick={onClick('right', true)} style={{ width: '15px', height: '15px' }} />
                         </div>
                     </div>
                 </div>

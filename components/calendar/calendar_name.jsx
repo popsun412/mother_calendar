@@ -4,8 +4,6 @@
 import { Fragment } from "react";
 
 // 글로벌 상태관리
-import { useRecoilState } from "recoil";
-import { userInfoState } from "../../states/user_info";
 import CustomMobileDatepicker from "../../components/common/custom_mobile_datepicker";
 import moment from "moment";
 import Link from 'next/link';
@@ -16,22 +14,19 @@ import { Drawer } from "@mui/material";
 import LockerDrawer from "../../components/calendar/locker_drawer";
 
 export default function CalendarName(props) {
-    // 글로벌 상태관리
-    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
-
     const [drawerOpen, setDrawerOpen] = useState(false);
 
     // show model
     const showModel = {
         get isMe() {
-            return userInfo.uid == props.selectedUserUid;
+            return props.userInfo.uid == props.selectedUserUid;
         },
         get isShare() {
-            if (userInfo.uid == props.selectedUserUid) return true;
+            if (props.userInfo.uid == props.selectedUserUid) return true;
             return props.selectedUserInfo.isShare ?? true;
         },
         get isFriend() {
-            return (userInfo.friends ?? []).findIndex((_friend) => _friend.uid == props.selectedUserUid) >= 0;
+            return (props.userInfo.friends ?? []).findIndex((_friend) => _friend.uid == props.selectedUserUid) >= 0;
         },
         get babysAge() {
             const _now = new Date();
@@ -64,33 +59,33 @@ export default function CalendarName(props) {
 
     // 친구추가
     const addFriends = () => {
-        let _friends = userInfo.friends.map((_friend) => _friend);
+        let _friends = props.userInfo.friends.map((_friend) => _friend);
 
         if (!showModel.isFriend) {
             _friends.push(props.selectedUserInfo);
         } else {
-            const _checkIndex = userInfo.friends.findIndex((_friend) => _friend.uid == props.selectedUserUid);
+            const _checkIndex = props.userInfo.friends.findIndex((_friend) => _friend.uid == props.selectedUserUid);
             _friends.splice(_checkIndex, 1);
         }
 
         network.post('/user/updateFriends', { friends: _friends });
 
-        setUserInfo({
-            ...userInfo,
+        props.setUserInfo({
+            ...props.userInfo,
             friends: _friends
         });
     }
 
     // 리렌더링
     useEffect(() => {
-    }, [userInfo])
+    }, [props.userInfo])
 
     return (
         <>
             <div className="flex mb-4 justify-between">
                 <div className='flex flex-row items-center'>
                     {(!props.selectedUserInfo.isShare) ? <img src={`/images/share_lock.png`} className='w-6 h-6' alt="비공개" /> : <></>}
-                    <span className="text-xl font-semibold textGray1 mr-2">{(props.selectedUserInfo.nickName.length > 6) ? `${props.selectedUserInfo.nickName.substring(0, 6)}...` : props.selectedUserInfo.nickName}</span>
+                    <span className="text-xl font-semibold textGray1 mr-2">{((props.selectedUserInfo.nickName ?? "").length > 6) ? `${props.selectedUserInfo.nickName.substring(0, 6)}...` : props.selectedUserInfo.nickName}</span>
                     <div className="flex px-2 text-xs font-normal border-color3 textOrange3 rounded-full border items-center text-center">{`${showModel.babysAge}, ${showModel.region}, ${showModel.nick}`}</div>
                 </div>
 

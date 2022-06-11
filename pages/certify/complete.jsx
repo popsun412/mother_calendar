@@ -16,6 +16,9 @@ import CertifyCompleteAppbar from "../../components/certify_complete/certify_com
 import CertifyCompleteHeader from "../../components/certify_complete/certify_complete_header";
 import CertifyCompleteBody from "../../components/certify_complete/certify_complete_body";
 
+import { useRecoilState } from "recoil";
+import { certifyLockerState } from "../../states/certify_locker";
+
 export default function CertifyComplete(props) {
     const auth = getAuth();
     const router = useRouter();
@@ -23,6 +26,7 @@ export default function CertifyComplete(props) {
     const [load, setLoad] = useState(false);
     const [item, setItem] = useState(null);
     const [userInfo, setUserInfo] = useState(null);
+    const [lockers, setLockers] = useRecoilState(certifyLockerState);
 
     const getItem = async () => {
         const _result = await network.get(`/auth/${props.query.planAuthUid}`);
@@ -47,9 +51,10 @@ export default function CertifyComplete(props) {
             <CertifyCompleteHeader userInfo={userInfo} auth={item.auth} />
             <CertifyCompleteBody plan={item.plan} lockers={item.lockers} auth={item.auth} />
             {(auth.currentUser.uid == item.auth.userUid) ? <div className="fixed flex items-center justify-center left-0 right-0 bottom-6">
-                <Link href={`/certify/edit?planAuthUid=${props.query.planAuthUid}`} passHref>
-                    <span className="px-5 py-3 bg5 text-base text-white font-medium rounded-full">수정하기</span>
-                </Link>
+                <span className="px-5 py-3 bg5 text-base text-white font-medium rounded-full" onClick={() => {
+                    setLockers([]);
+                    router.push(`/certify/edit?planAuthUid=${props.query.planAuthUid}`);
+                }}>수정하기</span>
             </div> : <></>}
         </>
         : <div className="h-screen w-screen">

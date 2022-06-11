@@ -12,6 +12,9 @@ import moment from "moment";
 // api호출
 import network from "../../util/network";
 
+import { useRecoilState } from "recoil";
+import { selectedTypeState } from "../../states/calendar_states";
+
 
 export default function CalendarHome(props) {
     // 불러오기
@@ -21,7 +24,7 @@ export default function CalendarHome(props) {
     const [open, setOpen] = useState(true);
 
     // 목록 보기종류
-    const [type, setType] = useState(1);
+    const [type, setType] = useRecoilState(selectedTypeState);
 
     // 아이템들
     const [items, setItems] = useState([]);
@@ -99,7 +102,7 @@ export default function CalendarHome(props) {
                 {(open)
                     ? <>
                         {(items.length == 0) ? <EmptyPlan /> : <></>}
-                        {(items.length > 0 && type == 1) ? <PlanListDay items={items} /> : <></>}
+                        {(items.length > 0 && type == 1) ? <PlanListDay items={items} selectedDate={props.selectedDate} /> : <></>}
                         {(items.length > 0 && type == 2) ? <PlanListWeek items={items} selectedDate={props.selectedDate} /> : <></>}
                     </>
                     : <CalendarScreen />}

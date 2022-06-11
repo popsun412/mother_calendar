@@ -26,7 +26,7 @@ const AddAcademy = (props) => {
     const [itemInfo, setItemInfo] = useState({
         name: "",
         image: null,
-        status: null,
+        status: 1,
         address: null,
         detailAddress: null,
         subject: null,
@@ -59,6 +59,7 @@ const AddAcademy = (props) => {
     useEffect(() => {
         auth.onAuthStateChanged(async (_user) => {
             if (_user) {
+                if (props.query.isLocker) setItemInfo({ ...itemInfo, status: 1 });
                 await getData();
             } else {
                 router.back();
@@ -90,7 +91,7 @@ const AddAcademy = (props) => {
         formData.append('name', itemInfo.name);
         formData.append('status', itemInfo.status);
         formData.append('subject', itemInfo.subject);
-        formData.append('lockerType', "학원장소");
+        formData.append('lockerType', "학원");
         formData.append('image', itemInfo.image);
         formData.append('address', itemInfo.address);
         formData.append('detailAddress', itemInfo.detailAddress);
@@ -103,7 +104,11 @@ const AddAcademy = (props) => {
 
         await network.post('/locker', formData);
 
-        router.push('/academymap');
+        if (props.query.isLocker) {
+            router.back();
+        } else {
+            router.push('/academymap');
+        }
 
         setSaving(false);
     }
@@ -171,7 +176,7 @@ const AddAcademy = (props) => {
                         <div onClick={() => { window.history.back() }}>
                             <img src='/images/ic_back.png' />
                         </div>
-                        <div className='my-0 mx-auto text-base font-medium' style={{ letterSpacing: '-0.3px' }}>학원장소 등록</div>
+                        <div className='my-0 mx-auto text-base font-medium' style={{ letterSpacing: '-0.3px' }}>학원지도 등록</div>
                         <button className={`flex ${disabled() ? 'textGray4' : 'textOrange5'}`} style={{ fontSize: '15px' }} disabled={disabled()} onClick={onSubmit}>완료</button>
                     </div>
                 </div>
@@ -215,7 +220,7 @@ const AddAcademy = (props) => {
                         <div>
                             <input
                                 type='text'
-                                placeholder='학원장소 이름을 입력해주세요.'
+                                placeholder='학원지도 이름을 입력해주세요.'
                                 value={itemInfo.name ?? ""} onChange={(e) => setItemInfo({ ...itemInfo, name: e.currentTarget.value })}
                                 className='block w-full h-10 px-5 box-border border border-solid border-color4 rounded-md text-sm outline-none'
                             />
@@ -241,8 +246,20 @@ const AddAcademy = (props) => {
                         <ToggleButtonGroup
                             value={itemInfo.status}
                             aria-label="status" className='w-full'>
-                            <ToggleButton value={0} aria-label="방문예정" className='w-full' onClick={() => setItemInfo({ ...itemInfo, status: 0 })}>방문예정</ToggleButton>
-                            <ToggleButton value={1} arai-label='방문완료' className='w-full' onClick={() => setItemInfo({ ...itemInfo, status: 1 })}>방문완료</ToggleButton>
+                            <ToggleButton value={0} aria-label="방문예정" className='w-full' onClick={() => {
+                                if (props.query.isLocker) return;
+                                setItemInfo({
+                                    ...itemInfo,
+                                    status: 0
+                                })
+                            }}>방문예정</ToggleButton>
+                            <ToggleButton value={1} arai-label='방문완료' className='w-full' onClick={() => {
+                                if (props.query.isLocker) return;
+                                setItemInfo({
+                                    ...itemInfo,
+                                    status: 1
+                                })
+                            }}>방문완료</ToggleButton>
                         </ToggleButtonGroup>
                     </div>
                 </section>
@@ -371,7 +388,7 @@ const AddAcademy = (props) => {
                             <input type='text'
                                 placeholder="주소"
                                 value={itemInfo.address ?? ""}
-                                className='h-9 rounded-md bg-gray2 w-full text-sm px-5 outline-none'
+                                className='h-9 rounded-md bg-gray2 w-full text-sm px-5 outline-none border-0'
                                 readOnly style={{ height: '39px' }}
                             />
                         </div>
@@ -379,7 +396,7 @@ const AddAcademy = (props) => {
                         {(itemInfo.address != null && itemInfo.address.length > 0) ? <input
                             type='text'
                             value={itemInfo.detailAddress ?? ""}
-                            className='h-9 rounded-md bg-gray2 w-full text-sm px-5'
+                            className='h-9 rounded-md bg-gray2 w-full text-sm px-5 outline-none border-0'
                             style={{ height: '39px' }}
                             placeholder="상세주소"
                             onChange={(e) => setItemInfo({ ...itemInfo, detailAddress: e.currentTarget.value })}

@@ -2,7 +2,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect } from 'react';
 import { CameraAlt, Clear } from '@material-ui/icons';
-import DaumPostcode from 'react-daum-postcode';
 import { profileImageCheck } from "../../util/helper";
 import CircleLoadingOpacity from "../../components/common/circle_loading_opacity";
 import network from "../../util/network";
@@ -154,7 +153,20 @@ const ParentsInfo = (props) => {
             <div className='mt-9 mb-4'>
                 <div className='mb-8'>
                     <div className='relative'>
-                        <img src={profileImageCheck(props.userInfo, uploadImage)} className='w-30 h-30 border border-solid rounded-full mx-auto' />
+                        <div className="w-30 h-30 mx-auto">
+                            <div
+                                className="rounded-full border border-solid"
+                                style={{
+                                    backgroundImage: `url("${profileImageCheck(props.userInfo, uploadImage)}")`,
+                                    backgroundRepeat: "no-repeat",
+                                    backgroundSize: "cover",
+                                    width: "100%",
+                                    paddingTop: "100%",
+                                    backgroundPosition: "center center"
+                                }}
+                            />
+                        </div>
+
                         <button className='block absolute border border-solid rounded-full bg-white bottom-0 right-4 mr-25' style={{ width: '30px', height: '30px', borderColor: '#FFBCA1' }}>
                             {uploadImage.preview_URL === '' && props.userInfo.profileImage == null
                                 ? <>

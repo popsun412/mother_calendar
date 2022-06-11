@@ -23,7 +23,7 @@ const Parents = () => {
     }, [order])
 
     const clickOrder = () => {
-        setOrder(order.value == "name" ? _orders[1] : _orders[0]);
+        setOrder(order.value == "name" ? _orders[0] : _orders[1]);
     }
 
     const moreITems = async () => {

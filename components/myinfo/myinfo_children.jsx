@@ -89,6 +89,7 @@ const ChildrenInfo = (props) => {
                     <span className="text-sm font-medium textGray1">아이 생년월일</span>
                     <CustomMobileDatepicker
                         onChange={changeBirth}
+                        maxDate={moment().add(1, "Y").toDate()}
                         value={moment(props.userInfo.babys[selectedIndex].birth).toDate()}
                         auto={true}
                     >

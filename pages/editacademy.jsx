@@ -53,7 +53,7 @@ const AddAcademy = (props) => {
             subject: _result.data.subject,
             region: _result.data.region,
             score: _result.data.score,
-            regDt: _result.data.regDt == null ? null : moment(_result.data.regDt).toDate(),
+            regDt: _result.data.regDt == null ? new Date() : moment(_result.data.regDt).toDate(),
         });
     }
 
@@ -93,7 +93,7 @@ const AddAcademy = (props) => {
         formData.append('name', itemInfo.name);
         formData.append('status', itemInfo.status);
         formData.append('subject', itemInfo.subject);
-        formData.append('lockerType', "학원장소");
+        formData.append('lockerType', "학원");
         formData.append('image', itemInfo.image);
         formData.append('address', itemInfo.address);
         formData.append('detailAddress', itemInfo.detailAddress);
@@ -173,7 +173,7 @@ const AddAcademy = (props) => {
                         <div onClick={() => { window.history.back() }}>
                             <img src='/images/ic_back.png' />
                         </div>
-                        <div className='my-0 mx-auto text-base font-medium' style={{ letterSpacing: '-0.3px' }}>학원장소 수정</div>
+                        <div className='my-0 mx-auto text-base font-medium' style={{ letterSpacing: '-0.3px' }}>학원지도 수정</div>
                         <button className={`flex ${disabled() ? 'textGray4' : 'textOrange5'}`} style={{ fontSize: '15px' }} disabled={disabled()} onClick={onSubmit}>완료</button>
                     </div>
                 </div>
@@ -228,7 +228,7 @@ const AddAcademy = (props) => {
                         <div>
                             <input
                                 type='text'
-                                placeholder='학원장소 이름을 입력해주세요.'
+                                placeholder='학원지도 이름을 입력해주세요.'
                                 value={itemInfo.name ?? ""} onChange={(e) => setItemInfo({ ...itemInfo, name: e.currentTarget.value })}
                                 className='block w-full h-10 px-5 box-border border border-solid border-color4 rounded-md text-sm outline-none'
                             />
@@ -384,7 +384,7 @@ const AddAcademy = (props) => {
                             <input type='text'
                                 placeholder="주소"
                                 value={itemInfo.address ?? ""}
-                                className='h-9 rounded-md bg-gray2 w-full text-sm px-5 outline-none'
+                                className='h-9 rounded-md bg-gray2 w-full text-sm px-5 outline-none border-0'
                                 readOnly style={{ height: '39px' }}
                             />
                         </div>
@@ -392,7 +392,7 @@ const AddAcademy = (props) => {
                         {(itemInfo.address != null && itemInfo.address.length > 0) ? <input
                             type='text'
                             value={itemInfo.detailAddress ?? ""}
-                            className='h-9 rounded-md bg-gray2 w-full text-sm px-5'
+                            className='h-9 rounded-md bg-gray2 w-full text-sm px-5 outline-none border-0'
                             style={{ height: '39px' }}
                             placeholder="상세주소"
                             onChange={(e) => setItemInfo({ ...itemInfo, detailAddress: e.currentTarget.value })}
@@ -425,7 +425,7 @@ const AddAcademy = (props) => {
                             />
                         </div>
                     </section> : ''}
-                {itemInfo.status === 1
+                {itemInfo.status != 0
                     ? <section className='mx-5 my-6'>
                         <div className='text-sm textGray2 font-medium'>만족도 <span className='textGray4'>(선택)</span></div>
                         <div className='flex mt-3'>

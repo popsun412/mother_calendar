@@ -10,7 +10,17 @@ export default function CalendarTopAvatar(props) {
 
     return (
         <span className={`rounded-full w-9 h-9 ${(props.active) ? selectedRing : nonSelectedRing}`} onClick={props.onClick}>
-            <img src={profileImage} className="w-full rounded-full" />
+            <div
+                className="rounded-full"
+                style={{
+                    backgroundImage: `url("${profileImage}")`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "cover",
+                    width: "100%",
+                    paddingTop: "100%",
+                    backgroundPosition: "center center"
+                }}
+            />
         </span>
     );
 }
