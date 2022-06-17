@@ -3,9 +3,11 @@ import { getAuth, sendEmailVerification } from "firebase/auth";
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import CircleLoadingOpacity from "../components/common/circle_loading_opacity";
 
 export default function EmailAuth() {
     const router = useRouter();
+    const [sending, setSending] = useState(false);
     const [load, setLoad] = useState(false);
 
     const auth = getAuth();
@@ -31,8 +33,19 @@ export default function EmailAuth() {
             <div
                 className="bg5 rounded h-12 mx-5 mb-2 flex justify-center items-center text-white text-sm font-semibold hover:cursor-pointer"
                 onClick={async () => {
-                    await sendEmailVerification(auth.currentUser);
-                    alert("이메일이 발송되었습니다.");
+                    if (sending) return;
+                    setSending(true);
+                    sendEmailVerification(auth.currentUser)
+                        .then((value) => {
+                            alert("이메일이 발송되었습니다.");
+                        })
+                        .catch((error) => {
+                            alert("알 수 없는 에러\n잠시후 다시 시도해주세요.")
+                        })
+                        .finally((value) => {
+                            setSending(false);
+                        });
+
                 }}
             >
                 <span>이메일 재발송</span>
@@ -53,5 +66,6 @@ export default function EmailAuth() {
                 <span className="textOrange5">로그인</span>
             </div>
         </div>
+        {(sending) ? <CircleLoadingOpacity /> : <></>}
     </> : <></>
 }

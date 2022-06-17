@@ -38,6 +38,7 @@ const Login = () => {
             } else if (error.code == 'auth/user-not-found') {
                 alert("입력한 회원 정보를 다시 확인해주세요.");
             } else {
+                alert("잠시 후에 다시 시도해주세요.");
             }
 
             setLoginError(true);

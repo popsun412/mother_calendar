@@ -108,11 +108,9 @@ export default function Regist(props) {
             endTime: (registInfo.endTime == null) ? null : moment(registInfo.endTime).format("HH:mm"),
         });
 
-        console.log(_result);
-
-        // if (_result.status == 200) {
-        //     router.push(`/calendar`);
-        // }
+        if (_result.status == 200) {
+            router.push(`/calendar`);
+        }
     }
 
     useEffect(() => {
@@ -169,7 +167,7 @@ export default function Regist(props) {
                         <input
                             type="text"
                             className="bg-transparent outline-none w-full px-10 text-sm text-black text-center"
-                            placeholder='계획명을 입력해주세요.'
+                            placeholder='계획명을 입력해주세요. (최대 20자)'
                             value={registInfo.name}
                             maxLength={30}
                             disabled={common}

@@ -20,9 +20,9 @@ export default function CertifyCompleteBody(props) {
             })}
         </div>
         {(props.auth.image == null)
-            ? <div className="flex flex-col py-24 w-full bg-gray2 items-center">
+            ? <div className="flex flex-col bg-gray2 justify-center items-center" style={{ height: "100vw" }}>
                 <img src='/images/img-empty-image.png' style={{ width: 94 }} />
-                <p className="textGray3">사진이 없습니다</p>
+                <p className="textGray3">사진이 없습니다.</p>
             </div>
             : <div
                 style={{

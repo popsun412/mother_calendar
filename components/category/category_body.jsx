@@ -27,7 +27,7 @@ const CategoryBody = (props) => {
 
     const obj = {
         0: <CategoryPlan type={type} category={category} setCategory={setCategory} />,
-        1: <CategoryItem type={type} category={category} setCategory={setCategory} />
+        1: <CategoryItem type={type} category={category} setCategory={setCategory} scrollCheckRef={props.scrollCheckRef} />
     }
 
     useEffect(() => {
@@ -45,7 +45,7 @@ const CategoryBody = (props) => {
     }, [router.query.id])
 
     return (load) ?
-        <main className='mt-14'>
+        <main className='mt-12'>
             <CategoryMenu type={type} category={category} setCategory={setCategory} />
             <div className='my-4'>
                 <ul className='flex w-full border-b' style={{ height: '36px' }}>

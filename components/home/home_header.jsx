@@ -11,7 +11,7 @@ const HomeHeader = () => {
         setValue(e.target.value)
     }
 
-    return (<header className='sticky top-0 left-0 right-0 visible opacity-100 bg-white z-100'>
+    return (<header className='fixed top-0 left-0 right-0 visible opacity-100 bg-white z-100'>
         <div className='my-auto mx-auto py-0 px-4 relative flex items-center w-full bg-white border-b border-solid border-gray3' style={{ height: '50px' }}>
             <div className='flex-1 flex items-center justify-between'>
                 <div>

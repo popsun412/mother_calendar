@@ -28,8 +28,8 @@ const PlanHeader = (props) => {
                                     <img className="w-4 h-4 mr-2" src={getSubjectImage(subject)} onClick={() => { window.history.back() }} />
                                     <span>{name}</span>
                                 </div>
-                                <div>
-                                    <img src='/images/ic_back.png' onClick={() => { window.history.back() }} />
+                                <div className="relative -left-4">
+                                    <img src='/images/ic_back.png' className="w-10" onClick={() => { window.history.back() }} />
                                 </div>
                             </div> : <img src='/images/ic_banner_aos.png' onClick={() => { window.history.back() }} />
                     }

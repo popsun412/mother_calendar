@@ -4,8 +4,8 @@ export default function WeekPlanDayInfo(props) {
     const _type = props.type ?? 0;
 
     return (
-        <div className="flex flex-col items-center justify-between">
-            <span className="text-gray-400">{props.day}</span>
+        <div className="flex flex-col items-center justify-between w-6">
+            <span className="text-gray-400 text-xs">{props.day}</span>
             <div className="h-5 flex items-center">
                 {(_type == 0) ? <CloseRounded className="text-sm textOrange5" /> : <></>}
                 {(_type == 1) ? <div className="bg5 rounded-full w-4 h-4"></div> : <></>}

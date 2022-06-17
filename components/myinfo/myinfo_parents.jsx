@@ -17,6 +17,7 @@ const ParentsInfo = (props) => {
     const [saving, setSaving] = useState(false);
 
     const [nickname, setNickname] = useState(props.userInfo.nickName);
+    const [zonecode, setZonecode] = useState(props.userInfo.zonecode ?? "");
     const [address, setAddress] = useState(props.userInfo.address);
     const [detailAddress, setDetailAddress] = useState(props.userInfo.detailAddress ?? "");
     const [tel1, setTel1] = useState(props.userInfo.tel.substr(0, 3));
@@ -81,6 +82,7 @@ const ParentsInfo = (props) => {
         formData.append('nickName', nickname);
         formData.append('sex', gender);
         formData.append('tel', `${tel1}${tel2}${tel3}`);
+        formData.append('zonecode', zonecode ?? "");
         formData.append('address', address);
         formData.append('detailAddress', detailAddress);
         formData.append('interest', interest);
@@ -140,6 +142,7 @@ const ParentsInfo = (props) => {
 
                 setAddress(addr);
                 setRegion(data.sido);
+                setZonecode(data.zonecode);
                 setDetailAddress("");
             }
         }).open();

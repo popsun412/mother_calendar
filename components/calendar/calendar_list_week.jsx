@@ -38,8 +38,11 @@ export default function PlanListWeek(props) {
 
         // 0 안함, 100% 2 계획 있는날, 3계획 없는날
 
+        // 하루 체크
+        if (_item.repeatDay == null) return oneDayCheck(_item, _day, _dayIndex);
+
         // 이전 날짜면 리턴
-        if (_day.date.unix() <= _startDate.unix()) return 3;
+        if (_day.date.unix() < _startDate.unix()) return 3;
         if (_day.date.unix() > _endDate.unix()) return 3;
 
         // 실행완료
@@ -47,16 +50,28 @@ export default function PlanListWeek(props) {
         if (_checkAuth >= 0) return 1;
 
         // 반복요일 체크
-        if (_item.repeatDay != null && _item.repeatDay.length > 0) {
-            const _checkDay = _item.repeatDay.findIndex((_repeat) => _repeat == _dayIndex);
-            if (_checkDay >= 0) {
-                return ((_day.date.unix() + (60 * 60 * 24)) > moment().unix()) ? 2 : 0;
-            } else {
-                return 3;
-            }
-        }
+        const _checkDay = _item.repeatDay.findIndex((_repeat) => _repeat == _dayIndex);
 
-        return 0;
+        if (_checkDay >= 0) {
+            return ((_day.date.unix() + (60 * 60 * 24)) > moment().unix()) ? 2 : 0;
+        } else {
+            return 3;
+        }
+    }
+
+    // 하루 체크
+    const oneDayCheck = (_item, _day, _dayIndex) => {
+        // 0 안함, 100% 2 계획 있는날, 3계획 없는날
+        if (_day.date.unix() == moment(_item.startDate).unix()) {
+            // 인증 완료이면 리턴
+            const _check = _item.auths.findIndex((_auth) => moment(_auth.authDt, 'YYYY-MM-DD').unix() == _day.date.unix()) >= 0;
+            if (_check) return 1;
+
+            // 날짜 지남 여부 확인
+            if (moment().unix() < _day.date.unix() + (60 * 60 * 24)) return 2;
+        };
+
+        return 3;
     }
 
     return (

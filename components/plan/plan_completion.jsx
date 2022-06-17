@@ -65,9 +65,6 @@ export default function PlanCompletion() {
                     <span className="text-sm textGray3">사진이 없습니다.</span>
                 </div>
             </div>
-            {/* <div className="p-5 text-sm text-[#333333]">
-                집중력 떨어질까봐 책상은 다 비웠었는데, 교재 종류가 증가하다보니 어쩔 수 없이 매일 보는 것은 가까이 꽂아두었습니다니다니나디나디나디나디나디나디나
-            </div> */}
             <div className="flex items-center justify-center">
                 <span className="mt-[5.6rem] bg5 rounded-full shadow-lg text-sm font-medium text-white px-10 py-3.5">수정하기</span>
             </div>

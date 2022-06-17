@@ -11,6 +11,8 @@ export default function CalendarTop(props) {
     const router = useRouter();
 
     const profileImage = (_friend) => {
+        if (!_friend.isShare) return '/images/profile_lock.png';
+
         if (_friend.profileImage == null) {
             return (_friend.sex == 'female') ? '/images/img_profile_mom.png' : '/images/img_profile_dad.png';
         }

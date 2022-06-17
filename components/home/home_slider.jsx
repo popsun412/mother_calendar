@@ -53,7 +53,7 @@ const HomeSlider = () => {
                                             backgroundPosition: "center center"
                                         }}
                                     />
-                                    <span className='bottom-14 left-4 block text-center absolute py-2 pr-2.5 text-white text-base font-semibold' style={{ letterSpacing: '-0.48px' }}>
+                                    <span className='bottom-14 left-4 block text-center absolute py-2 pr-2.5 text-white text-lg font-bold' style={{ letterSpacing: '-0.48px' }}>
                                         {item.name}
                                     </span>
                                     <div className='flex absolute bottom-8 left-4'>

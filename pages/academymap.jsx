@@ -68,11 +68,11 @@ const AcademyMap = (props) => {
 
     return load
         ? <div className='w-screen h-screen overflow-y-auto scrollbar-hide'>
-            <header className='sticky top-0 left-0 right-0 visible opacity-100 pb-3.5 bg-white z-100' style={{ marginBottom: '-50px' }}>
+            <header className='fixed top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{ marginBottom: '-50px' }}>
                 <div className='relative flex items-center w-full justify-between px-4 bg-white border-b border-solid border-gray3' style={{ height: '50px' }}>
                     <div className="flex items-center">
-                        <img className="mr-4" src='/images/ic_back.png' onClick={() => { router.push('/calendar'); }} />
-                        <BookmarkBorderOutlined onClick={() => setLockerDrawerOpen(true)} />
+                        <img src='/images/ic_back.png' className="w-10 relative -left-4 flex-shrink-0" onClick={() => { window.history.back() }} />
+                        <BookmarkBorderOutlined onClick={() => setLockerDrawerOpen(true)} className="relative -left-4" />
                     </div>
                     <div className='absolute left-0 right-0 mx-20 text-base font-medium text-center' style={{ letterSpacing: '-0.3px' }}>학원지도</div>
                     <div className='flex mr-2' style={{ width: '20px' }}>
@@ -81,7 +81,7 @@ const AcademyMap = (props) => {
                     </div>
                 </div>
             </header>
-            <main style={{ marginTop: '50px' }}>
+            <main className="pb-20" style={{ marginTop: '50px' }}>
                 <section className='mx-5 pt-5 space-y-5 flex flex-col'>
                     {items.length > 0
                         ? items.map((item, index) => <LockerItem key={index} item={item} onDelete={() => onDelete(item, index)} isMe={isMe()} />)
@@ -100,7 +100,7 @@ const AcademyMap = (props) => {
             {
                 isMe() ? <Link href={"/addacademy"} passHref>
                     <div className='fixed bottom-0 right-0 z-100'>
-                        <img src='/images/ic_float.png' />
+                        <img src='/images/ic_float.png' style={{ width: 72, height: 72 }} />
                     </div>
                 </Link> : <></>
             }

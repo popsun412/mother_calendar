@@ -21,17 +21,6 @@ export default function MyPlanList() {
     // 로그인 확인
     const [load, setLoad] = useState(false);
 
-    // 유저 정보 갖고오기
-    const getUser = async () => {
-        const _result = await network.post('/userInfo');
-        // data 통신
-        if (_result.status == 200) {
-            setUserInfo(_result.data);
-        } else {
-            router.push('/');
-        }
-    }
-
     // 데이터 갖고오기
     const getItem = async () => {
         const _result = await network.get('/plans');

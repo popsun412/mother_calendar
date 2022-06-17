@@ -20,7 +20,7 @@ const SearchHeader = () => {
     return (
         <div className='mx-auto px-4 flex bg-white items-center border-b border-solid w-full border-gray3 h-12 mb-6'>
             <div className='flex-1 flex items-center'>
-                <img src='/images/ic_back.png' className='mr-4' onClick={onClick} />
+                <img src='/images/ic_back.png' className="w-10 relative -left-4" onClick={() => { window.history.back() }} />
                 <input type='text' value={value} placeholder='검색어를 입력해주세요.' className='block w-full text-base font-light py-0'
                     style={{ letterSpacing: '-0.6px' }} onChange={onChange} onKeyDown={(e) => {
                         if (e.key == 'Enter' || e.key == 'enter') {

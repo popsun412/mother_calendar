@@ -89,7 +89,7 @@ export default function PlaneDetail(props) {
     return (
         <>
             <div className="px-5">
-                <div className="flex items-center justify-between py-6">
+                <div className="flex items-center justify-between" style={{ height: 50 }}>
                     <svg className="w-7 h-8 textGray2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" onClick={() => router.back()}>
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
                     </svg>
@@ -97,9 +97,9 @@ export default function PlaneDetail(props) {
                     {(auth.currentUser.uid == props.plan.createUserUid) ? <PlanMoreButton plan={props.plan} /> : <></>}
                 </div>
 
-                <div className="flex flex-row pb-6">
+                <div className="flex flex-row pb-6 pt-3">
                     <PlanTitle subject={props.plan.subject} />
-                    <p className="textGray1 text-lg font-normal">{props.plan.name}</p>
+                    <p className="textGray1 text-lg font-semibold">{props.plan.name}</p>
                 </div>
                 {props.plan.commonPlanUid
                     ? <div className="border rounded-md border-color2 flex justify-between p-3 mb-4" onClick={() => {
@@ -178,7 +178,7 @@ export default function PlaneDetail(props) {
                                     <div className="w-full h-full absolute top-0 left-0 bg-[rgba(0,0,0,0.4)]" />
                                     <div className="flex flex-col absolute left-2.5 bottom-2.5">
                                         <span className="text-[#dbeffd] text-xs font-light">{moment(_auth.authDt).format("YYYY년")}</span>
-                                        <span className="text-white font-normal text-sm shadow-[0px 0px 4px rgba(0,0,0,0.25)]">{moment(_auth.authDt).format("M월D일")}</span>
+                                        <span className="text-white font-normal text-sm shadow-[0px 0px 4px rgba(0,0,0,0.25)]">{moment(_auth.authDt).format("M월 D일")}</span>
                                     </div>
                                 </div>
                             )}

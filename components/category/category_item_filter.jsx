@@ -17,7 +17,7 @@ export default function CategoryItemFilter(props) {
     return <>
         <div className='my-2.5 flex flex-col h-full items-stretch'>
             <div className='mx-3.5'>
-                <img src='/images/ic_close.png' className='ml-auto' onClick={() => props.setFilterOpen(false)} />
+                <img src='/images/ic_close.png' className='ml-auto w-6' onClick={() => props.setFilterOpen(false)} />
             </div>
             <div className='mb-7 mx-3.5'>
                 <h3 className='mb-4 text-base font-semibold'>정렬</h3>
@@ -142,8 +142,7 @@ export default function CategoryItemFilter(props) {
                         props.setParam({
                             ...props.param,
                             order: "reg",
-                            region: null,
-                            subject: null,
+                            fields: [],
                             age: [1, 4]
                         })
                     }}>

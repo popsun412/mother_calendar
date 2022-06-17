@@ -138,8 +138,8 @@ export default function PlanItemAdd(props) {
                                     </div>
                                 </div> : <></>}
                         </>}
-                    {(!props.menuOpen) ? <div className='fixed bottom-0 right-0 z-100' onClick={() => props.setMenuOpen(true)}>
-                        <img src='/images/ic_float.png' />
+                    {(!props.menuOpen) ? <div className='fixed bottom-6 right-4 z-100' onClick={() => props.setMenuOpen(true)}>
+                        <img src='/images/ic_float.png' style={{ width: 72, height: 72 }} />
                     </div> : <></>}
                 </div>
             </div>

@@ -16,6 +16,7 @@ import network from "../../util/network";
 // 글로벌 상태관리
 import { useRecoilState } from "recoil";
 import { certifyLockerState } from "../../states/certify_locker";
+import moment from "moment";
 
 export default function Certify(props) {
     const auth = getAuth();
@@ -30,15 +31,20 @@ export default function Certify(props) {
         setPlan(_result.data);
     }
 
-    useEffect(() => {
-        auth.onAuthStateChanged(async (_user) => {
-            if (_user) {
-                await getItem();
-                setLoad(true);
-            } else {
-                router.push('/');
-            }
-        });
+    useEffect(async () => {
+        if (!auth.currentUser) {
+            auth.onAuthStateChanged(async (_user) => {
+                if (_user) {
+                    await getItem();
+                    setLoad(true);
+                } else {
+                    router.push('/');
+                }
+            });
+        } else {
+            await getItem();
+            setLoad(true);
+        }
     }, [router]);
 
     return (load) ?

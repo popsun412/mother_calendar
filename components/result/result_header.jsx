@@ -9,9 +9,9 @@ const ResultHeader = (props) => {
     return (
         <header className='sticky top-0 left-0 right-0 visible opacity-100 pb-3.5 bg-white' style={{ marginBottom: '-90px' }}>
             <div className='border-b border-solid my-auto mx-auto py-0 px-4 relative flex items-center w-full bg-white .border-gray3' style={{ height: '50px' }}>
-                <div className='flex-1 flex items-center'>
-                    <img src='/images/ic_back.png' onClick={() => { window.history.back() }} />
-                    <div className='my-0 mx-auto text-base font-medium' style={{ letterSpacing: '-0.3px' }}>검색결과</div>
+                <div className='flex-1 flex items-center relative'>
+                    <img src='/images/ic_back.png' className="w-10 relative -left-4" onClick={() => { window.history.back() }} />
+                    <div className='absolute left-0 right-0 mx-10 text-center text-base font-medium' style={{ letterSpacing: '-0.3px' }}>검색결과</div>
                 </div>
             </div>
             <div className='border-b border-solid border-gray3' style={{ height: '40px' }}>

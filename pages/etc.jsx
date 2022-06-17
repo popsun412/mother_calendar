@@ -60,9 +60,9 @@ const Etc = () => {
             <div>
                 <header className='sticky top-0 left-0 right-0 visible opacity-100 pb-3.5 bg-white z-100' style={{ marginBottom: '-50px' }}>
                     <div className='my-auto mx-auto py-0 px-4 relative flex items-center w-full bg-white border-b border-solid border-gray3' style={{ height: '50px' }}>
-                        <div className='flex-1 flex items-center'>
-                            <img src='/images/ic_back.png' onClick={() => { window.history.back() }} />
-                            <div className='my-0 mx-auto text-base font-medium' style={{ letterSpacing: '-0.3px' }}>기타</div>
+                        <div className='flex-1 flex items-center relative'>
+                            <img src='/images/ic_back.png' className="w-10 relative -left-4 flex-shrink-0" onClick={() => { window.history.back(); }} />
+                            <div className='absolute left-0 right-0 mx-10 text-center text-base font-medium' style={{ letterSpacing: '-0.3px' }}>기타</div>
                         </div>
                     </div>
                 </header>
@@ -70,7 +70,7 @@ const Etc = () => {
                     <div className='mx-4'>
                         <div className='block relative' style={{ height: '26px' }}>
                             <div className='block absolute right-0'>
-                                <span className='bg-gray2 py-1.5 px-2 text-xs text-center textGray2 rounded' onClick={clickOrder}>↑↓ {order.label}</span>
+                                <span className='bg-gray2 py-1.5 px-2 text-xs text-center textGray2 rounded flex items-center' onClick={clickOrder}><img src="/images/order_icon.png" className="w-4 mr-1" /> {order.label}</span>
                             </div>
                         </div>
                         <div className='mt-5'>
@@ -81,7 +81,7 @@ const Etc = () => {
                                             <div className='flex mt-5'>
                                                 <div className='mr-4 block relative'>
                                                     <img src={item.image} className='rounded-md' style={{ width: '94px', height: '94px' }} />
-                                                    <img src={`/images/ic_${item.bookmark ? 'bookmarked.png' : 'bookmark.png'}`} className='block absolute bottom-0 right-0 mr-2 mb-1.5' onClick={(e) => {
+                                                    <img src={`/images/ic_${item.bookmark ? 'bookmarked.png' : 'bookmark.png'}`} className='block absolute bottom-0 right-0 mr-2 mb-1.5 w-3' onClick={(e) => {
                                                         e.preventDefault();
                                                         addBookmark(item.commonItemUid, idx);
                                                     }} />

@@ -54,14 +54,14 @@ const MyPage = () => {
 
     return (load)
         ? <div className=''>
-            <header className='sticky top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{ marginBottom: '-50px' }}>
+            {/* <header className='sticky top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{ marginBottom: '-50px' }}>
                 <div className='my-auto mx-auto py-0 px-4 relative flex items-center w-full bg-white border-solid border-b border-gray4' style={{ height: '50px' }}>
                     <div className='flex-1 flex items-center'>
                         <div className='my-0 mx-auto text-base' style={{ letterSpacing: '-0.3px', fontSize: '15px' }}>내 정보</div>
                     </div>
                 </div>
-            </header>
-            <main style={{ marginTop: '50px', marginBottom: '100px' }}>
+            </header> */}
+            <main style={{ marginBottom: '100px' }}>
                 <section>
                     <div className="h-48">
                         <div className='pt-7 mb-4'>
@@ -110,18 +110,26 @@ const MyPage = () => {
                             <span style={{ marginRight: '23px' }}>{'>'}</span>
                         </div>
                     </Link>
-                    <div className='flex items-center justify-between border-b border-solid border-gray4 h-15'>
-                        <span style={{ marginLeft: '18px', fontSize: '15px' }}>서비스 이용약관</span>
-                        <span style={{ marginRight: '23px' }}>{'>'}</span>
-                    </div>
-                    <div className='flex items-center justify-between border-b border-solid border-gray4 h-15'>
-                        <span style={{ marginLeft: '18px', fontSize: '15px' }}>개인정보 처리방침</span>
-                        <span style={{ marginRight: '23px' }}>{'>'}</span>
-                    </div>
-                    <div className='flex items-center justify-between border-b border-solid border-gray4 h-15'>
-                        <span style={{ marginLeft: '18px', fontSize: '15px' }}>1:1 문의</span>
-                        <span style={{ marginRight: '23px' }}></span>
-                    </div>
+                    <Link href="/useinfo" passHref>
+                        <div className='flex items-center justify-between border-b border-solid border-gray4 h-15'>
+                            <span style={{ marginLeft: '18px', fontSize: '15px' }}>서비스 이용약관</span>
+                            <span style={{ marginRight: '23px' }}>{'>'}</span>
+                        </div>
+                    </Link>
+                    <Link href="/privateinfo" passHref>
+                        <div className='flex items-center justify-between border-b border-solid border-gray4 h-15'>
+                            <span style={{ marginLeft: '18px', fontSize: '15px' }}>개인정보 처리방침</span>
+                            <span style={{ marginRight: '23px' }}>{'>'}</span>
+                        </div>
+                    </Link>
+                    <Link href="https://mamadadacal.channel.io">
+                        <a target="_blank">
+                            <div className='flex items-center justify-between border-b border-solid border-gray4 h-15'>
+                                <span style={{ marginLeft: '18px', fontSize: '15px' }}>1:1 문의</span>
+                                <span style={{ marginRight: '23px' }}>{'>'}</span>
+                            </div>
+                        </a>
+                    </Link>
                     {/* <div className='flex items-center justify-between h-15'>
                         <span style={{ marginLeft: '18px', fontSize: '15px' }}>버전 정보</span>
                         <span className='text-sm textGray4' style={{ marginRight: '23px' }}>1.02 ver</span>

@@ -41,17 +41,17 @@ const Parents = () => {
             <div>
                 <header className='sticky top-0 left-0 right-0 visible opacity-100 pb-3.5 bg-white z-100' style={{ marginBottom: '-50px' }}>
                     <div className='my-auto mx-auto py-0 px-4 relative flex items-center w-full bg-white border-b border-solid border-gray3' style={{ height: '50px' }}>
-                        <div className='flex-1 flex items-center'>
-                            <img src='/images/ic_back.png' onClick={() => { window.history.back() }} />
-                            <div className='my-0 mx-auto text-base font-medium' style={{ letterSpacing: '-0.3px' }}>부모</div>
+                        <div className='flex-1 flex items-center relative'>
+                            <img src='/images/ic_back.png' className="w-10 relative -left-4 flex-shrink-0" onClick={() => { window.history.back(); }} />
+                            <div className='absolute left-0 right-0 mx-10 text-center text-base font-medium' style={{ letterSpacing: '-0.3px' }}>부모</div>
                         </div>
                     </div>
                 </header>
                 <main className='my-14'>
                     <div className='mx-4'>
                         <div className='block relative' style={{ height: '26px' }}>
-                            <div className='block absolute right-0'>
-                                <span className='bg-gray2 py-1.5 px-2 text-xs text-center textGray2 rounded' onClick={clickOrder}>↑↓ {order.label}</span>
+                            <div className='block absolute right-0 items-center'>
+                                <span className='bg-gray2 py-1.5 px-2 text-xs text-center textGray2 rounded flex items-center' onClick={clickOrder}><img src="/images/order_icon.png" className="w-4 mr-1" />{order.label}</span>
                             </div>
                         </div>
                         <div className='mt-5'>
@@ -64,10 +64,10 @@ const Parents = () => {
                                                     <img src={item.image} className='rounded-md' />
                                                 </div>
                                                 <div>
-                                                    <h3 className='text-base font-semibold mb-1.5' style={{ letterSpacing: '-0.3px' }}>{item.name}</h3>
-                                                    <div className='flex'>
-                                                        <span className='py-1 px-1.5 mr-1.5 rounded text-xs textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.subject}</span>
-                                                        <span className='py-1 px-1.5 mr-1.5 rounded text-xs textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.field}</span>
+                                                    <h3 className='font-semibold mb-1.5' style={{ fontSize: 15 }}>{item.name}</h3>
+                                                    <div className='flex items-center'>
+                                                        <span className='py-0.5 px-1 mr-1.5 rounded text-xs textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.subject}</span>
+                                                        <span className='py-0.5 px-1 mr-1.5 rounded text-xs textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.field}</span>
                                                     </div>
                                                 </div>
                                             </div>

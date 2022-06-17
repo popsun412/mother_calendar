@@ -55,10 +55,8 @@ const MyInfo = () => {
                 <header className='sticky top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{ marginBottom: '-50px' }}>
                     <div className='my-auto mx-auto py-0 px-4 relative flex items-center w-full bg-white' style={{ height: '50px' }}>
                         <div className='flex-1 flex items-center'>
-                            <div>
-                                <img src='/images/ic_back.png' onClick={() => { router.back() }} />
-                            </div>
-                            <div className='my-0 mx-auto text-base' style={{ letterSpacing: '-0.3px', fontSize: '15px' }}>내 정보 수정</div>
+                            <img src='/images/ic_back.png' className="w-10 relative -left-4 flex-shrink-0" onClick={() => { window.history.back(); }} />
+                            <div className='absolute left-0 right-0 mx-10 text-center text-base' style={{ letterSpacing: '-0.3px', fontSize: '15px' }}>내 정보 수정</div>
                         </div>
                     </div>
                 </header>

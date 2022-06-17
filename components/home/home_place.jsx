@@ -41,7 +41,7 @@ const HomePlace = (props) => {
                                         <span className='absolute block top-0 py-1 px-2 text-xs text-white bg-blue3 rounded-tl-md rounded-br-md'>{idx + 1}위</span>
                                         <img src={item.image} width={'96px'} height={'96px'} className='rounded-md' style={{ width: '94px', height: '94px' }} />
                                         <img src={`/images/ic_${item.bookmark ? 'bookmarked.png' : 'bookmark.png'}`}
-                                            className='absolute block bottom-0 right-0 mr-2 mb-1.5' onClick={(e) => {
+                                            className='absolute block bottom-0 right-0 mr-2 mb-1.5 w-3' onClick={(e) => {
                                                 e.preventDefault();
                                                 if (item.bookmark) return;
                                                 addBookmark(item.commonItemUid, idx)

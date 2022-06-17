@@ -15,7 +15,7 @@ const ExMapBody = (props) => {
 
     useEffect(() => {
         const script = document.createElement("script");
-        script.src ="https://dapi.kakao.com/v2/maps/sdk.js?appkey=5ed92c5109844752200bc345ce2a6deb&autoload=false&libraries=services,clusterer";
+        script.src = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=5ed92c5109844752200bc345ce2a6deb&autoload=false&libraries=services,clusterer";
         document.head.appendChild(script);
 
         script.onload = () => {
@@ -60,7 +60,7 @@ const ExMapBody = (props) => {
             minLevel: 10,
             disableClickZoom: true,
             styles: [{
-                width : '40px', height : '40px',
+                width: '40px', height: '40px',
                 background: 'rgba(255, 115, 77, 0.6)',
                 borderRadius: '20px',
                 color: '#fff',
@@ -71,29 +71,29 @@ const ExMapBody = (props) => {
             }]
         })
 
-        const clusterMarkers = markerClusterPositions.map( (item) => {
+        const clusterMarkers = markerClusterPositions.map((item) => {
             return new kakao.maps.Marker({
-                position : new kakao.maps.LatLng(item.lat, item.lng)
+                position: new kakao.maps.LatLng(item.lat, item.lng)
             })
         })
 
-        kakao.maps.event.addListener(clusterer, 'clustered', function(clusters ) {
-            for(const i=0; i<clusters.length; i++){            
+        kakao.maps.event.addListener(clusterer, 'clustered', function (clusters) {
+            for (const i = 0; i < clusters.length; i++) {
                 const cluster = clusters[i];
                 const overlay = cluster.getClusterMarker().getContent();
-                
+
                 // 각 클러스터의 overlay에 mouseover 이벤트를 등록합니다.
-                overlay.addEventListener('mouseover', function() {
-                    if(!this.classList.contains('cluster_click')) {      
+                overlay.addEventListener('mouseover', function () {
+                    if (!this.classList.contains('cluster_click')) {
                         this.classList.add('cluster_click');
                     } else {
                         this.classList.remove('cluster_click');
                     }
                 });
-                
+
                 // 각 클러스터의 overlay에 mouseout 이벤트를 등록합니다.
-                overlay.addEventListener('mouseout', function() {
-                    if(this.classList.contains('cluster_click')) {
+                overlay.addEventListener('mouseout', function () {
+                    if (this.classList.contains('cluster_click')) {
                         this.classList.remove('cluster_click');
                     }
                 });
@@ -102,7 +102,7 @@ const ExMapBody = (props) => {
         clusterer.addMarkers(clusterMarkers);
 
 
-        kakao.maps.event.addListener(clusterer, 'clusterclick', function(cluster) {
+        kakao.maps.event.addListener(clusterer, 'clusterclick', function (cluster) {
             setMarkers(cluster.getMarkers());
             setOpen(true);
         })
@@ -135,25 +135,25 @@ const ExMapBody = (props) => {
         navigator.geolocation.getCurrentPosition(locatonLoadSuccess, locationLoadError);
     }
 
-    return (       
+    return (
         <React.Fragment>
             <div id="container" ref={container} className='relative m-auto'>
-                <div className='absolute top-16 right-2.5 rounded-md flex items-center' style={{zIndex: 5}}>
-                    <div className='flex justify-center items-center text-center bg-white' 
-                        style={{width: '50px', height: '50px', borderRadius: '25px', cursor: 'pointer'}} onClick={getCurrentPosBtn}>
+                <div className='absolute top-16 right-2.5 rounded-md flex items-center' style={{ zIndex: 5 }}>
+                    <div className='flex justify-center items-center text-center bg-white'
+                        style={{ width: '50px', height: '50px', borderRadius: '25px', cursor: 'pointer' }} onClick={getCurrentPosBtn}>
                         <img src='/images/ic_crosshair.png' />
                     </div>
                 </div>
                 <Link href='/addplace'>
-                    <div className='absolute top-28 rounded-md flex items-center' style={{zIndex: 5, right: '-10px'}}>
-                        <img src='/images/ic_float.png' style={{width: '90%', height: '90%'}}/>
+                    <div className='absolute top-28 rounded-md flex items-center' style={{ zIndex: 5, right: '-10px' }}>
+                        <img src='/images/ic_float.png' style={{ width: 72, height: 72 }} />
                     </div>
                 </Link>
                 {
-                    open ? <ExMapList markers={markers} setMarkers={setMarkers}/> : ''
+                    open ? <ExMapList markers={markers} setMarkers={setMarkers} /> : ''
                 }
             </div>
-        </React.Fragment> 
+        </React.Fragment>
     )
 }
 

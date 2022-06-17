@@ -11,7 +11,7 @@ export default function PlaceListDrawer(props) {
     return <>
         <div className='my-2.5 flex flex-col h-full items-stretch'>
             <div className='mx-3.5'>
-                <img src='/images/ic_close.png' className='ml-auto' onClick={() => props.setDrawerOpen(false)} />
+                <img src='/images/ic_close.png' className='ml-auto w-6' onClick={() => props.setDrawerOpen(false)} />
             </div>
             <div className='mb-7 mx-3.5'>
                 <h3 className='mb-4 text-base font-semibold'>정렬</h3>
@@ -101,7 +101,7 @@ export default function PlaceListDrawer(props) {
                                     key={index}
                                     onClick={() => {
                                         if (_checkIndex >= 0) {
-                                            props.param.subject.splice(_selectedIndex, 1);
+                                            props.param.subject.splice(_checkIndex, 1);
                                         } else {
                                             props.param.subject.push(_subject);
                                         }

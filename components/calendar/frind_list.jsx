@@ -11,6 +11,8 @@ export default function FriendList(props) {
     // show model
     const showModel = {
         profileImage(_user) {
+            if (!_user.isShare) return '/images/profile_lock.png';
+
             if (_user.profileImage == null) {
                 return (_user.sex == 'female') ? '/images/img_profile_mom.png' : '/images/img_profile_dad.png';
             }

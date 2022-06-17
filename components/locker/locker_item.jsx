@@ -45,7 +45,7 @@ export default function LockerItem(props) {
             <div
                 className="before:top-0 before:right-0 before:bottom-0 before:left-0 before:absolute rounded-md border border-solid border-color4"
                 style={{
-                    backgroundImage: `url("${props.item.image}")`,
+                    backgroundImage: `url("${props.item.image ?? "/images/camera.png"}")`,
                     backgroundRepeat: "no-repeat",
                     backgroundSize: "cover",
                     width: "100%",
@@ -75,11 +75,14 @@ export default function LockerItem(props) {
             </div>
         </div>
 
-        <CloseSharp onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
+        {(props.isMe) ? <CloseSharp
+            style={{ color: "#828282" }}
+            fontSize='small'
+            onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
 
-            props.onDelete();
-        }} />
+                props.onDelete();
+            }} /> : <></>}
     </div>
 }

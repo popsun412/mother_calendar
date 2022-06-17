@@ -48,7 +48,7 @@ export default function CertifyCompleteHeader(props) {
             </div>
 
             <div className="flex">
-                <div className="flex h-6 px-2 text-xs font-normal border-color3 textOrange3 rounded-full border items-center text-center">{`${_babysAge()}, ${props.userInfo.region}, ${nick()}`}</div>
+                <div className="mr-1 flex h-6 px-2 text-xs font-normal border-color3 textOrange3 rounded-full border items-center text-center">{`${_babysAge()}, ${props.userInfo.region}, ${nick()}`}</div>
                 {(props.auth.userUid == auth.currentUser.uid) ? <CertifyCompleteMoreButton auth={props.auth} /> : <></>}
             </div>
         </div>

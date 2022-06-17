@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
+
 import { useEffect, useState, Fragment } from 'react';
 import { useRouter } from 'next/router';
 import FeedHeader from "../components/feed/feed_header";
@@ -37,14 +38,14 @@ export default function Feed() {
     const getItems = async () => {
         moreITems(true);
 
-        const _result = await network.post(`/feeds`, { ...param, offset: items.length });
+        const _result = await network.post(`/feeds`, { ...param, offset: 0 });
         if (_result.data.length == 0) setHasMore(false);
         setItems(_result.data);
     }
 
     const moreITems = async () => {
         const _result = await network.post(`/feeds`, { ...param, offset: items.length });
-        if (_result.data == 0) moreITems(false);
+        if (_result.data == 0) setHasMore(false);
         setItems(items.concat(_result.data));
     }
 
@@ -61,8 +62,6 @@ export default function Feed() {
 
     const onReport = async (contents) => {
         const _result = await network.post('/feed/report', { planAuthUid, contents });
-        console.log(_result);
-
         setPlanAuthUid(null);
         setDeclarationOpen(false);
     }
@@ -76,6 +75,8 @@ export default function Feed() {
             <FeedHeader setFilterOpen={setFilterOpen} />
             <div className="pt-4 pb-20 flex flex-col space-y-10" style={{ marginTop: 50 }}>
                 {items.map((_item, idx) => {
+                    if (_item == null) return <></>;
+
                     return <FeedItem item={_item} key={idx} ages={param.age} onClick={() => {
                         setPlanAuthUid(_item.planAuthUid);
                         setDeclarationOpen(true);

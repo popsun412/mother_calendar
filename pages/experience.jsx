@@ -28,6 +28,7 @@ const Experience = () => {
 
     const getItems = async () => {
         setItems([]);
+
         const res = await network.post('/home/recommPlace', param);
         setItems(res.data)
     }
@@ -65,16 +66,18 @@ const Experience = () => {
             hasMore={hasMore}
         >
             <div>
-                <header className='sticky top-0 left-0 right-0 visible opacity-100 pb-3.5 bg-white z-100' style={{ marginBottom: '-50px' }}>
+                <header className='fixed top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{ marginBottom: '-50px' }}>
                     <div className='my-auto mx-auto py-0 px-4 relative flex items-center w-full bg-white border-b border-solid border-gray3' style={{ height: '50px' }}>
                         <div className='flex-1 flex items-center justify-between'>
                             <div className="absolute left-0 right-0 mx-10 text-center" style={{ letterSpacing: '-0.3px' }}>체험</div>
-                            <img src='/images/ic_back.png' onClick={() => { window.history.back() }} />
-                            <img src='/images/filter.png' onClick={() => setFilterOpen(true)} style={{ width: 24 }} />
+                            <img src='/images/ic_back.png' className="w-10 relative -left-4 flex-shrink-0" onClick={() => { window.history.back(); }} />
+                            <img src='/images/filter.png' onClick={() => setFilterOpen(true)} style={{ width: 18 }} />
                         </div>
                     </div>
                 </header>
-                <main style={{ marginTop: '55px' }}>
+
+                {/* 샘플 */}
+                <main className="mt-16">
                     <div className='my-2 mx-5'>
                         {
                             items.map((item, idx) => {
@@ -83,13 +86,13 @@ const Experience = () => {
                                         <div className='flex mb-5'>
                                             <div className='mr-4 block relative'>
                                                 <img src={item.image} className='rounded-md' style={{ width: '94px', height: '94px' }} />
-                                                <img src={`/images/ic_${item.bookmark ? 'bookmarked.png' : 'bookmark.png'}`} className='block absolute bottom-0 right-0 mr-2 mb-1.5' onClick={() => addBookmark(item.commonItemUid, idx)} />
+                                                <img src={`/images/ic_${item.bookmark ? 'bookmarked.png' : 'bookmark.png'}`} className='block absolute bottom-0 right-0 mr-2 mb-1.5 w-3' onClick={() => addBookmark(item.commonItemUid, idx)} />
                                             </div >
                                             <div>
-                                                <h3 className='text-base font-semibold mb-1.5'>{item.name}</h3>
+                                                <h3 className='font-semibold mb-1.5' style={{ fontSize: 15 }}>{item.name}</h3>
                                                 <div className='flex'>
-                                                    <span className='py-1 px-1.5 mr-1.5 rounded text-xs textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.region}</span>
-                                                    <span className='py-1 px-1.5 mr-1.5 rounded text-xs textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.field}</span>
+                                                    <span className='py-0.5 px-1 mr-1.5 rounded text-xs textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.region}</span>
+                                                    <span className='py-0.5 px-1 mr-1.5 rounded text-xs textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.field}</span>
 
                                                 </div>
                                             </div>

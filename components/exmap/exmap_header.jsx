@@ -180,7 +180,7 @@ const ExMapHeader = () => {
             />
             <div className='my-2.5'>
                 <div className='mx-3.5'>
-                    <img src='/images/ic_close.png' className='ml-auto' onClick={onClick(anchor, false, false)} />
+                    <img src='/images/ic_close.png' className='ml-auto w-6' onClick={onClick(anchor, false, false)} />
                 </div>
                 <div className='mb-7 mx-3.5'>
                     <h3 className='mb-4 text-base font-semibold'>정렬</h3>
@@ -327,7 +327,7 @@ const ExMapHeader = () => {
                             <Link href='/instimap'>
                                 <img src='/images/ic_list.png' className='mr-3' />
                             </Link>
-                            <img src='/images/filter.png' onClick={onClick('right', true)} style={{ width: 24 }} />
+                            <img src='/images/filter.png' onClick={onClick('right', true)} style={{ width: 18 }} />
                         </div>
                     </div>
                 </div>

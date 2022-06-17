@@ -71,18 +71,16 @@ const EduTool = (props) => {
                     <header className='sticky top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{ marginBottom: '-50px' }}>
                         <div className='flex py-0 px-4 relative items-center w-full bg-white justify-between' style={{ height: '50px' }}>
                             <div className="flex items-center">
-                                <div onClick={() => { router.push('/calendar'); }} className="mr-4">
-                                    <img src='/images/ic_back.png' />
-                                </div>
-                                <BookmarkBorderOutlined onClick={() => setLockerDrawerOpen(true)} />
+                                <img src='/images/ic_back.png' className="w-10 relative -left-4 flex-shrink-0" onClick={() => { router.push('/calendar'); }} />
+                                <BookmarkBorderOutlined onClick={() => setLockerDrawerOpen(true)} className="relative -left-4" />
                             </div>
                             <div className='flex'>
-                                <img src='/images/filter.png' onClick={() => setFilterOpen(true)} style={{ width: 24 }} />
+                                <img src='/images/filter.png' onClick={() => setFilterOpen(true)} style={{ width: 18 }} />
                             </div>
                             <div className='absolute left-0 right-0 mx-20 text-base font-medium text-center' style={{ letterSpacing: '-0.3px' }}>교구장</div>
                         </div>
                     </header>
-                    <main className='mt-12'>
+                    <main className='mt-12 pb-20'>
                         <div className='grid grid-cols-3 text-center text-sm textGray4 border-b border-solid border-gray3' style={{ height: '40px' }}>
                             <div className={`font-semibold ${activeTab === 0 ? 'textBlue4 border-b-3 border-solid border-blue4' : ''}`}
                                 style={{ lineHeight: '40px' }} onClick={() => { setActiveTab(0) }}>구매예정</div>
@@ -99,7 +97,7 @@ const EduTool = (props) => {
                     </main>
                     {isMe() ? <Link href={`/addtool`} passHref>
                         <div className='fixed bottom-0 right-0 z-100'>
-                            <img src='/images/ic_float.png' />
+                            <img src='/images/ic_float.png' style={{ width: 72, height: 72 }} />
                         </div>
                     </Link> : <></>}
                 </div>

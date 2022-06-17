@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState, Fragment, useCallback } from 'react';
 import { Drawer } from '@material-ui/core';
 import network from '../../util/network';
 import Link from 'next/link';
@@ -9,8 +9,8 @@ import Toast from '../common/toast';
 import CategoryItemFilter from "../category/category_item_filter";
 import GlobalStyles from '@mui/material/GlobalStyles';
 
-
 const CategoryItem = (props) => {
+    const [getting, setGetting] = useState(false);
     const [filterOpen, setFilterOpen] = useState(false);
     const [param, setParam] = useState({
         order: "reg",
@@ -25,7 +25,18 @@ const CategoryItem = (props) => {
     const getItems = async () => {
         if (category != "전체" && category != "") param = { ...param, subject: category };
         const res = await network.post('/home/recommItems', param);
+
         setData(res.data);
+        setGetting(false);
+    }
+
+    const moreITems = async () => {
+        if (category != "전체" && category != "") param = { ...param, subject: category };
+        const res = await network.post('/home/recommItems', { ...param, offset: data.length });
+
+        setData(data.concat(res.data));
+
+        setGetting(res.data.length == 0);
     }
 
     useEffect(() => {
@@ -51,6 +62,22 @@ const CategoryItem = (props) => {
         return { value: _filters.length > 1, label: _filters.join(",") }
     }
 
+
+    // 스크롤 체크
+    const handleScroll = async () => {
+        if (props.scrollCheckRef.current.scrollHeight - (props.scrollCheckRef.current.scrollTop + window.screen.height) < 100) {
+            if (!getting) setGetting(true);
+        };
+    }
+
+    useEffect(() => {
+        props.scrollCheckRef.current.addEventListener("scroll", handleScroll);
+    }, [handleScroll])
+
+    useEffect(async () => {
+        if (getting) await moreITems();
+    }, [getting])
+
     return <>
 
         <GlobalStyles
@@ -67,9 +94,9 @@ const CategoryItem = (props) => {
                     <span className={`flex items-center py-1.5 px-3 border border-solid rounded text-xs ${filterStatus().value ? 'border-blue4 textBlue4' : 'border-gary3 textGray4'}`}
                         onClick={() => setFilterOpen(true)}>
                         <span style={{ marginRight: '3.4px' }}>
-                            <img src='/images/filter.png' style={{ width: '15px' }} />
+                            <img src={`${filterStatus().value ? '/images/filter_select.png' : '/images/filter.png'}`} className="w-4" />
                         </span>
-                        <span className={`text-sm ${filterStatus().value ? 'textBlue4' : 'textGray4'}`}>{filterStatus().label}</span>
+                        <span className={`text-sm ${filterStatus().value ? 'textBlue4' : 'textGray2'}`}>{filterStatus().label}</span>
                     </span>
                 </div>
             </div>
@@ -86,8 +113,8 @@ const CategoryItem = (props) => {
                                         <div className='block relative'>
                                             <img src={item.image} className='rounded-md' />
                                             {item.bookmark
-                                                ? <img src='/images/ic_bookmarked.png' className='block absolute bottom-0 right-0 pr-2.5 pb-3' />
-                                                : <img src='/images/ic_bookmark.png' className='block absolute bottom-0 right-0 pr-2.5 pb-3' onClick={(e) => {
+                                                ? <img src='/images/ic_bookmarked.png' className='block absolute bottom-0 right-0 pr-2.5 pb-3 w-3' />
+                                                : <img src='/images/ic_bookmark.png' className='block absolute bottom-0 right-0 pr-2.5 pb-3 w-3' onClick={(e) => {
                                                     e.preventDefault();
                                                     if (item.bookmark) return;
                                                     addBookmark(item.commonItemUid, idx)
@@ -95,7 +122,7 @@ const CategoryItem = (props) => {
                                             }
 
                                         </div>
-                                        <div className='my-2 text-sm'>{item.name}</div>
+                                        <div className='my-2 text-base font-semibold'>{item.name}</div>
                                         <div>
                                             <span className='mr-1.5 py-1 px-1.5 rounded text-xs text-center textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.subject}</span>
                                             <span className='mr-1.5 py-1 px-1.5 rounded text-xs text-center textGray3' style={{ backgroundColor: '#f0f5f8' }}>{item.field}</span>

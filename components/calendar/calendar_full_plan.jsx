@@ -3,6 +3,7 @@ import PlanTitle from "./plan_title";
 import moment from "moment";
 import { calcPercent } from "../../util/helper";
 import Link from "next/link";
+import GlobalStyles from '@mui/material/GlobalStyles';
 
 export default function CalendarFullPlan(props) {
     const router = useRouter();
@@ -14,15 +15,21 @@ export default function CalendarFullPlan(props) {
         return Math.round((_plan.authCount / _totalDays) * 100);
     }
 
-    return (
-        <div className="flex flex-col h-full">
-            <div className="relative py-4 bg-white border-b border-gary3">
-                <span className="absolute top-0 bottom-0 right-0 left-0 flex items-center justify-center text-sm font-medium textGray1 z-40">전체 계획 관리</span>
+    return <>
+        <GlobalStyles
+            styles={{
+                'body': { backgroundColor: "#f2f2f2" }
+            }}
+        />
+
+        <div className="flex flex-col overflow-auto">
+            <div className="relative py-2.5 first-letter:border-b border-gary3 bg-white">
+                <span className="absolute top-0 bottom-0 right-0 left-0 flex items-center justify-center text-base font-medium textGray1 z-40">전체 계획 관리</span>
                 <svg className="relative w-7 h-8 ml-1 textGray2 z-50" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" onClick={() => router.back()}>
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
             </div>
-            <div className="flex flex-col bg-gray2 h-full px-5 pt-4 space-y-3">
+            <div className="flex flex-col bg-gray2 h-full px-5 pt-4 space-y-3 flex-shrink-0">
                 {
                     props.items.map((_item) => {
                         const _percent = checkComplete(_item);
@@ -39,5 +46,5 @@ export default function CalendarFullPlan(props) {
                 }
             </div>
         </div>
-    )
+    </>
 }

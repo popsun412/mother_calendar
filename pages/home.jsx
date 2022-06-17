@@ -48,9 +48,9 @@ const Home = () => {
     }, [])
 
     return (load) ?
-        <div className="w-screen h-screen overflow-y-auto scrollbar-hide">
+        <div className="w-full h-full overflow-y-auto scrollbar-hide">
             <HomeHeader />
-            <main>
+            <main style={{ marginTop: 50 }}>
                 <HomeSlider />
                 <HomeCategory />
                 <hr className='h-1.5 border-0 mt-8 mb-5 mx-0 p-0' style={{ background: '#ececec' }} />

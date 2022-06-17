@@ -59,7 +59,7 @@ const PlanItem = (props) => {
                                                     {
                                                         item.pick ? <span className='block absolute top-0 left-0 text-xs text-white px-1.5 py-1 bg-blue3 rounded-tl-md rounded-br-md'>PICK</span> : ''
                                                     }
-                                                    <img src={`/images/ic_${item.bookmark ? 'bookmarked.png' : 'bookmark.png'}`} className='block absolute bottom-0 right-0 mb-1.5 mr-2' onClick={(e) => {
+                                                    <img src={`/images/ic_${item.bookmark ? 'bookmarked.png' : 'bookmark.png'}`} className='block absolute bottom-0 right-0 mb-1.5 mr-2 w-3' onClick={(e) => {
                                                         e.preventDefault();
                                                         e.stopPropagation();
 

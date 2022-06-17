@@ -13,11 +13,12 @@ const PlanConfirm = (props) => {
 
     const [data, setData] = useState([]);
 
+    const getData = async () => {
+        const res = await network.get('/plan/commonPlan/auth/' + commonPlanUid)
+        res.data ? setData(res.data) : null;
+    }
+
     useEffect(() => {
-        const getData = async () => {
-            const res = await network.get('/plan/commonPlan/auth/' + commonPlanUid)
-            res.data ? setData(res.data) : null;
-        }
         getData();
     }, []);
 
@@ -40,7 +41,7 @@ const PlanConfirm = (props) => {
                                 <div className="w-full h-full absolute top-0 left-0 bg-[rgba(0,0,0,0.4)]" />
                                 <div className="flex flex-col absolute left-2.5 bottom-2.5">
                                     <span className="text-[#dbeffd] text-xs font-light">{moment(item.authDt).format("YYYY년")}</span>
-                                    <span className="text-white font-normal text-sm shadow-[0px 0px 4px rgba(0,0,0,0.25)]">{moment(item.authDt).format("M월D일")}</span>
+                                    <span className="text-white font-normal text-sm shadow-[0px 0px 4px rgba(0,0,0,0.25)]">{moment(item.authDt).format("M월 D일")}</span>
                                 </div>
                                 <span className={`absolute top-2 left-2 rounded-full w-8 h-8`}>
                                     <div

@@ -85,7 +85,7 @@ export default function CalendarName(props) {
             <div className="flex mb-4 justify-between">
                 <div className='flex flex-row items-center'>
                     {(!props.selectedUserInfo.isShare) ? <img src={`/images/share_lock.png`} className='w-6 h-6' alt="비공개" /> : <></>}
-                    <span className="text-xl font-semibold textGray1 mr-2">{((props.selectedUserInfo.nickName ?? "").length > 6) ? `${props.selectedUserInfo.nickName.substring(0, 6)}...` : props.selectedUserInfo.nickName}</span>
+                    <span className="text-xl font-bold textGray1 mr-2">{((props.selectedUserInfo.nickName ?? "").length > 6) ? `${props.selectedUserInfo.nickName.substring(0, 6)}...` : props.selectedUserInfo.nickName}</span>
                     <div className="flex px-2 text-xs font-normal border-color3 textOrange3 rounded-full border items-center text-center">{`${showModel.babysAge}, ${showModel.region}, ${showModel.nick}`}</div>
                 </div>
 

@@ -59,7 +59,12 @@ const CategoryPlan = (props) => {
                 level.map((_level) => {
                     return (
                         <div className='mb-6' key={_level}>
-                            <span className='py-1.5 px-3 bg5 text-sm text-white' style={{ borderRadius: '13.5px' }}>{_level} 단계 추천 계획</span>
+                            <span
+                                className='py-1.5 px-3 bg5 text-sm text-white flex items-center max-w-fit'
+                                style={{ borderRadius: '13.5px' }}
+                            >
+                                {<img src={`/images/level${_level}.png`} className="w-4 mr-1" />} 단계 추천 계획
+                            </span>
                             <div className='mt-3.5'>
                                 {
                                     data.map((_item, _index) => {

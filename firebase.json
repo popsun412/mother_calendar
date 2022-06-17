@@ -76,10 +76,6 @@
         "destination": "/item.html"
       },
       {
-        "source": "jointplan",
-        "destination": "/jointplan.html"
-      },
-      {
         "source": "locker",
         "destination": "/locker.html"
       },
@@ -150,6 +146,14 @@
       {
         "source": "signup",
         "destination": "/signup.html"
+      },
+      {
+        "source": "useinfo",
+        "destination": "/useinfo.html"
+      },
+      {
+        "source": "privateinfo",
+        "destination": "/privateinfo.html"
       },
       {
         "source": "**",

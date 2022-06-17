@@ -48,7 +48,13 @@ const Account = () => {
     // 유저 수정
     const updateUser = () => {
         network.put(
-            '/userInfo/update', { isShare: userInfo.isShare, marketingAgree: userInfo.marketingAgree, emailAgree: userInfo.emailAgree, smsAgree: userInfo.smsAgree }
+            '/userInfo/update', {
+            isShare: userInfo.isShare,
+            marketingAgree: userInfo.marketingAgree,
+            emailAgree: userInfo.emailAgree,
+            smsAgree: userInfo.smsAgree,
+            postAgree: userInfo.postAgree,
+        }
         );
         setBottomSheetOpen(false);
     }
@@ -100,11 +106,9 @@ const Account = () => {
         ? <div>
             <header className='sticky top-0 left-0 bottom-0 visible opacity-100 bg-white z-100' style={{ marginBottom: '-50px' }}>
                 <div className='my-auto mx-auto py-0 px-4 relative flex items-center w-full bg-white border-b border-solid' style={{ height: '50px' }}>
-                    <div className='flex-1 flex items-center'>
-                        <div>
-                            <img src='/images/ic_back.png' onClick={() => { window.history.back() }} />
-                        </div>
-                        <div className='my-0 mx-auto text-base' style={{ letterSpacing: '-0.3px' }}>계정 관리</div>
+                    <div className='flex-1 flex items-center relative'>
+                        <img src='/images/ic_back.png' className="w-10 relative -left-4 flex-shrink-0" onClick={() => { window.history.back(); }} />
+                        <div className='absolute left-0 right-0 mx-10 text-center text-base' style={{ letterSpacing: '-0.3px' }}>계정 관리</div>
                     </div>
                 </div>
             </header>
@@ -139,13 +143,14 @@ const Account = () => {
                         </div>
                         <div>
                             <Checkbox
-                                checked={(userInfo.emailAgree && userInfo.smsAgree)}
+                                checked={(userInfo.emailAgree && userInfo.smsAgree && userInfo.postAgree)}
                                 onChange={() => {
-                                    const _changeCheck = !(userInfo.emailAgree && userInfo.smsAgree);
+                                    const _changeCheck = !(userInfo.emailAgree && userInfo.smsAgree && userInfo.postAgree);
                                     setUserInfo({
                                         ...userInfo,
                                         emailAgree: _changeCheck,
-                                        smsAgree: _changeCheck
+                                        smsAgree: _changeCheck,
+                                        postAgree: _changeCheck,
                                     });
                                 }}
                                 style={{ color: '#FF6035' }}
@@ -155,6 +160,7 @@ const Account = () => {
                         <div className='ml-9' style={{ marginTop: '-10px' }}>
                             <Checkbox checked={userInfo.emailAgree} onChange={() => setUserInfo({ ...userInfo, emailAgree: !userInfo.emailAgree })} style={{ color: '#FF6035' }} /><span className='textGray3 text-xs font-medium'>이메일</span>
                             <Checkbox checked={userInfo.smsAgree} onChange={() => setUserInfo({ ...userInfo, smsAgree: !userInfo.smsAgree })} style={{ color: '#FF6035' }} /><span className='textGray3 text-xs font-medium'>SMS</span>
+                            <Checkbox checked={userInfo.postAgree} onChange={() => setUserInfo({ ...userInfo, postAgree: !userInfo.postAgree })} style={{ color: '#FF6035' }} /><span className='textGray3 text-xs font-medium'>우편</span>
                         </div>
                     </div>
                     <div className='flex absolute bottom-0 w-full items-center justify-evenly text-sm textGray4' style={{ height: '70px' }}>

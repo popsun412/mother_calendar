@@ -51,7 +51,7 @@ export default function SignIn1(props) {
                 } else {
                 }
 
-                props.setSignupInfo({ ...props.signupInfo, address: addr, region: data.sido });
+                props.setSignupInfo({ ...props.signupInfo, address: addr, region: data.sido, zonecode: data.zonecode });
             }
         }).open();
     }
@@ -102,7 +102,7 @@ export default function SignIn1(props) {
 
             <div className="space-y-2 mb-3">
                 <span className="text-sm font-medium textGray1">주소</span>
-                <div className="text-sm font-medium p-2.5 flex items-center justify-start textGray4 bg-gray2 rounded-md" onClick={daumPostcode}>
+                <div className={`text-sm font-medium p-2.5 flex items-center justify-start bg-gray2 rounded-md ${(props.signupInfo.address == "") ? "textGray4" : ""}`} onClick={daumPostcode}>
                     <svg className="w-6 h-6 mr-2.5 textGray1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>

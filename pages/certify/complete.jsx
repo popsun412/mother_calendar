@@ -50,8 +50,8 @@ export default function CertifyComplete(props) {
             <CertifyCompleteAppbar />
             <CertifyCompleteHeader userInfo={userInfo} auth={item.auth} />
             <CertifyCompleteBody plan={item.plan} lockers={item.lockers} auth={item.auth} />
-            {(auth.currentUser.uid == item.auth.userUid) ? <div className="fixed flex items-center justify-center left-0 right-0 bottom-6">
-                <span className="px-5 py-3 bg5 text-base text-white font-medium rounded-full" onClick={() => {
+            {(auth.currentUser.uid == item.auth.userUid) ? <div className="fixed flex items-center justify-center left-0 right-0 bottom-10">
+                <span className="px-8 py-3 bg5 text-base text-white font-medium rounded-full" onClick={() => {
                     setLockers([]);
                     router.push(`/certify/edit?planAuthUid=${props.query.planAuthUid}`);
                 }}>수정하기</span>

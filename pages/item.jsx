@@ -92,9 +92,7 @@ const Item = (props) => {
                                     <img className="w-4 h-4 mr-2" src={getLocktypeImage(data.lockerType)} onClick={() => { window.history.back() }} />
                                     <span style={{ fontFamily: "SuncheonR" }}>{data.name}</span>
                                 </div>
-                                <div>
-                                    <img src='/images/ic_back.png' onClick={() => { window.history.back() }} />
-                                </div>
+                                <img src='/images/ic_back.png' className="w-10 relative -left-4 flex-shrink-0" onClick={() => { window.history.back(); }} />
                             </div>
                             : <img src='/images/ic_banner_aos.png' onClick={() => { window.history.back() }} />
                         }
@@ -121,7 +119,7 @@ const Item = (props) => {
                                 <span className='textOrange1 text-xs rounded p-1' style={{ backgroundColor: 'rgba(219, 239, 253, 0.2)' }}>{data.field}</span>
                             </div>
                             <div className='block absolute bottom-0 right-0 mr-5 mb-5'>
-                                <img src={`/images/ic_${data.bookmark ? 'bookmarked.png' : 'bookmark.png'}`} className='mx-auto' onClick={(e) => {
+                                <img src={`/images/ic_${data.bookmark ? 'bookmarked.png' : 'bookmark.png'}`} className='mx-auto w-3' onClick={(e) => {
                                     e.preventDefault();
                                     if (data.bookmark) return;
                                     addBookmark();
@@ -143,18 +141,16 @@ const Item = (props) => {
                                 recommData.map((item, idx) => {
                                     return (
                                         <Link key={item.commonPlanUid} href={`/plandetail?commonPlanUid=${item.commonPlanUid}`} passHref>
-                                            <div className='flex py-4 pr-4 text-sm mb-4 justify-between'
+                                            <div className='flex py-4 pr-4 text-sm mb-4 justify-between items-center'
                                                 style={{ borderRadius: '15px', backgroundColor: '#f8f6f5', paddingLeft: '17px' }}>
                                                 <div className='flex'>
                                                     <img src={getSubjectImage(item.subject)} className='mr-3' style={{ width: '25px', height: '25px' }} />
                                                     <div className='mx-0 my-auto'>{item.name}</div>
                                                 </div>
-                                                <div>
-                                                    <img src='/images/ic_check_circle.png' onClick={(e) => {
-                                                        e.preventDefault();
-                                                        router.push(`/plan/regist?commonPlanUid=${item.commonPlanUid}`);
-                                                    }} />
-                                                </div>
+                                                <img className='w-5' src='/images/ic_check_circle.png' onClick={(e) => {
+                                                    e.preventDefault();
+                                                    router.push(`/plan/regist?commonPlanUid=${item.commonPlanUid}`);
+                                                }} />
                                             </div>
                                         </Link>
                                     )

@@ -12,11 +12,11 @@ export default function FeedFilter(props) {
     return <>
         <div className='my-2.5 flex flex-col h-full items-stretch'>
             <div className='mx-3.5'>
-                <img src='/images/ic_close.png' className='ml-auto' onClick={() => props.setFilterOpen(false)} />
+                <img src='/images/ic_close.png' className='ml-auto w-6' onClick={() => props.setFilterOpen(false)} />
             </div>
 
             <div className='mb-7 mx-3.5'>
-                <h3 className='mb-4 text-base font-semibold'>분야 <span className="textGray4 text-xs">(필터)</span></h3>
+                <h3 className='mb-4 text-base font-semibold'>계획 분야 <span className="textGray4 text-xs">(필터)</span></h3>
                 <div className='flex flex-wrap'>
                     {["국어", "영어", "수학", "과학", "사회", "미술", "음악", "체육", "놀이", "기타", "부모"].map((_subject, index) => {
                         const _checkIndex = props.param.subjects.findIndex((_item) => _item == _subject);
@@ -28,7 +28,7 @@ export default function FeedFilter(props) {
                                     props.param.subjects.push(_subject);
                                 }
 
-                                props.setParam({ ...props.param, region: [].concat(props.param.subjects) });
+                                props.setParam({ ...props.param, subjects: [].concat(props.param.subjects) });
                             }}>
                                 <span>{_subject}</span>
                             </div>
@@ -38,7 +38,7 @@ export default function FeedFilter(props) {
             </div>
 
             <div className='mb-7 mx-3.5'>
-                <h3 className='mb-4 text-base font-semibold'>지역 <span className="textGray4 text-xs">(필터)</span></h3>
+                <h3 className='mb-4 text-base font-semibold'>사는 지역 <span className="textGray4 text-xs">(필터)</span></h3>
                 <div className='flex justify-between space-x-2'>
                     {["서울", "경기", "기타"].map((_region, index) => {
                         const _checkIndex = props.param.regions.findIndex((_item) => _item == _region);
@@ -61,7 +61,7 @@ export default function FeedFilter(props) {
             </div>
 
             <div className='mx-3.5'>
-                <h3 className='mb-4 text-base font-semibold'>연령 <span className="textGray4 text-xs">(필터)</span></h3>
+                <h3 className='mb-4 text-base font-semibold'>아이 연령 <span className="textGray4 text-xs">(필터)</span></h3>
                 <div className='w-full justify-center'>
                     <div className='my-0 mx-2.5'>
                         <Range
@@ -134,7 +134,7 @@ export default function FeedFilter(props) {
             </div>
 
             <div className='mb-7 mx-3.5'>
-                <h3 className='mb-4 text-base font-semibold'>주관심사 <span className="textGray4 text-xs">(필터)</span></h3>
+                <h3 className='mb-4 text-base font-semibold'>주 관심사 <span className="textGray4 text-xs">(필터)</span></h3>
                 <div className='flex justify-between space-x-2'>
                     {["체험", "엄마표 교육", "사교육"].map((_interest, index) => {
                         const _checkIndex = props.param.interests.findIndex((_item) => _item == _interest);
@@ -161,6 +161,14 @@ export default function FeedFilter(props) {
             <div className='block bottom-0 mb-6 mx-3.5' style={{ width: '90%' }}>
                 <div className='grid grid-cols-2 gap-x-2 text-center text-sm' style={{ height: '44px' }}>
                     <div className='flex justify-center rounded-md bg-gray2 items-center' onClick={() => {
+                        props.setParam({
+                            regions: [],
+                            subjects: [],
+                            age: [1, 4],
+                            interests: [],
+                        });
+
+                        setValues([1, 4]);
                     }}>
                         <img src='/images/ic_refresh.png' className='w-4 h-4 mr-1' />다시설정
                     </div>
