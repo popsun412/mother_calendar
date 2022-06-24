@@ -79,7 +79,6 @@ export default function SignIn2(props) {
                         onChange={changeBirth}
                         maxDate={moment().add(1, "Y").toDate()}
                         value={moment(props.signupInfo.babys[selectedIndex].birth).toDate()}
-                        auto={true}
                     >
                         <div className={`flex w-full space-x-3 text-center text-base font-normal textGray1 items-center justify-center ${props.signupInfo.babys[selectedIndex].birth == null ? "textGray4" : ""}`}>
                             <div className="flex-auto border border-color4 rounded-md py-2 col-span-3 text-center outline-none appearance-none bg-white">

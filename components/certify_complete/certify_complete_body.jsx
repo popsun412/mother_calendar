@@ -14,7 +14,7 @@ export default function CertifyCompleteBody(props) {
             </div>
             {(props.lockers ?? []).map((_locker) => {
                 return <div className="flex items-center justify-center border border-color4 rounded-md mb-4 py-3" key={_locker.itemUid}>
-                    <img className="w-4 h-4 mr-2" src={getLocktypeImage(_locker.lockerType)} />
+                    <img className="w-4 h-4 mr-2" src={getLocktypeImage(_locker.lockerType, props.plan.subject)} />
                     <span className="text-sm font-semibold textOrange4">{_locker.name}</span>
                 </div>
             })}
@@ -34,6 +34,6 @@ export default function CertifyCompleteBody(props) {
                     backgroundPosition: "center center"
                 }}
             />}
-        <TextareaAutosize value={props.auth.review} className='mt-5 px-5 text-sm font-normal flex w-full resize-none outline-none text-center' readOnly />
+        <TextareaAutosize value={props.auth.review} className='mt-5 px-5 text-sm font-normal flex w-full resize-none outline-none text-center pb-28' readOnly />
     </div>
 }

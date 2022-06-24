@@ -111,7 +111,7 @@ const EditBook = (props) => {
     const disabled = () => {
         if (itemInfo.name.trim() == "") return true;
         if (itemInfo.status != 0 && itemInfo.status != 1 && itemInfo.status != 2) return true;
-        if (["국어", "영어", "수학", "과학", "사회", "미술", "음악", "체육", "놀이", "기타", "부모"].findIndex((_item) => _item == itemInfo.subject) < 0) return true;
+        if (["국어", "영어", "수학", "과학", "사회", "미술", "음악", "체육", "생활", "기타", "부모"].findIndex((_item) => _item == itemInfo.subject) < 0) return true;
         if (["대전집", "소전집", "단행본", "기타"].findIndex((_item) => _item == itemInfo.field) < 0) return true;
 
         return false;
@@ -188,6 +188,7 @@ const EditBook = (props) => {
                                 },
                             }}
                         />
+
                         <ToggleButtonGroup
                             value={itemInfo.status}
                             aria-label="status" className='w-full'>
@@ -291,13 +292,13 @@ const EditBook = (props) => {
                             </span>
 
                             <span
-                                className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${itemInfo.subject === '놀이' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}
+                                className={`flex text-sm py-2 px-2 border border-solid rounded justify-center ${itemInfo.subject === '생활' ? 'border-orange5 textOrange5' : 'textGray4 border-gray3'}`}
                                 onClick={() => setItemInfo({
                                     ...itemInfo,
-                                    subject: "놀이"
+                                    subject: "생활"
                                 })}
                             >
-                                <img src='/images/category9.png' className={`mr-1 ${itemInfo.subject == '놀이' ? '' : 'grayscale'}`} style={{ width: '17px', height: '17px' }} />놀이
+                                <img src='/images/category9.png' className={`mr-1 ${itemInfo.subject == '생활' ? '' : 'grayscale'}`} style={{ width: '17px', height: '17px' }} />생활
                             </span>
 
                             <span

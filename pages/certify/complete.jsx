@@ -18,6 +18,7 @@ import CertifyCompleteBody from "../../components/certify_complete/certify_compl
 
 import { useRecoilState } from "recoil";
 import { certifyLockerState } from "../../states/certify_locker";
+import { certifyUploadImageState, certifyRviewState } from "../../states/certify_info";
 
 export default function CertifyComplete(props) {
     const auth = getAuth();
@@ -27,6 +28,8 @@ export default function CertifyComplete(props) {
     const [item, setItem] = useState(null);
     const [userInfo, setUserInfo] = useState(null);
     const [lockers, setLockers] = useRecoilState(certifyLockerState);
+    const [uploadImage, setUploadImage] = useRecoilState(certifyUploadImageState);
+    const [review, setReview] = useRecoilState(certifyRviewState);
 
     const getItem = async () => {
         const _result = await network.get(`/auth/${props.query.planAuthUid}`);
@@ -52,6 +55,8 @@ export default function CertifyComplete(props) {
             <CertifyCompleteBody plan={item.plan} lockers={item.lockers} auth={item.auth} />
             {(auth.currentUser.uid == item.auth.userUid) ? <div className="fixed flex items-center justify-center left-0 right-0 bottom-10">
                 <span className="px-8 py-3 bg5 text-base text-white font-medium rounded-full" onClick={() => {
+                    setUploadImage({ image_file: null, preview_URL: '' });
+                    setReview("");
                     setLockers([]);
                     router.push(`/certify/edit?planAuthUid=${props.query.planAuthUid}`);
                 }}>수정하기</span>

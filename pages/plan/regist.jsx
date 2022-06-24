@@ -11,12 +11,14 @@ import CircleLoading from "../../components/common/circle_loading";
 import CustomMobileDatepicker from "../../components/common/custom_mobile_datepicker";
 import CustomTimepicker from "../../components/common/custom_timepicker";
 import { ChevronRight } from "@mui/icons-material"
+import CircleLoadingOpacity from "../../components/common/circle_loading_opacity";
 
 // firebase
 import { getAuth } from "firebase/auth";
 
 export default function Regist(props) {
     const router = useRouter();
+    const [saving, setSaving] = useState(false);
     const [load, setLoad] = useState(false);
     const auth = getAuth();
 
@@ -44,8 +46,6 @@ export default function Regist(props) {
         const _result = await network.get(`/plan/commonPlan/${props.query.commonPlanUid}`);
 
         if (_result.status == 200) {
-
-
             setChecked(_result.data.repeatDay.length > 0);
 
             registInfo.name = _result.data.name;
@@ -92,6 +92,8 @@ export default function Regist(props) {
     // 계획 등록
     const planRegist = async () => {
         if (!registActive()) return;
+        if (saving) return;
+        setSaving(true);
 
         registInfo.repeatDay = checked ? registInfo.repeatDay : null;
 
@@ -111,13 +113,19 @@ export default function Regist(props) {
         if (_result.status == 200) {
             router.push(`/calendar`);
         }
+
+        setSaving(false);
     }
 
     useEffect(() => {
         auth.onAuthStateChanged(async (_user) => {
             if (_user) {
-                if (props.query.commonPlanUid) await getCommonPlan();
-                setLoad(true);
+                try {
+                    if (props.query.commonPlanUid) await getCommonPlan();
+                    setLoad(true);
+                } catch (error) {
+                    router.back();
+                }
             } else {
                 setUserInfo(null);
                 router.push('/');
@@ -140,9 +148,8 @@ export default function Regist(props) {
         if (registInfo.name.trim() == "") return false;
         if (registInfo.subject == null) return false;
         if (checked && registInfo.repeatDay.length == 0) return false;
-        if (registInfo.startDate == null || registInfo.endDate == null) return false;
-        if (registInfo.startTime != null && registInfo.endTime == null) return false;
-        if (registInfo.endTime != null && registInfo.startTime == null) return false;
+        if (registInfo.startDate == null) return false;
+        if (checked && registInfo.endDate == null) return false;
 
         return true;
     }
@@ -169,9 +176,12 @@ export default function Regist(props) {
                             className="bg-transparent outline-none w-full px-10 text-sm text-black text-center"
                             placeholder='계획명을 입력해주세요. (최대 20자)'
                             value={registInfo.name}
-                            maxLength={30}
+                            maxLength={20}
                             disabled={common}
-                            onChange={(e) => setRegistInfo({ ...registInfo, name: e.currentTarget.value })}
+                            onChange={(e) => {
+                                if (e.currentTarget.value.length > 20) return;
+                                setRegistInfo({ ...registInfo, name: e.currentTarget.value })
+                            }}
                         />
                     </div>
                     {/* 분야 */}
@@ -210,7 +220,7 @@ export default function Regist(props) {
                                     checked={checked}
                                     onChange={checked => {
                                         setChecked(checked);
-                                        if (!checked) setRegistInfo({ ...registInfo, endDate: registInfo.startDate });
+                                        if (!checked) setRegistInfo({ ...registInfo, endDate: null });
                                     }}
                                     offColor="#e0e0e0"
                                     onColor="#3C81E1"
@@ -247,7 +257,7 @@ export default function Regist(props) {
                                     onChange={(date) => setRegistInfo({ ...registInfo, endDate: date })}
                                     value={registInfo.endDate}
                                     auto={true}
-                                    minDate={registInfo.startDate}
+                                    minDate={checked ? moment(registInfo.startDate).add(1, "d").toDate() : registInfo.startDate}
                                 >
                                     <div className='flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center'>
                                         <span className={`text-xs font-medium pl-2 ${registInfo.endDate == null ? "textGray4" : ""}`}>{registInfo.endDate == null ? "종료날짜" : moment(registInfo.endDate).format("YYYY년 M월 D일")}</span>
@@ -344,6 +354,7 @@ export default function Regist(props) {
                 <CircleLoading />
             </div>
         }
+        {(saving) ? <CircleLoadingOpacity /> : <></>}
     </>)
 }
 

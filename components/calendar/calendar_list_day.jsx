@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import { useState, useEffect } from 'react';
-import PlanTitle from './plan_title';
 import moment from "moment";
 import Link from "next/link";
 import { useRouter } from 'next/router';
@@ -13,12 +12,16 @@ import { getAuth } from "firebase/auth";
 // 글로벌 상태관리
 import { useRecoilState } from "recoil";
 import { certifyLockerState } from "../../states/certify_locker";
+import { certifyUploadImageState, certifyRviewState } from "../../states/certify_info";
 
 export default function PlanListDay(props) {
     const auth = getAuth();
     const router = useRouter();
 
     const [lockers, setLockers] = useRecoilState(certifyLockerState);
+    const [uploadImage, setUploadImage] = useRecoilState(certifyUploadImageState);
+    const [review, setReview] = useRecoilState(certifyRviewState);
+
     const [ToastStatus, setToastStatus] = useState(false);
 
     useEffect(() => {
@@ -46,18 +49,13 @@ export default function PlanListDay(props) {
         if (_item.isAuth) return false;
 
         const _startUnixTime = moment(moment(props.selectedDate).format("YYYY-MM-DD")).unix();
-        const _endUnixTime = _startUnixTime + 86400;
 
         if (_now.unix() < _startUnixTime) return false;
 
         // 인증 안함
         if (!_item.isAuth) {
-            // 종료된 앱인지 확인
-            if (moment().unix() >= moment(_item.endDate).add(1, 'd').unix()) return false;
-
-
             // 해당 요일이 맞는지 확인
-            const _day = parseInt(moment().format("d"));
+            const _day = parseInt(moment(props.selectedDate).format("d"));
             if (_item.repeatDay != null && _item.repeatDay.findIndex((_repeatDay) => _repeatDay == _day) < 0) return false;
         }
 
@@ -72,7 +70,6 @@ export default function PlanListDay(props) {
         if (aCheck < bCheck) return 1;
         if (aCheck > bCheck) return -1;
         return 0;
-
     });
 
     return <>
@@ -103,6 +100,8 @@ export default function PlanListDay(props) {
 
                                 // 인증하기 이동
                                 setLockers([]);
+                                setUploadImage({ image_file: null, preview_URL: '' });
+                                setReview("");
                                 let _href = { pathname: '/plan/certify', query: { planUid: _item.planUid, date: moment(props.selectedDate).format("YYYYMMDD") } }
                                 router.push(_href);
                             }}
@@ -110,8 +109,8 @@ export default function PlanListDay(props) {
                             {(_item.isAuth) ? <img src="/images/checkV.png" className="w-4 h-3" alt="체크" /> : <></>}
                         </div>
 
-                        <div className="flex-auto flex items-center">
-                            <div className="flex flex-col items-stretch">
+                        <div className="flex-auto flex items-center overflow-hidden">
+                            <div className="flex flex-col items-stretch w-full">
                                 <div className="flex">
                                     <div
                                         className={`inline-flex flex-shrink-0 max-h-6 justify-center items-center px-1 py-0.5 mr-2 rounded text-white text-xs ${props.fontWeight ? props.fontWeight : ""}`}
@@ -119,7 +118,7 @@ export default function PlanListDay(props) {
                                     >
                                         <span>{_item.subject}</span>
                                     </div>
-                                    <span className={`text-base font-semibold ${(!_item.isAuth ?? true) ? "" : "textGray4 line-through"}`}>{_item.name}</span>
+                                    <span className={`text-base font-semibold whitespace-nowrap break-words text-ellipsis overflow-hidden ${(!_item.isAuth ?? true) ? "" : "textGray4 line-through"}`}>{_item.name}</span>
                                 </div>
                                 <span className={`text-xs pt-1 ${_item.isAuth ? "textGray4" : "textGray3"}`}>{`${timeFormat(_item.startTime)} ~ ${timeFormat(_item.endTime)}`}</span>
                             </div>

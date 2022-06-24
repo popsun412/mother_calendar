@@ -10,9 +10,9 @@ export default function PlanListWeek(props) {
 
     const calDate = (value) => {
         if (value < 0) {
-            return moment(moment(props.selectedDate).add(value * -1, 'd').format("YYYY-MM-DD"), 'YYYY-MM-DD').locale("ko");
+            return moment(moment(props.selectedDate).add(value * -1, 'd').format("YYYY-MM-DD"), 'YYYY-MM-DD');
         } else {
-            return moment(moment(props.selectedDate).subtract(value, 'd').format("YYYY-MM-DD"), 'YYYY-MM-DD').locale("ko");
+            return moment(moment(props.selectedDate).subtract(value, 'd').format("YYYY-MM-DD"), 'YYYY-MM-DD');
         }
     }
 
@@ -33,8 +33,8 @@ export default function PlanListWeek(props) {
     }, [props.selectedDate])
 
     const checkStatus = (_item, _day, _dayIndex) => {
-        const _startDate = moment(_item.startDate, "YYYY-MM-DD").locale("ko");
-        const _endDate = moment(_item.endDate, 'YYYY-MM-DD').locale('ko').add(1, 'd');
+        const _startDate = moment(_item.startDate, "YYYY-MM-DD");
+        const _endDate = moment(_item.endDate, 'YYYY-MM-DD').add(1, 'd');
 
         // 0 안함, 100% 2 계획 있는날, 3계획 없는날
 
@@ -45,8 +45,13 @@ export default function PlanListWeek(props) {
         if (_day.date.unix() < _startDate.unix()) return 3;
         if (_day.date.unix() > _endDate.unix()) return 3;
 
-        // 실행완료
-        const _checkAuth = _item.auths.findIndex((_auth) => moment(_auth.authDt, 'YYYY-MM-DD').locale('ko').unix() == _day.date.unix());
+        const _checkAuth = _item.auths.findIndex((_auth) => {
+            const authUnixTime = moment(_auth.authDt).unix();
+            const _dayStartUnixTime = _day.date.unix();
+
+            return (_dayStartUnixTime <= authUnixTime && authUnixTime < (_dayStartUnixTime + 60 * 60 * 24));
+        });
+
         if (_checkAuth >= 0) return 1;
 
         // 반복요일 체크
@@ -87,8 +92,8 @@ export default function PlanListWeek(props) {
 
                                     let type = 3;
 
-                                    const _startDate = moment(_item.startDate, 'YYYY-MM-DD').locale('ko');
-                                    const _endDate = moment(_item.endDate, 'YYYY-MM-DD').locale('ko').add(1, 'd');
+                                    const _startDate = moment(_item.startDate, 'YYYY-MM-DD');
+                                    const _endDate = moment(_item.endDate, 'YYYY-MM-DD').add(1, 'd');
 
                                     // 이전 계획 X
                                     if (_startDate.unix() > _day.date.unix()) type = 3;
@@ -102,7 +107,7 @@ export default function PlanListWeek(props) {
                                     }
 
                                     // 실행완료
-                                    const _checkAuth = _item.auths.findIndex((_auth) => moment(_auth.authDt, 'YYYY-MM-DD').locale('ko').unix() == _day.date.unix());
+                                    const _checkAuth = _item.auths.findIndex((_auth) => moment(_auth.authDt, 'YYYY-MM-DD').unix() == _day.date.unix());
                                     if (_checkAuth >= 0) type = 1;
 
                                     return <WeekPlanDayInfo key={index} day={_day.day} type={checkStatus(_item, _day, index)} />

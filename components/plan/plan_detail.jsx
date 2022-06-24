@@ -13,6 +13,7 @@ import Link from "next/link";
 // 글로벌 상태관리
 import { useRecoilState } from "recoil";
 import { certifyLockerState } from "../../states/certify_locker";
+import { certifyUploadImageState, certifyRviewState } from "../../states/certify_info";
 
 // firebase
 import { getAuth } from "firebase/auth";
@@ -22,6 +23,8 @@ export default function PlaneDetail(props) {
 
     const router = useRouter();
     const [lockers, setLockers] = useRecoilState(certifyLockerState);
+    const [uploadImage, setUploadImage] = useRecoilState(certifyUploadImageState);
+    const [review, setReview] = useRecoilState(certifyRviewState);
 
     const status = () => {
         const _endDate = moment(props.plan.endDate).add(1, 'd');
@@ -114,7 +117,7 @@ export default function PlaneDetail(props) {
                     : <></>}
                 <div className="bg-gray2 rounded-md px-5 py-3.5 mb-5">
                     {
-                        (props.plan.repeatDay == null)
+                        (props.plan.repeatDay == null || props.plan.startDate == props.plan.endDate)
                             ? <p className="textGray2 font-semibold text-base mb-3">1회</p>
                             : <p className="textGray2 font-semibold text-base mb-3">{`주 ${(props.plan.repeatDay ?? []).length}회  |  매주 ${repeatDayFormat()}`}</p>
                     }
@@ -124,7 +127,7 @@ export default function PlaneDetail(props) {
                             <img src="/images/calendar.png" alt="캘린더이미지" className="w-3.5 h-3.5 mr-2" />
 
                             {
-                                (props.plan.repeatDay == null)
+                                (props.plan.repeatDay == null || props.plan.startDate == props.plan.endDate)
                                     ? <span>{`${moment(props.plan.startDate).format("YYYY년 M월 D일")}`}</span>
                                     : <span>{`${moment(props.plan.startDate).format("YYYY년 M월 D일")} - ${moment(props.plan.endDate).format("YYYY년 M월 D일")}`}</span>
                             }
@@ -188,6 +191,8 @@ export default function PlaneDetail(props) {
                 {(auth.currentUser.uid == props.plan.createUserUid) ? <div className="fixed flex items-center justify-center left-0 right-0 bottom-6">
                     {(status() == 0) ? <span className="px-5 py-3 bg5 text-base text-white font-medium rounded-full" onClick={() => {
                         setLockers([]);
+                        setUploadImage({ image_file: null, preview_URL: '' });
+                        setReview("");
                         router.push(`/plan/certify?planUid=${props.plan.planUid}`);
                     }}>오늘 하루 인증하기</span> : <></>}
                     {(status() == 1) ? <span className="px-5 py-3 bg-gray4 text-base text-white font-medium rounded-full fixed bottom-6">오늘 인증을 완료했어요!</span> : <></>}

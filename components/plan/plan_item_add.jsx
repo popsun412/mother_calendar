@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import BookCard from "../locker/book_card";
 import EduCard from "../locker/edu_card";
 import PlaceCard from "../locker/place_card";
+import AcademyCard from "../locker/academy_card";
 import network from "../../util/network";
 import Link from "next/link";
 
@@ -124,7 +125,7 @@ export default function PlanItemAdd(props) {
                             {items.map((_item) => {
                                 if (planLockerType == "책장") return <BookCard key={_item.itemUid} item={_item} onClick={() => addLocker(_item)} />
                                 if (planLockerType == "교구장") return <EduCard key={_item.itemUid} item={_item} onClick={() => addLocker(_item)} />
-                                if (planLockerType == "학원") return <PlaceCard key={_item.itemUid} item={_item} onClick={() => addLocker(_item)} />
+                                if (planLockerType == "학원") return <AcademyCard key={_item.itemUid} item={_item} onClick={() => addLocker(_item)} />
                                 if (planLockerType == "체험") return <PlaceCard key={_item.itemUid} item={_item} onClick={() => addLocker(_item)} />
                             })}
 

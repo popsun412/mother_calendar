@@ -59,6 +59,10 @@ const Experience = () => {
         if (ToastStatus) setTimeout(() => setToastStatus(false), 1000);
     }, [ToastStatus]);
 
+    useEffect(() => {
+        getItems();
+    }, [param])
+
     return (<>
         <InfiniteScroll
             dataLength={items.length}

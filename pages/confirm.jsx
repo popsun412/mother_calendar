@@ -88,7 +88,7 @@ const Confirm = () => {
         <div>
             <header className='sticky top-0 left-0 right-0 opacity-100 visible' style={{ marginBottom: '-50px' }}>
                 <div className='flex items-center relative mx-auto my-0 box-border py-4 w-full bg-white' style={{ height: '50px' }}>
-                    <img src='/images/ic_back.png' className="w-10 relative -left-4 flex-shrink-0" onClick={() => { window.history.back(); }} />
+                    <img src='/images/ic_back.png' className="w-10 relative flex-shrink-0" onClick={() => { window.history.back(); }} />
                     <div className='absolute left-0 right-0 mx-10 flex justify-center items-center'>
                         <span className='px-1.5 py-1 bg5 text-white rounded text-xs mr-2'>{info?.subject ?? ""}</span>
                         <span className='text-sm font-medium'>{info?.name ?? ""}</span>
@@ -107,7 +107,9 @@ const Confirm = () => {
                         {items.map((_item) => {
                             return <div className='flex mb-6' key={_item.uid}>
                                 <div className='flex items-center h-9 overflow-hidden'>
-                                    <div className='mr-2 block absolute' style={{ width: '22px', height: '22px' }}>
+                                    <div className='mr-2 block absolute' style={{ width: '22px', height: '22px' }} onClick={() => {
+                                        router.push({ pathname: '/calendar', query: { friend: _item.uid } });
+                                    }}>
                                         <div
                                             className="rounded-full"
                                             style={{

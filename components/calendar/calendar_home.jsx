@@ -66,8 +66,8 @@ export default function CalendarHome(props) {
         if (type == 2) {
             const _weekResult = await network.post('/calendar/weekPlans', {
                 userUid: props.selectedUserUid,
-                startDate: _dates[0],
-                endDate: _dates[1],
+                startDate: moment(_dates[0]).format("YYYY-MM-DD"),
+                endDate: moment(_dates[1]).add(1, "d").format("YYYY-MM-DD"),
             });
 
             if (!_weekResult.data.isShare) setOpen(false);
@@ -88,17 +88,14 @@ export default function CalendarHome(props) {
                 <CircleLoading />
             </div>
             : <div className="bg-gray2 flex-auto overflow-y-auto flex flex-col p-5">
-                {(items.length > 0)
-                    ? <div className="flex text-xs textGray2">
-                        <div className="flex bg-white py-1.5 px-7 rounded-t-xl mr-1" onClick={() => setType(1)}>
-                            <span>일간</span>
-                        </div>
-                        <div className="flex py-1.5 px-7 rounded-t-xl" style={{ backgroundColor: "#E0E0E0" }} onClick={() => setType(2)}>
-                            <span>주간</span>
-                        </div>
+                <div className="flex text-xs textGray2">
+                    <div className="flex bg-white py-1.5 px-7 rounded-t-xl mr-1" onClick={() => setType(1)}>
+                        <span>일간</span>
                     </div>
-                    : <></>
-                }
+                    <div className="flex py-1.5 px-7 rounded-t-xl" style={{ backgroundColor: "#E0E0E0" }} onClick={() => setType(2)}>
+                        <span>주간</span>
+                    </div>
+                </div>
                 {(open)
                     ? <>
                         {(items.length == 0) ? <EmptyPlan /> : <></>}

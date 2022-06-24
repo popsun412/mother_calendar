@@ -5,22 +5,29 @@ import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
 import network from '../../util/network';
 import LockerItem from "../locker/locker_item";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const BookshelfInstock = (props) => {
+    const [hasMore, setHasMore] = useState(true);
     const router = useRouter();
     const { params, activeTab } = props;
     const [data, setData] = useState([]);
 
     const getData = async () => {
         const res = await network.post('/locker/items', { ...params, userUid: props.userUid });
-        console.log(res);
-
         res.data ? setData(res.data) : null;
+    }
+
+    const moreItem = async () => {
+        const res = await network.post('/locker/items', { ...params, userUid: props.userUid, offset: data.length });
+        if (res.data.length == 0) setHasMore(false);
+        setData(data.concat(res.data));
     }
 
     useEffect(() => {
         if (activeTab == 0) {
             params['status'] = 0;
+            setHasMore(true);
             getData();
         }
     }, [params, activeTab]);
@@ -35,7 +42,11 @@ const BookshelfInstock = (props) => {
         }
     }
 
-    return (
+    return <InfiniteScroll
+        dataLength={data.length}
+        next={moreItem}
+        hasMore={hasMore}
+    >
         <div className='mx-5 pt-5 space-y-5 flex flex-col'>
             {data.length > 0
                 ? data.map((item, index) => <LockerItem key={index} item={item} onDelete={() => onDelete(item, index)} isMe={props.isMe} />)
@@ -50,7 +61,7 @@ const BookshelfInstock = (props) => {
                 </div>
             }
         </div>
-    )
+    </InfiniteScroll>
 }
 
 export default BookshelfInstock;

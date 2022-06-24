@@ -14,6 +14,7 @@ import network from "../util/network";
 import FeedFilter from '../components/feed/feed_filter';
 import FeedReport from '../components/feed/feed_report';
 import { Drawer } from "@mui/material";
+import { CircularProgress } from "@material-ui/core";
 
 export default function Feed() {
     const [planAuthUid, setPlanAuthUid] = useState();
@@ -25,6 +26,7 @@ export default function Feed() {
         interests: [],
     });
 
+    const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [items, setItems] = useState([]);
 
@@ -36,14 +38,20 @@ export default function Feed() {
     const [load, setLoad] = useState();
 
     const getItems = async () => {
-        moreITems(true);
+        if (loading) return;
+        setLoading(true);
 
         const _result = await network.post(`/feeds`, { ...param, offset: 0 });
         if (_result.data.length == 0) setHasMore(false);
+
+        moreItems(true);
+        setLoading(false);
         setItems(_result.data);
     }
 
-    const moreITems = async () => {
+    const moreItems = async () => {
+        if (!auth.currentUser) return;
+
         const _result = await network.post(`/feeds`, { ...param, offset: items.length });
         if (_result.data == 0) setHasMore(false);
         setItems(items.concat(_result.data));
@@ -60,6 +68,10 @@ export default function Feed() {
         });
     }, []);
 
+    useEffect(async () => {
+        if (auth.currentUser) await getItems();
+    }, [param])
+
     const onReport = async (contents) => {
         const _result = await network.post('/feed/report', { planAuthUid, contents });
         setPlanAuthUid(null);
@@ -69,11 +81,11 @@ export default function Feed() {
     return (load) ? <>
         <InfiniteScroll
             dataLength={items.length}
-            next={moreITems}
+            next={moreItems}
             hasMore={hasMore}
         >
             <FeedHeader setFilterOpen={setFilterOpen} />
-            <div className="pt-4 pb-20 flex flex-col space-y-10" style={{ marginTop: 50 }}>
+            {(!loading) ? <div className="pt-4 pb-20 flex flex-col space-y-10" style={{ marginTop: 50 }}>
                 {items.map((_item, idx) => {
                     if (_item == null) return <></>;
 
@@ -82,12 +94,14 @@ export default function Feed() {
                         setDeclarationOpen(true);
                     }} />
                 })}
-            </div>
+            </div> : <div className="flex w-screen h-screen justify-center items-center">
+                <CircularProgress style={{ color: "#FF6035" }} />
+            </div>}
             <Navigation path={'feed'} />
         </InfiniteScroll>
         <Fragment>
             <Drawer open={filterOpen} onClose={() => setFilterOpen(false)} anchor='right' PaperProps={{ sx: { width: "80%" } }}>
-                <FeedFilter setFilterOpen={setFilterOpen} param={param} setParam={setParam} getItems={getItems} />
+                <FeedFilter setFilterOpen={setFilterOpen} param={param} setParam={setParam} />
             </Drawer>
         </Fragment>
         <Fragment>

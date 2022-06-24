@@ -33,7 +33,6 @@ export default function MyPlanList() {
                 await getItem();
                 setLoad(true);
             } else {
-                // setUserInfo(null);
                 router.push('/');
             }
         });

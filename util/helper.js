@@ -54,20 +54,19 @@ export function getSubjectImage(_subject) {
     if (_subject == "미술") return '/images/category6.png';
     if (_subject == "음악") return '/images/category7.png';
     if (_subject == "체육") return '/images/category8.png';
-    if (_subject == "놀이") return '/images/category9.png';
+    if (_subject == "생활") return '/images/category9.png';
     if (_subject == "체험") return '/images/category10.png';
     if (_subject == "체험") return '/images/category10.png';
     if (_subject == "기타") return '/images/category11.png';
     if (_subject == "부모") return '/images/category12.png';
 }
 
-export function getLocktypeImage(lockerType) {
+export function getLocktypeImage(lockerType, subject) {
     if (lockerType == "책장") return '/images/locker/locker1.png';
     if (lockerType == "교구장") return '/images/locker/locker2.png';
     if (lockerType == "학원") return '/images/locker/locker3.png';
     if (lockerType == "체험") return '/images/locker/locker4.png';
-
-    console.log(lockerType);
+    if (subject == "부모") return '/images/category12.png';
 }
 
 export function calcTime(authDt) {

@@ -54,6 +54,12 @@ const PlanConfirm = (props) => {
                                             paddingTop: "100%",
                                             backgroundPosition: "center center"
                                         }}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+
+                                            router.push({ pathname: '/calendar', query: { friend: item.userUid } });
+                                        }}
                                     />
                                 </span>
                             </div>

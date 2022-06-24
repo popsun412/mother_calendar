@@ -8,7 +8,7 @@ export default function PlanTitle(props) {
             >
                 <span>{props.subject}</span>
             </div>
-            <span className={`text-sm ${(props.active ?? true) ? "" : "textGray4 line-through"}`}>{props.title}</span>
+            <span className={`text-sm whitespace-nowrap break-words text-ellipsis overflow-hidden ${(props.active ?? true) ? "" : "textGray4 line-through"}`}>{props.title}</span>
         </div>
     )
 }

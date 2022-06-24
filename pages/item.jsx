@@ -89,7 +89,7 @@ const Item = (props) => {
                         {scrollPosition > 60
                             ? <div className='flex mx-5 w-full items-center relative'>
                                 <div className='absolute flex justify-center items-center mx-3 left-0 right-0'>
-                                    <img className="w-4 h-4 mr-2" src={getLocktypeImage(data.lockerType)} onClick={() => { window.history.back() }} />
+                                    <img className="w-4 h-4 mr-2" src={getLocktypeImage(data.lockerTyp, data.subject)} onClick={() => { window.history.back() }} />
                                     <span style={{ fontFamily: "SuncheonR" }}>{data.name}</span>
                                 </div>
                                 <img src='/images/ic_back.png' className="w-10 relative -left-4 flex-shrink-0" onClick={() => { window.history.back(); }} />
@@ -118,14 +118,14 @@ const Item = (props) => {
                                 <span className='textOrange1 text-xs rounded p-1 mr-1' style={{ backgroundColor: 'rgba(219, 239, 253, 0.2)' }}>{data.subject}</span>
                                 <span className='textOrange1 text-xs rounded p-1' style={{ backgroundColor: 'rgba(219, 239, 253, 0.2)' }}>{data.field}</span>
                             </div>
-                            <div className='block absolute bottom-0 right-0 mr-5 mb-5'>
+                            {(data.subject != "부모") ? <div className='block absolute bottom-0 right-0 mr-5 mb-5'>
                                 <img src={`/images/ic_${data.bookmark ? 'bookmarked.png' : 'bookmark.png'}`} className='mx-auto w-3' onClick={(e) => {
                                     e.preventDefault();
                                     if (data.bookmark) return;
                                     addBookmark();
                                 }} />
                                 <p className='text-xs text-white text-center'>{data.count}</p>
-                            </div>
+                            </div> : <></>}
                         </div>
                     </section>
                     <section className='mx-5 mb-8'>
@@ -159,7 +159,7 @@ const Item = (props) => {
                         </div>
                     </section> : <></>}
                 </main>
-                <aside className='fixed bottom-0 left-0 right-0 z-100'>
+                {(data.subject != "부모") ? <aside className='fixed bottom-0 left-0 right-0 z-100'>
                     <div className='relative mx-auto my-0 bg-white'>
                         <nav className='flex items-center box-border relative' style={{ height: '90px' }} onClick={(e) => {
                             e.preventDefault();
@@ -170,7 +170,7 @@ const Item = (props) => {
                                 style={{ letterSpacing: '-0.28px' }}>내 보관함에 등록하기</span>
                         </nav>
                     </div>
-                </aside>
+                </aside> : <></>}
             </div>
             {ToastStatus ? <Toast msg={'보관함에 등록되었습니다.'} /> : <></>}
         </>

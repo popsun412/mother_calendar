@@ -106,13 +106,20 @@ const Calendar = (props) => {
                     userInfo={userInfo}
                     setUserInfo={setUserInfo}
                 />
-                {(auth.currentUser.uid == selectedUserUid) ? <div className="flex fixed right-5 bottom-20">
-                    <Fab color="primary" aria-label="add" style={{ backgroundColor: '#ff6035' }} onClick={() => {
+                {(auth.currentUser.uid == selectedUserUid)
+                    // ? <div className="flex fixed right-5 bottom-20">
+                    //     <Fab color="primary" aria-label="add" style={{ backgroundColor: '#ff6035' }} onClick={() => {
+                    //         router.push('/plan/regist');
+                    //     }}>
+                    //         <Add />
+                    //     </Fab>
+                    // </div>
+                    ? <div className='fixed right-5 bottom-20' onClick={() => {
                         router.push('/plan/regist');
                     }}>
-                        <Add />
-                    </Fab>
-                </div> : <></>}
+                        <img src='/images/ic_float.png' style={{ width: 72, height: 72 }} />
+                    </div>
+                    : <></>}
                 <Navigation path={'calendar'} />
             </div>
             // 로딩 바

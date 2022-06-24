@@ -74,7 +74,7 @@ const HomeCategory = () => {
             id: 9,
             imgUrl: '/images/category9.png',
             url: '/category?id=9',
-            title: '놀이',
+            title: '생활',
             recommend: false,
         },
         {

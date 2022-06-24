@@ -5,6 +5,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import TextField from '@mui/material/TextField';
 import { ko } from "date-fns/locale";
 import { useState } from 'react';
+import moment from 'moment';
 
 export default function CustomMobileDatepicker({ children, ...props }) {
     const [open, setOpen] = useState(false);
@@ -21,7 +22,7 @@ export default function CustomMobileDatepicker({ children, ...props }) {
                     onChange={(date) => { props.onChange(date); }}
                     onClose={() => { setOpen(false) }}
                     maxDate={props.maxDate ?? null}
-                    minDate={props.minDate ?? null}
+                    minDate={props.minDate ?? moment(0).toDate()}
                     renderInput={(params) => <TextField
                         id="selcedtedDatePicker"
                         size="small"

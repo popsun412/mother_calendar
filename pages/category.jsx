@@ -3,7 +3,7 @@ import CategoryHeader from '../components/category/category_header';
 import CategoryBody from '../components/category/category_body';
 
 const Category = (props) => {
-    const ref = useRef()
+    const ref = useRef();
 
     const type = props.query.type;
     const category = props.query.id;

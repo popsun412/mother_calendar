@@ -58,7 +58,7 @@ export default function LockerItem(props) {
         <div className="flex-auto flex flex-col overflow-hidden">
             <span className="overflow-hidden whitespace-nowrap break-words text-ellipsis font-semibold " style={{ fontSize: '15px', letterSpacing: '-0.3px' }}>{props.item.name}</span>
             {(props.item.status >= 1) ? <>
-                <div className='textGray3 mb-1' style={{ fontSize: '13px' }}>{moment(props.item.regDt).format("YYYY.MM")} {regString()}</div>
+                {props.item.regDt ? <div className='textGray3 mb-1' style={{ fontSize: '13px' }}>{moment(props.item.regDt).format("YYYY.MM")} {regString()}</div> : <></>}
                 <div className='flex mb-1'>
                     {(props.item.score >= 1) ? <img src='/images/ic_star_color.png' /> : <img src='/images/ic_star_grey.png' />}
                     {(props.item.score >= 2) ? <img src='/images/ic_star_color.png' /> : <img src='/images/ic_star_grey.png' />}

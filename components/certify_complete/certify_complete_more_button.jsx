@@ -7,9 +7,13 @@ import moment from "moment";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useRecoilState } from "recoil";
 import { certifyLockerState } from "../../states/certify_locker";
+import { certifyUploadImageState, certifyRviewState } from "../../states/certify_info";
 
 export default function CertifyCompleteMoreButton(props) {
     const [lockers, setLockers] = useRecoilState(certifyLockerState);
+    const [uploadImage, setUploadImage] = useRecoilState(certifyUploadImageState);
+    const [review, setReview] = useRecoilState(certifyRviewState);
+
     const router = useRouter();
 
     const [anchorEl, setAnchorEl] = useState(null);
@@ -36,6 +40,8 @@ export default function CertifyCompleteMoreButton(props) {
         <Menu anchorEl={anchorEl} open={open} onClose={handleClose} >
             <MenuItem onClick={() => {
                 setLockers([]);
+                setUploadImage({ image_file: null, preview_URL: '' });
+                setReview("");
                 router.push(`/certify/edit?planAuthUid=${props.auth.planAuthUid}`);
             }}>수정</MenuItem>
             <MenuItem onClick={planDelete}>삭제</MenuItem>

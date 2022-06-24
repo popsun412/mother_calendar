@@ -166,13 +166,12 @@ const Account = () => {
                     <div className='flex absolute bottom-0 w-full items-center justify-evenly text-sm textGray4' style={{ height: '70px' }}>
                         <div onClick={() => auth.signOut()}>로그아웃</div>
                         <div>|</div>
-                        <div onClick={() => {
+                        <div onClick={async () => {
                             const _result = confirm("회원정보, 계획/실행/인증 내역 즉시 삭제되고, 복원할 수 없습니다.\n회원탈퇴하시겠습니까?");
                             if (!_result) return;
 
-                            deleteUser(auth.currentUser);
                             network.delete('/userInfo');
-                            router.push('/');
+                            auth.signOut();
                         }}>회원탈퇴</div>
                     </div>
                     <Drawer

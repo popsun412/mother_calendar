@@ -9,6 +9,7 @@ import network from "../../util/network";
 import { getLocktypeImage } from "../../util/helper";
 import { useRecoilState } from "recoil";
 import { selectedLockerState } from "../../states/certify_locker";
+import { certifyUploadImageState, certifyRviewState } from "../../states/certify_info";
 import CircleLoadingOpacity from "../../components/common/circle_loading_opacity";
 import moment from 'moment';
 
@@ -19,13 +20,8 @@ export default function PlanCertify(props) {
     const router = useRouter();
 
     const [selectedLockerIndex, setSelectedLockerIndex] = useRecoilState(selectedLockerState);
-
-    const [uploadImage, setUploadImage] = useState({
-        image_file: null,
-        preview_URL: ''
-    });
-
-    const [review, setReview] = useState(props.item?.auth?.review ?? "");
+    const [uploadImage, setUploadImage] = useRecoilState(certifyUploadImageState);
+    const [review, setReview] = useRecoilState(certifyRviewState);
     const [image, setImage] = useState(props.item?.auth?.image ?? null);
 
     const saveImage = (e) => {
@@ -77,6 +73,7 @@ export default function PlanCertify(props) {
 
     useEffect(() => {
         if (router.query.date) setDate(moment(router.query.date));
+        if (review == "") setReview(props.item?.auth?.review ?? "");
     }, [router])
 
     return <>
@@ -87,7 +84,7 @@ export default function PlanCertify(props) {
             <span className="flex-auto text-center text-base font-medium textGray1">실행 인증</span>
             <span className={`pr-4 text-base font-medium textOrange5`} onClick={onSave}>완료</span>
         </div>
-        <div className='px-5 relative'>
+        <div className='px-5 relative pb-20'>
             <div className="flex mt-4 mb-6 items-center">
                 <PlanTitle subject={props.plan.subject} />
                 <p className="textGray1 text-lg font-semibold">{props.plan.name}</p>
@@ -97,7 +94,7 @@ export default function PlanCertify(props) {
                     setSelectedLockerIndex(idx);
                     router.push("/plan/items");
                 }}>
-                    <img className="w-4 h-4 mr-2" src={getLocktypeImage(_locker.lockerType)} />
+                    <img className="w-4 h-4 mr-2" src={getLocktypeImage(_locker.lockerType, props.item?.plan?.subject ?? "")} />
                     <span className="text-sm font-semibold textOrange4">{_locker.name}</span>
                 </div>
             })}

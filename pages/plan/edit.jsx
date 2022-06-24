@@ -61,10 +61,11 @@ export default function Edit(props) {
             planInfo.commonPlanUid = _result.data.commonPlanUid;
             planInfo.repeatDay = _result.data.repeatDay ?? [];
             planInfo.startDate = moment(_result.data.startDate).toDate();
-            planInfo.endDate = moment(_result.data.endDate).toDate();
+            planInfo.endDate = (_result.data.startDate == _result.data.endDate) ? null : moment(_result.data.endDate).toDate();
             if (_result.data.recommTerm != null) planInfo.endDate = moment(planInfo.endDate).add('M', _result.data.recommTerm).toDate();
             planInfo.startTime = _result.data.startTime == null ? null : moment(_result.data.startTime, "HH:mm:ss");
-            planInfo.endTime = _result.data.endTime == null ? null : moment(_result.data.endTime, "HH:mm:ss")
+            planInfo.endTime = _result.data.endTime == null ? null : moment(_result.data.endTime, "HH:mm:ss");
+            planInfo.isAuth = _result.data.auths.length > 0;
 
             if (_result.data.startTime == null && _result.data.endTime == null) setOpenTime(false);
             setCommon(_result.data.commonPlanUid != null);
@@ -159,9 +160,8 @@ export default function Edit(props) {
     // active 체크
     const isActive = () => {
         if (checked && (planInfo.repeatDay == null || planInfo.repeatDay.length == 0)) return false;
-        if (planInfo.startDate == null || planInfo.endDate == null) return false;
-        if (planInfo.startTime != null && planInfo.endTime == null) return false;
-        if (planInfo.endTime != null && planInfo.startTime == null) return false;
+        if (planInfo.startDate == null) return false;
+        if (checked && planInfo.endDate == null) return false;
         if (checked && moment(planInfo.startDate).format("YYYY-MM-DD") == moment(planInfo.endDate).format("YYYY-MM-DD")) return false;
 
         return true;
@@ -191,7 +191,7 @@ export default function Edit(props) {
                                 <Switch
                                     checked={checked}
                                     onChange={checked => {
-                                        if (!checked) setPlanInfo({ ...planInfo, endDate: planInfo.startDate });
+                                        if (!checked) setPlanInfo({ ...planInfo, endDate: null });
                                         setChecked(checked);
                                     }}
                                     offColor="#e0e0e0"
@@ -215,9 +215,10 @@ export default function Edit(props) {
                                     });
                                 }}
                                 value={planInfo.startDate}
-                                disabled={moment().unix() > moment(planInfo.startDate).unix()}
+                                minDate={moment().toDate()}
+                                disabled={planInfo.isAuth && moment().unix() > moment(planInfo.startDate).unix()}
                                 auto={true}
-                                maxDate={planInfo.endDate}
+                                maxDate={planInfo.endDate == null ? null : moment(planInfo.endDate).subtract(1, "d").toDate()}
                             >
                                 <div className='flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center'>
                                     <span className="text-xs font-medium pl-2">{moment(planInfo.startDate).format("YYYY년 M월 D일")}</span>
@@ -240,11 +241,11 @@ export default function Edit(props) {
                                         });
                                     }}
                                     value={planInfo.endDate}
-                                    minDate={moment().toDate()}
+                                    minDate={moment(planInfo.startDate).add(1, "d").toDate()}
                                     auto={true}
                                 >
                                     <div className='flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center'>
-                                        <span className="text-xs font-medium pl-2">{moment(planInfo.endDate).format("YYYY년 M월 D일")}</span>
+                                        <span className="text-xs font-medium pl-2">{planInfo.endDate == null ? "종료날짜" : moment(planInfo.endDate).format("YYYY년 M월 D일")}</span>
                                         <ChevronRight className="rotate-90" />
                                     </div>
                                 </CustomMobileDatepicker>

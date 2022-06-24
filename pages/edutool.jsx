@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState, Fragment, useRef } from 'react';
 import Link from 'next/link';
 import { Drawer } from '@material-ui/core';
 
@@ -21,6 +21,7 @@ import { edutoolActiveState } from "../states/locker_states";
 import GlobalStyles from '@mui/material/GlobalStyles';
 
 const EduTool = (props) => {
+    const [totalCount, setTotalCount] = useState(0);
     const [filterOpen, setFilterOpen] = useState(false);
     const [lockerDrawerOpen, setLockerDrawerOpen] = useState(false);
 
@@ -45,6 +46,7 @@ const EduTool = (props) => {
     useEffect(() => {
         auth.onAuthStateChanged(async (_user) => {
             if (_user) {
+                getTotalCount();
                 await getUser();
                 setLoad(true);
             } else {
@@ -57,6 +59,16 @@ const EduTool = (props) => {
         if (props.query.userUid == undefined || props.query.userUid == "") return true;
         return (auth.currentUser?.uid ?? "") == props.query.userUid;
     };
+
+    // 모든 아이템 갖고오기
+    const getTotalCount = async () => {
+        try {
+            const _result = await network.get(`/lockerTimeCount?lockerType=${"교구장"}`);
+            setTotalCount(_result.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const obj = {
         0: <EduToolInstock params={params} activeTab={activeTab} userUid={props.query.userUid} isMe={isMe()} />,
@@ -77,7 +89,7 @@ const EduTool = (props) => {
                             <div className='flex'>
                                 <img src='/images/filter.png' onClick={() => setFilterOpen(true)} style={{ width: 18 }} />
                             </div>
-                            <div className='absolute left-0 right-0 mx-20 text-base font-medium text-center' style={{ letterSpacing: '-0.3px' }}>교구장</div>
+                            <div className='absolute left-0 right-0 mx-20 text-base font-medium text-center' style={{ letterSpacing: '-0.3px' }}>교구장 ({totalCount}개)</div>
                         </div>
                     </header>
                     <main className='mt-12 pb-20'>
@@ -90,9 +102,7 @@ const EduTool = (props) => {
                                 style={{ lineHeight: '40px' }} onClick={() => { setActiveTab(2) }}>판매완료</div>
                         </div>
                         <section>
-                            {
-                                obj[activeTab]
-                            }
+                            {obj[activeTab]}
                         </section>
                     </main>
                     {isMe() ? <Link href={`/addtool`} passHref>

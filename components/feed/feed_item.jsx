@@ -40,10 +40,10 @@ const FeedItem = (props) => {
 
     return <div>
         <div className='mx-5 mb-6 flex justify-between items-start'>
-            <div className='flex'>
-                <div className='mr-3 w-10 h-10' onClick={() => {
-                    router.push({ pathname: '/calendar', query: { friend: props.item.userUid } });
-                }}>
+            <div className='flex' onClick={() => {
+                router.push({ pathname: '/calendar', query: { friend: props.item.userUid } });
+            }}>
+                <div className='mr-3 w-10 h-10'>
                     <div
                         className="rounded-full"
                         style={{
@@ -71,7 +71,7 @@ const FeedItem = (props) => {
             <p className="textGray1 text-lg font-semibold">{props.item.plan.name}</p>
         </div>
         {props.item.items.map((_locker) => <div key={_locker.itemUid} className='mx-5 mb-4 flex border border-solid border-color4 rounded-md items-center justify-center' style={{ height: '38px' }}>
-            <img className="w-4 h-4 mr-2" src={getLocktypeImage(_locker.lockerType)} />
+            <img className="w-4 h-4 mr-2" src={getLocktypeImage(_locker.lockerType, props.item.subject)} />
             <div className='textOrange5' style={{ fontSize: '15px', letterSpacing: '-0.3px', lineHeight: '38px' }}>{_locker.name}</div>
         </div>)}
         {props.item.image ? <div

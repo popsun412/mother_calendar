@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 export default function EdutoolFilterDrawer(props) {
     const [filterParams, setFilterParams] = useState(JSON.parse(JSON.stringify(props.params)));
 
-    const subjects = ['국어', '영어', '수학', '과학', '사회', '미술', '음악', '체육', '놀이', '기타', '부모'];
+    const subjects = ['국어', '영어', '수학', '과학', '사회', '미술', '음악', '체육', '생활', '기타', '부모'];
     const fields = ['교구', '교재', '영상', '게임', "블록", "퍼즐", "재료", "기타"];
     const _orders = [
         { value: "reg", label: "구매순" },

@@ -78,6 +78,10 @@ const CategoryItem = (props) => {
         if (getting) await moreITems();
     }, [getting])
 
+    useEffect(() => {
+        getItems();
+    }, [param])
+
     return <>
 
         <GlobalStyles
@@ -113,14 +117,13 @@ const CategoryItem = (props) => {
                                         <div className='block relative'>
                                             <img src={item.image} className='rounded-md' />
                                             {item.bookmark
-                                                ? <img src='/images/ic_bookmarked.png' className='block absolute bottom-0 right-0 pr-2.5 pb-3 w-3' />
-                                                : <img src='/images/ic_bookmark.png' className='block absolute bottom-0 right-0 pr-2.5 pb-3 w-3' onClick={(e) => {
+                                                ? <img src='/images/ic_bookmarked.png' className='absolute bottom-3 right-2.5 w-4' />
+                                                : <img src='/images/ic_bookmark.png' className='absolute bottom-3 right-2.5 w-4' onClick={(e) => {
                                                     e.preventDefault();
                                                     if (item.bookmark) return;
                                                     addBookmark(item.commonItemUid, idx)
                                                 }} />
                                             }
-
                                         </div>
                                         <div className='my-2 text-base font-semibold'>{item.name}</div>
                                         <div>
@@ -138,7 +141,7 @@ const CategoryItem = (props) => {
         {ToastStatus ? <Toast msg={'보관함에 등록되었습니다.'} /> : <></>}
         <Fragment>
             <Drawer open={filterOpen} onClose={() => setFilterOpen(false)} anchor='right'>
-                <CategoryItemFilter setFilterOpen={setFilterOpen} param={param} setParam={setParam} getItems={getItems} />
+                <CategoryItemFilter setFilterOpen={setFilterOpen} param={param} setParam={setParam} />
             </Drawer>
         </Fragment>
     </>

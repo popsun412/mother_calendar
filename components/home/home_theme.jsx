@@ -58,42 +58,41 @@ const HomeTheme = (props) => {
                 </div>
             </div>
             <div>
-                <Swiper slidesPerView={3}>
-                    {!loading ?
-                        data.map((item, idx) => {
-                            return <SwiperSlide key={idx}>
-                                <Link href={{ pathname: '/item', query: { commonItemUid: item.commonItemUid } }} passHref>
-                                    <div className='w-24'>
-                                        <div className='block relative '>
-                                            <img src={item.image} className='rounded-md' style={{ width: '94px', height: '94px' }} />
-                                            <img src={`/images/ic_${item.bookmark ? 'bookmarked.png' : 'bookmark.png'}`} className='block absolute bottom-0 right-0 mr-2 mb-1.5 w-3' onClick={(e) => {
-                                                e.preventDefault();
-                                                if (item.bookmark) return;
-                                                addBookmark(item.commonItemUid, idx)
-                                            }} />
-                                        </div>
-                                        <div className='text-xs leading-snug mt-1.5' style={{ letterSpacing: '-0.26px' }}>
-                                            <p className='w-full whitespace-nowrap break-words overflow-hidden text-ellipsis m-0'>
-                                                {item.name}
-                                            </p>
-                                        </div>
-                                        {(item.subject == "체험")
-                                            ? <div className='flex mt-1'>
-                                                <span className='py-1 px-1.5 rounded text-center text-xs textGray3 mr-1 bg5' style={{ backgroundColor: '#f0f5f8' }}>{item.region}</span>
-                                            </div>
-                                            : <div className='flex mt-1'>
-                                                <span className='py-1 px-1.5 rounded text-center text-xs textGray3 mr-1 bg5' style={{ backgroundColor: '#f0f5f8' }}>{item.subject}</span>
-                                                <span className='py-1 px-1.5 rounded text-center text-xs textGray3 mr-1 bg5' style={{ backgroundColor: '#f0f5f8' }}>{item.field}</span>
-                                            </div>
-                                        }
+
+                {!loading ?
+                    <div className='w-full flex overflow-x-auto space-x-2 scrollbar-hide'>
+                        {data.map((item, idx) => {
+                            return <Link href={{ pathname: '/item', query: { commonItemUid: item.commonItemUid } }} passHref key={item.commonItemUid}>
+                                <div className='w-24 flex-shrink-0'>
+                                    <div className='block relative '>
+                                        <img src={item.image} className='rounded-md' style={{ width: '94px', height: '94px' }} />
+                                        <img src={`/images/ic_${item.bookmark ? 'bookmarked.png' : 'bookmark.png'}`} className='block absolute bottom-0 right-0 mr-2 mb-1.5 w-3' onClick={(e) => {
+                                            e.preventDefault();
+                                            if (item.bookmark) return;
+                                            addBookmark(item.commonItemUid, idx)
+                                        }} />
                                     </div>
-                                </Link>
-                            </SwiperSlide>
-                        })
-                        : <div className="flex justify-center items-center h-36">
-                            <CircularProgress size={50} style={{ color: "#FF6035" }} />
-                        </div>}
-                </Swiper>
+                                    <div className='text-xs leading-snug mt-1.5' style={{ letterSpacing: '-0.26px' }}>
+                                        <p className='w-full whitespace-nowrap break-words overflow-hidden text-ellipsis m-0'>
+                                            {item.name}
+                                        </p>
+                                    </div>
+                                    {(item.subject == "체험")
+                                        ? <div className='flex mt-1'>
+                                            <span className='py-1 px-1.5 rounded text-center text-xs textGray3 mr-1 bg5' style={{ backgroundColor: '#f0f5f8' }}>{item.region}</span>
+                                        </div>
+                                        : <div className='flex mt-1'>
+                                            <span className='py-1 px-1.5 rounded text-center text-xs textGray3 mr-1 bg5' style={{ backgroundColor: '#f0f5f8' }}>{item.subject}</span>
+                                            <span className='py-1 px-1.5 rounded text-center text-xs textGray3 mr-1 bg5' style={{ backgroundColor: '#f0f5f8' }}>{item.field}</span>
+                                        </div>
+                                    }
+                                </div>
+                            </Link>
+                        })}
+                    </div>
+                    : <div className="flex justify-center items-center h-36">
+                        <CircularProgress size={50} style={{ color: "#FF6035" }} />
+                    </div>}
             </div>
         </section>
         {ToastStatus ? <Toast msg={'보관함에 등록되었습니다.'} /> : <></>}

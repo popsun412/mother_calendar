@@ -5,8 +5,10 @@ import React, { useState, useEffect } from 'react';
 import network from '../../util/network';
 import { useRouter } from 'next/router';
 import LockerItem from '../locker/locker_item';
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const BookshelfSell = (props) => {
+    const [hasMore, setHasMore] = useState(true);
     const router = useRouter();
     const { params, activeTab } = props;
     const [data, setData] = useState([]);
@@ -18,9 +20,16 @@ const BookshelfSell = (props) => {
         res.data ? setData(res.data) : null;
     }
 
+    const moreItem = async () => {
+        const res = await network.post('/locker/items', { ...params, userUid: props.userUid, offset: data.length });
+        if (res.data.length == 0) setHasMore(false);
+        setData(data.concat(res.data));
+    }
+
     useEffect(() => {
         if (activeTab == 2) {
             params['status'] = 2;
+            setHasMore(true);
             getData();
         }
     }, [params, activeTab]);
@@ -35,7 +44,11 @@ const BookshelfSell = (props) => {
         }
     }
 
-    return (
+    return <InfiniteScroll
+        dataLength={data.length}
+        next={moreItem}
+        hasMore={hasMore}
+    >
         <div className='mx-5 pt-5 space-y-5 flex flex-col'>
             {
                 data.length > 0
@@ -51,7 +64,7 @@ const BookshelfSell = (props) => {
                     </div>
             }
         </div>
-    )
+    </InfiniteScroll>
 }
 
 export default BookshelfSell;

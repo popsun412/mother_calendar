@@ -22,6 +22,7 @@ import { bookshelfActiveState } from "../states/locker_states";
 import GlobalStyles from '@mui/material/GlobalStyles';
 
 const Bookshelf = (props) => {
+    const [totalCount, setTotalCount] = useState(0);
     const [filterOpen, setFilterOpen] = useState(false);
     const [lockerDrawerOpen, setLockerDrawerOpen] = useState(false);
     const [load, setLoad] = useState(false);
@@ -37,9 +38,20 @@ const Bookshelf = (props) => {
         return (auth.currentUser?.uid ?? "") == props.query.userUid;
     };
 
+    // 모든 아이템 갖고오기
+    const getTotalCount = async () => {
+        try {
+            const _result = await network.get(`/lockerTimeCount?lockerType=${"책장"}`);
+            setTotalCount(_result.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         auth.onAuthStateChanged(async (_user) => {
             if (_user) {
+                getTotalCount();
                 setLoad(true);
             } else {
                 router.push('/');
@@ -68,7 +80,7 @@ const Bookshelf = (props) => {
                                 <div className='flex'>
                                     <img src='/images/filter.png' onClick={() => setFilterOpen(true)} style={{ width: 18 }} />
                                 </div>
-                                <div className='absolute left-0 right-0 mx-20 text-base font-medium text-center' style={{ letterSpacing: '-0.3px' }}>책장</div>
+                                <div className='absolute left-0 right-0 mx-20 text-base font-medium text-center' style={{ letterSpacing: '-0.3px' }}>책장 ({totalCount}개)</div>
                             </div>
                         </div>
                     </header>

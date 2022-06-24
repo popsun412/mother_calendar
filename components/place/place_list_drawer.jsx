@@ -91,7 +91,7 @@ export default function PlaceListDrawer(props) {
                 ? <div className='mb-7 mx-3.5'>
                     <h3 className='mb-4 text-base font-semibold'>분야 <span className="textGray4 text-xs">(필터)</span></h3>
                     <div className='flex flex-wrap gap-x-1.5 gap-y-2'>
-                        {["국어", "영어", "수학", "과학", "사회", "미술", "음악", "체육", "놀이", "기타", "부모"].map((_subject, index) => {
+                        {["국어", "영어", "수학", "과학", "사회", "미술", "음악", "체육", "생활", "기타", "부모"].map((_subject, index) => {
                             const _checkIndex = props.param.subject.findIndex((_checkItem) => _checkItem == _subject);
 
                             return (

@@ -16,7 +16,7 @@ const CategoryMenu = (props) => {
     }, [])
 
     const initIndex = () => {
-        return ["전체", "국어", "영어", "수학", "과학", "사회", "미술", "음악", "체육", "놀이"].findIndex((_item) => _item == props.category);
+        return ["전체", "국어", "영어", "수학", "과학", "사회", "미술", "음악", "체육", "생활"].findIndex((_item) => _item == props.category);
     }
 
     return (
@@ -104,12 +104,12 @@ const CategoryMenu = (props) => {
                     </div>
                 </SwiperSlide>
                 <SwiperSlide>
-                    <div className={`p-3 flex flex-col textGray2 font-normal text-xs ${"놀이" === props.category ? 'bg-gray2' : ''}`}
+                    <div className={`p-3 flex flex-col textGray2 font-normal text-xs ${"생활" === props.category ? 'bg-gray2' : ''}`}
                         style={{ borderRadius: "1.25rem", width: "3.25rem" }} onClick={() => {
-                            router.replace({ pathname: '/category', query: { type: "교육", id: "놀이" } });
+                            router.replace({ pathname: '/category', query: { type: "교육", id: "생활" } });
                         }}>
                         <img src='/images/category9.png' className="m-auto w-7 h-7" />
-                        <span className='text-center mt-2 textGray2 font-normal text-xs'>{"놀이"}</span>
+                        <span className='text-center mt-2 textGray2 font-normal text-xs'>{"생활"}</span>
                     </div>
                 </SwiperSlide>
             </Swiper>
