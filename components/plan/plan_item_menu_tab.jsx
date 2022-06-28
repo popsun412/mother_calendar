@@ -18,7 +18,7 @@ export default function PlanItemMenuTab(props) {
     ]
 
     return <>
-        <div className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-60" onClick={() => props.setMenuOpen(false)} />
+        <div className="fixed max-w-500 top-0 left-0 right-0 bottom-0 bg-black bg-opacity-60" onClick={() => props.setMenuOpen(false)} />
         <div className="fixed right-0 bottom-0 flex">
             <div className="absolute flex flex-col right-4 bottom-6 items-end">
                 <div className="flex flex-col items-end w-28 space-y-5 mr-1.5 mb-7">

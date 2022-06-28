@@ -41,5 +41,5 @@ export default function Congrats() {
 
     return load
         ? <></>
-        : <div className="h-screen w-screen"><CircleLoading /></div>
+        : <div className="h-screen w-full"><CircleLoading /></div>
 }

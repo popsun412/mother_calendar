@@ -40,10 +40,10 @@ export default function MyPlanList() {
 
     return <>
         {(load) ?
-            <div className="w-screen h-screen flex flex-col">
+            <div className="w-full h-screen flex flex-col">
                 <CalendarFullPlan items={items} />
             </div>
-            : <div className="h-screen w-screen"><CircleLoading /></div>
+            : <div className="h-screen w-full"><CircleLoading /></div>
         }
     </>
 }

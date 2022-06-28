@@ -8,7 +8,7 @@ const Result = () => {
     const [keyword, setKeyword] = useState(router.query.value);
 
     return (
-        <div className="w-screen h-screen overflow-y-auto scrollbar-hide">
+        <div className="w-full h-screen overflow-y-auto scrollbar-hide">
             <ResultHeader keyword={keyword} setKeyword={setKeyword} />
             <ResultBody keyword={keyword} setKeyword={setKeyword} />
         </div>

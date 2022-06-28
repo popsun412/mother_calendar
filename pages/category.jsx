@@ -10,7 +10,7 @@ const Category = (props) => {
     const activeTab = props.query.activeTab ?? 0;
 
     return (
-        <div className='w-screen h-screen overflow-y-auto scrollbar-hide' ref={ref}>
+        <div className='w-full h-screen overflow-y-auto scrollbar-hide' ref={ref}>
             <CategoryHeader type={type} />
             <CategoryBody type={type} category={category} activeTab={activeTab} scrollCheckRef={ref} />
         </div>

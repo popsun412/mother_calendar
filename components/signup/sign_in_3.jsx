@@ -65,7 +65,7 @@ export default function SignIn3(props) {
     }
 
     return <>
-        <div className="h-screen w-screen flex flex-col overflow-y-auto">
+        <div className="h-screen w-full flex flex-col overflow-y-auto">
             <SignupHeader step={props.step} setStep={props.setStep} />
             <div className="pt-4 px-5 text-xl font-normal textGray1" style={{ fontFamily: "Bazzi" }}>
                 사용하실 이메일과 비밀번호를 입력해주세요.

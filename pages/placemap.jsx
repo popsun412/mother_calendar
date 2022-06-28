@@ -95,8 +95,8 @@ const PlaceMap = (props) => {
             next={moreItem}
             hasMore={hasMore}
         >
-            <div className='w-screen h-screen overflow-y-auto scrollbar-hide'>
-                <header className='fixed top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{ marginBottom: '-50px' }}>
+            <div className='w-full h-screen overflow-y-auto scrollbar-hide'>
+                <header className='fixed max-w-500 top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{ marginBottom: '-50px' }}>
                     <div className='relative flex items-center w-full justify-between px-4 bg-white border-b border-solid border-gray3' style={{ height: '50px' }}>
                         <div className="flex items-center">
                             <img src='/images/ic_back.png' className="w-10 relative -left-4 flex-shrink-0" onClick={() => { router.push('/calendar'); }} />
@@ -126,7 +126,7 @@ const PlaceMap = (props) => {
                     </section>
                 </main>
                 {isMe() ? <Link href={"/addplace"} passHref>
-                    <div className='fixed bottom-0 right-0 z-100'>
+                    <div className='fixed flex justify-end pr-4 max-w-500 bottom-0 z-100'>
                         <img src='/images/ic_float.png' style={{ width: 72, height: 72 }} />
                     </div>
                 </Link> : <></>}
@@ -142,7 +142,7 @@ const PlaceMap = (props) => {
                 </Fragment>
             </div >
         </InfiniteScroll>
-        : <div className="h-screen w-screen"><CircleLoading /></div>
+        : <div className="h-screen w-full"><CircleLoading /></div>
 }
 
 export default PlaceMap;

@@ -57,8 +57,8 @@ export default function Neighbor() {
 
     return (<>
         {(load) ?
-            <div className="w-screen h-screen flex flex-col"><FriendList items={items} /></div>
-            : <div className="h-screen w-screen"><CircleLoading /></div>
+            <div className="w-full h-screen flex flex-col"><FriendList items={items} /></div>
+            : <div className="h-screen w-full"><CircleLoading /></div>
         }
     </>)
 }

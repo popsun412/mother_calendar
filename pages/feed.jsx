@@ -94,7 +94,7 @@ export default function Feed() {
                         setDeclarationOpen(true);
                     }} />
                 })}
-            </div> : <div className="flex w-screen h-screen justify-center items-center">
+            </div> : <div className="flex w-full h-screen justify-center items-center">
                 <CircularProgress style={{ color: "#FF6035" }} />
             </div>}
             <Navigation path={'feed'} />
@@ -112,5 +112,5 @@ export default function Feed() {
                 <FeedReport onReport={onReport} />
             </Drawer>
         </Fragment>
-    </> : <div className="w-screen h-screen flex justify-center items-center"><CircleLoading /></div>
+    </> : <div className="w-full h-screen flex justify-center items-center"><CircleLoading /></div>
 }

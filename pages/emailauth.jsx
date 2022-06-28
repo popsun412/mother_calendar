@@ -21,7 +21,7 @@ export default function EmailAuth() {
     }, [])
 
     return (load) ? <>
-        <div className="flex flex-col w-screen h-screen overflow-y-auto">
+        <div className="flex flex-col w-full h-screen overflow-y-auto">
             <div className="h-12 py-0.5 relative flex justify-center items-center">
                 <p className="text-center text-sm font-medium">이메일 인증</p>
             </div>

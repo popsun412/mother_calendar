@@ -61,7 +61,7 @@ const Home = () => {
                 <HomeTheme />
             </main>
             <Navigation path={'home'} />
-        </div> : <div className="h-screen w-screen">
+        </div> : <div className="h-screen w-full">
             <CircleLoading />
         </div>
 

@@ -61,7 +61,7 @@ export default function PlanIndex() {
         <div className="">
             <PlaneDetail plan={plan} />
         </div>
-        : <div className="h-screen w-screen">
+        : <div className="h-screen w-full">
             <CircleLoading />
         </div>
 }

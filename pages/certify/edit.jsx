@@ -46,7 +46,7 @@ export default function CertifyEdit(props) {
         <>
             <PlanCertify plan={item.plan} lockers={lockers} item={item} />
         </>
-        : <div className="h-screen w-screen">
+        : <div className="h-screen w-full">
             <CircleLoading />
         </div>
 }

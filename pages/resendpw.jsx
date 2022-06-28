@@ -28,7 +28,7 @@ export default function ResendPw() {
     }
 
     return <>
-        <div className="flex flex-col w-screen h-screen overflow-y-auto">
+        <div className="flex flex-col w-full h-screen overflow-y-auto">
             <div className="h-12 py-0.5 relative flex justify-center items-center">
                 {(!sendEmailStatus) ? <div className="absolute left-5" onClick={() => router.back()}><ArrowBackIos /></div> : <></>}
                 <p className="text-center font-medium">비밀번호 재설정</p>

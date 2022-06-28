@@ -76,7 +76,7 @@ const Calendar = (props) => {
     return (<>
         {(load) ?
             // 화면
-            <div className="w-screen h-screen flex flex-col">
+            <div className="w-full h-screen flex flex-col">
                 <CalendarTop
                     selectedUserUid={selectedUserUid}
                     setSelectedUserUid={setSelectedUserUid}
@@ -107,14 +107,7 @@ const Calendar = (props) => {
                     setUserInfo={setUserInfo}
                 />
                 {(auth.currentUser.uid == selectedUserUid)
-                    // ? <div className="flex fixed right-5 bottom-20">
-                    //     <Fab color="primary" aria-label="add" style={{ backgroundColor: '#ff6035' }} onClick={() => {
-                    //         router.push('/plan/regist');
-                    //     }}>
-                    //         <Add />
-                    //     </Fab>
-                    // </div>
-                    ? <div className='fixed right-5 bottom-20' onClick={() => {
+                    ? <div className='fixed flex justify-end pr-4 max-w-500 bottom-20 z-100' onClick={() => {
                         router.push('/plan/regist');
                     }}>
                         <img src='/images/ic_float.png' style={{ width: 72, height: 72 }} />
@@ -124,7 +117,7 @@ const Calendar = (props) => {
             </div>
             // 로딩 바
             :
-            <div className="h-screen w-screen">
+            <div className="h-screen w-full">
                 <CircleLoading />
             </div>
         }

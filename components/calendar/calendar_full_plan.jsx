@@ -18,12 +18,13 @@ export default function CalendarFullPlan(props) {
     return <>
         <GlobalStyles
             styles={{
+                'html': { backgroundColor: "#fff" },
                 'body': { backgroundColor: "#f2f2f2" }
             }}
         />
 
         <div className="flex flex-col overflow-auto">
-            <div className="fixed left-0 right-0 py-2.5 first-letter:border-b border-gary3 bg-white">
+            <div className="fixed max-w-500 py-2.5 first-letter:border-b border-gary3 bg-white">
                 <span className="absolute top-0 bottom-0 right-0 left-0 flex items-center justify-center text-base font-medium textGray1 z-40">전체 계획 관리</span>
                 <svg className="relative w-7 h-8 ml-1 textGray2 z-50" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" onClick={() => router.back()}>
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>

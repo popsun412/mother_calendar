@@ -100,7 +100,7 @@ export default function PlanItemAdd(props) {
     }
 
     return (load) ?
-        <div className="flex flex-col w-screen h-screen overflow-y-auto">
+        <div className="flex flex-col w-full h-screen overflow-y-auto">
             <div className="relative py-4 items-center justify-center">
                 <span className="absolute mx-4 top-0 right-10 bottom-0 left-10 flex justify-center items-center" style={{ zIndex: 10 }}>보관함</span>
 
@@ -139,12 +139,12 @@ export default function PlanItemAdd(props) {
                                     </div>
                                 </div> : <></>}
                         </>}
-                    {(!props.menuOpen) ? <div className='fixed bottom-6 right-4 z-100' onClick={() => props.setMenuOpen(true)}>
+                    {(!props.menuOpen) ? <div className='fixed flex justify-end max-w-500 pr-4 bottom-6 z-100' onClick={() => props.setMenuOpen(true)}>
                         <img src='/images/ic_float.png' style={{ width: 72, height: 72 }} />
                     </div> : <></>}
                 </div>
             </div>
-        </div> : <div className="w-screen h-screen flex justify-center items-center">
+        </div> : <div className="w-full h-screen flex justify-center items-center">
             <CircleLoading />
         </div>
 

@@ -8,7 +8,7 @@ import MainThem from "../components/main/main_ theme";
 
 export default function Main() {
     return (
-        <div className="w-screen h-screen overflow-y-auto scrollbar-hide">
+        <div className="w-full h-screen overflow-y-auto scrollbar-hide">
             {/* <MainTop />
             <MainBanner />
             <MainSubject />

@@ -70,7 +70,7 @@ const Experience = () => {
             hasMore={hasMore}
         >
             <div>
-                <header className='fixed top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{ marginBottom: '-50px' }}>
+                <header className='fixed max-w-500 top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{ marginBottom: '-50px' }}>
                     <div className='my-auto mx-auto py-0 px-4 relative flex items-center w-full bg-white border-b border-solid border-gray3' style={{ height: '50px' }}>
                         <div className='flex-1 flex items-center justify-between'>
                             <div className="absolute left-0 right-0 mx-10 text-center" style={{ letterSpacing: '-0.3px' }}>체험</div>

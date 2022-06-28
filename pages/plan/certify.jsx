@@ -66,7 +66,7 @@ export default function Certify(props) {
                 </div>
             </div> : <></>} */}
         </>
-        : <div className="h-screen w-screen">
+        : <div className="h-screen w-full">
             <CircleLoading />
         </div>
 }

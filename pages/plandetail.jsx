@@ -162,7 +162,7 @@ const Plan2 = () => {
                     <PlanItem subject={subject} field={field} />
                     <PlanTab commonPlanUid={data.commonPlanUid} />
                 </main>
-                <aside className='fixed bottom-0 left-0 right-0 z-100'>
+                <aside className='fixed max-w-500 bottom-0 left-0 right-0 z-100'>
                     <div className='relative mx-auto my-0 bg-white'>
                         <nav className='flex items-center box-border relative' style={{ height: '90px' }} onClick={() => {
                             if (data.isMyPlan) return;
@@ -173,7 +173,7 @@ const Plan2 = () => {
                         </nav>
                     </div>
                 </aside>
-            </> : <div className="h-screen w-screen">
+            </> : <div className="h-screen w-full">
                 <CircleLoading />
             </div>
     )

@@ -26,7 +26,7 @@ export default function Home() {
 
   return (load) ?
     <Login />
-    : <div className="h-screen w-screen">
+    : <div className="h-screen w-full">
       <CircleLoading />
     </div>
 }

@@ -310,7 +310,7 @@ export default function Edit(props) {
                 </div>
                 {(saving) ? <CircleLoadingOpacity /> : <></>}
             </div>
-            : <div className="w-screen h-screen flex items-center justify-center">
+            : <div className="w-full h-screen flex items-center justify-center">
                 <CircleLoading />
             </div>
         }

@@ -150,7 +150,7 @@ const MyPage = () => {
             </main>
             <Navigation path={'mypage'} />
         </div>
-        : <div className="h-screen w-screen"><CircleLoading /></div>
+        : <div className="h-screen w-full"><CircleLoading /></div>
 }
 
 export default MyPage;

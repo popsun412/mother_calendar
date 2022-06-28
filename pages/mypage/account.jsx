@@ -184,7 +184,7 @@ const Account = () => {
                 </section>
             </main>
         </div>
-        : <div className="h-screen w-screen"><CircleLoading /></div>
+        : <div className="h-screen w-full"><CircleLoading /></div>
 }
 
 export default Account;

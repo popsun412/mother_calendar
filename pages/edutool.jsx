@@ -108,7 +108,7 @@ const EduTool = (props) => {
                         </section>
                     </main>
                     {isMe() ? <Link href={`/addtool`} passHref>
-                        <div className='fixed bottom-0 right-0 z-100'>
+                        <div className='fixed flex justify-end pr-4 max-w-500 bottom-0 z-100'>
                             <img src='/images/ic_float.png' style={{ width: 72, height: 72 }} />
                         </div>
                     </Link> : <></>}
@@ -126,7 +126,7 @@ const EduTool = (props) => {
                     </Drawer>
                 </Fragment>
             </>
-            : <div className="w-screen h-screen"><CircleLoading /></div>
+            : <div className="w-full h-screen"><CircleLoading /></div>
     }</>)
 }
 

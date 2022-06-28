@@ -11,7 +11,7 @@ const Navigation = (props) => {
 
     return (
         <>
-            <aside className='fixed inset-x-0 bottom-0 z-100'>
+            <aside className='fixed max-w-500 inset-x-0 bottom-0 z-100'>
                 <div className='relative bg-white border border-solid my-0 mx-auto' style={{ borderColor: '#f9f9f9' }}>
                     <nav className='flex relative box-border' style={{ height: '70px' }}>
                         <Link href='/home'>

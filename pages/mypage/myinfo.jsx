@@ -72,7 +72,7 @@ const MyInfo = () => {
                 </main>
             </div>
         </>
-        : <div className="h-screen w-screen"><CircleLoading /></div>
+        : <div className="h-screen w-full"><CircleLoading /></div>
 
 }
 

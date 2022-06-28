@@ -6,7 +6,7 @@ import SearchTag from '../components/search/search_tag';
 const Search = () => {
 
     return (
-        <div className="w-screen h-screen overflow-y-auto scrollbar-hide">
+        <div className="w-full h-screen overflow-y-auto scrollbar-hide">
             <SearchHeader />
             <main>
                 <SearchTag />
