@@ -21,6 +21,7 @@ export default function Edit(props) {
     const auth = getAuth();
 
     // 상태관리
+    const [minDate, setMinDate] = useState(null);
     const [checked, setChecked] = useState(false);
     const [common, setCommon] = useState(false);
     const [saving, setSaving] = useState(false);
@@ -66,6 +67,10 @@ export default function Edit(props) {
             planInfo.startTime = _result.data.startTime == null ? null : moment(_result.data.startTime, "HH:mm:ss");
             planInfo.endTime = _result.data.endTime == null ? null : moment(_result.data.endTime, "HH:mm:ss");
             planInfo.isAuth = _result.data.auths.length > 0;
+
+            if (_result.data.auths.length > 0) {
+                setMinDate(moment(_result.data.auths[0].authDt).toDate());
+            }
 
             if (_result.data.startTime == null && _result.data.endTime == null) setOpenTime(false);
             setCommon(_result.data.commonPlanUid != null);
@@ -167,6 +172,12 @@ export default function Edit(props) {
         return true;
     }
 
+    const getMaxDate = () => {
+        if (planInfo.isAuth) return minDate;
+
+        return planInfo.endDate == null ? null : moment(planInfo.endDate).subtract(1, "d").toDate();
+    }
+
     return (<>
         {(load)
             ? <div className="">
@@ -215,10 +226,10 @@ export default function Edit(props) {
                                     });
                                 }}
                                 value={planInfo.startDate}
-                                minDate={moment().toDate()}
-                                disabled={planInfo.isAuth && moment().unix() > moment(planInfo.startDate).unix()}
+                                minDate={null}
+                                // disabled={planInfo.isAuth && moment().unix() > moment(planInfo.startDate).unix()}
                                 auto={true}
-                                maxDate={planInfo.endDate == null ? null : moment(planInfo.endDate).subtract(1, "d").toDate()}
+                                maxDate={getMaxDate()}
                             >
                                 <div className='flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center'>
                                     <span className="text-xs font-medium pl-2">{moment(planInfo.startDate).format("YYYY년 M월 D일")}</span>

@@ -245,7 +245,7 @@ export default function Regist(props) {
                                 onChange={(date) => setRegistInfo({ ...registInfo, startDate: date })}
                                 value={registInfo.startDate}
                                 auto={true}
-                                minDate={moment().toDate()}
+                                minDate={null}
                                 maxDate={checked ? registInfo.endDate : null}
                             >
                                 <div className='flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center'>

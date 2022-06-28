@@ -23,6 +23,10 @@
   }
 }
 
+html {
+    max-widht: "500px";
+}
+
 /* 백그라운 색상 */
 .bg1 {
     background-color: #FFD6C2;

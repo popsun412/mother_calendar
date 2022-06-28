@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import { useRouter } from 'next/router';
@@ -62,6 +63,7 @@ export default function PlanCertify(props) {
 
         if ((props.item?.auth ?? null) != null) {
             await network.post('/plan/authupdate', formData);
+            router.push("/calendar");
         } else {
             if (date && moment().format("YYYY-MM-DD") > date.format("YYYY-MM-DD")) formData.append('date', date);
             const _authResult = await network.post('/plan/auth', formData);
@@ -71,9 +73,11 @@ export default function PlanCertify(props) {
                 router.back();
                 return;
             }
+
+            router.push("/calendar");
+            // props.onSuccess();
         }
 
-        router.push("/calendar");
         setSaving(false);
     }
 

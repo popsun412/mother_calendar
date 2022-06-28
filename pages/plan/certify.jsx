@@ -22,6 +22,7 @@ export default function Certify(props) {
     const auth = getAuth();
     const router = useRouter();
 
+    const [successPopup, setSuccessPopup] = useState(false);
     const [load, setLoad] = useState(false);
     const [plan, setPlan] = useState(null);
     const [lockers, setLockers] = useRecoilState(certifyLockerState);
@@ -47,9 +48,23 @@ export default function Certify(props) {
         }
     }, [router]);
 
+    // 성공 팝업
+    const onSuccess = () => {
+        setSuccessPopup(true);
+    }
+
+    useEffect(() => {
+        if (successPopup) setTimeout(() => router.push("/calendar"), 1500);
+    });
+
     return (load) ?
         <>
-            <PlanCertify plan={plan} lockers={lockers} />
+            <PlanCertify plan={plan} lockers={lockers} onSuccess={onSuccess} />
+            {/* {(successPopup) ? <div className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center">
+                <div className="flex flex-col max-w-sm px-5">
+                    <img src="/images/" alt="성공" />
+                </div>
+            </div> : <></>} */}
         </>
         : <div className="h-screen w-screen">
             <CircleLoading />
