@@ -41,7 +41,7 @@ const Bookshelf = (props) => {
     // 모든 아이템 갖고오기
     const getTotalCount = async () => {
         try {
-            const _result = await network.get(`/lockerTimeCount?lockerType=${"책장"}`);
+            const _result = await network.post(`/lockerTimeCount`, { lockerType: "책장", userUid: props.query.userUid });
             setTotalCount(_result.data);
         } catch (error) {
             console.log(error);
@@ -49,16 +49,16 @@ const Bookshelf = (props) => {
     }
 
     useEffect(() => {
-        auth.onAuthStateChanged(async (_user) => {
-            if (_user) {
-                getTotalCount();
-                setLoad(true);
-            } else {
-                router.push('/');
-            }
-        });
-    }, []);
-
+        if (props.query.userUid)
+            auth.onAuthStateChanged(async (_user) => {
+                if (_user) {
+                    getTotalCount();
+                    setLoad(true);
+                } else {
+                    router.push('/');
+                }
+            });
+    }, [router]);
 
     const obj = {
         0: <BookshelfInstock params={params} activeTab={activeTab} userUid={props.query.userUid} isMe={isMe()} />,

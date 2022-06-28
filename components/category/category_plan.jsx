@@ -70,23 +70,28 @@ const CategoryPlan = (props) => {
                                     data.map((_item, _index) => {
                                         return (
                                             _item.level == _level
-                                                ? <Link
-                                                    href={{ pathname: '/plandetail', query: { commonPlanUid: _item.commonPlanUid } }}
+                                                ? <div
                                                     key={_index}
-                                                    passHref
+                                                    className='py-5 px-4 rounded-2xl text-sm flex items-center mb-4'
+                                                    style={{ backgroundColor: '#f8f6f5' }}
+                                                    onClick={() => {
+                                                        const _href = { pathname: '/plandetail', query: { commonPlanUid: _item.commonPlanUid } };
+                                                        router.push(_href);
+                                                    }}
                                                 >
-                                                    <div className='py-5 px-4 rounded-2xl text-sm flex items-center mb-4' style={{ backgroundColor: '#f8f6f5' }}>
 
-                                                        <div className='flex flex-auto'>
-                                                            <img src={`${getSubjectImage(_item.subject)}`} className='mr-4 w-6 h-6' />
-                                                            <div className='my-auto mx-0'>{_item.name}</div>
-                                                        </div>
-                                                        <img className="w-6" src={`${_item.bookmark ? "/images/vector.png?v=1" : "/images/ic_check_circle.png"}`} onClick={(e) => {
-                                                            e.preventDefault();
-                                                            router.push(`/plan/regist?commonPlanUid=${_item.commonPlanUid}`);
-                                                        }} />
+                                                    <div className='flex flex-auto'>
+                                                        <img src={`${getSubjectImage(_item.subject)}`} className='mr-4 w-6 h-6' />
+                                                        <div className='my-auto mx-0'>{_item.name}</div>
                                                     </div>
-                                                </Link>
+                                                    <img className="w-6" src={`${_item.bookmark ? "/images/vector.png?v=1" : "/images/ic_check_circle.png"}`} onClick={(e) => {
+                                                        e.preventDefault();
+                                                        e.stopPropagation();
+
+                                                        if (_item.bookmark) return;
+                                                        router.push(`/plan/regist?commonPlanUid=${_item.commonPlanUid}`);
+                                                    }} />
+                                                </div>
                                                 : <></>
                                         )
                                     })

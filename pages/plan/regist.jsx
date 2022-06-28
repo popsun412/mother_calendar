@@ -110,6 +110,13 @@ export default function Regist(props) {
             endTime: (registInfo.endTime == null) ? null : moment(registInfo.endTime).format("HH:mm"),
         });
 
+        // 등록안됨
+        if (!_result.data) {
+            alert("진행중인 공동계획입니다.");
+            router.back();
+            return;
+        }
+
         if (_result.status == 200) {
             router.push(`/calendar`);
         }

@@ -89,7 +89,7 @@ const Item = (props) => {
                         {scrollPosition > 60
                             ? <div className='flex mx-5 w-full items-center relative'>
                                 <div className='absolute flex justify-center items-center mx-3 left-0 right-0'>
-                                    <img className="w-4 h-4 mr-2" src={getLocktypeImage(data.lockerTyp, data.subject)} onClick={() => { window.history.back() }} />
+                                    <img className="w-4 h-4 mr-2" src={getLocktypeImage(data.lockerType, data.subject)} onClick={() => { window.history.back() }} />
                                     <span style={{ fontFamily: "SuncheonR" }}>{data.name}</span>
                                 </div>
                                 <img src='/images/ic_back.png' className="w-10 relative -left-4 flex-shrink-0" onClick={() => { window.history.back(); }} />

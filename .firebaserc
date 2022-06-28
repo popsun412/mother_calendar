@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "mamadadacal-a1df8"
+  },
+  "targets": {
+    "mamadadacal-a1df8": {
+      "hosting": {
+        "dev": [
+          "mamadadacaldev"
+        ]
+      }
+    }
   }
 }

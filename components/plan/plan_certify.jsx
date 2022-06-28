@@ -64,7 +64,13 @@ export default function PlanCertify(props) {
             await network.post('/plan/authupdate', formData);
         } else {
             if (date && moment().format("YYYY-MM-DD") > date.format("YYYY-MM-DD")) formData.append('date', date);
-            await network.post('/plan/auth', formData);
+            const _authResult = await network.post('/plan/auth', formData);
+
+            if (!_authResult.data) {
+                alert("오늘 인증을 이미 완료했습니다.");
+                router.back();
+                return;
+            }
         }
 
         router.push("/calendar");

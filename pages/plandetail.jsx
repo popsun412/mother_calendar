@@ -118,6 +118,10 @@ const Plan2 = () => {
                                 <div className='mr-5 mb-1'>
                                     <img className="w-5 mb-1" src={`${data.isMyPlan ? "/images/vector.png?v=1" : "/images/ic_check_circle.png"}`} onClick={(e) => {
                                         e.preventDefault();
+                                        e.stopPropagation();
+
+                                        if (data.isMyPlan) return;
+
                                         router.push(`/plan/regist?commonPlanUid=${data.commonPlanUid}`);
                                     }} />
                                     <div className='mb-5 text-xs text-white text-center mx-auto'>

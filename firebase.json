@@ -6,6 +6,7 @@
       "**/.*",
       "**/node_modules/**"
     ],
+    "target": "dev",
     "rewrites": [
       {
         "source": "addbook",
@@ -154,6 +155,10 @@
       {
         "source": "privateinfo",
         "destination": "/privateinfo.html"
+      },
+      {
+        "source": "useguide",
+        "destination": "/useguide.html"
       },
       {
         "source": "**",

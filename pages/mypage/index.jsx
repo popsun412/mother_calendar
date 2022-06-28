@@ -86,12 +86,12 @@ const MyPage = () => {
                     </div>
                 </section>
                 <section>
-                    <Link href='/mypage/runtype' passHref>
+                    {/* <Link href='/mypage/runtype' passHref>
                         <div className='flex items-center justify-between border-b border-solid border-gray4 h-15'>
                             <span style={{ marginLeft: '18px', fontSize: '15px' }}>내 실행 유형</span>
                             <span style={{ marginRight: '23px' }}>{'>'}</span>
                         </div>
-                    </Link>
+                    </Link> */}
                     <Link href='/mypage/myinfo' passHref>
                         <div className='flex items-center justify-between border-b border-solid border-gray4 h-15'>
                             <span style={{ marginLeft: '18px', fontSize: '15px' }}>내 정보 수정</span>
@@ -101,6 +101,18 @@ const MyPage = () => {
                     <Link href='/mypage/account' passHref>
                         <div className='flex items-center justify-between border-b border-solid border-gray4 h-15'>
                             <span style={{ marginLeft: '18px', fontSize: '15px' }}>계정 관리</span>
+                            <span style={{ marginRight: '23px' }}>{'>'}</span>
+                        </div>
+                    </Link>
+                    <Link href='/serviceinfo' passHref>
+                        <div className='flex items-center justify-between border-b border-solid border-gray4 h-15'>
+                            <span style={{ marginLeft: '18px', fontSize: '15px' }}>서비스 소개</span>
+                            <span style={{ marginRight: '23px' }}>{'>'}</span>
+                        </div>
+                    </Link>
+                    <Link href='/useguide' passHref>
+                        <div className='flex items-center justify-between border-b border-solid border-gray4 h-15'>
+                            <span style={{ marginLeft: '18px', fontSize: '15px' }}>이용 안내</span>
                             <span style={{ marginRight: '23px' }}>{'>'}</span>
                         </div>
                     </Link>

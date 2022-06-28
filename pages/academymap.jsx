@@ -51,14 +51,16 @@ const AcademyMap = (props) => {
     }
 
     useEffect(() => {
-        auth.onAuthStateChanged(async (_user) => {
-            if (_user) {
-                getTotalCount();
-                await getItems();
-                setLoad(true);
-            }
-        });
-    }, []);
+        if (router.query.userUid) {
+            auth.onAuthStateChanged(async (_user) => {
+                if (_user) {
+                    getTotalCount();
+                    await getItems();
+                    setLoad(true);
+                }
+            });
+        }
+    }, [router]);
 
     const isMe = () => {
         if (props.query.userUid == undefined || props.query.userUid == "") return true;
@@ -79,7 +81,7 @@ const AcademyMap = (props) => {
     // 모든 아이템 갖고오기
     const getTotalCount = async () => {
         try {
-            const _result = await network.get(`/lockerTimeCount?lockerType=${"학원"}`);
+            const _result = await network.post(`/lockerTimeCount`, { lockerType: "학원", userUid: router.query.userUid });
             setTotalCount(_result.data);
         } catch (error) {
             console.log(error);

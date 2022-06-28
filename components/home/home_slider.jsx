@@ -12,12 +12,15 @@ import { useRouter } from 'next/router';
 
 const HomeSlider = () => {
     const router = useRouter();
-    const [data, setData] = useState([]);
+    const [data, setData] = useState([
+        { isGuide: true, image: "/images/banner/serviceinfo.png", url: "/serviceinfo" },
+        { isGuide: true, image: "/images/banner/useinfo.png", url: "/useguide" },
+    ]);
 
     useEffect(() => {
         const getData = async () => {
-            const res = await network.post('/common/banners')
-            res.data ? setData(res.data) : null;
+            const res = await network.post('/common/banners');
+            res.data ? setData(data.concat(res.data)) : null;
         }
         getData();
     }, [])
@@ -35,11 +38,23 @@ const HomeSlider = () => {
                 onSwiper={swiper => console.log(swiper)}
                 pagination={{ clickable: true }}
             >
-                {
-                    data.map((item, idx) => {
-                        return (
-                            <SwiperSlide key={idx}>
-                                <div onClick={() => {
+                {data.map((item, idx) => {
+                    return (
+                        <SwiperSlide key={idx}>
+                            {item.isGuide
+                                ? <div onClick={() => router.push(item.url)}>
+                                    <div
+                                        style={{
+                                            backgroundImage: `url("${item.image}")`,
+                                            backgroundRepeat: "no-repeat",
+                                            backgroundSize: "cover",
+                                            width: "100%",
+                                            paddingTop: "60%",
+                                            backgroundPosition: "center center"
+                                        }}
+                                    />
+                                </div>
+                                : <div onClick={() => {
                                     router.push(`/plandetail?commonPlanUid=${item.commonPlanUid}`);
                                 }}>
                                     <div
@@ -60,12 +75,10 @@ const HomeSlider = () => {
                                         <span className='text-xs font-bold text-center textOrange1 py-1 px-2 mr-2 rounded' style={{ backgroundColor: 'rgba(219, 239, 253, 0.3)' }}>{item.subject}</span>
                                         <span className='text-xs font-bold text-center textOrange1 py-1 px-2 mr-2 rounded' style={{ backgroundColor: 'rgba(219, 239, 253, 0.3)' }}>{item.field}</span>
                                     </div>
-                                </div>
-                            </SwiperSlide>
-                        )
-                    })
-                }
-
+                                </div>}
+                        </SwiperSlide>
+                    )
+                })}
             </Swiper>
         </section>
     )

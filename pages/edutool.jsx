@@ -44,16 +44,18 @@ const EduTool = (props) => {
     }
 
     useEffect(() => {
-        auth.onAuthStateChanged(async (_user) => {
-            if (_user) {
-                getTotalCount();
-                await getUser();
-                setLoad(true);
-            } else {
-                router.push('/');
-            }
-        });
-    }, []);
+        if (props.query.userUid) {
+            auth.onAuthStateChanged(async (_user) => {
+                if (_user) {
+                    getTotalCount();
+                    await getUser();
+                    setLoad(true);
+                } else {
+                    router.push('/');
+                }
+            });
+        }
+    }, [router]);
 
     const isMe = () => {
         if (props.query.userUid == undefined || props.query.userUid == "") return true;
@@ -63,7 +65,7 @@ const EduTool = (props) => {
     // 모든 아이템 갖고오기
     const getTotalCount = async () => {
         try {
-            const _result = await network.get(`/lockerTimeCount?lockerType=${"교구장"}`);
+            const _result = await network.post(`/lockerTimeCount`, { lockerType: "교구장", userUid: props.query.userUid });
             setTotalCount(_result.data);
         } catch (error) {
             console.log(error);
