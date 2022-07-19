@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
-import Link from 'next/link';
-import React from 'react';
-import Navigation from '../../components/common/navigation';
-import CircleLoading from '../../components/common/circle_loading';
+import Link from "next/link";
+import React from "react";
+import Navigation from "../../components/common/navigation";
+import CircleLoading from "../../components/common/circle_loading";
 
 // react, next
 import { useState } from "react";
@@ -16,7 +16,7 @@ import { getAuth } from "firebase/auth";
 
 // api호출
 import network from "../../util/network";
-import { profileImageCheck } from "../../util/helper"
+import { profileImageCheck } from "../../util/helper";
 
 const MyPage = () => {
     const auth = getAuth();
@@ -30,15 +30,15 @@ const MyPage = () => {
 
     // 유저 정보 갖고오기
     const getUser = async () => {
-        const _result = await network.post('/userInfo');
+        const _result = await network.post("/userInfo");
 
         // data 통신
         if (_result.status == 200) {
             setUserInfo(_result.data);
         } else {
-            router.push('/');
+            router.push("/");
         }
-    }
+    };
 
     useEffect(() => {
         auth.onAuthStateChanged(async (_user) => {
@@ -47,13 +47,13 @@ const MyPage = () => {
                 setLoad(true);
             } else {
                 setUserInfo(null);
-                router.push('/');
+                router.push("/");
             }
         });
     }, [router]);
 
-    return (load)
-        ? <div className=''>
+    return load ? (
+        <div className="">
             {/* <header className='sticky top-0 left-0 right-0 visible opacity-100 bg-white z-100' style={{ marginBottom: '-50px' }}>
                 <div className='my-auto mx-auto py-0 px-4 relative flex items-center w-full bg-white border-solid border-b border-gray4' style={{ height: '50px' }}>
                     <div className='flex-1 flex items-center'>
@@ -61,10 +61,10 @@ const MyPage = () => {
                     </div>
                 </div>
             </header> */}
-            <main style={{ marginBottom: '100px' }}>
+            <main style={{ marginBottom: "100px" }}>
                 <section>
                     <div className="h-48">
-                        <div className='pt-7 mb-4'>
+                        <div className="pt-7 mb-4">
                             <div
                                 className="rounded-full border border-solid border-color4 mx-auto"
                                 style={{
@@ -73,72 +73,70 @@ const MyPage = () => {
                                     backgroundSize: "cover",
                                     width: 75,
                                     paddingTop: 75,
-                                    backgroundPosition: "center center"
+                                    backgroundPosition: "center center",
                                 }}
                             />
                         </div>
-                        <div className='text-xl text-center mb-1.5' style={{ letterSpacing: '-0.6px' }}>
+                        <div className="text-xl text-center mb-1.5" style={{ letterSpacing: "-0.6px" }}>
                             {userInfo.nickName}
                         </div>
-                        <div className='text-sm text-center textOrange3'>
-                            {auth.currentUser.email}
-                        </div>
+                        <div className="text-sm text-center textOrange3">{auth.currentUser.email}</div>
                     </div>
                 </section>
                 <section>
-                    {/* <Link href='/mypage/runtype' passHref>
-                        <div className='flex items-center justify-between border-b border-solid border-gray4 h-15'>
-                            <span style={{ marginLeft: '18px', fontSize: '15px' }}>내 실행 유형</span>
-                            <span style={{ marginRight: '23px' }}>{'>'}</span>
-                        </div>
-                    </Link> */}
-                    <Link href='/mypage/myinfo' passHref>
-                        <div className='flex items-center justify-between border-b border-solid border-gray4 h-15'>
-                            <span style={{ marginLeft: '18px', fontSize: '15px' }}>내 정보 수정</span>
-                            <span style={{ marginRight: '23px' }}>{'>'}</span>
+                    <Link href="/mypage/runtype" passHref>
+                        <div className="flex items-center justify-between border-b border-solid border-gray4 h-15">
+                            <span style={{ marginLeft: "18px", fontSize: "15px" }}>내 실행 유형</span>
+                            <span style={{ marginRight: "23px" }}>{">"}</span>
                         </div>
                     </Link>
-                    <Link href='/mypage/account' passHref>
-                        <div className='flex items-center justify-between border-b border-solid border-gray4 h-15'>
-                            <span style={{ marginLeft: '18px', fontSize: '15px' }}>계정 관리</span>
-                            <span style={{ marginRight: '23px' }}>{'>'}</span>
+                    <Link href="/mypage/myinfo" passHref>
+                        <div className="flex items-center justify-between border-b border-solid border-gray4 h-15">
+                            <span style={{ marginLeft: "18px", fontSize: "15px" }}>내 정보 수정</span>
+                            <span style={{ marginRight: "23px" }}>{">"}</span>
                         </div>
                     </Link>
-                    <Link href='/serviceinfo' passHref>
-                        <div className='flex items-center justify-between border-b border-solid border-gray4 h-15'>
-                            <span style={{ marginLeft: '18px', fontSize: '15px' }}>서비스 소개</span>
-                            <span style={{ marginRight: '23px' }}>{'>'}</span>
+                    <Link href="/mypage/account" passHref>
+                        <div className="flex items-center justify-between border-b border-solid border-gray4 h-15">
+                            <span style={{ marginLeft: "18px", fontSize: "15px" }}>계정 관리</span>
+                            <span style={{ marginRight: "23px" }}>{">"}</span>
                         </div>
                     </Link>
-                    <Link href='/useguide' passHref>
-                        <div className='flex items-center justify-between border-b border-solid border-gray4 h-15'>
-                            <span style={{ marginLeft: '18px', fontSize: '15px' }}>이용 안내</span>
-                            <span style={{ marginRight: '23px' }}>{'>'}</span>
+                    <Link href="/serviceinfo" passHref>
+                        <div className="flex items-center justify-between border-b border-solid border-gray4 h-15">
+                            <span style={{ marginLeft: "18px", fontSize: "15px" }}>서비스 소개</span>
+                            <span style={{ marginRight: "23px" }}>{">"}</span>
                         </div>
                     </Link>
-                    <Link href='/mypage/' passHref>
-                        <div className='flex items-center justify-between border-b border-solid border-gray4 h-15'>
-                            <span style={{ marginLeft: '18px', fontSize: '15px' }}>공지사항</span>
-                            <span style={{ marginRight: '23px' }}>{'>'}</span>
+                    <Link href="/useguide" passHref>
+                        <div className="flex items-center justify-between border-b border-solid border-gray4 h-15">
+                            <span style={{ marginLeft: "18px", fontSize: "15px" }}>이용 안내</span>
+                            <span style={{ marginRight: "23px" }}>{">"}</span>
+                        </div>
+                    </Link>
+                    <Link href="/mypage/" passHref>
+                        <div className="flex items-center justify-between border-b border-solid border-gray4 h-15">
+                            <span style={{ marginLeft: "18px", fontSize: "15px" }}>공지사항</span>
+                            <span style={{ marginRight: "23px" }}>{">"}</span>
                         </div>
                     </Link>
                     <Link href="/useinfo" passHref>
-                        <div className='flex items-center justify-between border-b border-solid border-gray4 h-15'>
-                            <span style={{ marginLeft: '18px', fontSize: '15px' }}>서비스 이용약관</span>
-                            <span style={{ marginRight: '23px' }}>{'>'}</span>
+                        <div className="flex items-center justify-between border-b border-solid border-gray4 h-15">
+                            <span style={{ marginLeft: "18px", fontSize: "15px" }}>서비스 이용약관</span>
+                            <span style={{ marginRight: "23px" }}>{">"}</span>
                         </div>
                     </Link>
                     <Link href="/privateinfo" passHref>
-                        <div className='flex items-center justify-between border-b border-solid border-gray4 h-15'>
-                            <span style={{ marginLeft: '18px', fontSize: '15px' }}>개인정보 처리방침</span>
-                            <span style={{ marginRight: '23px' }}>{'>'}</span>
+                        <div className="flex items-center justify-between border-b border-solid border-gray4 h-15">
+                            <span style={{ marginLeft: "18px", fontSize: "15px" }}>개인정보 처리방침</span>
+                            <span style={{ marginRight: "23px" }}>{">"}</span>
                         </div>
                     </Link>
                     <Link href="https://mamadadacal.channel.io">
                         <a target="_blank">
-                            <div className='flex items-center justify-between border-b border-solid border-gray4 h-15'>
-                                <span style={{ marginLeft: '18px', fontSize: '15px' }}>1:1 문의</span>
-                                <span style={{ marginRight: '23px' }}>{'>'}</span>
+                            <div className="flex items-center justify-between border-b border-solid border-gray4 h-15">
+                                <span style={{ marginLeft: "18px", fontSize: "15px" }}>1:1 문의</span>
+                                <span style={{ marginRight: "23px" }}>{">"}</span>
                             </div>
                         </a>
                     </Link>
@@ -148,9 +146,13 @@ const MyPage = () => {
                     </div> */}
                 </section>
             </main>
-            <Navigation path={'mypage'} />
+            <Navigation path={"mypage"} />
         </div>
-        : <div className="h-screen w-full"><CircleLoading /></div>
-}
+    ) : (
+        <div className="h-screen w-full">
+            <CircleLoading />
+        </div>
+    );
+};
 
 export default MyPage;

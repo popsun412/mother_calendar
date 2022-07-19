@@ -6,7 +6,7 @@ import { Fragment } from "react";
 // 글로벌 상태관리
 import CustomMobileDatepicker from "../../components/common/custom_mobile_datepicker";
 import moment from "moment";
-import Link from 'next/link';
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import network from "../../util/network";
 
@@ -32,20 +32,20 @@ export default function CalendarName(props) {
             const _now = new Date();
             const _ages = [];
             (props.selectedUserInfo.babys ?? []).map((_baby) => {
-                const _birth = moment(_baby.birth, 'YYYY-MM-DD').toDate();
+                const _birth = moment(_baby.birth, "YYYY-MM-DD").toDate();
                 const _age = _now.getFullYear() - _birth.getFullYear() + 1;
                 _ages.push(`${_age}세`);
             });
 
-            return _ages.join(' ');
+            return _ages.join(" ");
         },
         get region() {
             return props.selectedUserInfo.region ?? "";
         },
         get nick() {
-            return (props.selectedUserInfo.interest == "엄마표 교육") ? "엄마표" : props.selectedUserInfo.interest;
-        }
-    }
+            return props.selectedUserInfo.interest == "엄마표 교육" ? "엄마표" : props.selectedUserInfo.interest;
+        },
+    };
 
     // 포멧팅
     const getDateFormat = () => {
@@ -53,9 +53,9 @@ export default function CalendarName(props) {
         const _month = props.selectedDate.getMonth();
         const _week = weekOfMonth(moment(props.selectedDate));
         return `${_year}년 ${_month + 1}월 ${_week}주차`;
-    }
+    };
 
-    const weekOfMonth = (_moment) => _moment.week() - moment(_moment).startOf('month').week() + 1;
+    const weekOfMonth = (_moment) => _moment.week() - moment(_moment).startOf("month").week() + 1;
 
     // 친구추가
     const addFriends = () => {
@@ -68,40 +68,41 @@ export default function CalendarName(props) {
             _friends.splice(_checkIndex, 1);
         }
 
-        network.post('/user/updateFriends', { friends: _friends });
+        network.post("/user/updateFriends", { friends: _friends });
 
         props.setUserInfo({
             ...props.userInfo,
-            friends: _friends
+            friends: _friends,
         });
-    }
+    };
 
     // 리렌더링
-    useEffect(() => {
-    }, [props.userInfo])
+    useEffect(() => {}, [props.userInfo]);
 
     return (
         <>
             <div className="flex mb-4 justify-between">
-                <div className='flex flex-row items-center'>
-                    {(!props.selectedUserInfo.isShare) ? <img src={`/images/share_lock.png`} className='w-6 h-6' alt="비공개" /> : <></>}
-                    <span className="text-xl font-bold textGray1 mr-2">{((props.selectedUserInfo.nickName ?? "").length > 6) ? `${props.selectedUserInfo.nickName.substring(0, 6)}...` : props.selectedUserInfo.nickName}</span>
+                <div className="flex flex-row items-center">
+                    {!props.selectedUserInfo.isShare ? <img src={`/images/share_lock.png`} className="w-6 h-6" alt="비공개" /> : <></>}
+                    <span className="text-xl font-bold textGray1 mr-2">
+                        {(props.selectedUserInfo.nickName ?? "").length > 6
+                            ? `${props.selectedUserInfo.nickName.substring(0, 6)}...`
+                            : props.selectedUserInfo.nickName}
+                    </span>
                     <div className="flex px-2 text-xs font-normal border-color3 textOrange3 rounded-full border items-center text-center">{`${showModel.babysAge}, ${showModel.region}, ${showModel.nick}`}</div>
                 </div>
 
-                {(!showModel.isMe) ?
-                    <div className='flex flex-row' onClick={addFriends}>
-                        <img src={(showModel.isFriend) ? `/images/like_on.png` : `/images/like_off.png`} className='w-7 h-7' alt="좋아요" />
+                {!showModel.isMe ? (
+                    <div className="flex flex-row" onClick={addFriends}>
+                        <img src={showModel.isFriend ? `/images/like_on.png` : `/images/like_off.png`} className="w-7 h-7" alt="좋아요" />
                     </div>
-                    : <></>
-                }
+                ) : (
+                    <></>
+                )}
             </div>
             <div className="flex justify-between items-center">
-                <CustomMobileDatepicker
-                    onChange={(value) => props.setSelectedDate(value)}
-                    value={props.selectedDate}
-                >
-                    <div className='flex bg-gray2 rounded px-2 py-1.5 textGray2 items-center justify-center'>
+                <CustomMobileDatepicker onChange={(value) => props.setSelectedDate(value)} value={props.selectedDate}>
+                    <div className="flex bg-gray2 rounded px-2 py-1.5 textGray2 items-center justify-center">
                         <span className="text-xs">{getDateFormat()}</span>
                         <svg className="w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
@@ -109,20 +110,30 @@ export default function CalendarName(props) {
                     </div>
                 </CustomMobileDatepicker>
                 <div className="flex space-x-1 flex-row">
-                    {(showModel.isMe) ? <Link href={'/plan/list'} passHref><div className='checkbox textGray2 text-xs font-normal px-3 py-1.5'>전체계획</div></Link> : <></>}
-                    {(showModel.isShare) ? <div className='flex checkbox textGray2 text-xs font-normal px-3 py-1.5 items-center' onClick={() => setDrawerOpen(true)}>
-                        보관함
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
-                        </svg>
-                    </div> : <></>}
+                    {showModel.isMe ? (
+                        <Link href={"/plan/list"} passHref>
+                            <div className="checkbox textGray2 text-xs font-normal px-3 py-1.5">전체계획</div>
+                        </Link>
+                    ) : (
+                        <></>
+                    )}
+                    {showModel.isShare ? (
+                        <div className="flex checkbox textGray2 text-xs font-normal px-3 py-1.5 items-center" onClick={() => setDrawerOpen(true)}>
+                            보관함
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                            </svg>
+                        </div>
+                    ) : (
+                        <></>
+                    )}
                 </div>
             </div>
             <Fragment>
-                <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)}                >
+                <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
                     <LockerDrawer userUid={props.selectedUserUid} />
                 </Drawer>
             </Fragment>
         </>
-    )
+    );
 }

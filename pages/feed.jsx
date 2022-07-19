@@ -2,17 +2,17 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useState, Fragment } from 'react';
-import { useRouter } from 'next/router';
+import { useEffect, useState, Fragment } from "react";
+import { useRouter } from "next/router";
 import FeedHeader from "../components/feed/feed_header";
-import FeedItem from '../components/feed/feed_item';
-import Navigation from '../components/common/navigation';
+import FeedItem from "../components/feed/feed_item";
+import Navigation from "../components/common/navigation";
 import CircleLoading from "../components/common/circle_loading";
 import { getAuth } from "firebase/auth";
 import InfiniteScroll from "react-infinite-scroll-component";
 import network from "../util/network";
-import FeedFilter from '../components/feed/feed_filter';
-import FeedReport from '../components/feed/feed_report';
+import FeedFilter from "../components/feed/feed_filter";
+import FeedReport from "../components/feed/feed_report";
 import { Drawer } from "@mui/material";
 import { CircularProgress } from "@material-ui/core";
 
@@ -39,23 +39,23 @@ export default function Feed() {
 
     const getItems = async () => {
         if (loading) return;
+        setHasMore(false);
         setLoading(true);
-
         const _result = await network.post(`/feeds`, { ...param, offset: 0 });
-        if (_result.data.length == 0) setHasMore(false);
+        if (_result.data.length > 0) setHasMore(true);
 
-        moreItems(true);
         setLoading(false);
         setItems(_result.data);
-    }
+    };
 
     const moreItems = async () => {
-        if (!auth.currentUser) return;
+        if (!auth.currentUser || items.length == 0) return;
 
         const _result = await network.post(`/feeds`, { ...param, offset: items.length });
+
         if (_result.data == 0) setHasMore(false);
         setItems(items.concat(_result.data));
-    }
+    };
 
     useEffect(() => {
         auth.onAuthStateChanged(async (_user) => {
@@ -63,54 +63,78 @@ export default function Feed() {
                 await getItems();
                 setLoad(true);
             } else {
-                router.push('/');
+                router.push("/");
             }
         });
     }, []);
 
     useEffect(async () => {
-        if (auth.currentUser) await getItems();
-    }, [param])
+        if (auth.currentUser) {
+            setItems([]);
+            await getItems();
+        }
+    }, [param]);
+
+    useEffect(async () => {
+        if (items.filter((_item) => _item != null).length == 1 && hasMore) moreItems();
+    }, [items]);
 
     const onReport = async (contents) => {
-        const _result = await network.post('/feed/report', { planAuthUid, contents });
+        const _result = await network.post("/feed/report", { planAuthUid, contents });
         setPlanAuthUid(null);
         setDeclarationOpen(false);
-    }
+    };
 
-    return (load) ? <>
-        <InfiniteScroll
-            dataLength={items.length}
-            next={moreItems}
-            hasMore={hasMore}
-        >
-            <FeedHeader setFilterOpen={setFilterOpen} />
-            {(!loading) ? <div className="pt-4 pb-20 flex flex-col space-y-10" style={{ marginTop: 50 }}>
-                {items.map((_item, idx) => {
-                    if (_item == null) return <></>;
+    return load ? (
+        <>
+            <InfiniteScroll dataLength={items.length} next={moreItems} hasMore={hasMore}>
+                <FeedHeader setFilterOpen={setFilterOpen} />
+                {!loading ? (
+                    <div className="pt-4 pb-20 flex flex-col space-y-10" style={{ marginTop: 50 }}>
+                        {items.map((_item, idx) => {
+                            if (_item == null) return <></>;
 
-                    return <FeedItem item={_item} key={idx} ages={param.age} onClick={() => {
-                        setPlanAuthUid(_item.planAuthUid);
-                        setDeclarationOpen(true);
-                    }} />
-                })}
-            </div> : <div className="flex w-full h-screen justify-center items-center">
-                <CircularProgress style={{ color: "#FF6035" }} />
-            </div>}
-            <Navigation path={'feed'} />
-        </InfiniteScroll>
-        <Fragment>
-            <Drawer open={filterOpen} onClose={() => setFilterOpen(false)} anchor='right' PaperProps={{ sx: { width: "80%" } }}>
-                <FeedFilter setFilterOpen={setFilterOpen} param={param} setParam={setParam} />
-            </Drawer>
-        </Fragment>
-        <Fragment>
-            <Drawer open={declarationOpen} onClose={() => {
-                setPlanAuthUid(null);
-                setDeclarationOpen(false)
-            }} anchor='bottom'>
-                <FeedReport onReport={onReport} />
-            </Drawer>
-        </Fragment>
-    </> : <div className="w-full h-screen flex justify-center items-center"><CircleLoading /></div>
+                            return (
+                                <FeedItem
+                                    item={_item}
+                                    key={_item.planAuthUid}
+                                    ages={param.age}
+                                    onClick={() => {
+                                        setPlanAuthUid(_item.planAuthUid);
+                                        setDeclarationOpen(true);
+                                    }}
+                                />
+                            );
+                        })}
+                    </div>
+                ) : (
+                    <div className="flex w-full h-screen justify-center items-center">
+                        <CircularProgress style={{ color: "#FF6035" }} />
+                    </div>
+                )}
+                <Navigation path={"feed"} />
+            </InfiniteScroll>
+            <Fragment>
+                <Drawer open={filterOpen} onClose={() => setFilterOpen(false)} anchor="right" PaperProps={{ sx: { width: "80%" } }}>
+                    <FeedFilter setFilterOpen={setFilterOpen} param={param} setParam={setParam} />
+                </Drawer>
+            </Fragment>
+            <Fragment>
+                <Drawer
+                    open={declarationOpen}
+                    onClose={() => {
+                        setPlanAuthUid(null);
+                        setDeclarationOpen(false);
+                    }}
+                    anchor="bottom"
+                >
+                    <FeedReport onReport={onReport} />
+                </Drawer>
+            </Fragment>
+        </>
+    ) : (
+        <div className="w-full h-screen flex justify-center items-center">
+            <CircleLoading />
+        </div>
+    );
 }

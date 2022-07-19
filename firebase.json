@@ -1,175 +1,171 @@
 {
-  "hosting": {
-    "public": "./out",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "target": "dev",
-    "rewrites": [
-      {
-        "source": "addbook",
-        "destination": "/addbook.html"
-      },
-      {
-        "source": "addplace",
-        "destination": "/addplace.html"
-      },
-      {
-        "source": "addtool",
-        "destination": "/addtool.html"
-      },
-      {
-        "source": "bookshelf",
-        "destination": "/bookshelf.html"
-      },
-      {
-        "source": "calendar",
-        "destination": "/calendar.html"
-      },
-      {
-        "source": "category",
-        "destination": "/category.html"
-      },
-      {
-        "source": "confirm",
-        "destination": "/confirm.html"
-      },
-      {
-        "source": "edutool",
-        "destination": "/edutool.html"
-      },
-      {
-        "source": "etc",
-        "destination": "/etc.html"
-      },
-      {
-        "source": "exmap",
-        "destination": "/exmap.html"
-      },
-      {
-        "source": "experience",
-        "destination": "/experience.html"
-      },
-      {
-        "source": "feed",
-        "destination": "/feed.html"
-      },
-      {
-        "source": "guide",
-        "destination": "/guide.html"
-      },
-      {
-        "source": "home",
-        "destination": "/home.html"
-      },
-      {
-        "source": "academymap",
-        "destination": "/academymap.html"
-      },
-      {
-        "source": "placemap",
-        "destination": "/placemap.html"
-      },
-      {
-        "source": "item",
-        "destination": "/item.html"
-      },
-      {
-        "source": "locker",
-        "destination": "/locker.html"
-      },
-      {
-        "source": "main",
-        "destination": "/main.html"
-      },
-      {
-        "source": "map",
-        "destination": "/map.html"
-      },
-      {
-        "source": "mypage",
-        "destination": "/mypage.html"
-      },
-      {
-        "source": "mypage/myinfo",
-        "destination": "/mypage/myinfo.html"
-      },
-      {
-        "source": "mypage/runtype",
-        "destination": "/mypage/runtype.html"
-      },
-      {
-        "source": "parents",
-        "destination": "/parents.html"
-      },
-      {
-        "source": "plan",
-        "destination": "/plan.html"
-      },
-      {
-        "source": "plan/*",
-        "destination": "/plan/[planUid].html"
-      },
-      {
-        "source": "plan/certify",
-        "destination": "/plan/certify.html"
-      },
-      {
-        "source": "plan/edit",
-        "destination": "/plan/edit.html"
-      },
-      {
-        "source": "plan/items",
-        "destination": "/plan/items.html"
-      },
-      {
-        "source": "plan/list",
-        "destination": "/plan/list.html"
-      },
-      {
-        "source": "plan/regist",
-        "destination": "/plan/regist.html"
-      },
-      {
-        "source": "plandetail",
-        "destination": "/plandetail.html"
-      },
-      {
-        "source": "result",
-        "destination": "/result.html"
-      },
-      {
-        "source": "search",
-        "destination": "/search.html"
-      },
-      {
-        "source": "signup",
-        "destination": "/signup.html"
-      },
-      {
-        "source": "useinfo",
-        "destination": "/useinfo.html"
-      },
-      {
-        "source": "privateinfo",
-        "destination": "/privateinfo.html"
-      },
-      {
-        "source": "useguide",
-        "destination": "/useguide.html"
-      },
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
-  },
-  "emulators": {
     "hosting": {
-      "host": "localhost",
-      "port": "3000"
+        "public": "./out",
+        "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+        "target": "dev",
+        "rewrites": [
+            {
+                "source": "addbook",
+                "destination": "/addbook.html"
+            },
+            {
+                "source": "addplace",
+                "destination": "/addplace.html"
+            },
+            {
+                "source": "addtool",
+                "destination": "/addtool.html"
+            },
+            {
+                "source": "bookshelf",
+                "destination": "/bookshelf.html"
+            },
+            {
+                "source": "calendar",
+                "destination": "/calendar.html"
+            },
+            {
+                "source": "category",
+                "destination": "/category.html"
+            },
+            {
+                "source": "confirm",
+                "destination": "/confirm.html"
+            },
+            {
+                "source": "edutool",
+                "destination": "/edutool.html"
+            },
+            {
+                "source": "etc",
+                "destination": "/etc.html"
+            },
+            {
+                "source": "exmap",
+                "destination": "/exmap.html"
+            },
+            {
+                "source": "experience",
+                "destination": "/experience.html"
+            },
+            {
+                "source": "feed",
+                "destination": "/feed.html"
+            },
+            {
+                "source": "guide",
+                "destination": "/guide.html"
+            },
+            {
+                "source": "home",
+                "destination": "/home.html"
+            },
+            {
+                "source": "academymap",
+                "destination": "/academymap.html"
+            },
+            {
+                "source": "placemap",
+                "destination": "/placemap.html"
+            },
+            {
+                "source": "item",
+                "destination": "/item.html"
+            },
+            {
+                "source": "locker",
+                "destination": "/locker.html"
+            },
+            {
+                "source": "main",
+                "destination": "/main.html"
+            },
+            {
+                "source": "map",
+                "destination": "/map.html"
+            },
+            {
+                "source": "mypage",
+                "destination": "/mypage.html"
+            },
+            {
+                "source": "mypage/myinfo",
+                "destination": "/mypage/myinfo.html"
+            },
+            {
+                "source": "mypage/runtype",
+                "destination": "/mypage/runtype.html"
+            },
+            {
+                "source": "parents",
+                "destination": "/parents.html"
+            },
+            {
+                "source": "plan",
+                "destination": "/plan.html"
+            },
+            {
+                "source": "plan/*",
+                "destination": "/plan/[planUid].html"
+            },
+            {
+                "source": "plan/certify",
+                "destination": "/plan/certify.html"
+            },
+            {
+                "source": "plan/edit",
+                "destination": "/plan/edit.html"
+            },
+            {
+                "source": "plan/items",
+                "destination": "/plan/items.html"
+            },
+            {
+                "source": "plan/list",
+                "destination": "/plan/list.html"
+            },
+            {
+                "source": "plan/regist",
+                "destination": "/plan/regist.html"
+            },
+            {
+                "source": "plandetail",
+                "destination": "/plandetail.html"
+            },
+            {
+                "source": "result",
+                "destination": "/result.html"
+            },
+            {
+                "source": "search",
+                "destination": "/search.html"
+            },
+            {
+                "source": "signup",
+                "destination": "/signup.html"
+            },
+            {
+                "source": "useinfo",
+                "destination": "/useinfo.html"
+            },
+            {
+                "source": "privateinfo",
+                "destination": "/privateinfo.html"
+            },
+            {
+                "source": "useguide",
+                "destination": "/useguide.html"
+            },
+            {
+                "source": "**",
+                "destination": "/index.html"
+            }
+        ]
+    },
+    "emulators": {
+        "hosting": {
+            "host": "localhost",
+            "port": "3000"
+        }
     }
-  }
 }

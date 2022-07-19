@@ -35,7 +35,7 @@ const BookshelfSell = (props) => {
     }, [params, activeTab]);
 
     const onDelete = async (_item, index) => {
-        const _check = confirm("삭제하시겠습니까?");
+        const _check = confirm("아이템 내역 즉시 삭제되고, 복원할 수 없습니다.\n삭제하시겠습니까?");
 
         if (_check) {
             await network.delete(`/locker/${_item.itemUid}`);
