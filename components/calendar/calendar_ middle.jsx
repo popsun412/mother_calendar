@@ -1,6 +1,4 @@
-import CalendarMine from "./calendar_mine";
 import CalendarName from "./calendar_name";
-
 
 export default function CalendarMiddle(props) {
     return (

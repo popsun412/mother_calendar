@@ -14,7 +14,7 @@ import ExMapBody from "../components/exmap/exmap_body";
 const Experience = () => {
     const auth = getAuth();
 
-    const [isList, setIsList] = useState(true);
+    const [isList, setIsList] = useState(false);
     const [ToastStatus, setToastStatus] = useState(false);
 
     const [hasMore, setHasMore] = useState(true);
