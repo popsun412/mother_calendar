@@ -108,9 +108,9 @@ const FeedItem = (props) => {
             )}
             <div className="px-5 flex">
                 <pre className="max-w-full whitespace-pre-wrap text-sm textGray1 resize-none">{showModel.review(props.item)}</pre>
-                {props.item.review.length > 20 && !allView ? (
+                {props.item.review.length > 30 && !allView ? (
                     <span className="textGray4" style={{ fontSize: 9 }} onClick={() => setAllView(true)}>
-                        더 보기
+                        ...더 보기
                     </span>
                 ) : (
                     <></>
