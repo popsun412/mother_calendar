@@ -7,7 +7,7 @@ export default function FreeMeeting() {
     const [expanded1, setExpanded1] = useState(false);
 
     return <>
-        <div className="w-full h-screen flex flex-col border">
+        <div className="w-full h-screen flex flex-col border overflow-y-auto">
             {/* 헤더 */}
             <div className="px-5 py-4 flex justify-between items-center">
                 <img src="/images/back_ic.png" alt="" className="w-2 h-4" />
@@ -59,32 +59,38 @@ export default function FreeMeeting() {
                 <div className="mb-4">
                     모임에 참여 신청한 이웃입니다. <span>(0/5)</span>
                 </div>
-                {/* 참여 신청한 이웃이 있는 경우 - 참여자 */}
-                {/*
-                <div>
-                    <div className="grid gap-4">
-                        <div className="flex justify-between items-center">
-                            <div className="flex items-center shrink-2 whitespace-nowrap overflow-hidden">
-                                <img src="/images/place1.png" alt="" className="w-5 h-5 rounded-full mr-2" />
-                                <span className="textGray1 text-sm font-medium mr-2 shrink">비빔밥볶음밥단무지밥비빔밥볶음밥단무지밥</span>
-                                <div className="textOrange3 text-xs font-medium align-middle border border-color3 rounded-full px-2 py-1">6세, 11세, 서울, 엄마표</div>
-                            </div>
-                            <div className="textGray4 text-sm font-medium shrink-0 pl-7">수락대기</div>
-                        </div>
-                    </div>
-                </div>
-                */}
-
                 {/* 참여 신청한 이웃이 없는 경우 */}
-                {/*
+                {/* 
                 <div className="flex flex-col items-center  py-10 ">
                     <img src="/images/img_empty.png" alt="" className=" w-24 h-28 mb-3" />
                     <span className="text-center text-base font-medium textGray3">모임에 함께 할 이웃을<br />기다리고 있어요.</span>
                 </div>
                 */}
 
+
+                {/* 참여 신청한 이웃이 있는 경우 - 참여자 */}
+                {/* <div className="flex flex-col space-y-4">
+                    <div className="flex justify-between items-center align-middle">
+                        <div className="flex items-center whitespace-nowrap overflow-x-hidden">
+                            <img src="/images/place1.png" alt="" className="w-5 h-5 rounded-full mr-2" />
+                            <span className="textGray1 text-sm font-medium mr-2">비빔밥볶음밥단무지밥비빔밥볶음밥단무지밥</span>
+                            <div className="textOrange3 text-xs font-medium align-middle border border-color3 rounded-full px-2 py-1">6세, 11세, 서울, 엄마표</div>
+                        </div>
+                        <div className="textGray4 text-sm font-medium pl-7 shrink-0 align-middle">수락대기</div>
+                    </div>
+                    <div className="flex justify-between items-center">
+                        <div className="flex items-center whitespace-nowrap overflow-x-hidden">
+                            <img src="/images/place1.png" alt="" className="w-5 h-5 rounded-full mr-2" />
+                            <span className="textGray1 text-sm font-medium mr-2">수민맘</span>
+                            <div className="textOrange3 text-xs font-medium align-middle border border-color3 rounded-full px-2 py-1">5세, 서울, 엄마표</div>
+                        </div>
+                        <div className="textOrange5 text-sm font-medium pl-7 shrink-0 align-middle">수락완료</div>
+                    </div>
+                </div> */}
+
+
                 {/* 참여 신청한 이웃이 있는 경우 - 개설자 */}
-                <div className="flex flex-col space-y-4">
+                <div className="flex flex-col space-y-3">
                     <CommunityMember />
                 </div>
             </div>

@@ -6,6 +6,11 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
+import CustomMobileDatepicker from "../../components/common/custom_mobile_datepicker";
+import CustomTimepicker from "../../components/common/custom_timepicker";
+import moment from "moment";
+import { ChevronRight } from "@mui/icons-material";
+
 export default function FreeMettingOpened() {
     return (
         <>
@@ -94,9 +99,18 @@ export default function FreeMettingOpened() {
                                 <img src="/images/ic_search_black.png" alt="" className="w-6 h-6" />
                             </div>
                         </div>
+                        {/* 직접 입력 후 */}
+                        {/*
+                        <div className="bg-gray2 rounded-md py-3 px-4 flex justify-between items-center">
+                            <div className=" textGray1 text-sm font-normal">
+                                서울시 용산구 청파동 101-10
+                            </div>
+                            <span className="text-[#3C81E1] text-sm font-normal">수정</span>
+                        </div>
+                        */}
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     );
 }

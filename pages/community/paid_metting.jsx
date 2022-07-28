@@ -1,6 +1,9 @@
 import { Collapse } from '@mui/material';
 import React, { useState } from "react";
 
+import AliceCarousel from 'react-alice-carousel';
+import "react-alice-carousel/lib/alice-carousel.css";
+
 
 export default function PaidMeeting() {
     const [expanded, setExpanded] = useState(false);
@@ -8,7 +11,7 @@ export default function PaidMeeting() {
 
     return <>
         {/* 화면에 스크롤 있어야 되요.*/}
-        <div className="w-full h-screen flex flex-col border relative overflow-y-auto">
+        <div className="w-full h-full flex flex-col border overflow-y-auto pb-24 relative">
             {/* 헤더 */}
             <div className="px-5 py-4 flex justify-between items-center">
                 <img src="/images/back_ic.png" alt="" className="w-2 h-4" />
@@ -60,7 +63,11 @@ export default function PaidMeeting() {
                     <div>저희 집에서 같이 보드게임해요! 5~7세가 가지고 놀만한 보드게임 많이 있으니 빈손으로 오셔도 돼요~</div>
 
                     <div className='m-5'>
-                        <img src="/images/banner.png" alt="" className='w-full' />
+                        <AliceCarousel autoPlay autoPlayInterval="3000">
+                            <img src="/images/banner.png" alt="" className='w-full' />
+                            <img src="/images/banner.png" alt="" className='w-full' />
+                            <img src="/images/banner.png" alt="" className='w-full' />
+                        </AliceCarousel>
                     </div>
                 </div>
 
@@ -70,8 +77,8 @@ export default function PaidMeeting() {
                 <div className="mb-4">
                     모임에 참여 신청한 이웃입니다. <span>(0/5)</span>
                 </div>
-                <div className="grid gap-4">
-                    {/* 참여 신청한 이웃이 있는 경우 - 참여자 */}
+                {/* 참여 신청한 이웃이 있는 경우 - 참여자 */}
+                {/* <div className="flex flex-col space-y-4">
                     <div className="flex justify-between items-center">
                         <div className="flex items-center shrink-2 whitespace-nowrap overflow-hidden">
                             <img src="/images/place1.png" alt="" className="w-5 h-5 rounded-full mr-2" />
@@ -88,10 +95,9 @@ export default function PaidMeeting() {
                         </div>
                         <div className="textOrange5 text-sm font-bold shrink-0 pl-7">수락완료</div>
                     </div>
-                </div>
+                </div> */}
 
                 {/* 참여 신청한 이웃이 있는 경우 - 개설자 */}
-                {/*
                 <div className=''>
                     <div className="flex justify-between items-center">
                         <div className="flex items-center shrink-2 whitespace-nowrap overflow-hidden">
@@ -101,7 +107,7 @@ export default function PaidMeeting() {
                         </div>
                         <div className="text-white text-xs font-medium shrink-0 ml-7 bg-[#c4c4c4] px-2 py-1 rounded-full mr-4">수락대기</div>
                         <div>
-                            <img src="/images/up.png" alt="" className="w-4 h-2" onClick={() => setExpanded(!expanded)} />
+                            <img src={`${expanded ? "/images/up.png" : "/images/down.png"}`} alt="" className="w-4 h-2" onClick={() => setExpanded(!expanded)} />
                         </div>
                     </div>
                     <Collapse in={expanded} className="bg-gray2 p-3 my-2">
@@ -119,28 +125,26 @@ export default function PaidMeeting() {
                         </div>
                         <div className="text-white text-xs font-medium shrink-0 ml-7 bg-[#FF6035] px-2 py-1 rounded-full mr-4">수락하기</div>
                         <div>
-                            <img src="/images/up.png" alt="" className="w-4 h-2" onClick={() => setExpanded1(!expanded1)} />
+                            <img src={`${expanded ? "/images/up.png" : "/images/down.png"}`} alt="" className="w-4 h-2" onClick={() => setExpanded(!expanded)} />
                         </div>
                     </div>
                     <Collapse in={expanded1} className="bg-gray2 p-3">
-                       날짜 : 2022년 10월 21일<br />
+                        날짜 : 2022년 10월 21일<br />
                         시간 : 오전 10시 - 오후 1시<br />
                         요청사항 : 없음
                     </Collapse>
                 </div>
-            */}
+
 
                 {/* 참여 신청한 이웃이 없는 경우 */}
-                {/*
-            <div className="flex flex-col items-center  py-10 ">
-                <img src="/images/img_empty.png" alt="" className=" w-24 h-28 mb-3" />
-                <span className="text-center text-base font-medium textGray3">모임에 함께 할 이웃을<br />기다리고 있어요.</span>
-            </div>
-            */}
+                {/*<div className="flex flex-col items-center  py-10 ">
+                    <img src="/images/img_empty.png" alt="" className=" w-24 h-28 mb-3" />
+                    <span className="text-center text-base font-medium textGray3">모임에 함께 할 이웃을<br />기다리고 있어요.</span>
+                </div>*/}
             </div>
 
             {/* 푸터 */}
-            <div className='flex p-5 fixed bottom-0 left-0 right-0 bg-white'>
+            <div className='flex p-5 absolute bottom-0 left-0 right-0 bg-white'>
                 <div className='flex-1 flex-col'>
                     <div className='textGray3 text-base font-normal'>1시간 당</div>
                     <div className='text-black text-2xl font-semibold'>20,000원</div>
