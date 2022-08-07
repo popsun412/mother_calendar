@@ -79,15 +79,20 @@ const ExMapBody = (props) => {
 
         const _centerResult = await network.post("/home/recommPlaceMap", { ...props.param, centerLngLat, endLngLat });
 
+        const imageSrc = "/images/vector.png";
+        const imageSize = new kakao.maps.Size(29, 42);
+        const imageOption = { offset: new kakao.maps.Point(15, 42) };
+        var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+
         const clusterMarkers = _centerResult.data.map((_item) => {
             if (_item.latlng != null) {
                 var _marker = new kakao.maps.Marker({
                     position: new kakao.maps.LatLng(_item.latlng.coordinates[1], _item.latlng.coordinates[0]),
+                    image: markerImage,
                     clickable: true,
                 });
 
                 (function (_marker) {
-                    // 마커에 mouseover 이벤트를 등록하고 마우스 오버 시 인포윈도우를 표시합니다
                     kakao.maps.event.addListener(_marker, "click", function () {
                         const _href = { pathname: "/item", query: { commonItemUid: _item.commonItemUid } };
                         router.push(_href);

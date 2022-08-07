@@ -225,7 +225,7 @@ export default function PlaneDetail(props) {
                             <></>
                         )}
                         {status() == 1 ? (
-                            <span className="px-5 py-3 bg-gray4 text-base text-white font-medium rounded-full fixed bottom-6 max-w-500">
+                            <span className="px-5 py-3 bg-gray4 text-base text-white font-medium rounded-full fixed bottom-6 max-w-fit">
                                 오늘 인증을 완료했어요!
                             </span>
                         ) : (
@@ -233,7 +233,7 @@ export default function PlaneDetail(props) {
                         )}
                         {status() == 2 ? (
                             <Link href={`/plan/edit?planUid=${props.plan.planUid}`} passHref>
-                                <span className="px-5 py-3 bg5 text-base text-white font-medium rounded-full fixed bottom-6 max-w-500">
+                                <span className="px-5 py-3 bg5 text-base text-white font-medium rounded-full fixed bottom-6 max-w-fit">
                                     종료 계획 재시작하기
                                 </span>
                             </Link>
