@@ -134,8 +134,8 @@ const Plan2 = () => {
                         <div className="block absolute bottom-0 right-0">
                             <div className="mr-5 mb-1">
                                 <img
-                                    className={`${data.isMyPlan ? "w-5" : "w-6"} mb-1`}
-                                    src={`${data.isMyPlan ? "/images/vector.png?v=1" : "/images/ic_add_03.png"}`}
+                                    className={`w-6 mb-1`}
+                                    src={`${data.isMyPlan ? "/images/ic_add_complete.png?v=1" : "/images/ic_add_03.png"}`}
                                     onClick={(e) => {
                                         e.preventDefault();
                                         e.stopPropagation();
