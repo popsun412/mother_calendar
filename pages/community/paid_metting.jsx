@@ -57,13 +57,17 @@ export default function PaidMeeting() {
                 </div>
                 <div className="flex flex-col textGray1 text-sm font-normal">
                     <div className='flex text-sm mb-4'>
-                        <span className='text-black font-medium mr-2'>제공 사항: </span>
+                        <span className='text-black font-medium mr-2 w-1.5'>제공 사항: </span>
                         <div className='textGray1 font-normal'>전집제공, 책 읽어주기, 영어회화</div>
                     </div>
                     <div>저희 집에서 같이 보드게임해요! 5~7세가 가지고 놀만한 보드게임 많이 있으니 빈손으로 오셔도 돼요~</div>
 
                     <div className='m-5'>
-                        <AliceCarousel autoPlay autoPlayInterval="3000">
+                        <AliceCarousel
+                            autoPlay
+                            autoPlayInterval="3000"
+                            disableButtonsControls
+                        >
                             <img src="/images/banner.png" alt="" className='w-full' />
                             <img src="/images/banner.png" alt="" className='w-full' />
                             <img src="/images/banner.png" alt="" className='w-full' />

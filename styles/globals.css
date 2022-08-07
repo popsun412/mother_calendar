@@ -3,24 +3,26 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: "Bazzi";
-  src: url("/fonts/Bazzi.otf") format("truetype");
+    font-family: "Bazzi";
+    src: url("/fonts/Bazzi.otf") format("truetype");
 }
 
 @font-face {
-  font-family: "SuncheonR";
-  src: url("/fonts/SuncheonR.ttf") format("truetype");
+    font-family: "SuncheonR";
+    src: url("/fonts/SuncheonR.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: "SuncheonB";
-  src: url("/fonts/SuncheonB.ttf") format("truetype");
+    font-family: "SuncheonB";
+    src: url("/fonts/SuncheonB.ttf") format("truetype");
 }
 
 @layer base {
-  html, body {
-    font-family: "SuncheonR";
-  }
+
+    html,
+    body {
+        font-family: "SuncheonR";
+    }
 }
 
 body {
@@ -269,6 +271,27 @@ body {
 }
 
 .swiper-pagination-bullet-active {
-     background-color: #ff6035 !important;
-     opacity: 1 !important;
+    background-color: #ff6035 !important;
+    opacity: 1 !important;
+}
+
+
+.alice-carousel__dots {
+    position: absolute;
+    left: 45%;
+    bottom: 0;
+    margin-bottom: 1rem !important;
+}
+
+.alice-carousel__dots-item {
+    background-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.alice-carousel__dots-item:not(.__custom):not(:last-child) {
+    margin-right: 0.375rem !important;
+}
+
+.alice-carousel__dots-item:not(.__custom):hover,
+.alice-carousel__dots-item:not(.__custom).__active {
+    background-color: #ff6035 !important;
 }
