@@ -1,9 +1,11 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function CommunityAddBtn() {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
 
   return (
@@ -15,8 +17,8 @@ export default function CommunityAddBtn() {
       ) : (
         <div className="absolute left-0 right-0 top-0 bottom-0 bg-black/60 z-150">
           <div className="absolute flex flex-col items-center space-y-4 text-white" style={{ bottom: 84, right: 22 }}>
-            <p>무료모임</p>
-            <p>유료모임</p>
+            <p onClick={() => router.push("/community/freeopen")}>무료모임</p>
+            <p onClick={() => router.push("/community/payopen")}>유료모임</p>
             <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center">
               <img src="/images/close.png" className="w-24" onClick={() => setOpen(false)} />
             </div>

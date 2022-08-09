@@ -1,15 +1,20 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState } from "react";
 import { useEffect } from "react";
 import CommunityCard from "../community/community_card";
+import { useRecoilState } from "recoil";
+import { selectedDateState } from "../../states/community_state";
 
 export default function CommunityCardList() {
-  const [items, setItems] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+  const [selectedDate, setSelectedDate] = useRecoilState(selectedDateState);
+
+  const [items, setItems] = useState([]);
 
   const getItems = () => {};
 
   useEffect(() => {
     getItems();
-  }, []);
+  }, [selectedDate]);
 
   return (
     <div className="flex-auto flex flex-col px-5 pt-4 overflow-y-auto scrollbar-hide pb-36 bg-gray2">

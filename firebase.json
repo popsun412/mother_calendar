@@ -2,6 +2,7 @@
     "hosting": {
         "public": "./out",
         "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+        "target": "dev",
         "rewrites": [
             {
                 "source": "addbook",
@@ -154,6 +155,26 @@
             {
                 "source": "useguide",
                 "destination": "/useguide.html"
+            },
+            {
+                "source": "community",
+                "destination": "/community.html"
+            },
+            {
+                "source": "community/detail",
+                "destination": "/community/detail.html"
+            },
+            {
+                "source": "community/attend",
+                "destination": "/community/attend.html"
+            },
+            {
+                "source": "community/freeopen",
+                "destination": "/community/freeopen.html"
+            },
+            {
+                "source": "community/payopen",
+                "destination": "/community/payopen.html"
             },
             {
                 "source": "**",
