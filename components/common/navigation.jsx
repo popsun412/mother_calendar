@@ -52,7 +52,10 @@ const Navigation = (props) => {
             <Link href="/community">
               <div className="flex-1 mt-2.5 my-0 mx-auto">
                 <div className="text-center">
-                  <img src={`${pathname === "community" ? "/images/calendar_navi_select.png" : "/images/calendar_navi.png"}`} className="mx-auto w-6 h-6" />
+                  <img
+                    src={`${pathname === "community" ? "/images/community_navi_select.png" : "/images/community_navi_select.png"}`}
+                    className="mx-auto w-6 h-6"
+                  />
                 </div>
                 <div className="text-center">
                   <span className={`text-xs ${pathname === "community" ? "textOrange5" : "textGray4"}`} style={{ letterSpacing: "-0.36px" }}>

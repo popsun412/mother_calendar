@@ -177,6 +177,10 @@
                 "destination": "/community/payopen.html"
             },
             {
+                "source": "community/list",
+                "destination": "/community/list.html"
+            },
+            {
                 "source": "**",
                 "destination": "/index.html"
             }

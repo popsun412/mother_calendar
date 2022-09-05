@@ -7,6 +7,7 @@ import CircleLoading from "../../components/common/circle_loading";
 import CommunityAttendInfo from "../../components/community/attend/community_attend_info";
 import moment from "moment";
 import network from "../../util/network";
+import { ArrowBackIosNewRounded } from "@mui/icons-material";
 
 export default function CommunityAttend() {
   const router = useRouter();
@@ -75,17 +76,8 @@ export default function CommunityAttend() {
         <div className="relative flex py-4">
           <span className="absolute top-0 right-0 left-0 bottom-0 flex items-center justify-center text-base font-medium textGray1 z-40">신청하기</span>
 
-          <div className="flex flex-auto justify-between items-center z-50 ml-2.5">
-            <svg
-              className="w-7 h-8 ml-1 textGray2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              onClick={() => router.back()}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
-            </svg>
+          <div className="flex flex-auto justify-between items-center z-50 ml-4">
+            <ArrowBackIosNewRounded onClick={() => router.back()} style={{ width: 24, color: "#4f4f4f" }} />
           </div>
         </div>
         <CommunityAttendInfo

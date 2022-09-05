@@ -7,10 +7,12 @@ import PayOpenStep1 from "../../components/community/create/pay_open_step1";
 import PayOpenStep2 from "../../components/community/create/pay_open_step2";
 import CircleLoading from "../../components/common/circle_loading";
 import { useEffect } from "react";
+import { ArrowBackIosNewRounded } from "@mui/icons-material";
 
 export default function PayOpen() {
   const auth = getAuth();
   const router = useRouter();
+  const [userInfo, setUserInfo] = useState(null);
   const [step, setStep] = useState(1);
   const [load, setLoad] = useState(false);
 
@@ -37,10 +39,23 @@ export default function PayOpen() {
     images: [],
   });
 
+  // 유저 정보 갖고오기
+  const getUser = async () => {
+    const _result = await network.post("/userInfo");
+
+    // data 통신
+    if (_result.status == 200) {
+      setUserInfo(_result.data);
+      setLoad(true);
+    } else {
+      router.push("/");
+    }
+  };
+
   useEffect(() => {
     auth.onAuthStateChanged(async (_user) => {
       if (_user) {
-        setLoad(true);
+        getUser();
       } else {
         router.push("/");
       }
@@ -80,6 +95,10 @@ export default function PayOpen() {
     for (var key in communityCreateDto) {
       if (key == "directOffer") continue;
 
+      if (key == "address") {
+        formData.append(key, communityCreateDto.placeType == 0 ? userInfo.address : communityCreateDto.placeType);
+      }
+
       if (key == "communityStartTime") {
         formData.append(key, communityCreateDto.communityStartTime == null ? null : moment(communityCreateDto.communityStartTime).format("HH:mm"));
         continue;
@@ -110,20 +129,14 @@ export default function PayOpen() {
         <div className="relative flex py-4">
           <span className="absolute top-0 right-0 left-0 bottom-0 flex items-center justify-center text-base font-medium textGray1 z-40">유료 모임 개설</span>
 
-          <div className="flex flex-auto justify-between items-center z-50 ml-2.5">
-            <svg
-              className="w-7 h-8 ml-1 textGray2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
+          <div className="flex flex-auto justify-between items-center z-50 ml-4">
+            <ArrowBackIosNewRounded
               onClick={() => {
                 if (step == 1) router.back();
                 if (step == 2) setStep(1);
               }}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
-            </svg>
+              style={{ width: 24, color: "#4f4f4f" }}
+            />
           </div>
         </div>
         {step == 1 ? (

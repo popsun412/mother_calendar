@@ -10,7 +10,7 @@ import moment from "moment";
 import CircleLoading from "../../components/common/circle_loading";
 import CustomMobileDatepicker from "../../components/common/custom_mobile_datepicker";
 import CustomTimepicker from "../../components/common/custom_timepicker";
-import { ChevronRight } from "@mui/icons-material";
+import { ChevronRight, ArrowBackIosNewRounded } from "@mui/icons-material";
 import CircleLoadingOpacity from "../../components/common/circle_loading_opacity";
 
 // firebase
@@ -172,19 +172,10 @@ export default function Regist(props) {
               {common ? "공동" : ""} 계획 등록
             </span>
 
-            <div className="flex flex-auto justify-between items-center z-50">
-              <svg
-                className="w-7 h-8 ml-1 textGray2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-                onClick={() => router.back()}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
-              </svg>
+            <div className="flex flex-auto justify-between items-center z-50 px-5">
+              <ArrowBackIosNewRounded className="-ml-1" onClick={() => router.back()} style={{ width: 24, color: "#4f4f4f" }} />
 
-              <span className={`pr-4 text-base font-medium ${registActive() ? "textOrange5" : "textGray4"}`} value="false" onClick={planRegist}>
+              <span className={`text-base font-medium ${registActive() ? "textOrange5" : "textGray4"}`} value="false" onClick={planRegist}>
                 완료
               </span>
             </div>

@@ -15,6 +15,14 @@ export default function CommunityDeatilHeader(props) {
     return `${koA} ${koH}${koM == "00" ? "" : " " + koM + "분"}`;
   };
 
+  const conditionString = () => {
+    try {
+      return conditions[conditions.findIndex((_item) => _item.type == props.item.condition)].text;
+    } catch (error) {
+      return "";
+    }
+  };
+
   return (
     <div className="py-2 overflow-hidden">
       <div className="flex items-center align-middle mb-6">
@@ -39,8 +47,7 @@ export default function CommunityDeatilHeader(props) {
         <div className="flex items-center">
           <img src="/images/bi-people-fill.png" alt="" className="w-4 h-4 mr-1.5" />
           <span className="textGray3 text-sm font-normal">
-            {conditions[conditions.findIndex((_item) => _item.type == props.community.condition)].text} 만 {props.community.minAge}세 ~ 만{" "}
-            {props.community.maxAge}세
+            {conditionString()} 만 {props.community.minAge}세 ~ 만 {props.community.maxAge}세
           </span>
         </div>
       </div>

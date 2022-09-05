@@ -2,8 +2,10 @@ import CustomMobileDatepicker from "../common/custom_mobile_datepicker";
 import moment from "moment";
 import { useRecoilState } from "recoil";
 import { selectedDateState } from "../../states/community_state";
+import { useRouter } from "next/router";
 
 export default function CommunityDate(props) {
+  const router = useRouter();
   const [selectedDate, setSelectedDate] = useRecoilState(selectedDateState);
 
   // 포멧팅
@@ -26,7 +28,9 @@ export default function CommunityDate(props) {
           </svg>
         </div>
       </CustomMobileDatepicker>
-      <div className="checkbox textGray2 text-xs font-normal px-3 py-1.5 p-">참여모임</div>
+      <div className="checkbox textGray2 text-xs font-normal px-3 py-1.5 p-" onClick={() => router.push("/community/list")}>
+        참여모임
+      </div>
     </div>
   );
 }
