@@ -12,7 +12,7 @@ export default function CommunityCard(props) {
     // 마감
     if (moment(props.item.communityDate) <= moment()) return false;
     if (props.item.status != 0) return false;
-    if (props.item.memberMaxCount <= props.item.members.length) return false;
+    if (props.item.memberMaxCount <= props.item.members.map((_member) => _member.status == 1 && _member.userUid != auth.currentUser.uid).length) return false;
 
     // 정상
     return true;
@@ -37,10 +37,8 @@ export default function CommunityCard(props) {
   };
 
   const placeText = () => {
-    if (props.item.placeType == 0) return "집";
     if (props.item.placeType == 2) return "온라인";
-
-    return `${props.item.address} ${props.item.detailAddress}`;
+    return `${props.item.address} ${props.item.detailAddress ?? ""}`;
   };
 
   // 장소
@@ -63,7 +61,7 @@ export default function CommunityCard(props) {
 
   const conditionString = () => {
     try {
-      return conditions[conditions.findIndex((_item) => _item.type == props.item.condition)].text;
+      return `${conditions[conditions.findIndex((_item) => _item.type == props.item.condition)].text}·`;
     } catch (error) {
       return "";
     }
@@ -97,7 +95,8 @@ export default function CommunityCard(props) {
         <div className={`flex align-middle items-center ${props.item.minAge && props.item.maxAge ? "" : "hidden"}`}>
           <img src={`${_isActive() ? "/images/bi-people-fill.png" : "/images/bi-people.png"}`} className="w-4 h-4" />
           <span className="textGray3 text-xs font-normal ml-1">
-            {conditionString()} 만 {props.item.minAge}세 ~ 만 {props.item.maxAge}세
+            {conditionString()}
+            {props.item.minAge}세 ~ {props.item.maxAge}세
           </span>
         </div>
       </div>
@@ -106,7 +105,11 @@ export default function CommunityCard(props) {
         <div className="flex-auto flex-shrink-0 flex flex-nowrap gap-2">
           {/* 개설자 */}
           <div className="relative">
-            <img src={profileImage(props.item.creator)} className="w-8 h-8" style={_isActive() ? {} : { WebkitFilter: "grayscale(100%)", filter: "gray" }} />
+            <img
+              src={profileImage(props.item.creator)}
+              className="w-8 h-8 rounded-full"
+              style={_isActive() ? {} : { WebkitFilter: "grayscale(100%)", filter: "gray" }}
+            />
             <span className="absolute bottom-0 right-0">
               <img src="/images/group-7459.png" alt="" className="w-3 h-3" style={_isActive() ? {} : { WebkitFilter: "grayscale(100%)", filter: "gray" }} />
             </span>
@@ -114,7 +117,12 @@ export default function CommunityCard(props) {
           {/* 멤버 */}
           {props.item.members.map((_member, index) => {
             return (
-              <img key={index} src={profileImage(_member)} className="w-8 h-8" style={_isActive() ? {} : { WebkitFilter: "grayscale(100%)", filter: "gray" }} />
+              <img
+                key={index}
+                src={profileImage(_member)}
+                className="w-8 h-8 rounded-full"
+                style={_isActive() ? {} : { WebkitFilter: "grayscale(100%)", filter: "gray" }}
+              />
             );
           })}
 

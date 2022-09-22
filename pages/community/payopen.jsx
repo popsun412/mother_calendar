@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { getAuth } from "firebase/auth";
@@ -60,7 +61,7 @@ export default function PayOpen() {
         router.push("/");
       }
     });
-  });
+  }, []);
 
   const nextBtnActive = () => {
     if (step == 1) {
@@ -79,9 +80,9 @@ export default function PayOpen() {
       if (communityCreateDto.condition == null) return false;
       if (communityCreateDto.amount <= 0) return false;
       if (communityCreateDto.offers.length == 0) return false;
-      if (communityCreateDto.message.trim() == "") return false;
-      if (communityCreateDto.minAge != null && communityCreateDto.maxAge == null) return false;
-      if (communityCreateDto.maxAge != null && communityCreateDto.minAge == null) return false;
+      if ((communityCreateDto.message ?? "").trim().length < 50) return false;
+      if (communityCreateDto.minAge == null || communityCreateDto.maxAge == null) return false;
+      if (communityCreateDto.images == null || communityCreateDto.images.length == 0) return false;
     }
 
     return true;
@@ -96,7 +97,8 @@ export default function PayOpen() {
       if (key == "directOffer") continue;
 
       if (key == "address") {
-        formData.append(key, communityCreateDto.placeType == 0 ? userInfo.address : communityCreateDto.placeType);
+        formData.append(key, communityCreateDto.placeType == 0 ? userInfo.address : communityCreateDto.address);
+        continue;
       }
 
       if (key == "communityStartTime") {
@@ -117,7 +119,6 @@ export default function PayOpen() {
         });
       }
     }
-
     const _result = await network.post("/community", formData);
 
     router.push("/community");

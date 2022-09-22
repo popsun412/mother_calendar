@@ -53,7 +53,7 @@ const Navigation = (props) => {
               <div className="flex-1 mt-2.5 my-0 mx-auto">
                 <div className="text-center">
                   <img
-                    src={`${pathname === "community" ? "/images/community_navi_select.png" : "/images/community_navi_select.png"}`}
+                    src={`${pathname === "community" ? "/images/community_navi_select.png" : "/images/community/community_navi_none_select.png"}`}
                     className="mx-auto w-6 h-6"
                   />
                 </div>

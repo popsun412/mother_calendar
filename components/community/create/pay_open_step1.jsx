@@ -62,7 +62,7 @@ export default function PayOpenStep1(props) {
           유료 모임은 어떻게 진행되나요
         </strong>
         <p className="text-[#3C81E1] text-xs font-medium leading-6">
-          유료 모임은 무료 모임과 달리 참가들에게 참여를 위한 비용이 부과됩니다. 참여비는 리더에게 지급되며, 리더는 참가자들에게 특정 서비스를 제공할 수
+          유료 모임은 무료 모임과 달리 참가자들에게 참여를 위한 비용이 부과됩니다. 참여비는 리더에게 지급되며, 리더는 참가자들에게 특정 서비스를 제공할 수
           있습니다.
         </p>
       </div>
@@ -113,13 +113,12 @@ export default function PayOpenStep1(props) {
       <div className="mb-4">
         <div className="text-sm font-medium">
           <span className="textGray2">날짜</span>
-          <span className="textGray4"> (중복가능)</span>
+          {/* <span className="textGray4"> (중복가능)</span> */}
         </div>
         <div className="mt-3 max-w-fit mb-4">
           <CustomMobileDatepicker
             onChange={(date) => {
-              props.communityCreateDto.communityDates.push(moment(date).format("YYYY-MM-DD HH:mm:ss"));
-              props.setCommunityCreateDto({ ...props.communityCreateDto });
+              props.setCommunityCreateDto({ ...props.communityCreateDto, communityDates: [moment(date).format("YYYY-MM-DD HH:mm:ss")] });
             }}
             closeOnSelect={true}
             value={
@@ -140,7 +139,7 @@ export default function PayOpenStep1(props) {
             </div>
           </CustomMobileDatepicker>
         </div>
-        <div className="grid grid-cols-2 gap-4 w-full">
+        {/* <div className="grid grid-cols-2 gap-4 w-full">
           {props.communityCreateDto.communityDates
             .sort((a, b) => a - b)
             .map((_communityDate, index) => {
@@ -159,7 +158,7 @@ export default function PayOpenStep1(props) {
                 </div>
               );
             })}
-        </div>
+        </div> */}
       </div>
 
       {/* 시간 */}
@@ -171,6 +170,7 @@ export default function PayOpenStep1(props) {
           <CustomTimepicker
             onChange={(time) => props.setCommunityCreateDto({ ...props.communityCreateDto, communityStartTime: time })}
             value={props.communityCreateDto.communityStartTime}
+            maxTime={props.communityCreateDto.communityEndTime}
           >
             <div className="flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center">
               <span className={`text-xs font-medium pl-2 ${props.communityCreateDto.communityStartTime == null ? "textGray4" : ""}`}>
@@ -189,6 +189,7 @@ export default function PayOpenStep1(props) {
           <CustomTimepicker
             onChange={(time) => props.setCommunityCreateDto({ ...props.communityCreateDto, communityEndTime: time })}
             value={props.communityCreateDto.communityEndTime}
+            minTime={props.communityCreateDto.communityStartTime}
           >
             <div className="flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center">
               <span className={`text-xs font-medium pl-2 ${props.communityCreateDto.communityEndTime == null ? "textGray4" : ""}`}>

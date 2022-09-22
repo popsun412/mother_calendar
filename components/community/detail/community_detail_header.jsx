@@ -16,17 +16,23 @@ export default function CommunityDeatilHeader(props) {
   };
 
   const conditionString = () => {
-    try {
-      return conditions[conditions.findIndex((_item) => _item.type == props.item.condition)].text;
-    } catch (error) {
-      return "";
-    }
+    if (props.community.condition == 0) return "아이랑·";
+    if (props.community.condition == 1) return "엄마만·";
+    if (props.community.condition == 2) return "아빠만·";
+    return "";
+  };
+
+  const placeText = () => {
+    if (props.community.placeType == 2) return "온라인";
+    return `${props.community.address ?? ""} ${props.community.detailAddress ?? ""}`;
   };
 
   return (
     <div className="py-2 overflow-hidden">
       <div className="flex items-center align-middle mb-6">
-        <span className="bg4 text-white rounded-md text-xs py-1 px-2 mr-2">{props.community.subject}</span>
+        <span className={`${props.community.communityType == 0 ? "bg4" : "bg-blue4"} text-white rounded-md text-xs py-1 px-2 mr-2`}>
+          {props.community.subject}
+        </span>
         <div>{props.community.name}</div>
       </div>
       <div className="grid gap-2.5 bg-gray2 p-4 rounded-lg mb-6">
@@ -40,14 +46,15 @@ export default function CommunityDeatilHeader(props) {
             {timeFormat(props.community.communityStartTime)} - {timeFormat(props.community.communityEndTime)}
           </span>
         </div>
-        <div className={`flex items-center ${props.community.address ? "" : "hidden"}`}>
+        <div className={`flex items-center`}>
           <img src="/images/frame.png" alt="" className="w-4 h-4 mr-1.5" />
-          <span className="textGray3 text-sm font-normal">{`${props.community.address ?? ""} ${props.community.detailAddress ?? ""}`}</span>
+          <span className="textGray3 text-sm font-normal">{placeText()}</span>
         </div>
         <div className="flex items-center">
           <img src="/images/bi-people-fill.png" alt="" className="w-4 h-4 mr-1.5" />
           <span className="textGray3 text-sm font-normal">
-            {conditionString()} 만 {props.community.minAge}세 ~ 만 {props.community.maxAge}세
+            {conditionString()}
+            {props.community.minAge}세 ~ {props.community.maxAge}세
           </span>
         </div>
       </div>

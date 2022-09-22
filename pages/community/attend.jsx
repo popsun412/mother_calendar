@@ -8,6 +8,7 @@ import CommunityAttendInfo from "../../components/community/attend/community_att
 import moment from "moment";
 import network from "../../util/network";
 import { ArrowBackIosNewRounded } from "@mui/icons-material";
+import { useRef } from "react";
 
 export default function CommunityAttend() {
   const router = useRouter();
@@ -16,6 +17,8 @@ export default function CommunityAttend() {
   const [load, setLoad] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
   const [infoCheck, setInfoCheck] = useState(false);
+
+  const communityInfo = useRef(null);
 
   const [attendCommunityDto, setAttendCommunityDto] = useState({
     communityUid: router.query.cid,
@@ -33,6 +36,14 @@ export default function CommunityAttend() {
     } else {
       router.push("/");
     }
+
+    const _communityResult = await network.get(`/community/${router.query.cid}`);
+    communityInfo.current = _communityResult.data.community;
+    setAttendCommunityDto({
+      ...attendCommunityDto,
+      startTime: moment(`${communityInfo.current.communityDate} ${communityInfo.current.communityStartTime}`).toDate(),
+      endTime: moment(`${communityInfo.current.communityDate} ${communityInfo.current.communityEndTime}`).toDate(),
+    });
 
     setLoad(true);
   };
@@ -52,6 +63,7 @@ export default function CommunityAttend() {
   const attend = async () => {
     const _result = await network.post("/community/attend", {
       ...attendCommunityDto,
+      communityUid: communityInfo.current.communityUid,
       startTime: attendCommunityDto.startTime == null ? null : moment(attendCommunityDto.startTime).format("HH:mm"),
       endTime: attendCommunityDto.endTime == null ? null : moment(attendCommunityDto.endTime).format("HH:mm"),
     });
@@ -62,9 +74,10 @@ export default function CommunityAttend() {
   };
 
   const nextBtnActive = () => {
-    if (attendCommunityDto.startTime == null) return false;
-    if (attendCommunityDto.endTime == null) return false;
-    if (attendCommunityDto.requestMessage == null || attendCommunityDto.requestMessage.trim() == "") return false;
+    if (communityInfo.communityType == 1 && attendCommunityDto.startTime == null) return false;
+    if (communityInfo.communityType == 1 && attendCommunityDto.endTime == null) return false;
+    if (attendCommunityDto.requestMessage == null) return false;
+    if (attendCommunityDto.requestMessage.length < 50) return false;
     if (!infoCheck) return false;
 
     return true;
@@ -85,6 +98,7 @@ export default function CommunityAttend() {
           setAttendCommunityDto={setAttendCommunityDto}
           userInfo={userInfo}
           infoCheck={infoCheck}
+          communityInfo={communityInfo.current}
           setInfoCheck={setInfoCheck}
         />
       </div>

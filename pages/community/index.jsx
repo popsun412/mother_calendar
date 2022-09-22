@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import CommunityTop from "../../components/community/community_top";
@@ -11,9 +12,11 @@ import { useEffect } from "react";
 import { getAuth } from "firebase/auth";
 import CircleLoading from "../../components/common/circle_loading";
 import network from "../../util/network";
+import { useRouter } from "next/router";
 
 export default function Community() {
   const auth = getAuth();
+  const router = useRouter();
   const [load, setLoad] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
   const [myRegion, setMyRegion] = useState(null);
@@ -48,10 +51,10 @@ export default function Community() {
           <div className="flex flex-col px-5 pt-5">
             <CommunityTop userInfo={userInfo} myRegion={myRegion} setMyRegion={setMyRegion} />
             <CommunityDate />
-            <CommunityWeek />
+            <CommunityWeek myRegion={myRegion} />
           </div>
           <CommunityCardList myRegion={myRegion} />
-          <CommunityAddBtn />
+          {auth.currentUser.email == "jiyun25@naver.com" ? <CommunityAddBtn /> : <></>}
         </div>
         <Navigation path={"community"} />
       </div>

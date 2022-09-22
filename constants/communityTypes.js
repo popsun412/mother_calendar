@@ -9,5 +9,5 @@ export const offers = ["전집 제공", "교구 제공", "체험 제공", "책 �
 export const conditions = [
   { type: 0, text: "아이랑" },
   { type: 1, text: "엄마만" },
-  { type: 1, text: "아빠만" },
+  { type: 2, text: "아빠만" },
 ];

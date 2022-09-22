@@ -26,7 +26,7 @@ export default function FriendList(props) {
 
       _user.babys.map((_baby) => {
         const _birth = moment(_baby.birth, "YYYY-MM-DD").toDate();
-        const _age = _now.getFullYear() - _birth.getFullYear();
+        const _age = _now.getFullYear() - _birth.getFullYear() + 1;
         _ages.push(`${_age}세`);
       });
 

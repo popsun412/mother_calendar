@@ -55,7 +55,7 @@ export default function CommunityDetail() {
 
     // 참여자
     if (!_checkCreator) {
-      if (members.length >= community.memberMaxCount) return false;
+      if (members.map((_member) => _member.status == 1).length >= community.memberMaxCount) return false;
     }
 
     return true;
@@ -67,7 +67,7 @@ export default function CommunityDetail() {
         <div className="flex-auto">
           <div className="px-5">
             {/* 앱바 */}
-            <CommunityAppBar />
+            <CommunityAppBar checkCreator={creator.uid == auth.currentUser.uid} community={community} />
 
             {/* 헤더 */}
             <CommunityDeatilHeader community={community} />
@@ -83,7 +83,7 @@ export default function CommunityDetail() {
           <div className="px-5 mb-20">
             <div className="mb-4">
               <span className="font-semibold text-base">
-                모임에 참여 신청한 이웃입니다. ({members.length}/{community.memberMaxCount})
+                모임에 참여 신청한 이웃입니다. ({members.map((_member) => _member.status == 1).length}/{community.memberMaxCount})
               </span>
             </div>
             {members.length == 0 ? (
@@ -91,7 +91,7 @@ export default function CommunityDetail() {
             ) : (
               <div className="space-y-6">
                 {members.map((_member, index) => (
-                  <CommunityMember key={index} member={_member} community={community} />
+                  <CommunityMember key={index} member={_member} community={community} checkCreator={creator.uid == auth.currentUser.uid} />
                 ))}
               </div>
             )}

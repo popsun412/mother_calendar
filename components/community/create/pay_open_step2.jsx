@@ -28,6 +28,13 @@ export default function PayOpenStep2(props) {
 
   const amountFormat = () => props.communityCreateDto.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
+  // 이미지 url 체크
+  const imageUrlCheck = (_imageFile) => {
+    if (typeof _imageFile === "string") return _imageFile;
+
+    return URL.createObjectURL(_imageFile);
+  };
+
   return (
     <div className="px-5">
       <div className="flex-col space-y-8">
@@ -103,7 +110,7 @@ export default function PayOpenStep2(props) {
         <div>
           <div className="mb-3 text-sm font-medium textGray2">
             참여자의 아이 연령
-            <span className="textGray4"> (선택)</span>
+            <span className="textGray4"></span>
           </div>
           <div className="flex">
             <div
@@ -268,7 +275,8 @@ export default function PayOpenStep2(props) {
             <TextareaAutosize
               className="bg-transparent resize-none outline-none text-center"
               placeholder="리더로서 함께 하고 싶은 계획 내용을 자세히 소개해주세요. (50자 이상)"
-              maxLength={50}
+              defaultValue={props.communityCreateDto.message}
+              minLength={50}
               onChange={(e) => props.setCommunityCreateDto({ ...props.communityCreateDto, message: e.currentTarget.value })}
             />
           </div>
@@ -296,7 +304,7 @@ export default function PayOpenStep2(props) {
 
             {props.communityCreateDto.images.map((_imageFile, index) => (
               <div key={index} className="relative">
-                <img src={URL.createObjectURL(_imageFile)} alt="" className="w-full rounded-md" />
+                <img src={imageUrlCheck(_imageFile)} className="w-full rounded-md" alt="" />
                 <img
                   src="/images/ic-delete.png"
                   alt=""

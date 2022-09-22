@@ -52,8 +52,8 @@ export default function FreeOpen() {
     if (step == 2) {
       if (communityCreateDto.memberMaxCount == 0) return false;
       if (communityCreateDto.condition == null) return false;
-      if (communityCreateDto.minAge != null && communityCreateDto.maxAge == null) return false;
-      if (communityCreateDto.maxAge != null && communityCreateDto.minAge == null) return false;
+      if ((communityCreateDto.message ?? "").trim().length < 50) return false;
+      if (communityCreateDto.minAge == null || communityCreateDto.maxAge == null) return false;
     }
 
     return true;
@@ -62,7 +62,7 @@ export default function FreeOpen() {
   const createCommunity = async () => {
     const _result = await network.post("/community", {
       ...communityCreateDto,
-      address: communityCreateDto.placeType == 0 ? userInfo.address : communityCreateDto.placeType,
+      address: communityCreateDto.placeType == 0 ? userInfo.address : communityCreateDto.address,
       communityStartTime: communityCreateDto.communityStartTime == null ? null : moment(communityCreateDto.communityStartTime).format("HH:mm"),
       communityEndTime: communityCreateDto.communityEndTime == null ? null : moment(communityCreateDto.communityEndTime).format("HH:mm"),
     });

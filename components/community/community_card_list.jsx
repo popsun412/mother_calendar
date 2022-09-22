@@ -18,7 +18,7 @@ export default function CommunityCardList(props) {
   const getItems = async () => {
     setLoad(false);
 
-    const _result = await network.get(`/community?date=${moment(selectedDate).format("YYYY-MM-DD")}&region=${props.myRegion}`);
+    const _result = await network.get(`/community?dates=${moment(selectedDate).format("YYYY-MM-DD")}&region=${props.myRegion}`);
     setItems(_result.data);
 
     setLoad(true);

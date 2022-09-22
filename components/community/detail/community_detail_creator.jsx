@@ -47,7 +47,7 @@ export default function CommunityDetailCreator(props) {
               {showModel.interest}
             </div>
           </div>
-          <div className="textGray3 text-xs font-normal">{props.creator.region}</div>
+          <div className="textGray3 text-xs font-normal">{props.creator.address}</div>
         </div>
       </div>
       {props.community.communityType == 1 ? (

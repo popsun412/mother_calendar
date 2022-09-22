@@ -129,6 +129,7 @@ export default function FreeOpenStep1(props) {
           <CustomTimepicker
             onChange={(time) => props.setCommunityCreateDto({ ...props.communityCreateDto, communityStartTime: time })}
             value={props.communityCreateDto.communityStartTime}
+            maxTime={props.communityCreateDto.communityEndTime}
           >
             <div className="flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center">
               <span className={`text-xs font-medium pl-2 ${props.communityCreateDto.communityStartTime == null ? "textGray4" : ""}`}>
@@ -147,6 +148,7 @@ export default function FreeOpenStep1(props) {
           <CustomTimepicker
             onChange={(time) => props.setCommunityCreateDto({ ...props.communityCreateDto, communityEndTime: time })}
             value={props.communityCreateDto.communityEndTime}
+            minTime={props.communityCreateDto.communityStartTime}
           >
             <div className="flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center">
               <span className={`text-xs font-medium pl-2 ${props.communityCreateDto.communityEndTime == null ? "textGray4" : ""}`}>

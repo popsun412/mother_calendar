@@ -94,7 +94,7 @@ export default function FreeOpenStep2(props) {
         <div>
           <div className="mb-3 text-sm font-medium textGray2">
             참여자의 아이 연령
-            <span className="textGray4"> (선택)</span>
+            <span className="textGray4"></span>
           </div>
           <div className="flex">
             <div
@@ -188,7 +188,8 @@ export default function FreeOpenStep2(props) {
             <TextareaAutosize
               className="bg-transparent resize-none outline-none text-center"
               placeholder="리더로서 함께 하고 싶은 계획 내용을 자세히 소개해주세요. (50자 이상)"
-              maxLength={50}
+              minLength={50}
+              defaultValue={props.communityCreateDto.message}
               onChange={(e) => props.setCommunityCreateDto({ ...props.communityCreateDto, message: e.currentTarget.value })}
             />
           </div>

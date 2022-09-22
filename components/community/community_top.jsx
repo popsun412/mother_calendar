@@ -37,18 +37,18 @@ export default function CommunityTop(props) {
   ];
 
   useEffect(() => {
-    const _myRegion = getCookie("myRegion");
+    let _myRegion = getCookie("myRegion");
 
     if (!_myRegion) {
       _regions.map((_region) => {
         if (props.userInfo.address.search(_region) >= 0) {
-          setCookies("myRegion", _region, { maxAge: 60 * 60 * 24 * 1000 });
-          props.setMyRegion(_region);
+          _myRegion = _region;
         }
       });
-    } else {
-      props.setMyRegion(_myRegion);
     }
+
+    setCookies("myRegion", _myRegion, { maxAge: 60 * 60 * 24 * 1000 });
+    props.setMyRegion(_myRegion ?? "용산구");
   }, []);
 
   return (
@@ -75,6 +75,7 @@ export default function CommunityTop(props) {
                   key={index}
                   className="flex"
                   onClick={() => {
+                    setCookies("myRegion", _region, { maxAge: 60 * 60 * 24 * 1000 });
                     props.setMyRegion(_region);
                   }}
                 >

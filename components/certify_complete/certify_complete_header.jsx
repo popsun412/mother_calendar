@@ -32,7 +32,7 @@ export default function CertifyCompleteHeader(props) {
       <div
         className="flex items-center space-x-2"
         onClick={() => {
-          router.push({ pathname: "/calendar", query: { friend: props.userInfo.userUid } });
+          router.push({ pathname: "/calendar", query: { friend: props.userInfo.uid } });
         }}
       >
         <span className={`rounded-full w-10 h-10`}>

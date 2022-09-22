@@ -60,16 +60,27 @@ export default function CommunityMember(props) {
 
       if (props.community.userUid == auth.currentUser.uid) {
         if (member.status == 0) return "수락하기";
-        if (member.status == 1) return "수락완료";
+        if (member.status == 1) return "수락취소";
       }
     },
   };
 
+  // 오전 오후 표시
+  const timeFormat = (value) => {
+    if (value == null) return "";
+    const _dateTime = moment(`${moment().format("yyyy-MM-DD")} ${value}`);
+
+    const koA = _dateTime.format("a") == "am" ? "오전" : "오후";
+    const koH = _dateTime.format("h시");
+    const koM = _dateTime.format("mm");
+    return `${koA} ${koH}${koM == "00" ? "" : " " + koM + "분"}`;
+  };
+
   // 수락하기
   const accept = async () => {
-    const _result = await network.patch("/community/accept", { communityAttendUid: member.communityAttendUid });
+    const _result = await network.patch("/community/accept", { communityAttendUid: member.communityAttendUid, status: member.status == 0 ? 1 : 0 });
 
-    setMember({ ...member, status: 1 });
+    setMember({ ...member, status: _result.data.status });
   };
 
   return (
@@ -88,14 +99,12 @@ export default function CommunityMember(props) {
           className={showModel.memberBtnClass}
           onClick={() => {
             if (props.community.userUid != auth.currentUser.uid) return;
-            if (member.status == 1) return;
-
             accept();
           }}
         >
           <span>{showModel.memberBtnText}</span>
         </div>
-        {member.message ? (
+        {member.message && props.checkCreator ? (
           <div className="ml-4">
             <img src={`${expanded ? "/images/up.png" : "/images/down.png"}`} alt="" className="w-4 h-2" onClick={() => setExpanded(!expanded)} />
           </div>
@@ -104,7 +113,17 @@ export default function CommunityMember(props) {
         )}
       </div>
       <Collapse in={expanded} className="bg-gray2">
-        <div className="p-3 text-xs textGray1">{member.message}</div>
+        {props.community.communityType == 0 ? (
+          <div className="p-3 text-xs textGray1 whitespace-normal break-words">{member.message}</div>
+        ) : (
+          <div className="p-3 text-xs textGray1 whitespace-normal break-words">
+            <p>날짜 : {moment(props.community.communityDate).format("YYYY년 MM월 DD일")}</p>
+            <p>
+              시간 : {timeFormat(props.community.communityStartTime)} ~ {timeFormat(props.community.communityEndTime)}
+            </p>
+            <p>요청사항 : {member.message}</p>
+          </div>
+        )}
       </Collapse>
     </div>
   );

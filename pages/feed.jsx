@@ -41,10 +41,11 @@ export default function Feed() {
     if (loading) return;
     setHasMore(false);
     setLoading(true);
+
     const _result = await network.post(`/feeds`, { ...param, offset: 0 });
     if (_result.data.length > 0) setHasMore(true);
+    if (_result.data.filter((_item) => _item == null).length != 100) setLoading(false);
 
-    setLoading(false);
     setItems(_result.data);
   };
 
@@ -54,6 +55,8 @@ export default function Feed() {
     const _result = await network.post(`/feeds`, { ...param, offset: items.length });
 
     if (_result.data == 0) setHasMore(false);
+    if (_result.data.filter((_item) => _item == null).length != 100) setLoading(false);
+
     setItems(items.concat(_result.data));
   };
 
@@ -76,7 +79,7 @@ export default function Feed() {
   }, [param]);
 
   useEffect(async () => {
-    if (items.filter((_item) => _item != null).length == 1 && hasMore) moreItems();
+    if (items.filter((_item) => _item != null).length <= 1 && hasMore) moreItems();
   }, [items]);
 
   const onReport = async (contents) => {
@@ -106,6 +109,7 @@ export default function Feed() {
                 />
               );
             })}
+            <div className="flex w-full h-8 justify-center items-center">{hasMore ? <CircularProgress style={{ color: "#FF6035" }} /> : <></>}</div>
           </div>
         ) : (
           <div className="flex w-full h-screen justify-center items-center">

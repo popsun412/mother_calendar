@@ -1,18 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
+import network from "../../util/network";
 import moment from "moment";
 
 import { useRecoilState } from "recoil";
 import { selectedDateState } from "../../states/community_state";
 
-export default function CommunityWeek() {
+export default function CommunityWeek(props) {
   const [selectedDate, setSelectedDate] = useRecoilState(selectedDateState);
   const _weekday = moment(selectedDate).weekday();
   const [dates, setDates] = useState([]);
 
   // style
   const _selectStyle = (_date) => {
-    return _checkSelected(_date) ? "bg4 text-white" : "bg-white border-dotted border border-color3";
+    if (_checkSelected(_date)) return "bg4 text-white";
+    if (_date.isCommunity) return "border-dotted border border-color3";
+    return "";
   };
 
   useEffect(() => {
@@ -26,8 +29,19 @@ export default function CommunityWeek() {
       { week: "토", date: calDate(_weekday - 6), authCount: 0, planCount: 0 },
     ];
 
-    setDates(_newDates);
-  }, [selectedDate]);
+    checkDayHasCommunity(_newDates);
+  }, [selectedDate, props.myRegion]);
+
+  // 그 날 모임 존재 여부
+  const checkDayHasCommunity = async (_dates) => {
+    const _result = await network.get(`/community?dates=${_dates.map((_date) => moment(_date.date).format("YYYY-MM-DD"))}&region=${props.myRegion}`);
+
+    _dates.map((_date) => {
+      _date.isCommunity = _result.data.filter((_item) => _item.communityDate == _date.date.format("yyyy-MM-DD")).length > 0;
+    });
+
+    setDates(_dates);
+  };
 
   const _checkSelected = (_date) => moment(selectedDate).format("yyyy-MM-D") == _date.date.format("yyyy-MM-D");
   const calDate = (value) => (value < 0 ? moment(selectedDate).add(value * -1, "d") : moment(selectedDate).subtract(value, "d"));
