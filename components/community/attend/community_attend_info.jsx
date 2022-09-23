@@ -29,6 +29,8 @@ export default function CommunityAttendInfo(props) {
           <div className="flex space-x-1.5 mt-3">
             <CustomTimepicker
               onChange={(time) => props.setAttendCommunityDto({ ...props.attendCommunityDto, startTime: time })}
+              minTime={moment(`${props.communityInfo.communityDate} ${props.communityInfo.communityStartTime}`).toDate()}
+              maxTime={moment(`${props.communityInfo.communityDate} ${props.communityInfo.communityEndTime}`).toDate()}
               value={props.attendCommunityDto.startTime}
             >
               <div className="flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center">
@@ -47,6 +49,8 @@ export default function CommunityAttendInfo(props) {
 
             <CustomTimepicker
               onChange={(time) => props.setAttendCommunityDto({ ...props.attendCommunityDto, endTime: time })}
+              minTime={moment(`${props.communityInfo.communityDate} ${props.communityInfo.communityStartTime}`).toDate()}
+              maxTime={moment(`${props.communityInfo.communityDate} ${props.communityInfo.communityEndTime}`).toDate()}
               value={props.attendCommunityDto.endTime}
             >
               <div className="flex-auto border border-gary3 rounded-md text-sm textGray2 text-center py-1 flex items-center justify-center">
@@ -111,19 +115,19 @@ export default function CommunityAttendInfo(props) {
           {props.communityInfo.communityType == 0 ? (
             <>
               <p>모임 시작 전 참여가 어려울 경우 리더에게 미리 알려주세요.</p>
-              <p>n모임 중에 피해를 주지 않도록 노력해주세요.</p>
+              <p>모임 중에 피해를 주지 않도록 노력해주세요.</p>
             </>
           ) : (
             <>
               <p>유료 모임 전 참여가 어려울 경우 리더에게 미리 알려주세요.</p>
-              <p>n유료 모임 중에 피해를 주지 않도록 노력해주세요.</p>
-              <p>n예약 시간을 준수하고 리더에게 비용을 지불해주세요.</p>
+              <p>유료 모임 중에 피해를 주지 않도록 노력해주세요.</p>
+              <p>예약 시간을 준수하고 리더에게 비용을 지불해주세요.</p>
             </>
           )}
         </p>
         <FormGroup className="">
           <FormControlLabel
-            label="네, 알겠습니다"
+            label="네, 알겠습니다."
             className="textOrange5 text-xs font-semibold max-w-fit"
             control={
               <Checkbox

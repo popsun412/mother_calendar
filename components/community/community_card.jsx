@@ -3,16 +3,22 @@
 import moment from "moment";
 import { useRouter } from "next/router";
 import { conditions } from "../../constants/communityTypes";
+import { getAuth } from "firebase/auth";
 
 export default function CommunityCard(props) {
+  const auth = getAuth();
   const router = useRouter();
 
   // 상태
   const _isActive = () => {
-    // 마감
-    if (moment(props.item.communityDate) <= moment()) return false;
+    // 마감 확인
+    const communityDateTime = moment(`${props.item.communityDate} ${props.item.communityStartTime}`);
+
+    if (communityDateTime <= moment()) return false;
     if (props.item.status != 0) return false;
-    if (props.item.memberMaxCount <= props.item.members.map((_member) => _member.status == 1 && _member.userUid != auth.currentUser.uid).length) return false;
+
+    if (props.item.memberMaxCount <= props.item.members.filter((_member) => _member.status == 1 && _member.userUid != auth.currentUser.uid).length)
+      return false;
 
     // 정상
     return true;

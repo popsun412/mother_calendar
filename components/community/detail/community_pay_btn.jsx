@@ -8,12 +8,13 @@ export default function CommunityPayBtn(props) {
   const auth = getAuth();
   const amountFormat = () => props.community.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
+  const communityDateTime = moment(`${props.community.communityDate} ${props.community.communityStartTime}`);
   const attendCount = () => props.members.filter((_member) => _member.status == 1 && _member.uid != auth.currentUser.uid).length;
 
   const nextBtnActive = () => {
     const _checkCreator = props.creator.uid == auth.currentUser.uid;
 
-    if (moment() >= moment(props.community.communityDate)) return false;
+    if (moment() >= communityDateTime) return false;
     if (props.community.status == 1) return false;
 
     // 참여자
@@ -29,13 +30,13 @@ export default function CommunityPayBtn(props) {
     const _checkCreator = props.creator.uid == auth.currentUser.uid;
 
     if (_checkCreator) {
-      if (moment() >= moment(props.community.communityDate)) return "신청 마감된 모임입니다.";
+      if (moment() >= communityDateTime) return "신청 마감된 모임입니다.";
       return props.community.status == 1 ? "신청 마감된 모임입니다." : "수락한 이웃과 모임 시작하기";
     }
 
     if (!_checkCreator) {
       if (props.members.findIndex((_member) => _member.uid == auth.currentUser.uid) >= 0 && props.community.status == 1) return "리더가 모임 시작 예정입니다.";
-      if (moment() >= moment(props.community.communityDate)) return "신청 마감된 모임입니다.";
+      if (moment() >= communityDateTime) return "신청 마감된 모임입니다.";
       if (attendCount() >= props.community.memberMaxCount) return "신청 마감된 모임입니다.";
       if (props.members.findIndex((_member) => _member.uid == auth.currentUser.uid) >= 0) return "신청 취소하기";
 

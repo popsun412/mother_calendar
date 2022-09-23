@@ -55,7 +55,7 @@ export default function CommunityDetail() {
 
     // 참여자
     if (!_checkCreator) {
-      if (members.map((_member) => _member.status == 1).length >= community.memberMaxCount) return false;
+      if (members.filter((_member) => _member.status == 1).length >= community.memberMaxCount) return false;
     }
 
     return true;

@@ -80,6 +80,9 @@ export default function CommunityAttend() {
     if (attendCommunityDto.requestMessage.length < 50) return false;
     if (!infoCheck) return false;
 
+    const communtiyAttendDateTime = moment(`${communityInfo.communityDate} ${moment(attendCommunityDto.startTime).format("HH:mm")}`);
+    if (communtiyAttendDateTime < moment()) return false;
+
     return true;
   };
 
