@@ -80,6 +80,12 @@ const Item = (props) => {
     if (ToastStatus) setTimeout(() => setToastStatus(false), 1000);
   }, [ToastStatus]);
 
+  const regionText = (_item) => {
+    if (_item.region == "직접입력") return _item.directRegion;
+
+    return _item.region;
+  };
+
   return load ? (
     <>
       <div style={{ fontFamily: "SuncheonR" }}>
@@ -128,7 +134,7 @@ const Item = (props) => {
               </span>
               <div className="block absolute bottom-0 left-0 ml-5 mb-5">
                 <span className="textOrange1 text-xs rounded p-1 mr-1" style={{ backgroundColor: "rgba(219, 239, 253, 0.2)" }}>
-                  {data.subject}
+                  {data.subject == "체험" ? regionText(data) : data.subject}
                 </span>
                 <span className="textOrange1 text-xs rounded p-1" style={{ backgroundColor: "rgba(219, 239, 253, 0.2)" }}>
                   {data.field}
